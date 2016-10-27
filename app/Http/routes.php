@@ -11,7 +11,14 @@
 |
 */
 
+Route::resource('proyecto', 'ProyectoController',
+                ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

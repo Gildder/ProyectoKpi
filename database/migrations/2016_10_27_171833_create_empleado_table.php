@@ -20,9 +20,9 @@ class CreateEmpleadoTable extends Migration
             $table->string('apellidoPaterno',50);
             $table->string('apellidoMaterno',50);
             $table->string('correo',50);
-            $table->char('estado',1);
-            $table->integer('departamento_id');
-            $table->integer('localizacion_id');
+            $table->char('estado',1)->default('1');
+            $table->integer('departamento_id')->unsigned();
+            $table->integer('localizacion_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->engine = 'InnoDB';

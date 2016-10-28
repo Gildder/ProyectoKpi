@@ -14,10 +14,8 @@ class CreateTareaLocalizacionTable extends Migration
     {
         //
         Schema::create('tareaLocalizacion', function (Blueprint $table) {
-            $table->integer('tarea_id');
-            $table->integer('localizacion_id');
-            $table->primary('tarea_id');
-            $table->primary('localizacion_id');
+            $table->integer('tarea_id')->unsigned();
+            $table->integer('localizacion_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->engine = 'InnoDB';
@@ -25,6 +23,7 @@ class CreateTareaLocalizacionTable extends Migration
         });
 
          Schema::table('tareaLocalizacion', function ($table) {
+            $table->primary('tarea_id','localizacion_id');
             $table->foreign('tarea_id')->references('id')->on('tarea')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('localizacion_id')->references('id')->on('localizacion')->onDelete('cascade')->onUpdate('cascade');
         });

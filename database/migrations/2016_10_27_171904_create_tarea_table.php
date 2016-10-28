@@ -23,8 +23,8 @@ class CreateTareaTable extends Migration
             $table->double('tiempoTrabajo',15,2);
             $table->double('tiempoTrabajoReal',15,2);
             $table->text('observacion');
-            $table->char('estado',1);
-            $table->integer('proyecto_id');
+            $table->char('estado',1)->default('1');
+            $table->integer('proyecto_id')->unsigned();
             $table->integer('empleado_id');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

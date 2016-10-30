@@ -2,16 +2,20 @@
 
 namespace ProyectoKpi\Http\Controllers;
 
+use ProyectoKpi\Models\GrupoDepartamento;
+
 use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
+use ProyectoKpi\Http\Controllers\Controller;
 
 class GrupoDepartamentoController extends Controller
 {
     //
       public function index()
 	{
-		return "metodo index";
+		$grdepartamento = GrupoDepartamento::all();
+		return view('grupodepartamento/list', compact('grdepartamento'));
 	}
 
 

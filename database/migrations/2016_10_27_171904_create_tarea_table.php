@@ -22,6 +22,7 @@ class CreateTareaTable extends Migration
             $table->dateTime('fechaFinReal');
             $table->double('tiempoTrabajo',15,2);
             $table->double('tiempoTrabajoReal',15,2);
+            $table->enum('tipo',['diaria','programada']);
             $table->text('observacion');
             $table->char('estado',1)->default('1');
             $table->integer('proyecto_id')->unsigned();

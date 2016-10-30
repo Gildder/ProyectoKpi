@@ -27,4 +27,10 @@ class GrupoDepartamento extends Model
         'id', 'estado','created_at', 'update_at',
     ];
 
+
+    public function departamento()
+    {
+        $this->hasMany(Departamento::class);
+    }
+
 }

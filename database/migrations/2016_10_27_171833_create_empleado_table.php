@@ -13,7 +13,7 @@ class CreateEmpleadoTable extends Migration
     public function up()
     {
         //
-        Schema::create('empleado', function (Blueprint $table) {
+        Schema::create('empleados', function (Blueprint $table) {
             $table->integer('id')->unique();
             $table->primary('id');
             $table->string('nombre',50);
@@ -23,15 +23,17 @@ class CreateEmpleadoTable extends Migration
             $table->char('estado',1)->default('1');
             $table->integer('departamento_id')->unsigned();
             $table->integer('localizacion_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->engine = 'InnoDB';
 
         });
 
-         Schema::table('empleado', function ($table) {
-            $table->foreign('departamento_id')->references('id')->on('departamento')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('localizacion_id')->references('id')->on('localizacion')->onDelete('cascade')->onUpdate('cascade');
+         Schema::table('empleados', function ($table) {
+            $table->foreign('departamento_id')->references('id')->on('departamentos')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('localizacion_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -43,6 +45,6 @@ class CreateEmpleadoTable extends Migration
     public function down()
     {
         //
-        Schema::drop('empleado');
+        Schema::drop('empleados');
     }
 }

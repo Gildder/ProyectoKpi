@@ -26,4 +26,9 @@ class Departamento extends Model
     protected $hidden = [
         'id', 'estado','grupodep_id','created_at', 'update_at',
     ];
+
+    public function grupoDepartamento()
+    {
+        $this->belongsTo(GrupoDepartamento::class);
+    }
 }

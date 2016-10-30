@@ -13,7 +13,7 @@ class CreateDepartamentoTable extends Migration
     public function up()
     {
         //
-        Schema::create('Departamento', function (Blueprint $table) {
+        Schema::create('departamentos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',120);
             $table->char('estado',1)->default('1');
@@ -23,8 +23,8 @@ class CreateDepartamentoTable extends Migration
             $table->engine = 'InnoDB';
         });
 
-        Schema::table('Departamento', function ($table) {
-            $table->foreign('grupodep_id')->references('id')->on('grupoDepartamento')->onDelete('cascade')->onUpdate('cascade');
+        Schema::table('departamentos', function ($table) {
+            $table->foreign('grupodep_id')->references('id')->on('grupo_departamentos')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -36,7 +36,7 @@ class CreateDepartamentoTable extends Migration
     public function down()
     {
         //
-        Schema::drop('Departamento');
+        Schema::drop('departamentos');
         
     }
 }

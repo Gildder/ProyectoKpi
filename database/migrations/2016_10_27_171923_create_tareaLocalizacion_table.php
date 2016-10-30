@@ -13,7 +13,7 @@ class CreateTareaLocalizacionTable extends Migration
     public function up()
     {
         //
-        Schema::create('tareaLocalizacion', function (Blueprint $table) {
+        Schema::create('tarea_Localizaciones', function (Blueprint $table) {
             $table->integer('tarea_id')->unsigned();
             $table->integer('localizacion_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
@@ -22,10 +22,10 @@ class CreateTareaLocalizacionTable extends Migration
 
         });
 
-         Schema::table('tareaLocalizacion', function ($table) {
+         Schema::table('tarea_Localizaciones', function ($table) {
             $table->primary('tarea_id','localizacion_id');
-            $table->foreign('tarea_id')->references('id')->on('tarea')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('localizacion_id')->references('id')->on('localizacion')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('tarea_id')->references('id')->on('tareas')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('localizacion_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -37,6 +37,6 @@ class CreateTareaLocalizacionTable extends Migration
     public function down()
     {
         //
-        Schema::drop('tareaLocalizacion');
+        Schema::drop('tarea_Localizaciones');
     }
 }

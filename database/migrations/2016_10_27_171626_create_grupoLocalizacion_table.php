@@ -13,7 +13,7 @@ class CreateGrupoLocalizacionTable extends Migration
     public function up()
     {
         //
-        Schema::create('grupoLocalizacion', function (Blueprint $table) {
+        Schema::create('grupo_localizaciones', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',120);
             $table->char('estado',1)->default('1');
@@ -32,6 +32,6 @@ class CreateGrupoLocalizacionTable extends Migration
     public function down()
     {
         //
-        Schema::drop('grupoDepartamento');
+        Schema::drop('grupo_localizaciones');
     }
 }

@@ -13,7 +13,7 @@ class CreateProyectoTable extends Migration
     public function up()
     {
         //
-        Schema::create('proyecto', function (Blueprint $table) {
+        Schema::create('proyectos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',50);
             $table->dateTime('fechaInicioEstimado');
@@ -40,6 +40,6 @@ class CreateProyectoTable extends Migration
     public function down()
     {
         //
-        Schema::drop('proyecto');
+        Schema::drop('proyectos');
     }
 }

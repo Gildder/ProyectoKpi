@@ -13,7 +13,7 @@ class CreateTareaTable extends Migration
     public function up()
     {
         //
-        Schema::create('tarea', function (Blueprint $table) {
+        Schema::create('tareas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('descripcion',120);
             $table->dateTime('fechaInicioEstimado');
@@ -32,9 +32,9 @@ class CreateTareaTable extends Migration
 
         });
 
-         Schema::table('tarea', function ($table) {
-            $table->foreign('proyecto_id')->references('id')->on('proyecto')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('empleado_id')->references('id')->on('empleado')->onDelete('cascade')->onUpdate('cascade');
+         Schema::table('tareas', function ($table) {
+            $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('empleado_id')->references('id')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -46,6 +46,6 @@ class CreateTareaTable extends Migration
     public function down()
     {
         //
-        Schema::drop('tarea');
+        Schema::drop('tareas');
     }
 }

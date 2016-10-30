@@ -13,7 +13,7 @@ class CreateLocalizacionTable extends Migration
     public function up()
     {
         //
-        Schema::create('localizacion', function (Blueprint $table) {
+        Schema::create('localizaciones', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',50);
             $table->string('direccion',50);
@@ -28,8 +28,8 @@ class CreateLocalizacionTable extends Migration
 
         });
 
-         Schema::table('localizacion', function ($table) {
-            $table->foreign('grupoloc_id')->references('id')->on('grupoLocalizacion')->onDelete('cascade')->onUpdate('cascade');
+         Schema::table('localizaciones', function ($table) {
+            $table->foreign('grupoloc_id')->references('id')->on('grupo_localizaciones')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -41,6 +41,6 @@ class CreateLocalizacionTable extends Migration
     public function down()
     {
         //
-        Schema::drop('localizacion');
+        Schema::drop('localizaciones');
     }
 }

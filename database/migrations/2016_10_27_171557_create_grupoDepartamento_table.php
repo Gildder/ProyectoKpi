@@ -13,7 +13,7 @@ class CreateGrupoDepartamentoTable extends Migration
     public function up()
     {
         //
-        Schema::create('grupoDepartamento', function (Blueprint $table) {
+        Schema::create('grupo_departamentos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',50);
             $table->char('estado',1)->default('1');
@@ -32,7 +32,7 @@ class CreateGrupoDepartamentoTable extends Migration
     public function down()
     {
         //
-        Schema::drop('grupoDepartamento');
+        Schema::drop('grupo_departamentos');
         
     }
 }

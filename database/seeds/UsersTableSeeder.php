@@ -13,14 +13,15 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+       $faker = Faker::create();
        for($i=0; $i <30 ; $i++) 
        {
 
             DB::table('users')->insert([
                 'name' => $faker->unique()->userName(),
                 'email' => $faker->unique()->email(),
-                'password' => $faker->sha256('123456'),
+                //'password' => $faker->sha256('123456'),
+                'password' => \Hash::make('123456'),
                 'remember_token' => \Hash::make('123456'),
                 'state' => $faker->numberBetween($min = 0, $max = 1),
                 'type' => $faker->numberBetween($min = 1, $max = 2),

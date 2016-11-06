@@ -1,13 +1,14 @@
 <?php
 
-namespace ProyectoKpi;
+namespace ProyectoKpi\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Departamento extends Model
 {
     //
-    protected $table = "departamento";
+    protected $table = "departamentos";
+    protected $primarykey = "id";
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +16,7 @@ class Departamento extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre',
+        'nombre', 'grupodep_id',
     ];
 
     /**
@@ -24,7 +25,7 @@ class Departamento extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','grupodep_id','created_at', 'update_at',
+        'id', 'estado','created_at', 'update_at',
     ];
 
     public function grupoDepartamento()

@@ -7,26 +7,35 @@ use ProyectoKpi\Models\GrupoDepartamento;
 use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
-use ProyectoKpi\Http\Controllers\Controller;
 
 class GrupoDepartamentoController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
+    
       public function index()
 	{
-		$grdepartamento = GrupoDepartamento::all();
-		return view('grupodepartamento/list', compact('grdepartamento'));
+		$grdepartamentos = \App\Models\GrupoDepartamento::select('grdepartamentos.id','grdepartamentos.nombre','grdepartamentos.estado')->get();
+		return view('grupodepartamento/list')->with('grdepartamentos', $grdepartamentos);
 	}
 
 
 	public function create()
 	{
-		return "metodo create";
+		return view('grupodepartamento.create');
 	}
 
-	public function store()
+	public function store(Request $Request)
 	{
-		return "metodo store";
+		\ProyectoKpi\Models\GrupoDepartamento::create([
+			'nombre'=>$Request['nombre'],
+		]);
+
+		return 'Grupo registrado';
 
 	}
 

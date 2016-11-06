@@ -1,13 +1,15 @@
 <?php
 
-namespace ProyectoKpi;
+namespace ProyectoKpi\Models;
+
 
 use Illuminate\Database\Eloquent\Model;
 
 class Localizacion extends Model
 {
     //
-    protected $table = "localizacion";
+    protected $table = "localizaciones";
+    protected $primarykey = "id";
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +17,7 @@ class Localizacion extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'direccion',  'telefono',  'ciudad',  'pais',  
+        'nombre', 'direccion',  'telefono',  'ciudad',  'pais',  'grupoloc_id',
     ];
 
     /**
@@ -24,7 +26,7 @@ class Localizacion extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','grupoloc_id','created_at', 'update_at',
+        'id', 'estado','created_at', 'update_at',
     ];
 
 }

@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
 
-class TareaLocalizacionController extends Controller
+class SupervisorEmpleadoController extends Controller
 {
     //
-      public function index()
+    public function index()
 	{
 		return "metodo index";
 	}

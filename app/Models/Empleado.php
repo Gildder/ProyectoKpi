@@ -1,13 +1,17 @@
 <?php
 
-namespace ProyectoKpi;
+namespace ProyectoKpi\Models;
+
+
 
 use Illuminate\Database\Eloquent\Model;
 
 class Empleado extends Model
 {
     //
-    protected $table = "empleado";
+    protected $table = "empleados";
+    protected $primarykey = "id";
+    
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +19,7 @@ class Empleado extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'apellidoPaterno', 'apellidoMaterno','correo',
+        'codigo', 'nombre', 'apellidoPaterno', 'apellidoMaterno','correo', 'departamento_id', 'localizacion_id','cargo_id','user_id',
     ];
 
     /**
@@ -24,7 +28,7 @@ class Empleado extends Model
      * @var array
      */
     protected $hidden = [
-        'id','estado', 'departamento_id', 'localizacion_id', 'created_at', 'update_at',
+        'id','estado', 'created_at', 'update_at',
     ];
 
 }

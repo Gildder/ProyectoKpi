@@ -11,19 +11,19 @@
 |
 */
 
-Route::resource('grdepartamento', 'GrupoDepartamentoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+Route::resource('grupodepartamento', 'GrupoDepartamentoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 Route::resource('departamento', 'DepartamentoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
-Route::resource('grlocalizacion', 'GrupoLocalizacionController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+Route::resource('grupolocalizacion', 'GrupoLocalizacionController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 Route::resource('localizacion', 'LocalizacionController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 Route::resource('empleado', 'EmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
-Route::resource('proyecto', 'ProyectoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
-Route::resource('tarea', 'TareaController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
-Route::resource('tarealocal', 'TareaLocalizacionController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+Route::resource('cargo', 'CargoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+Route::resource('supervisorempleado', 'SupervisorEmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::auth();
 

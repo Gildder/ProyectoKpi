@@ -6,10 +6,16 @@ use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
 
-class TareaController extends Controller
+class CargoController extends Controller
 {
-    //
-      public function index()
+    /*
+    public function __contruct()
+   	{
+   		$this->middleware('is_route');
+   	}*/
+
+
+    public function index()
 	{
 		return "metodo index";
 	}

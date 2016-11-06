@@ -1,13 +1,14 @@
 <?php
 
-namespace ProyectoKpi;
+namespace ProyectoKpi\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class GrupoLocalizacion extends Model
 {
     //
-    protected $table = "grupolocalizacion";
+    protected $table = "grupo_localizaciones";
+    protected $primarykey = "id";
 
 
     /**

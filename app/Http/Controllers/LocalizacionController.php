@@ -9,7 +9,7 @@ use ProyectoKpi\Http\Requests;
 class LocalizacionController extends Controller
 {
     //
-      public function index()
+    public function index()
 	{
 		return "metodo index";
 	}

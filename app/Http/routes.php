@@ -21,7 +21,7 @@ Route::resource('supervisorempleado', 'SupervisorEmpleadoController', ['only' =>
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 

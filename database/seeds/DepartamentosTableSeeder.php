@@ -14,7 +14,7 @@ class DepartamentosTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-       for($i=0; $i <5 ; $i++) 
+       for($i=0; $i <800; $i++) 
        {
 
         $id =   DB::table('grupo_departamentos')->insert([
@@ -28,6 +28,32 @@ class DepartamentosTableSeeder extends Seeder
                 'estado' => $faker->numberBetween($min = 0, $max = 1),
                 'grupodep_id' => $id,
             ]);
+       }
+        
+        for($i=0; $i <5 ; $i++) 
+       {
+
+        $id =   DB::table('grupo_localizaciones')->insert([
+                'nombre' => $faker->unique()->name(),
+                'estado' => $faker->numberBetween($min = 0, $max = 1),
+            ]);
+
+
+            DB::table('localizaciones')->insert([
+                'nombre' => $faker->unique()->name(),
+                'estado' => $faker->numberBetween($min = 0, $max = 1),
+                'grupoloc_id' => $id,
+            ]);
+       }
+        
+        for($i=0; $i <5 ; $i++) 
+       {
+
+            $id =   DB::table('cargos')->insert([
+                    'nombre' => $faker->unique()->name(),
+                    'estado' => $faker->numberBetween($min = 0, $max = 1),
+            ]);
+          
        }
         
     }

@@ -52,5 +52,7 @@ class Kernel extends HttpKernel
 
 
         'is_route' => \App\Http\Middleware\IsTouteMiddleware::class,
+        'usuarioadmin' => \App\Http\Middleware\MwUsuarioAdmin::class,
+        'usuariostandard' => \App\Http\Middleware\MwUsuarioStandard::class,
     ];
 }

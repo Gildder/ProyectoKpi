@@ -8,6 +8,7 @@
                 <div class="panel-heading">Inicio Sesion</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">  
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">

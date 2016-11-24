@@ -14,13 +14,11 @@ class CreateEmpleadoTable extends Migration
     {
         //
         Schema::create('empleados', function (Blueprint $table) {
-            $table->integer('id')->unique();
-            $table->primary('id');
             $table->string('codigo',10);
+            $table->primary('codigo');
             $table->string('nombre',50);
             $table->string('apellidoPaterno',50);
             $table->string('apellidoMaterno',50);
-            $table->string('correo',50);
             $table->char('estado',1)->default('1');
             $table->integer('departamento_id')->unsigned();
             $table->integer('localizacion_id')->unsigned();

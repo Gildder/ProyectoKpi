@@ -29,4 +29,9 @@ class Localizacion extends Model
         'id', 'estado','created_at', 'update_at',
     ];
 
+    public function grupoLocalizaciones()
+    {
+        return $this->belongsTo(grupoLocalizacion::class);
+    }
+
 }

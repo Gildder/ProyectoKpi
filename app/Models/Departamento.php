@@ -3,6 +3,7 @@
 namespace ProyectoKpi\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use ProyectoKpi\Models\GrupoDepartamento;
 
 class Departamento extends Model
 {
@@ -30,6 +31,6 @@ class Departamento extends Model
 
     public function grupoDepartamento()
     {
-        $this->belongsTo(GrupoDepartamento::class);
+        return $this->belongsTo('ProyectoKpi\Models\GrupoDepartamento','grupodep_id');
     }
 }

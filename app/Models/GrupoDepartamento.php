@@ -4,6 +4,8 @@ namespace ProyectoKpi\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use ProyectoKpi\Models\Departamento;
+use Yajra\Datatables\Facades\Datatables;
 
 class GrupoDepartamento extends Model
 {
@@ -30,9 +32,10 @@ class GrupoDepartamento extends Model
     ];
 
 
-    public function departamento()
-    {
-        $this->hasMany(Departamento::class);
-    }
+    protected $guarded = ['id'];
 
+    public function departamentos()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Departamento');
+    }
 }

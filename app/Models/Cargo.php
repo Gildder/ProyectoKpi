@@ -29,4 +29,9 @@ class Cargo extends Model
         'id', 'estado','created_at', 'update_at',
     ];
 
+    public function empleados()
+    {
+        return $this->hasMany(Empleado::class);
+    }
+
 }

@@ -82,7 +82,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-user"></i>
-              <span class="hidden-xs">{{ Auth::user()->name }}</span>
+              <span class="hidden-xs">{{ Auth::user()->type  }}</span>
             </a>
           </li>
           <li class="dropdown tasks-menu" style="background: #DD4B39;">

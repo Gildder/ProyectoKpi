@@ -31,4 +31,20 @@ class Empleado extends Model
         'id','estado', 'created_at', 'update_at',
     ];
 
+    function users(){
+        return $this->hasOne('ProyectoKpi\User');
+    }
+
+    function cargos(){
+        return $this->belongsTo(Cargo::class);
+    }
+    
+    function departamentos(){
+        return $this->belongsTo(Departamento::class);
+    }
+
+    function localizaciones(){
+        return $this->belongsTo(Localizacion::class);
+    }
+
 }

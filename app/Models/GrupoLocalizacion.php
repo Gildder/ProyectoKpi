@@ -29,4 +29,9 @@ class GrupoLocalizacion extends Model
         'id', 'estado','created_at', 'update_at',
     ];
 
+    public function localizaciones()
+    {
+        return $this->hasMany(Localizacion::class);
+    }
+
 }

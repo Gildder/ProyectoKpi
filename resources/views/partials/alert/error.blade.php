@@ -1,5 +1,5 @@
 @if($errors->has())
-    <div class='alert alert-danger' id="alertError">
+    <div class='alert alert-danger'>
         @foreach ($errors->all('<p>:message</p>') as $message)
             {!! $message !!}
         @endforeach

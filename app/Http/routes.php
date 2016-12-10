@@ -19,6 +19,10 @@ Route::resource('localizaciones/localizacion', 'LocalizacionController', ['only'
 Route::resource('empleados/empleado', 'EmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 Route::resource('supervisorempleado', 'SupervisorEmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 
+Route::resource('indicadores/indicador', 'IndicadorController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
+Route::post('indicadores/indicador/asign/{indicador}', array('as' => 'indicadores.indicador.asign', 'uses' => 'IndicadorController@asign') );
+Route::get('indicadores/indicador/quitar/{indicador}/{param?}', array('as' => 'indicadores.indicador.quitar', 'uses' => 'IndicadorController@quitar') );
+Route::resource('indicadores/indicadorcargo', 'IndicadorCargoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
 Route::get('/', function () {
     return view('auth/login');

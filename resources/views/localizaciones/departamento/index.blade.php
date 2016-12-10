@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
+@section('titulo')
+	Departamentos
+@endsection
+
 @section('content')
 	<button  id="nuevo"  class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
-	<h3>Departamentos</h3>
+	<h1>Departamentos</h1>
 	<hr>
 	@include('partials/alert/error')
 		<!--tabla de cargos-->
@@ -40,7 +44,7 @@
 			</div>
 		</div>
 		<!--Fin tabla de cargos-->
-
+						
 
 <script  >
 	$('#nuevo').click(function(e){

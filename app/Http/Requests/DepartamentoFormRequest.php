@@ -26,7 +26,6 @@ class DepartamentoFormRequest extends Request
         return [
             'nombre'=>'required|min:5|max:45',
             'grupodep_id'=>'required',
-            
         ];
     }
 

@@ -40,8 +40,6 @@ class GrupoDepartamentoController extends Controller
 		$grupodepartamento->save();
 
 		return redirect('localizaciones/grupodepartamento')->with('message', 'Se guardo correctamente.');
-
-
 	}
 
 	public function edit($id)

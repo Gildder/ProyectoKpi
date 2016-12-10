@@ -4,11 +4,13 @@ namespace ProyectoKpi\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use ProyectoKpi\Models\Indicador;
+use Yajra\Datatables\Facades\Datatables;
 
-class Cargo extends Model
+class Indicador extends Model
 {
     //
-    protected $table = "cargos";
+    protected $table = "Indicadores";
     protected $primarykey = "id";
 
     /**
@@ -17,7 +19,7 @@ class Cargo extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'nombre', 'objetivo', 'valorobjetivo', 'condicion', 'frecuencia', 
     ];
 
     /**
@@ -29,15 +31,11 @@ class Cargo extends Model
         'id', 'estado','created_at', 'update_at',
     ];
 
-    public function empleados()
+
+    protected $guarded = ['id'];
+
+    public function cargos()
     {
-        return $this->hasMany(Empleado::class);
+        return $this->belongsToMany('ProyectoKpi\Models\Cargo','indicadores_cargos', 'indicador_id', 'cargo_id');
     }
-
-
-    public function indicadores()
-    {
-        return $this->belongsToMany('ProyectoKpi\Models\Inidicador','indicadores_cargos', 'indicador_id', 'cargo_id');
-    }
-
 }

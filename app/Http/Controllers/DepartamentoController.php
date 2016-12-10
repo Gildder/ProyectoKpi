@@ -19,7 +19,8 @@ class DepartamentoController extends Controller
     public function index()
 	{
 		$departamentos = Departamento::
-								select('departamentos.id','departamentos.nombre as departamento','grupo_departamentos.nombre as grupo','departamentos.estado','departamentos.created_at','departamentos.updated_at')->join('grupo_departamentos','grupo_departamentos.id','=','departamentos.grupodep_id')
+								select('departamentos.id','departamentos.nombre as departamento','grupo_departamentos.nombre as grupo','departamentos.estado','departamentos.created_at','departamentos.updated_at')
+								->join('grupo_departamentos','grupo_departamentos.id','=','departamentos.grupodep_id')
 								->where('departamentos.estado', '=', '1')->get();
 
 		return view('localizaciones/departamento/index')->with('departamentos',$departamentos);
@@ -27,16 +28,18 @@ class DepartamentoController extends Controller
 
 	public function create()
 	{
-		$grupo = GrupoDepartamento::lists('nombre','id');
+		$grupo = GrupoDepartamento::select('id as idgrupo','nombre as nombregrupo')
+								->where('estado', '=', '1')->get();
 
-		return view('localizaciones.departamento.create')->with('grupo',$grupo);
+		return view('localizaciones.departamento.create',['grupo'=>$grupo]);
+		//return view('localizaciones.departamento.create')->with('grupo',$grupo);
 	}
 
 	public function store(DepartamentoFormRequest $Request)
 	{
 		$departamento = new Departamento;
-		$departamento->nombre = \Request::input('nombre');
-		$departamento->grupodep_id = \Request::input('grupodep_id');
+		$departamento->nombre = $Request->nombre;
+		$departamento->grupodep_id = $Request->grupodep_id;
 		$departamento->save();
 
 		return redirect('localizaciones/departamento')->with('message', 'Se guardo correctamente.');
@@ -45,8 +48,11 @@ class DepartamentoController extends Controller
 	public function edit($id)
 	{
 		$departamento = Departamento::findOrFail($id);
-		$grupo = GrupoDepartamento::findOrFail($departamento->id);
-		return view('localizaciones.departamento.edit')->with('departamento', $departamento)->with('grupo', $grupo);
+		$grupo = GrupoDepartamento::select('id as idgrupo','nombre as nombregrupo')
+								->where('estado', '=', '1')->get();
+
+
+		return view('localizaciones.departamento.edit',['departamento'=>$departamento,'grupo'=>$grupo]);
 
 	}
 
@@ -55,6 +61,9 @@ class DepartamentoController extends Controller
 		$departamento = Departamento::findOrFail($id);
 		$input = $Request->all();
 		$departamento->fill($input)->save();
+
+		//attach roles
+    	$user->roles()->sync($request->input('roles',[]));
 
 		return redirect('localizaciones/departamento')->with('message', 'Se modifico correctamente.');
 

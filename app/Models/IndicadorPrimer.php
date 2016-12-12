@@ -1,16 +1,12 @@
 <?php
 
-namespace ProyectoKpi\Models;
-
+namespace ProyectoKpi;
 
 use Illuminate\Database\Eloquent\Model;
-use ProyectoKpi\Models\Indicador;
-use Yajra\Datatables\Facades\Datatables;
 
-class Indicador extends Model
+class IndicadorPrimer extends Model
 {
-    //
-    protected $table = "indicadores";
+    protected $table = "indicador_primer";
     protected $primarykey = "id";
 
     /**
@@ -19,7 +15,7 @@ class Indicador extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'orden', 'descripcion_objetivo', 'objetivo',  'tipo_indicador_id', 'condicion', 'frecuencia', 
+        'gestion', 'mes', 'semana', 'actpro',  'actrea', 'efeser', 
     ];
 
     /**
@@ -34,8 +30,8 @@ class Indicador extends Model
 
     protected $guarded = ['id'];
 
-    public function cargos()
+    public function empleados()
     {
-        return $this->belongsToMany('ProyectoKpi\Models\Cargo','indicadores_cargos', 'indicador_id', 'cargo_id');
+        return $this->belongsTo('ProyectoKpi\Models\Empleado','emp_codigo');
     }
 }

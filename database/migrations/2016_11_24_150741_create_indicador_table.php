@@ -16,13 +16,20 @@ class CreateIndicadorTable extends Migration
         Schema::create('indicadores', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',100);
+            $table->integer('orden');
+            $table->string('descripcion_objetivo',100);
             $table->double('objetivo');
             $table->string('condicion',120)->default('ninguna');
             $table->enum('frecuencia',['1','2','3']); //1 semanal, 2 mensual, 3 anual
             $table->char('estado',1)->default('1');
+            $table->integer('tipo_indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->engine = 'InnoDB';
+        });
+
+        Schema::table('indicadores', function ($table) {
+            $table->foreign('tipo_indicador_id')->references('id')->on('tipos_indicadores')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

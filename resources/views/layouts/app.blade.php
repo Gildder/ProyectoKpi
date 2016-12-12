@@ -41,6 +41,8 @@
   <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
 
   <script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+  
+  <script src="{{URL::asset('dist/js/main.js')}}"></script>
 
 
 
@@ -68,9 +70,10 @@
   <!-- Content Wrapper. Contains page content -->
   
     <!-- Main content -->
+    <section class="content-header">
+          @yield('content-header')     
+    </section>
     <section class="content">
-      <div class="row" >
-        <div id="contenedor" class="col-lg-8 col-lg-offset-2  col-md-10 col-lg-offset-2 col-sm-12 col-xs-12" >
           @if(session('success'))
             <div class="alert alert-success"> 
               {{session('success')}}
@@ -78,8 +81,6 @@
           @endif
 
           @yield('content')     
-        </div>
-      </div>
     </section>
     <!-- /.content -->
   </div>

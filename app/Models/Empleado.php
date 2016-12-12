@@ -47,4 +47,10 @@ class Empleado extends Model
         return $this->belongsTo(Localizacion::class);
     }
 
+    //Indicadores
+    public function primer_indicador()
+    {
+        return $this->hasMany('ProyectoKpi\Models\IndicadorPrimer');
+    }
+
 }

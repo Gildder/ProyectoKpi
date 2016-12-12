@@ -24,7 +24,7 @@ class IndicadorController extends Controller
     
     public function index()
 	{
-		$indicadores = Indicador::select('id','nombre','objetivo','condicion',  'frecuencia' ,'created_at','updated_at')->where('indicadores.estado', '=', '1')->get();
+		$indicadores = Indicador::select('id','orden','nombre','descripcion_objetivo','objetivo','tipo_indicador_id','condicion',  'frecuencia' ,'created_at','updated_at')->where('indicadores.estado', '=', '1')->get();
 
 		return view('indicadores/indicador/index')->with('indicadores', $indicadores);
 	}
@@ -49,7 +49,7 @@ class IndicadorController extends Controller
 								->where('estado', '=', '1')->get();
 
 		$cargos_libres = $todos_cargos->diff($cargos_indicardor);
-    	var_dump($cargos_libres);
+    	//var_dump($cargos_libres);
 
 		return view('indicadores/indicador/edit',['indicador'=>$indicador,'cargos_indicardor'=>$cargos_indicardor,'cargos_libres'=>$cargos_libres]);
 	}
@@ -79,11 +79,8 @@ class IndicadorController extends Controller
 
 	public function show($id)
 	{
-		$indicador = Indicador::findOrFail($id);
-		$cargos = Indicador::find($id)->cargos()->orderBy('id')->get();
 
-
-		return view('indicadores.indicador.editar',['indicador'=>$indicador,'cargos'=>$cargos]);
+		return view('indicadores.indicador.show');
 	}
 
 	public function destroy($id)

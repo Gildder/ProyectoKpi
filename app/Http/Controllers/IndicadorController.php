@@ -124,4 +124,5 @@ class IndicadorController extends Controller
 		return view('indicadores/indicador/asignar',['cargos'=>$cargos]);
 	}
 
+
 }

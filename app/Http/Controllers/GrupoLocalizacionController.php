@@ -17,14 +17,12 @@ class GrupoLocalizacionController extends Controller
         //$this->middleware('guest');
     }
     
-    //
     public function index()
 	{
 		$grupolocalizaciones = GrupoLocalizacion::where('grupo_localizaciones.estado', '=', '1')->get();
 
 		return view('localizaciones/grupolocalizacion/index')->with('grupolocalizaciones', $grupolocalizaciones);
 	}
-
 
 	public function create()
 	{

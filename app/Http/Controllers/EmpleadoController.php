@@ -21,7 +21,7 @@ class EmpleadoController extends Controller
 							->join('users','users.id','=','empledos.user_id')
 						->where('empledos.estado', '=', '1')->get();
 
-		return view('localizaciones/departamento/index')->with('empledos',$empledos);
+		return view('empleados/empleado/index')->with('empledos',$empledos);
 	}
 
 

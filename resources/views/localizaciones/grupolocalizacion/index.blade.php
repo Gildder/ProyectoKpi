@@ -16,7 +16,7 @@
 					<thead>
 						<th>Nro</th>
 						<th>Nombre</th>	
-						<th  class="hidden-xs">Fecha Creacion</th>
+						<th class="hidden-xs">Fecha Creacion</th>
 						<th class="hidden-xs">Fecha Actualizacion</th>
 						<th>Opciones</th>
 					</thead>
@@ -51,11 +51,6 @@
 		document.location.href = "{{route('localizaciones.grupolocalizacion.create')}}";
 
 	});
-
-$(document).ready(function(){
-    $('#myTable').DataTable();
-});
-
 </script>
 
 @endsection

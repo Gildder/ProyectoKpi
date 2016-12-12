@@ -67,8 +67,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i>Empleado</a></li>
-            <li><a href="{{url('empleados.cargo.index')}}"><i class="fa fa-circle-o"></i> Cargo</a></li>
+            <li><a href="{{url('empleados/empleado')}}"><i class="fa fa-circle-o"></i>Empleado</a></li>
+            <li><a href="{{url('empleados/cargo')}}"><i class="fa fa-circle-o"></i> Cargo</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -80,10 +80,10 @@
             </span>
           </a>
           <ul class="treeview-menu">
-          <li><a href="{{url('localizaciones/grupolocalizacion/index')}}"><i class="fa fa-circle-o"></i>Grupo Localizacion</a></li>
-            <li><a href="{{url('localizaciones/Localizacion/index')}}"><i class="fa fa-circle-o"></i>Localizacion</a></li>
-            <li><a href="{{url('localizaciones/grupodepartamento/index')}}"><i class="fa fa-circle-o"></i>Grupo Departamento</a></li>
-            <li><a href="{{url('localizaciones/departamento/index')}}"><i class="fa fa-circle-o"></i> Departamento</a></li>
+          <li><a href="{{url('localizaciones/grupolocalizacion')}}"><i class="fa fa-circle-o"></i>Grupo Localizacion</a></li>
+            <li><a href="{{url('localizaciones/localizacion')}}"><i class="fa fa-circle-o"></i>Localizacion</a></li>
+            <li><a href="{{url('localizaciones/grupodepartamento')}}"><i class="fa fa-circle-o"></i>Grupo Departamento</a></li>
+            <li><a href="{{url('localizaciones/departamento')}}"><i class="fa fa-circle-o"></i> Departamento</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -95,8 +95,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> Indicador</a></li>
-            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Graficos</a></li>
+            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Indicador</a></li>
+            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Graficos</a></li>
           </ul>
         </li>
       </ul>

@@ -1,14 +1,14 @@
 @if($errors->has())
-    <div class='alert alert-danger'>
+    <div  class="alert alert-danger" role="alert">
+        <button type="button" class="close pull-right" data-dismiss="alert">&times;</button>
         @foreach ($errors->all('<p>:message</p>') as $message)
             {!! $message !!}
         @endforeach
-        <button type="button" class="close" data-dismiss="alert" style="top: -20px; font-size: 20px; position: relative;color: white;">&times;</button>
     </div>
 @endif
 
 @if (Session::has('message'))
-    <div class="alert alert-success">{{ Session::get('message') }}
-		<button type="button" class="close" data-dismiss="alert" style="top: -20px  position: relative; color: white;">&times;</button>
+    <div class="alert alert-success" role="alert">{{ Session::get('message') }}
+		<button type="button" class="close pull-right" data-dismiss="alert" >&times;</button>
     </div>
 @endif

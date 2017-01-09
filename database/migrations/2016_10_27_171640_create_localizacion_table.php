@@ -15,9 +15,9 @@ class CreateLocalizacionTable extends Migration
         //
         Schema::create('localizaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre',50);
+            $table->string('nombre',50)->unique();
             $table->string('direccion',50);
-            $table->string('telefono',20);
+            $table->string('telefono',20)->unique();
             $table->string('ciudad',30);
             $table->string('pais',50);
             $table->char('estado',1)->default('1');

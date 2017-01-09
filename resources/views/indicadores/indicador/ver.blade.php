@@ -1,27 +1,68 @@
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2>Indicador Nro. {{$indicador->id}}</h2>
+  </div>
+  <div class="panel-body">
+  <table class="table">
+         <tbody>
+            <tr>
+               <td class="text-right"><b>Nro.:</b></td>
+               <td>{{$indicador->id}}</td>
+            </tr>
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header" style="	padding-bottom: 5px; background: #3c8dbc;">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-      	<h3 class="modal-title" >Indicador</h3>
+            <tr>
+               <td class="text-right"><b>Orden:</b></td>
+               <td>{{$indicador->orden}}</td>
+            </tr>
+
+            <tr>
+               <td class="text-right"><b>Objetivo:</b></td>
+               <td>{{$indicador->descripcion_objetivo}} {{$indicador->objetivo}}%</td>
+            </tr>
+
+            <tr>
+               <td class="text-right"><b>Condicion:</b></td>
+               <td>{{$indicador->condicion}}</td>
+            </tr>
+
+            <tr>
+               <td class="text-right"><b>Frecuencia:</b></td>
+               <td>{{$indicador->frecuencia}}</td>
+            </tr>
+
+             <tr>
+               <td class="text-right"><b>Formula:</b></td>
+               <td></td>
+            </tr>
+         </tbody>
+      </table>
+
+      <div class="text-center" style="background: #dff0d8;">
+      @if($indicador->id ===1)
+        @include('partials/formulas/formula_primer_indicador')
+      @elseif($indicador->id ===2)
+        @include('partials/formulas/formula_segundo_indicador')
+
+    @endif
       </div>
-      <div class="modal-body">
-           {!!Form::open()!!}
-            <div class="modal-body">
-              <h3>¿Estas seguro que deseas eliminar?</h3><br>
-                  <div class="form-group col-sm-5 ">
-                        <label id="nombregrupo"></label>
-                  </div>
-            </div>
-            <div class="modal-footer">
-                  {!! form::submit('Aceptar',['name'=>'Aceptar','id'=>'aceptar','content'=>'<span>Aceptar</span>','class'=>'btn btn-success navbar-btn']) !!}
-                  <button type="button" data-dismiss="modal" class="btn btn-danger navbar-btn">Cancelar</button>
-            </div>
-            {!! Form::close()!!}
-      </div>
-    </div>
+
+
 
   </div>
 </div>
+
+
+<style>
+.fraction {
+  display: inline-block;
+  vertical-align: middle; 
+  margin: 0 0.2em 0.4ex;
+  text-align: center;
+  }
+.fraction > span {
+    display: block;
+    padding-top: 0.15em;
+}
+.fraction span.fdn {border-top: thin solid black;}
+.fraction span.bar {display: none;}
+</style>

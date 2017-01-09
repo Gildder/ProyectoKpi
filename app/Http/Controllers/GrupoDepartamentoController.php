@@ -3,12 +3,14 @@
 namespace ProyectoKpi\Http\Controllers;
 
 use ProyectoKpi\Models\GrupoDepartamento;
+use ProyectoKpi\Models\Departamento;
 
 use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Requests\GrupoDepartamentoFormRequest;
-
+use ProyectoKpi\Http\Requests\GrupoDepartamentoRequestUpdate;
+use Illuminate\Support\Facades\DB;
 use Session;
 
 class GrupoDepartamentoController extends Controller
@@ -18,6 +20,11 @@ class GrupoDepartamentoController extends Controller
         //$this->middleware('guest');
     }
 
+    public function todosDepartamntos($id)
+    {
+		return  Departamento::where('estado', '=', '1')->where('grupodep_id','=', $id)->get();
+    	
+    }
     
     public function index()
 	{
@@ -37,6 +44,8 @@ class GrupoDepartamentoController extends Controller
 	{
 		$grupodepartamento = new GrupoDepartamento;
 		$grupodepartamento->nombre = \Request::input('nombre');
+
+		
 		$grupodepartamento->save();
 
 		return redirect('localizaciones/grupodepartamento')->with('message', 'Se guardo correctamente.');
@@ -49,21 +58,25 @@ class GrupoDepartamentoController extends Controller
 
 	}
 
-	public function update(GrupoDepartamentoFormRequest $Request,$id)
+	public function update(GrupoDepartamentoRequestUpdate $Request,$id)
 	{
-		$grupodepartamento = GrupoDepartamento::findOrFail($id);
-		$input = $Request->all();
-		$grupodepartamento->fill($input)->save();
+		$result = DB::table('grupo_departamentos')->where('nombre', $Request->nombre)->where('id', $id)->count();
 
-		return redirect('localizaciones/grupodepartamento')->with('message', 'Se modifico correctamente.');
-
+		if($result <> 0)
+		{
+			$grupodepartamento = GrupoDepartamento::findOrFail($id);
+			$input = $Request->all();
+			$grupodepartamento->fill($input)->save();
+			return redirect('localizaciones/grupodepartamento')->with('message', 'Se modifico correctamente.');
+		}else{
+			return $this->edit($id)->withErrors('El nombre "'.$Request->nombre.'"  ya existe');
+		}
 	}
 
 	public function show($id)
 	{
 		$grupodepartamento = GrupoDepartamento::findOrFail($id);
 		return response()->json($grupodepartamento);
-		//return view('localizaciones/grupodepartamento/delete')->with('grupodepartamento', $grupodepartamento);
 
 
 	}
@@ -72,8 +85,20 @@ class GrupoDepartamentoController extends Controller
 	{
 		$result = DB::table('grupo_departamentos')
 					            ->where('id', $id)
-					            ->update(['estado' => 0]);
+					            ->update(['estado' => 0]);		
+		
+		return redirect('localizaciones/grupodepartamento')->with('message', 'Se elimino correctamente.');
 
-		return redirect('localizaciones/grupodepartamento/index')->with('message', 'Se elimino correctamente.');
+
+	}
+
+	/**
+	 * Retorna todos departamentos activos para este grupo
+	 */
+	public function getDepartamentos(Request $request, $id)
+	{
+			$departamentos = Departamento::obtenerDepartamento($id);
+
+			return $departamentos;
 	}
 }

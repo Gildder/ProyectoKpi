@@ -1,37 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-      <h3 class="box-title">Editanto  {{$cargo->id}} - {{$cargo->nombre}}</h3>
-      <hr>
-	<div id="formNuevo" class="row panel panel-default " >
-            @include('partials/alert/error')
 
-            {!!Form::model($cargo, ['route'=>['empleados.cargo.update', $cargo->id], 'method'=>'PUT'])!!}
-                  <div class="form-group col-sm-5 ">
-                        <label for="nombre" class="hidden-xs">Nombre</label>
-                        {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingrese el Nombre']) !!}
-                  </div>
-                  <div class="form-group col-lg-12 col-sm-12">
-                        {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'<span class="glyphicon glyphicon-ok">Guardar</span>', 'class'=>'btn btn-success col-xs-12 col-sm-2' ]) !!}
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Cargo</a></li>
+  <li><a data-toggle="tab" href="#menu1">Indicadores</a></li>
+  <li><a data-toggle="tab" href="#menu2">Empleados</a></li>
+</ul>
 
-                        <button  id="cancelar" class="btn btn-danger col-xs-12 col-sm-2 " type="reset"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
-                  </div>
-            {!! Form::close()!!}
-		
-	</div>
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+    @include('empleados/cargo/editar')
+  </div>
 
 
-<script>
-      $('#nuevo').click(function(e){
-            document.location.href = "{{route('empleados.cargo.create')}}";
+  <div id="menu1" class="tab-pane fade">
+    <!-- Lista de Indicadores-->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <a  href="{{route('empleados.cargo.index')}}" class="btn btn-default"><span class="fa fa-reply"></span></a>
+          <h3 class="box-title">Lista de Indicadores</h3>
+      </div>
 
-      });
+      <div class="panel-body">
+        @include('empleados/cargo/tabla_indicador')
+      </div>
+
+      <div class="panel-footer">
+        <div class="text-right">
+          <a  href="{{route('empleados.cargo.indicadores', $cargo->id)}}" class="btn btn-success">Agregar</a>
+        </div>
+      </div>
+    </div>
+    <!-- Fin de Indicadores-->
+  </div>
+
+  <div id="menu2" class="tab-pane fade">
+    <!-- Lista de empleados-->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+          <a  href="{{route('empleados.cargo.index')}}" class="btn btn-default"><span class="fa fa-reply"></span></a>
+          <h3 class="box-title">Lista de Empleados</h3>
+      </div>
+      <div class="panel-body">
+        @include('empleados/cargo/tabla_empleado')
+      </div>
+    </div>
 
 
-      $('#cancelar').click(function(e){
-           document.location.href = "{{route('empleados.cargo.index')}}";
-      });
-
-</script>   
-
+    <!-- Fin de Empleados-->
+  </div>
+  <!-- Content -->
+</div>
 @endsection

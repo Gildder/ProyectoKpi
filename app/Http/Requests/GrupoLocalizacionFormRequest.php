@@ -24,8 +24,7 @@ class GrupoLocalizacionFormRequest extends Request
     public function rules()
     {
         return [
-            'nombre'=>'required|min:5|max:45',
-            
+            'nombre'=>'required|min:5|max:45|unique:grupolocalizaciones,nombre',
         ];
     }
 
@@ -33,8 +32,9 @@ class GrupoLocalizacionFormRequest extends Request
     {
         return [
             'nombre.required' => 'El campo nombre es requerido!',
-            'nombre.min' => 'El campo title no puede tener menos de 5 carácteres',
-            'max.min' => 'El campo title no puede tener más de 45 carácteres',
+            'nombre.unique' => 'El campo nombre ya existe',
+            'nombre.min' => 'El campo nombre no puede tener menos de 5 carácteres',
+            'nombre.max' => 'El campo nombre no puede tener más de 45 carácteres',
         ];
     }
 }

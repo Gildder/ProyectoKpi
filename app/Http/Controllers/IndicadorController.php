@@ -58,7 +58,6 @@ class IndicadorController extends Controller
 	{
 
 		$indicador = Indicador::findOrFail($id);
-
     	$nuevos_cargos = $Request->input('prov',[]);
 
     	var_dump($nuevos_cargos);

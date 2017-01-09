@@ -1,37 +1,52 @@
+@extends('layouts.app')
 
-		<div class="panel panel-default">
-		{!!Form::open(['route'->'localizaciones.grupodepartamento.store', 'method'->'POST'])!!}
-			<!--<form action="">-->
-				<div class="form-group">
-					{!! form::label('Nombre') !!}
-					{!! form::text('name',null, ['id'->'nombre', 'class'->'form-control', 'placeholder'->'Ingrese su Nombre']) !!}
-				</div>
+@section('titulo')
+	Nuevo Empleado
+@endsection
 
-				<div class="form-group">
-					{!! form::submit('Guardar',['name'->'guardar', 'id'->'guardar', 'content'->'<span>Guardar</span>', 'class'->'btn btn-success']) !!}
-					{!! form::submit('Cancelar',['name'->'cancelar', 'id'->'cancelar', 'content'->'<span>Cancelar</span>', 'class'->'btn btn-danger']) !!}
-				</div>
-				<!--
-				<button class="btn btn-success">Guardar</button>
-				<button class="btn btn-danger">Cancelar</button>
+@section('content')
 
-				-->
-			<!--</form>-->
+<!-- Nuevo -->
 
-		{!! Form::close()!!}
-		</div>
-		<!--
-		<div id="formNuevo" class="panel panel-default" style="background: #D9D8DE; padding: 20px; display: none;">
-			{!!Form::open(['route'->'localizaciones.grupodepartamento.store', 'method'->'POST'])!!}
-				<div class="form-group">
-					{!! form::label('Nombre') !!}
-					{!! form::text('name',null, ['id'->'nombre', 'class'->'form-control', 'placeholder'->'Ingrese su Nombre']) !!}
-				</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <strong>Nuevo Empleado</strong>
+  </div>
+  <div class="panel-body">
 
-				<div class="form-group">
-					{!! form::submit('Guardar',['name'->'guardar', 'id'->'guardar', 'content'->'<span>Guardar</span>', 'class'->'btn btn-success']) !!}
-					<button onclick="ocultarFormRegistro()" class="btn btn-danger">Cancelar</button>
-				</div>
-			{!! Form::close()!!}
-		</div>
--->
+
+	<div class="col-lg-12 breadcrumb">
+		<a  href="{{route('empleados.empleado.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+	</div>
+      
+      @include('partials/alert/error')
+
+      {!!Form::open(['route'=>'empleados.empleado.store', 'method'=>'POST'])!!}
+
+      @include('empleados/empleado/partials/crear_atributos')
+      
+  </div>
+  <div class="panel-footer text-right">
+      <a  id="cancelar" href="{{route('empleados.empleado.index')}}" class="btn btn-danger" type="reset">Cancelar</a>
+      {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success' ]) !!}
+  </div>
+      {!! Form::close()!!}
+</div>
+
+<!-- Fin Nuevo -->
+
+@endsection
+
+
+
+@section('script')
+  
+  $('#grlocalizacion').change(function(event){
+    alert(event.target.value );
+    $.get("localizaciones/grupodepartamento/departamentos/" + event.target.value + "", function(response, state){
+      console.log(response);
+      alert(response);
+    })
+  });
+
+@endsection

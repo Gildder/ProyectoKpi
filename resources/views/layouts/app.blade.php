@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='angularRoutingApp'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,15 +34,19 @@
   <!-- Datetables -->
   <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
 
-  <!-- bootstrap wysihtml5 - text editor -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')}}">
+
+<!-- jQuery 2.2.3 -->
+<script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{URL::asset('plugins/jQueryUI/jquery-ui.min.js')}}"></script>
+<!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
 
    <!-- Mi Datetables -->
   <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
 
-  <script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
-  
   <script src="{{URL::asset('dist/js/main.js')}}"></script>
+
+
 
 
 
@@ -55,8 +59,6 @@
 </head>
 <body class="skin-blue sidebar-mini" >
 <div class="wrapper">
-
-
     @if (Auth::user())
       @if (Auth::user()->type == 2)
         @include("partials/menus/menu_bar_admin")
@@ -89,27 +91,16 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
-<!-- jQuery UI 1.11.4 -->
-<!--<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-  //$.widget.bridge('uibutton', $.ui.button);
-
-
-  
-</script>
-
-
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('bootstrap/js/bootstrap.min.js')}}"></script>
 <!-- Morris.js charts -->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->
-<script src="{{URL::asset('plugins/mis descargas/raphael-min.js')}}"></script>
+<!--
+<script src="{{URL::asset('plugins/descargas/raphael-min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+-->
 <script src="{{URL::asset('plugins/morris/morris.min.js')}}"></script>
 <!-- Sparkline -->
 <script src="{{URL::asset('plugins/sparkline/jquery.sparkline.min.js')}}"></script>
@@ -119,6 +110,9 @@
 <!-- jQuery Knob Chart -->
 <script src="{{URL::asset('plugins/knob/jquery.knob.js')}}"></script>
 <!-- daterangepicker -->
+<!--
+<script src="{{URL::asset('plugins/descargas/moment.min.js')}}"></script>
+-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script src="{{URL::asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- datepicker -->
@@ -133,6 +127,10 @@
 <script src="{{URL::asset('dist/js/app.min.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{URL::asset('dist/js/pages/dashboard.js')}}"></script>
+
+<script>
+  @yield('script')   
+</script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{URL::asset('dist/js/demo.js')}}"></script>
 

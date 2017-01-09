@@ -8,6 +8,9 @@ use ProyectoKpi\Http\Requests;
 
 use ProyectoKpi\Models\GrupoLocalizacion;
 use ProyectoKpi\Http\Requests\GrupoLocalizacionFormRequest;
+use ProyectoKpi\Http\Requests\GrupoLocalizacionRequestUpdate;
+use Illuminate\Support\Facades\DB;
+
 
 
 class GrupoLocalizacionController extends Controller
@@ -48,7 +51,7 @@ class GrupoLocalizacionController extends Controller
 
 	}
 
-	public function update(GrupoLocalizacionFormRequest $Request,$id)
+	public function update(GrupoLocalizacionRequestUpdate $Request,$id)
 	{
 		$grupolocalizacion = GrupoLocalizacion::findOrFail($id);
 		$input = $Request->all();
@@ -56,6 +59,18 @@ class GrupoLocalizacionController extends Controller
 
 		return redirect('localizaciones/grupolocalizacion')->with('message', 'Se modifico correctamente.');
 
+
+		$result = DB::table('grupo_localizaciones')->where('nombre', $Request->nombre)->where('id', $id)->count();
+
+		if($result <> 0)
+		{
+			$grupolocalizacion = GrupoLocalizacion::findOrFail($id);
+			$input = $Request->all();
+			$grupolocalizacion->fill($input)->save();
+			return redirect('localizaciones/grupolocalizacion')->with('message', 'Se modifico correctamente.');
+		}else{
+			return $this->edit($id)->withErrors('El nombre "'.$Request->nombre.'" ya existe');
+		}
 	}
 
 	public function show($id)
@@ -69,10 +84,10 @@ class GrupoLocalizacionController extends Controller
 
 	public function destroy($id)
 	{
-		$result = DB::table('grupo_departamentos')
+		$result = DB::table('grupo_localizaciones')
 					            ->where('id', $id)
 					            ->update(['estado' => 0]);
 
-		return redirect('localizaciones/grupolocalizacion/index')->with('message', 'Se elimino correctamente.');
+		return redirect('localizaciones/grupolocalizacion')->with('message', 'Se elimino correctamente.');
 	}
 }

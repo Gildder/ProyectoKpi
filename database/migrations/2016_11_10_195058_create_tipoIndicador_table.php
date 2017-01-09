@@ -14,7 +14,7 @@ class CreateTipoIndicadorTable extends Migration
     {
          Schema::create('tipos_indicadores', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre',40);
+            $table->string('nombre',40)->unique();
             $table->char('estado',1)->default('1');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

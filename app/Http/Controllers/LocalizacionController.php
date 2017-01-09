@@ -5,7 +5,13 @@ namespace ProyectoKpi\Http\Controllers;
 use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
+
 use ProyectoKpi\Models\Localizacion;
+use ProyectoKpi\Models\GrupoLocalizacion;
+use ProyectoKpi\Http\Requests\LocalizacionFormRequest;
+use ProyectoKpi\Http\Requests\LocalizacionRequestUpdate;
+use Illuminate\Support\Facades\DB;
+
 
 class LocalizacionController extends Controller
 {
@@ -22,30 +28,65 @@ class LocalizacionController extends Controller
 
 	public function create()
 	{
-		return "metodo create";
+		$grupo = GrupoLocalizacion::select('id as idgrupo','nombre as nombregrupo')
+								->where('estado', '=', '1')->get();
+
+		return view('localizaciones.localizacion.create',['grupo'=>$grupo]);
+		//return view('localizaciones.departamento.create')->with('grupo',$grupo);
 	}
 
-	public function store()
+	public function store(LocalizacionFormRequest $Request)
 	{
-		return "metodo store";
+		$localizacion = new Localizacion;
+		$localizacion->nombre = $Request->nombre;
+		$localizacion->grupoloc_id = $Request->grupoloc_id;
+		$localizacion->save();
+
+		return redirect('localizaciones/localizacion')->with('message', 'Se guardo correctamente.');
+	}
+
+	public function edit($id)
+	{
+		$localizacion = Localizacion::findOrFail($id);
+		$grupo = GrupoLocalizacion::select('id as idgrupo','nombre as nombregrupo')->where('estado', '=', '1')->get();
+
+
+		return view('localizaciones.localizacion.edit',['localizacion'=>$localizacion,'grupo'=>$grupo]);
+
+	}
+
+	public function update(localizacionRequestUpdate $Request,$id)
+	{
+
+		$result = DB::table('localizaciones')->where('nombre', $Request->nombre)->where('id', $id)->count();
+
+		if($result <> 0)
+		{
+			$localizacion = Localizacion::findOrFail($id);
+			$input = $Request->all();
+			$localizacion->fill($input)->save();
+			return redirect('localizaciones/localizacion')->with('message', 'Se modifico correctamente.');
+		}else{
+			return $this->edit($id)->withErrors('El nombre "'.$Request->nombre.'" ya existe');
+		}
 
 	}
 
 	public function show($id)
 	{
-		return "metodo show ".$id;
+		$localizacion = Localizacion::findOrFail($id);
+		return response()->json($localizacion);
+		//return view('localizaciones/departamento/delete')->with('departamento', $departamento);
+
 
 	}
 
-	public function update($id)
+	public  function destroy($id)
 	{
-		return "metodo update ".$id;
+		$result = DB::table('localizaciones')
+					            ->where('id', $id)
+					            ->update(['estado' => 0]);		
 
-	}
-
-	public function destroy($id)
-	{
-		return "metodo destroy ".$id;
-
+		return redirect('localizaciones/localizacion')->with('message', 'Se elimino correctamente.');
 	}
 }

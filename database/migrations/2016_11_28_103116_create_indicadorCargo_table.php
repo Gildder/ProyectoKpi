@@ -13,8 +13,8 @@ class CreateIndicadorCargoTable extends Migration
     public function up()
     {
         Schema::create('indicadores_cargos', function (Blueprint $table) {
-            $table->integer('indicador_id')->unsigned();
-            $table->integer('cargo_id')->unsigned();
+            $table->integer('indicador_id')->unique()->unsigned();
+            $table->integer('cargo_id')->unique()->unsigned();
             $table->char('estado',1)->default('1');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

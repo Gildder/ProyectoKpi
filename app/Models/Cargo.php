@@ -4,6 +4,8 @@ namespace ProyectoKpi\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use ProyectoKpi\Models\Cargo;
+use Yajra\Datatables\Facades\Datatables;
 
 class Cargo extends Model
 {
@@ -31,13 +33,13 @@ class Cargo extends Model
 
     public function empleados()
     {
-        return $this->hasMany(Empleado::class);
+        return $this->hasMany('ProyectoKpi\Models\Empleado', 'cargo_id', 'id');
     }
 
 
     public function indicadores()
     {
-        return $this->belongsToMany('ProyectoKpi\Models\Inidicador','indicadores_cargos', 'indicador_id', 'cargo_id');
+        return $this->belongsToMany('ProyectoKpi\Models\Indicador','indicadores_cargos', 'cargo_id', 'indicador_id');
     }
 
 }

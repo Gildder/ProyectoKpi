@@ -14,7 +14,7 @@ class DepartamentosTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-       for($i=0; $i <800; $i++) 
+       for($i=0; $i <20; $i++) 
        {
 
         $id =   DB::table('grupo_departamentos')->insert([

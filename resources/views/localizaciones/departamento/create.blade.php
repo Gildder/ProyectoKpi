@@ -5,19 +5,32 @@
 @endsection
 
 @section('content')
-      <h1 class="box-title">Nuevo Departamento</h1>
-      <hr>
 
-      @include('partials/alert/error')
 
-<div id="formNuevo" class="row panel panel-default" >
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <p class="titulo-panel">Nuevo Departamento</p>
+  </div>
+  <div class="panel-body">
+
+
+      <div class="col-lg-12 breadcrumb">
+            <a  href="{{route('localizaciones.departamento.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
+      </div>
+      
+      <div class="col-lg-12">
+            @include('partials/alert/error')
+      </div>
+
       {!!Form::open(['route'=>'localizaciones.departamento.store', 'method'=>'POST'])!!}
-            <div class="form-group col-sm-5 ">
+            <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-5 ">
                   <label for="nombre" class="hidden-xs">Nombre</label>
-                  {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingrese el Nombre']) !!}
+                  {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
+                  @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
             </div>
-            <div class="form-group col-sm-5 ">
-            	<label for="nombre" class="hidden-xs">Grupo Departamento</label>
+            <div class="form-group @if ($errors->has('grupodep_id')) has-error @endif  col-sm-5 ">
+              <label for="grupodep_id" class="hidden-xs">Grupo Departamento</label>
                   <!--
                   {!! form::select('nombregrupo',$grupo, null, ['id'=>'idgrupo', 'class'=>'form-control', 'placeholder'=>'Seleccionar..']) !!}
                   -->
@@ -27,26 +40,17 @@
                         <option value="{{$item->idgrupo}}">{{$item->nombregrupo}}</option>
                       @endforeach
                   </select>
-            </div>
-            <div class="form-group col-lg-12 col-sm-12">
-                  {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'<span class="glyphicon glyphicon-ok">Guardar</span>', 'class'=>'btn btn-success col-xs-12 col-sm-2' ]) !!}
+                  @if ($errors->has('grupodep_id')) <p class="help-block">{{ $errors->first('grupodep_id') }}</p> @endif
 
-            	<button  id="cancelar" class="btn btn-danger col-xs-12 col-sm-2 " type="reset"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
             </div>
+                
+  </div>
+  <div class="panel-footer text-right">
+      <a  id="cancelar" href="{{route('localizaciones.departamento.index')}}" class="btn btn-danger" type="reset">Cancelar</a>
+      {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success' ]) !!}
+  </div>
       {!! Form::close()!!}
-
 </div>
 
-<script>
-
-      $('#cancelar').click(function(e){
-           document.location.href = "{{route('localizaciones.departamento.index')}}";
-      });
-
-      $('#guardar').click(function(e){
-            document.location.href =  "{{route('localizaciones.departamento.store')}}";
-      });
-
-</script>      
 
 @endsection

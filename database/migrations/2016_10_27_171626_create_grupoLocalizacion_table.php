@@ -15,7 +15,7 @@ class CreateGrupoLocalizacionTable extends Migration
         //
         Schema::create('grupo_localizaciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre',120);
+            $table->string('nombre',120)->unique();
             $table->char('estado',1)->default('1');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

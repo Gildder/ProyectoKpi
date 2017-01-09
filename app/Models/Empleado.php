@@ -5,12 +5,14 @@ namespace ProyectoKpi\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use ProyectoKpi\Models\Empleado;
+use Yajra\Datatables\Facades\Datatables;
 
 class Empleado extends Model
 {
     //
     protected $table = "empleados";
-    protected $primarykey = "id";
+    protected $primarykey = "codigo";
     
 
     /**
@@ -19,7 +21,7 @@ class Empleado extends Model
      * @var array
      */
     protected $fillable = [
-        'codigo', 'nombre', 'apellidoPaterno', 'apellidoMaterno','correo', 'departamento_id', 'localizacion_id','cargo_id','user_id',
+        'codigo','nombres', 'apellidos', 'grdepartamento_id','departamento_id', 'grlocalizacion_id','localizacion_id','cargo_id','user_id',
     ];
 
     /**
@@ -28,7 +30,7 @@ class Empleado extends Model
      * @var array
      */
     protected $hidden = [
-        'id','estado', 'created_at', 'update_at',
+        'estado', 'created_at', 'update_at',
     ];
 
     function users(){
@@ -36,15 +38,15 @@ class Empleado extends Model
     }
 
     function cargos(){
-        return $this->belongsTo(Cargo::class);
+        return $this->belongsTo('ProyectoKpi\Models\Cargo');
     }
     
     function departamentos(){
-        return $this->belongsTo(Departamento::class);
+        return $this->belongsTo('ProyectoKpi\Models\Departamento');
     }
 
     function localizaciones(){
-        return $this->belongsTo(Localizacion::class);
+        return $this->belongsTo('ProyectoKpi\Models\Localizacion');
     }
 
     //Indicadores

@@ -1,13 +1,33 @@
+.titulo-panel {
+  margin: 0;
+  font-weight: bold;
+}
+.modal-delete-content {
+  border-radius: 10px;
+}
+.modal-delete-header {
+  background: #3c8dbc;
+  color: #fff;
+}
+.modal-delete-body {
+  padding: 0;
+}
+.modal-delete-footer {
+  padding: 5px 10px;
+}
+#nuevo {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  rigth: 0px;
+}
+#tituloNuevo {
+  display: inline-block;
+}
 #contenedor {
   background: #fff;
   border-radius: 10px 10px 10px 10px;
   padding: 10px;
-}
-#contenedor #nuevo {
-  top: 20px;
-  right: 10px;
-  position: relative;
-  display: block;
 }
 #contenedor #formNuevo {
   background: #e8e8e8;

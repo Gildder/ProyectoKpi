@@ -33,4 +33,15 @@ class Departamento extends Model
     {
         return $this->belongsTo('ProyectoKpi\Models\GrupoDepartamento','grupodep_id');
     }
+
+    /**
+     * Retorna los departamentos perteneciente a un grupo departamento
+     *
+     * @var id del departamento
+     */
+    public static function obtenerDepartamento($id)
+    {
+        return Departamento::where('grupodep_id','=', $id)->where('estado','=', '1')->get();
+    }
+
 }

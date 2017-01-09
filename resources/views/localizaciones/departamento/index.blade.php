@@ -5,58 +5,27 @@
 @endsection
 
 @section('content')
-	<button  id="nuevo"  class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
-	<h1>Departamentos</h1>
-	<hr>
-	@include('partials/alert/error')
-		<!--tabla de cargos-->
-		<div class="row">
-			<div class="col-lg-12" >
-				<div class="table-response">
-					<table  id="myTable" class="table table-striped table-bordered table-condensed table-hover">
-						<thead>
-							<th>Nro</th>
-							<th>Departamento</th>	
-							<th>Grupo</th>	
-							<th class="hidden-xs">Fecha Creacion</th>
-							<th class="hidden-xs">Fecha Actualizacion</th>
-							<th>Opciones</th>
-						</thead>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+      		<p class="titulo-panel">Departamentos</p>
 
-						<tbody>
-						@foreach($departamentos as $grupo)
-							<tr>
-								<td>{{$grupo->id}}</td>
-								<td>{{$grupo->departamento}}</td>
-								<td>{{$grupo->grupo}}</td>
-								<td class="hidden-xs">{{$grupo->created_at}}</td>
-								<td class="hidden-xs">{{$grupo->updated_at}}</td>
-								<td>
-									<a href="{{route('localizaciones.departamento.edit', $grupo->id)}}" class="btn btn-warning btn-small"><span class="glyphicon glyphicon-pencil"   title="Editar"></span><span > Editar</span></a>
-								<a href="" class="btn btn-danger btn-small" ><span class="glyphicon glyphicon-remove-sign"  title="Baja"></span><span > Baja</span></a>
-								</td>
-							</tr>
-						@endforeach
-						</tbody>
-				
-					</table>
+		</div>
+		<div class="panel-body">
+			
+			@include('partials/alert/error')
+
+			<div class="text-left col-lg-12 breadcrumb">
+				<a  href="{{route('localizaciones.departamento.create')}}" class="btn btn-primary btn-sm" ><b>Nuevo</b> </a>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+		        	@include("localizaciones/departamento/partials/tabla_departamento")
 				</div>
 			</div>
+
 		</div>
-		<!--Fin tabla de cargos-->
-						
-
-<script  >
-	$('#nuevo').click(function(e){
-		document.location.href = "{{route('localizaciones.departamento.create')}}";
-
-	});
-
-
-	$(document).ready(function(){
-	    $('#myTable').DataTable();
-	});
-
-</script>
+		<div class="panel-footer">
+		</div>
+	</div>
 
 @endsection

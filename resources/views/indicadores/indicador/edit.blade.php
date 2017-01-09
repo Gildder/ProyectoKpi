@@ -85,7 +85,7 @@
 	                     <label>{{ Form::checkbox('prov[]', $item->id) }} {{ $item->nombre }}</label><br>
 	                   @endforeach
 	               <div class="col-sm-12">
-	                   {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'<span class="glyphicon glyphicon-ok">Guardar</span>', 'class'=>'btn btn-success col-sm' ]) !!}
+	                   {!!form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'<span class="glyphicon glyphicon-ok">Guardar</span>', 'class'=>'btn btn-success col-sm']) !!}
 	               </div>
 	            {!! Form::close()!!}
 	          </div>

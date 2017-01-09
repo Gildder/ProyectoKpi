@@ -28,7 +28,7 @@
 							<td>{{$indicador->tipo_indicador_id}}</td>
 							<td>{{$indicador->descripcion_objetivo}} {{$indicador->objetivo}} %</td>
 							<td>{{$indicador->condicion}}</td>
-							<td>{{ $indicador->frecuencia}}</td>
+							<td>{{$indicador->frecuencia}}</td>
 						</tr>
 					@endforeach
 					</tbody>
@@ -39,28 +39,10 @@
 		
 
 	</div>
-           
-
-
 
 	<!--Fin tabla de cargos-->
 
    <!-- Alertable -->
   <link rel="stylesheet" href="{{URL::asset('plugins/jquery_alertable/jquery.alertable.css')}}">
   <script src="{{URL::asset('plugins/jquery_alertable/jquery.alertable.js')}}"></script>
-
-<script>
-
-
-	$(document).ready(function(){
-	    $('#myTable').DataTable();
-		//$("#formNuevo").css("display", "none");
-		//$(".alert").css("display", "none");
-
-	});
-
-
-</script>
-
-
 @endsection

@@ -1,56 +1,31 @@
 @extends('layouts.app')
 
+@section('titulo')
+      Grupo Localizacion
+@endsection
+
 @section('content')
-	<button  id="nuevo"  class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"> Nuevo</span></button>
-	<h3>Grupo Localizacion</h3>
-	<hr>
-	@include('partials/alert/error')
+<div class="panel panel-default">
+	<div class="panel-heading">
+  		<p class="titulo-panel">Grupo Localizacion</p>
 
-	<!--tabla de cargos-->
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="table-response">
-				
-				<table  id="myTable" class="table table-striped table-bordered table-condensed table-hover">
+	</div>
+	<div class="panel-body">
+		
+		@include('partials/alert/error')
 
-					<thead>
-						<th>Nro</th>
-						<th>Nombre</th>	
-						<th class="hidden-xs">Fecha Creacion</th>
-						<th class="hidden-xs">Fecha Actualizacion</th>
-						<th>Opciones</th>
-					</thead>
-
-					<tbody>
-					@foreach($grupolocalizaciones as $grupo)
-						<tr>
-							<td>{{$grupo->id}}</td>
-							<td>{{$grupo->nombre}}</td>
-							<td  class="hidden-xs">{{$grupo->created_at}}</td>
-							<td  class="hidden-xs">{{$grupo->updated_at}}</td>
-							<td>
-								<a  href="{{route('localizaciones.grupolocalizacion.edit', $grupo->id)}}"  class="btn btn-warning btn-small"><span class="glyphicon glyphicon-pencil"   title="Editar"></span><span > Editar</span></a>
-								<a href="" class="btn btn-danger btn-small" ><span class="glyphicon glyphicon-remove-sign"  title="Baja"></span><span > Baja</span></a>
-							</td>
-						</tr>
-					@endforeach
-					</tbody>
-			
-				</table>
+		<div class="text-left col-lg-12 breadcrumb">
+			<a  href="{{route('localizaciones.grupolocalizacion.create')}}" class="btn btn-primary btn-sm" ><b>Nuevo</b> </a>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+	        	@include("localizaciones/grupolocalizacion/partials/tabla_grupolocalizacion")
 			</div>
 		</div>
-		        @include("localizaciones/departamento/delete")
+
 	</div>
-	<!--Fin tabla de cargos-->
-
-	
-
-
-<script  >
-	$('#nuevo').click(function(e){
-		document.location.href = "{{route('localizaciones.grupolocalizacion.create')}}";
-
-	});
-</script>
+	<div class="panel-footer">
+	</div>
+</div>
 
 @endsection

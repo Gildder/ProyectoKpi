@@ -1,37 +1,40 @@
 @extends('layouts.app')
 
+@section('titulo')
+      Editar Grupo Localizacion
+@endsection
+
 @section('content')
-      <h3 class="box-title">Editanto  {{$grupolocalizacion->id}} - {{$grupolocalizacion->nombre}}</h3>
-      <hr>
-	<div id="formNuevo" class="row panel panel-default " >
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <p class="titulo-panel">{{$grupolocalizacion->id}} - {{$grupolocalizacion->nombre}}</p>
+  </div>
+  <div class="panel-body">
+
+
+      <div class="col-lg-12 breadcrumb">
+            <a  href="{{route('localizaciones.grupolocalizacion.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+      </div>
+      
+      <div class="col-lg-12">
             @include('partials/alert/error')
+      </div>
 
-            {!!Form::model($grupolocalizacion, ['route'=>['localizaciones.grupolocalizacion.update', $grupolocalizacion->id], 'method'=>'PUT'])!!}
-                  <div class="form-group col-sm-5 ">
-                        <label for="nombre" class="hidden-xs">Nombre</label>
-                        {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingrese el Nombre']) !!}
-                  </div>
-                  <div class="form-group col-lg-12 col-sm-12">
-                        {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'<span class="glyphicon glyphicon-ok">Guardar</span>', 'class'=>'btn btn-success col-xs-12 col-sm-2' ]) !!}
-
-                        <button  id="cancelar" class="btn btn-danger col-xs-12 col-sm-2 " type="reset"><span class="glyphicon glyphicon-remove"> Cancelar</span></button>
-                  </div>
-            {!! Form::close()!!}
-		
-	</div>
-
-
-<script>
-      $('#nuevo').click(function(e){
-            document.location.href = "{{route('localizaciones.grupolocalizacion.create')}}";
-
-      });
-
-
-      $('#cancelar').click(function(e){
-           document.location.href = "{{route('localizaciones.grupolocalizacion.index')}}";
-      });
-
-</script>   
+      {!!Form::model($grupolocalizacion, ['route'=>['localizaciones.grupolocalizacion.update', $grupolocalizacion->id], 'method'=>'PUT'])!!}
+      <div class="form-group @if ($errors->has('nombre')) has-error @endif  col-sm-5">
+            <label for="nombre" class="hidden-xs">Nombre</label>
+            {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
+            @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
+            
+      </div>
+                
+  </div>
+  <div class="panel-footer text-right">
+      <a  id="cancelar" href="{{route('localizaciones.grupolocalizacion.index')}}" class="btn btn-danger" type="reset">Cancelar</a>
+      {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success' ]) !!}
+  </div>
+      {!! Form::close()!!}
+</div>
 
 @endsection

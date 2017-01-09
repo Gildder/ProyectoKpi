@@ -13,6 +13,7 @@ class GrupoDepartamento extends Model
     protected $table = "grupo_departamentos";
     protected $primarykey = "id";
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -37,5 +38,11 @@ class GrupoDepartamento extends Model
     public function departamentos()
     {
         return $this->hasMany('ProyectoKpi\Models\Departamento');
+    }
+
+
+    public static function validarRepetido()
+    {
+
     }
 }

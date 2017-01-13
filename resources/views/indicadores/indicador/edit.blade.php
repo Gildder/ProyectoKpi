@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content-header')
+@section('titulo')
 	<h1>{{$indicador->nombre}}</h1>
 @endsection
 
@@ -72,7 +72,7 @@
 	  <div class="panel-body">
 
 			
-			<div class="col-lg-12">
+		<div class="col-lg-12">
 	         <h3>Lista de Puestos</h3>
 	         <p>Los puestos de trabajo a los cuales se aplicara el indicador.</p>
 
@@ -125,6 +125,8 @@
 	            </table>
 	         </div>
 	      </div>
+
+	      
 	  </div>
 	</div>
 </div>

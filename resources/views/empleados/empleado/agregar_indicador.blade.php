@@ -14,7 +14,6 @@
               
 		<div class="col-lg-12">
 	        <p>Seleccionar los indicadores que se aplicaran al empleado.</p>
-        
           
           @if(count($indicadores_libres) > 0)
             <div class="col-sm-12" style="background: white; padding: 10px;">

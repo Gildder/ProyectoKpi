@@ -1,21 +1,18 @@
 
    <!-- Modal -->
-<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-delete-{{$cargo->id}}">
+<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-delete-{{$empleados->codigo}}">
   <div class="modal-dialog">
 
     <!-- Modal content-->
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        Eliminar Cargo
+        Baja de Empleado
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['CargoController@destroy', $cargo->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['EmpleadoController@destroy', $empleados->codigo], 'method'=>'DELETE'])!!}
             <div class="modal-body">
-              <p>¿Estas seguro que deseas eliminar a <b>{{$cargo->nombre}}?</b></p>
-                  <div class="form-group col-sm-5 ">
-                        <label id="nombregrupo"></label>
-                  </div>
+              <p>¿Estas seguro que deseas dar de Baja a <b>{{$empleados->nombres}}  {{$empleados->apellidos}}</b>?</p>
             </div>
             <div class="modal-footer modal-delete-footer">
                   <a data-dismiss="modal" class="btn btn-danger btn-sm">Cancelar</a>

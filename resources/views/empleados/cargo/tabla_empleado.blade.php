@@ -12,7 +12,7 @@
     <tbody>
     @foreach($empleados as $empleado)
       <tr>
-        <td>{{$empleado->id}}</td>
+        <td>{{$empleado->codigo}}</td>
         <td>{{$empleado->nombres}} {{$empleado->apellidos}}</td>
         <td>{{$empleado->usuario}}</td>
         <td>{{$empleado->correo}}</td>

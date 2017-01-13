@@ -53,3 +53,6 @@ Route::get('api/grupodepartamento', function() {
 	return Datatables::eloquent(grupodepartamento::query())->make(true);
 });
 */
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

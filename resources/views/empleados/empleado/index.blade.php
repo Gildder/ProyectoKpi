@@ -9,7 +9,8 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-  	<strong>Empleados</strong>
+  	<p class="titulo-panel">Empleados</p>
+
   </div>
   <div class="panel-body">
   	

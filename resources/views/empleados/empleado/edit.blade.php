@@ -23,7 +23,7 @@
 
       {!!Form::model($empleado, ['route'=>['empleados.empleado.update', $empleado->codigo], 'method'=>'PUT'])!!}
 
-      @include('empleados/empleado/partials/actualizar_atributos')
+        @include('empleados/empleado/partials/actualizar_atributos')
       
   </div>
   <div class="panel-footer text-right">

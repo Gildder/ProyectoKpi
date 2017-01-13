@@ -8,9 +8,10 @@ use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Models\Cargo;
 use ProyectoKpi\Models\Indicador;
 use ProyectoKpi\Http\Requests\CargoFormRequest;
+use ProyectoKpi\Http\Requests\CargoRequestUpdate;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Redirect;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class CargoController extends Controller
 {
@@ -53,35 +54,26 @@ class CargoController extends Controller
 	public function edit($id)
 	{
 		$cargo = Cargo::findOrFail($id);
-		$indicadores = Cargo::find($id)->indicadores()->where('indicadores_cargos.cargo_id','=',$id)->where('indicadores_cargos.estado','=','1')->get();
-		//$empleados = Cargo::find($id)->empleados()->where('empleados.cargo_id','=',$id)->where('empleados.estado','=','1')->get();
-
-
-		$empleados = DB::table('empleados')
-						->join('departamentos', 'departamentos.id', '=', 'empleados.departamento_id')
-						->join('localizaciones', 'localizaciones.id', '=', 'empleados.localizacion_id')
-						->join('cargos', 'cargos.id', '=', 'empleados.cargo_id')
-						->join('users', 'users.id', '=', 'empleados.user_id')
-						->select('empleados.id','empleados.nombres','empleados.apellidos', 'localizaciones.nombre as localizacion','departamentos.nombre as departamento', 'users.name as usuario','users.email as correo', 'cargos.nombre as cargo')
-						->where('empleados.cargo_id', '=', $id)
-						->get();
-
-
-		//return view('empleados.cargo.edit')->with('cargo', $cargo);
-		return view('empleados/cargo/edit',['cargo'=>$cargo,'indicadores'=>$indicadores,'empleados'=>$empleados]);
+		
+		return view('empleados/cargo/edit',['cargo'=>$cargo]);
 
 	}
 
-	public function update(CargoFormRequest $Request, $id)
+	public function update(CargoRequestUpdate $Request, $id)
 	{
-		$cargo = Cargo::findOrFail($id);
-		$input = $Request->all();
-		$cargo->fill($input)->save();
 
-		//return redirect('empleados/cargo/edit')->with('message', 'Se modifico correctamente.');
-		//return view('indicadores.indicador');
-		return $this->edit($id)->with('message', 'Se modifico correctamente.');
+		$result = DB::table('cargos')->where('nombre', $Request->nombre)->where('id', $id)->count();
 
+		if($result <> 0)
+		{
+			$cargo = Cargo::findOrFail($id);
+			$input = $Request->all();
+			$cargo->fill($input)->save();
+
+			return redirect('empleados/cargo/show', $id)->with('message', 'Se modifico correctamente.');
+		}else{
+			return $this->edit($id)->withErrors('El nombre "'.$Request->nombre.'" ya existe');
+		}
 	}
 
 	public function agregar(Request $Request,$id)
@@ -103,17 +95,28 @@ class CargoController extends Controller
 	public function show($id)
 	{
 		$cargo = Cargo::findOrFail($id);
-		return response()->json($cargo);
-		//return view('empleados/cargo/delete')->with('cargo', $cargo);
+		$indicadores = Cargo::find($id)->indicadores()->where('indicadores_cargos.cargo_id','=',$id)->where('indicadores_cargos.estado','=','1')->get();
+
+		$empleados = DB::table('empleados')
+						->join('departamentos', 'departamentos.id', '=', 'empleados.departamento_id')
+						->join('localizaciones', 'localizaciones.id', '=', 'empleados.localizacion_id')
+						->join('cargos', 'cargos.id', '=', 'empleados.cargo_id')
+						->join('users', 'users.id', '=', 'empleados.user_id')
+						->select('empleados.codigo','empleados.nombres','empleados.apellidos', 'localizaciones.nombre as localizacion','departamentos.nombre as departamento', 'users.name as usuario','users.email as correo', 'cargos.nombre as cargo')
+						->where('empleados.cargo_id', '=', $id)
+						->get();
+
+
+		return view('empleados/cargo/show',['cargo'=>$cargo,'indicadores'=>$indicadores,'empleados'=>$empleados]);
 	}
 
 	public function destroy($id)
 	{
-		$result = DB::table('grupo_departamentos')
+		$result = DB::table('cargos')
 					            ->where('id', $id)
 					            ->update(['estado' => 0]);
 
-		return redirect('empleados/cargo/index')->with('message', 'Se elimino correctamente.');
+		return redirect('empleados/cargo')->with('message', 'Se elimino correctamente.');
 	}
 
 	public function indicadores($id)

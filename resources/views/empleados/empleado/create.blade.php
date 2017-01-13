@@ -14,12 +14,10 @@
   </div>
   <div class="panel-body">
 
-
 	<div class="col-lg-12 breadcrumb">
 		<a  href="{{route('empleados.empleado.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
 	</div>
-      
-      @include('partials/alert/error')
+      <p>Todos los campos del formulario son requiridos, por favor llene todos.</p>
 
       {!!Form::open(['route'=>'empleados.empleado.store', 'method'=>'POST'])!!}
 
@@ -42,7 +40,6 @@
 @section('script')
   
   $('#grlocalizacion').change(function(event){
-    alert(event.target.value );
     $.get("localizaciones/grupodepartamento/departamentos/" + event.target.value + "", function(response, state){
       console.log(response);
       alert(response);

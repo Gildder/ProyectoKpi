@@ -22,9 +22,11 @@
           <a href="" class="btn btn-danger btn-small"  data-toggle="modal" data-target="#myModalIndicador">Quitar</a>
         </td>
       </tr>
+      @include('empleados/empleado/partials/ver_indicador')
+      @include('empleados/cargo/delete_indicador')
+      
     @endforeach
     </tbody>
   </table>
 
-  @include('empleados/cargo/delete_indicador')
 </div>

@@ -6,3 +6,11 @@ $(document).ready(function(){
 
 });
 
+
+
+function agregarFormala(id)
+{
+	var url = 'partials/formula_'+id;
+	$("#formulario").html(url);
+	alert(url);
+}

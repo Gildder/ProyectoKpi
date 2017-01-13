@@ -4,7 +4,7 @@ namespace ProyectoKpi\Http\Requests;
 
 use ProyectoKpi\Http\Requests\Request;
 
-class CargoFormRequest extends Request
+class CargoRequestUpdate extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class CargoFormRequest extends Request
     public function rules()
     {
      return [
-            'nombre'=>'required|min:5|max:40|unique:cargos,nombre',
+            'nombre'=>'required|min:5|max:40',
             
         ];
     }
@@ -35,7 +35,6 @@ class CargoFormRequest extends Request
             'nombre.required' => 'El campo nombre es requerido!',
             'nombre.min' => 'El campo nombre no puede tener menos de 5 carácteres',
             'nombre.max' => 'El campo nombre no puede tener más de 40 carácteres',
-            'nombre.unique' => 'El campo nombre ya existe',
         ];
     }
 }

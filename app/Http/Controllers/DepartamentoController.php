@@ -58,17 +58,17 @@ class DepartamentoController extends Controller
 
 	public function update(DepartamentoRequestUpdate $Request,$id)
 	{
-			$result = DB::table('departamentos')->where('nombre', $Request->nombre)->where('id', $id)->count();
+		$result = DB::table('departamentos')->where('nombre', $Request->nombre)->where('id', $id)->count();
 
-			if($result <> 0)
-			{
-				$departamento = Departamento::findOrFail($id);
-				$input = $Request->all();
-				$departamento->fill($input)->save();
-				return redirect('localizaciones/departamento')->with('message', 'Se modifico correctamente.');
-			}else{
-				return $this->edit($id)->withErrors('El nombre "'.$Request->nombre.'" ya existe');
-			}
+		if($result <> 0)
+		{
+			$departamento = Departamento::findOrFail($id);
+			$input = $Request->all();
+			$departamento->fill($input)->save();
+			return redirect('localizaciones/departamento')->with('message', 'Se modifico correctamente.');
+		}else{
+			return $this->edit($id)->withErrors('El nombre "'.$Request->nombre.'" ya existe');
+		}
 	}
 
 	public function show($id)

@@ -29,14 +29,14 @@ class EmpleadoFormRequest extends Request
             'email'=>'required|max:30',
             'nombres'=>'required|max:50',
             'apellidos'=>'required|max:50',
-            //'grdepartamento_id'=>'required',
+            'grdepartamento_id'=>'required',
             'departamento_id'=>'required',
-            //'grlocalizacion_id'=>'required',
+            'grlocalizacion_id'=>'required',
             'localizacion_id'=>'required',
             'cargo_id'=>'required',
             'type_id'=>'required',
-            'password'=>'required',
-            'repassword'=>'required',
+            'password'=>'required|AlphaNum|min:8|Confirmed',
+            'password_confirmation'=>'Required|AlphaNum|min:8'
         ];
     }
 
@@ -53,14 +53,14 @@ class EmpleadoFormRequest extends Request
             'apellidos.max' => 'Los apellidos no puede tener más de 50 carácteres',
             'codigo.required' => 'El codigo del empleado es requerido!',
             'codigo.max' => 'El codigo no puede tener más de 40 carácteres',
-           // 'grdepartamento_id.required' => 'Seleccione el grupo departamento',
+            'grdepartamento_id.required' => 'Seleccione el grupo departamento',
             'departamento_id.required' => 'Seleccione el departamento',
-            //'grlocalizacion_id.required' => 'Seleccione el grupo localizacion',
+            'grlocalizacion_id.required' => 'Seleccione el grupo localizacion',
             'localizacion_id.required' => 'Seleccione la localizacion',
             'cargo_id.required' => 'Seleccione el cargo del empleado',
             'type_id.required' => 'Seleccione tipo usuario!',
             'password.required' => 'Coloque la Contraseña!',
-            'repassword.required' => 'Repita la contraseña!',
+            'password_confirmation.required' => 'Repita la contraseña!',
         ];
     }
 }

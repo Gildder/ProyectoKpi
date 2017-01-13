@@ -14,12 +14,10 @@ use ProyectoKpi\Models\GrupoLocalizacion;
 use ProyectoKpi\Models\Localizacion;
 use ProyectoKpi\Models\GrupoDepartamento;
 use ProyectoKpi\Models\Departamento;
-use ProyectoKpi\Http\Controllers\GrupoDepartamentoController;
+use ProyectoKpi\Http\Controllers\Localizaciones\GrupoDepartamentoController;
 use ProyectoKpi\Http\Requests\EmpleadoFormRequest;
 use ProyectoKpi\Http\Requests\EmpleadoRequestUpdate;
-
-
-
+use Illuminate\Support\Facades\DB;
 
 class EmpleadoController extends Controller
 {
@@ -72,10 +70,12 @@ class EmpleadoController extends Controller
     public function obtenerIndicadores($id)
     {
     	return $indicadores = Indicador::
-						select('indicadores.id','indicadores.nombre','indicadores.orden','indicadores.descripcion_objetivo','indicadores.objetivo', 'indicadores.condicion', 'indicadores.frecuencia', 'indicadores.estado')
+						select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','indicadores.objetivo','tipos_indicadores.nombre as tipo','indicadores.condicion',  'frecuencias.nombre as frecuencia')
 							->join('indicadores_cargos','indicadores_cargos.indicador_id','=','indicadores.id')
 							->join('cargos','cargos.id','=','indicadores_cargos.cargo_id')
 							->join('empleados','empleados.cargo_id','=','cargos.id')
+							->join('frecuencias','frecuencias.id','=','indicadores.frecuencia_id')
+							->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 						->where('indicadores.estado', '=', '1')
 						->where('empleados.codigo', '=', $id)
 						->get();
@@ -88,7 +88,11 @@ class EmpleadoController extends Controller
 		
 		$cargos_indicador = Cargo::find($idCargo)->indicadores()->where('indicadores_cargos.cargo_id','=', $idCargo)->get();
 
-		$todos_indicadores = Indicador::select('indicadores.*')->where('estado', '=', '1')->get();
+		$todos_indicadores = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','indicadores.objetivo','tipos_indicadores.nombre as tipo','indicadores.condicion',  'frecuencias.nombre as frecuencia')
+							->join('frecuencias','frecuencias.id','=','indicadores.frecuencia_id')
+							->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
+						->where('indicadores.estado', '=', '1')
+						->get();
 
 		return $todos_indicadores->diff($cargos_indicador);
 
@@ -161,44 +165,30 @@ class EmpleadoController extends Controller
 
 	public function update(EmpleadoRequestUpdate $Request,$id)
 	{
-		$empleado = Empleado::where('codigo','=', $id)->first();
 
-		$users = User::where('id','=', $empleado->user_id)->get();
-		$users->name = $Request->usuario;
-		$users->email = $Request->email;
-		$users->type = $Request->type_id;
-		$users->save();
+		$empleado = Empleado::where('codigo',$id)->first();
 
-		$empleado->nombres = $Request->nombres;
-		$empleado->apellidos = $Request->apellidos;
-		$empleado->codigo = $Request->codigo;
-		$empleado->departamento_id = $Request->departamento_id;
-		$empleado->localizacion_id = $Request->localizacion_id;
-		$empleado->cargo_id = $Request->cargo_id;
-		var_dump($empleado); 
-		$empleado->push();
+		DB::table('empleados')->where('codigo',$id)->update(['nombres' => $Request->nombres,'apellidos' => $Request->apellidos,'codigo' => $Request->codigo,'departamento_id' => $Request->departamento_id,'localizacion_id' => $Request->localizacion_id,'cargo_id' => $Request->cargo_id]);
 
-
+		DB::table('users')->where('id', $empleado->user_id)->update(['name' => $Request->usuario,'email' => $Request->email,'type' => $Request->type_id]);
 
 		return redirect('empleados/empleado')->with('message', 'Se guardo correctamente.');
 	}
-
-
-	
 
 	public function show($id)
 	{
 		$empleados = $this->obtenerEmpleado($id);
 
-		$indicadoresLibres = $this->obtenerIndicadoresDisponibles($id,$empleados->cargo_id);
+		$indicadores = $this->obtenerIndicadores($empleados->codigo);
 		
-		return view('empleados.empleado.show',['empleados'=>$empleados, 'indicadores'=>$indicadoresLibres]);
-
+		return view('empleados.empleado.show',['empleados'=>$empleados, 'indicadores'=>$indicadores]);
 	}
 
 	public function destroy($id)
 	{
-		return "metodo destroy ".$id;
+		$result = DB::table('empleados')->where('codigo', $id)->update(['estado' => 0]);		
+
+		return redirect('empleados/empleado')->with('message', 'Se procedio con la baja exitosamente.');
 
 	}
 }

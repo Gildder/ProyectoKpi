@@ -8,7 +8,7 @@
 		<tbody>
 		@foreach($cargos as $cargo)
 			<tr>
-				<td><a href="{{route('empleados.cargo.edit', $cargo->id)}}" class="btn btn-primary btn-xs" ><span class=""  title="Baja"></span><span >{{$cargo->id}}</span></a></td>
+				<td><a href="{{route('empleados.cargo.show', $cargo->id)}}" class="btn btn-primary btn-xs" ><span class=""  title="Baja"></span><span >{{$cargo->id}}</span></a></td>
 				<td>{{$cargo->nombre}}</td>
 			</tr>
 		@endforeach

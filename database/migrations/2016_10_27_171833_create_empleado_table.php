@@ -19,9 +19,7 @@ class CreateEmpleadoTable extends Migration
             $table->string('nombres',50);
             $table->string('apellidos',50);
             $table->char('estado',1)->default('1');
-            $table->integer('grdepartamento_id')->unsigned();
             $table->integer('departamento_id')->unsigned();
-            $table->integer('grlocalizacion_id')->unsigned();
             $table->integer('localizacion_id')->unsigned();
             $table->integer('cargo_id')->unsigned();
             $table->integer('user_id')->unique()->unsigned();
@@ -32,9 +30,7 @@ class CreateEmpleadoTable extends Migration
         });
 
          Schema::table('empleados', function ($table) {
-            $table->foreign('grdepartamento_id')->references('id')->on('grupo_departamentos')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('departamento_id')->references('id')->on('departamentos')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('grlocalizacion_id')->references('id')->on('grupo_localizaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('localizacion_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('cargo_id')->references('id')->on('cargos')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

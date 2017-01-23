@@ -16,14 +16,14 @@
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-briefcase"></i>
-              <label for="Empleados" class="hidden-xs">Empleados</label>
+              <label for="Tareas" class="hidden-xs">Tareas</label>
             </a>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-sitemap"></i>
-              <label for="Cargos" class="hidden-xs">Cargos</label>
+              <label for="Cargos" class="hidden-xs">Empleado</label>
             </a>
           </li>
           <!-- Tasks: style can be found in dropdown.less -->

@@ -1,6 +1,6 @@
 <div class="table-response">
 				
-	<table  id="myTable" class="table table-striped table-bordered table-condensed table-hover">
+	<table  id="myTableGrDepartamento" class="table table-striped table-bordered table-condensed table-hover">
 
 		<thead>
 			<th>Nro</th>
@@ -14,8 +14,8 @@
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>
 				<td>
-					<a  href="{{route('localizaciones.grupolocalizacion.edit', $item->id)}}"  class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"   title="Editar"></span><span > Editar</span></a>
-					<a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><span class="glyphicon glyphicon-trash"  title="Eliminar"></span><span > Eliminar</span></a>
+					<a  href="{{route('localizaciones.grupolocalizacion.edit', $item->id)}}"  class="btn btn-warning btn-sm"><span class="fa fa-edit"   title="Editar"></span><b> Editar</b></a>
+					<a href="" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><span class="fa fa-trash"  title="Eliminar"></span><b> Borrar</b></a>
 				</td>
 			</tr>
 			@include("localizaciones/grupolocalizacion/delete")

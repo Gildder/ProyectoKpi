@@ -10,7 +10,7 @@
         Eliminar Localizacion
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['LocalizacionController@destroy', $item->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Localizaciones\LocalizacionController@destroy', $item->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a {{$item->localizacion}}?</p>
             </div>

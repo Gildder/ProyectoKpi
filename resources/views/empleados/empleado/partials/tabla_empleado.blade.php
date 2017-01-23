@@ -13,7 +13,7 @@
 		<tbody>
 		@foreach($empleados as $item)
 			<tr>
-				<td><a href="{{route('empleados.empleado.show', $item->codigo)}}" class="btn btn-primary btn-xs" >{{$item->codigo}}</a></td>
+				<td><a href="{{route('empleados.empleado.show', $item->codigo)}}" class="btn btn-warning btn-xs" >{{$item->codigo}}</a></td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
 				<td>{{$item->usuario}}</td>
 				<td>{{$item->correo}}</td>

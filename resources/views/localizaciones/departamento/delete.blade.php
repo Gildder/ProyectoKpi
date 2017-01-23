@@ -10,13 +10,13 @@
         Eliminar Departamento
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['DepartamentoController@destroy', $item->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Localizaciones\DepartamentoController@destroy', $item->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
-              <p>¿Estas seguro que deseas eliminar a {{$item->departamento}}?</p>
+              <p>¿Estas seguro que deseas eliminar a <b>{{$item->nombre}}</b>?</p>
             </div>
             <div class="modal-footer modal-delete-footer">
-                  <a data-dismiss="modal" class="btn btn-danger btn-sm">Cancelar</a>
-                  {!! form::submit('Aceptar',['name'=>'Aceptar','id'=>'aceptar','content'=>'<span>Aceptar</span>','class'=>'btn btn-success btn-sm']) !!}
+                  <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
+                {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
             </div>
             {!! Form::close()!!}
       </div>

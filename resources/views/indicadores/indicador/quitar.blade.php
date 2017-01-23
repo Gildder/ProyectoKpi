@@ -9,7 +9,7 @@
         Quitar Cargo del Indicador
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['IndicadorController@quitar',$indicador->id, $cargo->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['Indicadores\IndicadorController@quitar',$indicador->id, $cargo->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas quitar a <b>{{$cargo->nombre}}</b>?</p>
             </div>

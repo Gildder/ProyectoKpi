@@ -7,16 +7,16 @@
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        Baja de Empleado
+        Eliminar Empleado
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['EmpleadoController@destroy', $empleados->codigo], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Empleados\EmpleadoController@destroy', $empleados->codigo], 'method'=>'DELETE'])!!}
             <div class="modal-body">
-              <p>¿Estas seguro que deseas dar de Baja a <b>{{$empleados->nombres}}  {{$empleados->apellidos}}</b>?</p>
+              <p>¿Estas seguro que deseas eliminar a <b>{{$empleados->nombres}}  {{$empleados->apellidos}}</b>?</p>
             </div>
             <div class="modal-footer modal-delete-footer">
-                  <a data-dismiss="modal" class="btn btn-danger btn-sm">Cancelar</a>
-                  {!! form::submit('Aceptar',['name'=>'Aceptar','id'=>'aceptar','content'=>'<span>Aceptar</span>','class'=>'btn btn-success btn-sm']) !!}
+                     <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
+                {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
             </div>
             {!! Form::close()!!}
       </div>

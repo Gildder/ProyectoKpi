@@ -25,8 +25,8 @@
       
   </div>
   <div class="panel-footer text-right">
-      <a  id="cancelar" href="{{route('empleados.empleado.index')}}" class="btn btn-danger" type="reset">Cancelar</a>
-      {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success' ]) !!}
+      <a  id="cancelar" href="{{route('empleados.empleado.index')}}" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>
+    {!! form::button('<i class="fa fa-save"></i> Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
   </div>
       {!! Form::close()!!}
 </div>
@@ -35,15 +35,3 @@
 
 @endsection
 
-
-
-@section('script')
-  
-  $('#grlocalizacion').change(function(event){
-    $.get("localizaciones/grupodepartamento/departamentos/" + event.target.value + "", function(response, state){
-      console.log(response);
-      alert(response);
-    })
-  });
-
-@endsection

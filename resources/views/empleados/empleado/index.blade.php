@@ -17,7 +17,7 @@
 	@include('partials/alert/error')
 	
 	<div class="text-left col-lg-12 breadcrumb">
-		<a  href="{{route('empleados.empleado.create')}}" class="btn btn-primary btn-sm" ><b>Nuevo</b> </a>
+		<a  href="{{route('empleados.empleado.create')}}" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span><b>   Nuevo</b> </a>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
@@ -25,6 +25,8 @@
 		</div>
 	</div>
 
+  </div>
+  <div class="panel-footer">
   </div>
 </div>
 @endsection

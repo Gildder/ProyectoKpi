@@ -1,0 +1,79 @@
+<?php
+
+namespace ProyectoKpi\Http\Controllers\Localizaciones;
+
+use Illuminate\Http\Request;
+use ProyectoKpi\Http\Requests;
+use ProyectoKpi\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+
+
+use ProyectoKpi\Models\Localizaciones\GrupoLocalizacion;
+use ProyectoKpi\Http\Requests\Localizaciones\GrupoLocalizacionFormRequest;
+use ProyectoKpi\Http\Requests\Localizaciones\GrupoLocalizacionRequestUpdate;
+
+class GrupoLocalizacionController extends Controller
+{
+	public function __construct()
+    {
+        //$this->middleware('guest');
+    }
+    
+    public function index()
+	{
+		$grupolocalizaciones = GrupoLocalizacion::where('grupo_localizaciones.estado', '=', '1')->get();
+
+		return view('localizaciones/grupolocalizacion/index')->with('grupolocalizaciones', $grupolocalizaciones);
+	}
+
+	public function create()
+	{
+
+		return view('localizaciones.grupolocalizacion.create');
+	}
+
+	public function store(GrupoLocalizacionFormRequest $Request)
+	{
+		$grupolocalizacion = new GrupoLocalizacion;
+		$grupolocalizacion->nombre = trim(\Request::input('nombre'));
+		$grupolocalizacion->save();
+
+		return redirect('localizaciones/grupolocalizacion')->with('message', 'El Grupo "'.$grupolocalizacion->nombre.'" se guardo correctamente.');
+
+
+	}
+
+	public function edit($id)
+	{
+		$grupolocalizacion = GrupoLocalizacion::findOrFail($id);
+		return view('localizaciones.grupolocalizacion.edit')->with('grupolocalizacion', $grupolocalizacion);
+
+	}
+
+	public function update(GrupoLocalizacionFormRequest $Request,$id)
+	{
+		DB::table('grupo_localizaciones')
+            ->where('id', $id)
+            ->update(array('nombre' => trim($Request->nombre)));
+
+		return redirect('localizaciones/grupolocalizacion')->with('message', 'El Grupo Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+	}
+
+	public function show($id)
+	{
+		$grupolocalizacion = GrupoLocalizacion::findOrFail($id);
+		return response()->json($grupolocalizacion);
+		//return view('localizaciones/grupolocalizacion/delete')->with('grupolocalizacion', $grupolocalizacion);
+
+
+	}
+
+	public function destroy($id)
+	{
+		$result = DB::table('grupo_localizaciones')
+					            ->where('id', $id)
+					            ->update(['estado' => 0]);
+
+		return redirect('localizaciones/grupolocalizacion')->with('message', 'El Grupo de Nro.- '.$id.'  se elimino correctamente.');
+	}
+}

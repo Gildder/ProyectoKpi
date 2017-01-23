@@ -8,7 +8,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-	  <p class="titulo-panel">{{$empleados->codigo}} - {{$empleados->nombres}}</p>
+	  <p class="titulo-panel">{{$empleados->codigo}} - {{$empleados->nombres}} {{$empleados->apellidos}}</p>
 	</div>
 
 	<div class="panel-body">
@@ -34,7 +34,6 @@
 				</div>
 				<div class="col-sm-12 panel-footer text-right">
 		
-					<a href="{{route('empleados.empleado.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply text-left"></span>	<b>Volver</b> </a>
 					<a href="{{route('empleados.empleado.edit', $empleados->codigo)}}" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
 					<a href="#"  data-toggle="modal" data-target="#modal-delete-{{$empleados->codigo}}" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
 

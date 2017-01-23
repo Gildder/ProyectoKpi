@@ -18,8 +18,6 @@
                 {{$indicador->descripcion_objetivo}} {{$indicador->objetivo}}% <hr>
               <label  style="margin:10px 10px 0 10%; text-align:right;  width: 35%">Condicion: </label>
                 {{$indicador->condicion}} <hr>
-              <label  style="margin:10px 10px 0 10%; text-align:right;  width: 35%">Orden</label>
-                {{$indicador->orden}} <hr>
               <label  style="margin:10px 10px 0 10%; text-align:right;  width: 35%" >Tipo de Indicador:</label>
                 {{$indicador->tipo}} <hr>
               <label  style="margin:10px 10px 0 10%; text-align:right;  width: 35%">Frecuencia:</label>

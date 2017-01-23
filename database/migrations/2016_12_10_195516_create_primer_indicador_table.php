@@ -12,7 +12,7 @@ class CreatePrimerIndicadorTable extends Migration
      */
     public function up()
     {
-        Schema::create('indicador_primer', function(Blueprint $table){
+        Schema::create('primer_indicador', function(Blueprint $table){
             $table->increments('id');
             $table->integer('gestion');
             $table->integer('mes');
@@ -28,7 +28,7 @@ class CreatePrimerIndicadorTable extends Migration
             $table->engine = 'InnoDB';
         });
 
-        Schema::table('indicador_primer', function($table) {
+        Schema::table('primer_indicador', function($table) {
             $table->foreign('emp_codigo')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('indicador_id')->references('id')->on('indicadores')->onDelete('cascade')->onUpdate('cascade');
 

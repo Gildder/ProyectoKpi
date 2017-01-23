@@ -12,8 +12,8 @@
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>
 				<td>
-					<a href="{{route('localizaciones.grupodepartamento.edit', $item->id)}}" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"   title="Editar"></span> Editar</a>
-					<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><span class="glyphicon glyphicon-trash"  title="Eliminar"></span> Eliminar</a>
+					<a href="{{route('localizaciones.grupodepartamento.edit', $item->id)}}" class="btn btn-warning btn-sm"><span class="fa fa-edit"   title="Editar"></span> <b>Editar</b> </a>
+					<a class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-delete-{{$item->id}}"><span class="fa fa-trash"  title="Eliminar"></span> <b>Borrar</b> </a>
 				</td>
 			</tr>
 			

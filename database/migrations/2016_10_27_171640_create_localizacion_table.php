@@ -18,10 +18,10 @@ class CreateLocalizacionTable extends Migration
             $table->string('nombre',20)->unique();
             $table->string('direccion',20);
             $table->string('telefono',20)->unique();
-            $table->char('estado',1)->default('1');
             $table->integer('grupoloc_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->softDeletes();
             $table->engine = 'InnoDB';
 
         });

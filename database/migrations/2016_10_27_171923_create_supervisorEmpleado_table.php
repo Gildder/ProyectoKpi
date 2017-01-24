@@ -18,6 +18,7 @@ class CreateSupervisorEmpleadoTable extends Migration
             $table->string('empleados_id');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->softDeletes();
             $table->engine = 'InnoDB';
 
         });

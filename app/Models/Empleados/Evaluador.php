@@ -3,12 +3,24 @@
 namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Evaluador extends Model
 {
-	protected $table = "evaluadores";
+
+    protected $table = "evaluadores";
     protected $primarykey = "id";
     
+    use SoftDeletes;
+    public $timestamps = true;
+    
+    /**
+     * The attributes that should be mutated to dates 
+     *  
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +37,7 @@ class Evaluador extends Model
      * @var array
      */
     protected $hidden = [
-        'id','estado', 'created_at', 'update_at',
+        'id', 'created_at', 'update_at',
     ];
 
     public function empleados()

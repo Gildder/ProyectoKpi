@@ -21,7 +21,7 @@ class GrupoLocalizacionController extends Controller
     
     public function index()
 	{
-		$grupolocalizaciones = GrupoLocalizacion::where('grupo_localizaciones.estado', '=', '1')->get();
+		$grupolocalizaciones = GrupoLocalizacion::all();
 
 		return view('localizaciones/grupolocalizacion/index')->with('grupolocalizaciones', $grupolocalizaciones);
 	}
@@ -52,9 +52,9 @@ class GrupoLocalizacionController extends Controller
 
 	public function update(GrupoLocalizacionFormRequest $Request,$id)
 	{
-		DB::table('grupo_localizaciones')
-            ->where('id', $id)
-            ->update(array('nombre' => trim($Request->nombre)));
+        $grupolocalizacion = GrupoLocalizacion::findOrFail($id);
+		$grupolocalizacion->nombre = trim(\Request::input('nombre'));
+		$grupolocalizacion->save();
 
 		return redirect('localizaciones/grupolocalizacion')->with('message', 'El Grupo Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
@@ -63,16 +63,13 @@ class GrupoLocalizacionController extends Controller
 	{
 		$grupolocalizacion = GrupoLocalizacion::findOrFail($id);
 		return response()->json($grupolocalizacion);
-		//return view('localizaciones/grupolocalizacion/delete')->with('grupolocalizacion', $grupolocalizacion);
 
 
 	}
 
 	public function destroy($id)
 	{
-		$result = DB::table('grupo_localizaciones')
-					            ->where('id', $id)
-					            ->update(['estado' => 0]);
+		GrupoLocalizacion::destroy($id);
 
 		return redirect('localizaciones/grupolocalizacion')->with('message', 'El Grupo de Nro.- '.$id.'  se elimino correctamente.');
 	}

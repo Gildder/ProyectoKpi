@@ -30,10 +30,10 @@
             <label for="grupodep_id" class="hidden-xs">Grupo Departamento</label>
             <select class="form-control" name="grupodep_id">
                   @foreach($grupo as $item)
-                     @if($item->idgrupo==$departamento->grupodep_id)
-                           <option value="{{$item->idgrupo}}" selected="selected" >{{$item->nombregrupo}}</option>
+                     @if($item->id==$departamento->grupodep_id)
+                           <option value="{{$item->id}}" selected="selected" >{{$item->nombre}}</option>
                      @else
-                           <option value="{{$item->idgrupo}}" >{{$item->nombregrupo}}</option>
+                           <option value="{{$item->id}}" >{{$item->nombre}}</option>
                      @endif
                   @endforeach
             </select>

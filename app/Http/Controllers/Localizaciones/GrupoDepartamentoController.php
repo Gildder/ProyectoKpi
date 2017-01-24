@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent;
 use Session;
 
 use ProyectoKpi\Models\Localizaciones\GrupoDepartamento;
@@ -20,17 +21,10 @@ class GrupoDepartamentoController extends Controller
         //$this->middleware('guest');
     }
 
-    public function todosDepartamntos($id)
-    {
-		return  Departamento::where('estado', '=', '1')->where('grupodep_id','=', $id)->get();
-    	
-    }
-    
     public function index()
 	{
-		$grupodepartamentos = GrupoDepartamento::where('grupo_departamentos.estado', '=', '1')->get();
 
-		return view('localizaciones/grupodepartamento/index')->with('grupodepartamentos', $grupodepartamentos);
+		return view('localizaciones/grupodepartamento/index')->with('grupodepartamentos', GrupoDepartamento::all());
 	}
 
 
@@ -43,9 +37,7 @@ class GrupoDepartamentoController extends Controller
 	public function store(GrupoDepartamentoFormRequest $Request)
 	{
 		$grupodepartamento = new GrupoDepartamento;
-		$grupodepartamento->nombre = \Request::input('nombre');
-
-		
+		$grupodepartamento->nombre = trim(\Request::input('nombre'));
 		$grupodepartamento->save();
 
 		return redirect('localizaciones/grupodepartamento')->with('message', 'El Grupo "'.$grupodepartamento->nombre.'" se guardo correctamente.');
@@ -60,9 +52,9 @@ class GrupoDepartamentoController extends Controller
 
 	public function update(GrupoDepartamentoFormRequest $Request,$id)
 	{
-		DB::table('grupo_departamentos')
-            ->where('id', $id)
-            ->update(array('nombre' => $Request->nombre));
+		$grupodepartamento = GrupoDepartamento::findOrFail($id);
+		$grupodepartamento->nombre = trim(\Request::input('nombre'));
+		$grupodepartamento->save();
 
 		return redirect('localizaciones/grupodepartamento')->with('message',  'El Grupo Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
@@ -77,9 +69,7 @@ class GrupoDepartamentoController extends Controller
 
 	public function destroy($id)
 	{
-		$result = DB::table('grupo_departamentos')
-					            ->where('id', $id)
-					            ->update(['estado' => 0]);		
+		GrupoDepartamento::destroy($id);	
 		
 		return redirect('localizaciones/grupodepartamento')->with('message', 'El Grupo de Nro.- '.$id.'  se elimino correctamente.');
 	}
@@ -89,7 +79,7 @@ class GrupoDepartamentoController extends Controller
 	 */
 	public function getDepartamentos(Request $request, $id)
 	{
-			$departamentos = Departamento::obtenerDepartamento($id);
+			$departamentos = Departamento::all();
 
 			return $departamentos;
 	}

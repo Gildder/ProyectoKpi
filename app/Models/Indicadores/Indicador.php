@@ -6,12 +6,24 @@ namespace ProyectoKpi\Models\Indicadores;
 use Illuminate\Database\Eloquent\Model;
 use ProyectoKpi\Models\Indicadores\Indicador;
 use Yajra\Datatables\Facades\Datatables;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Indicador extends Model
 {
     //
     protected $table = "indicadores";
     protected $primarykey = "id";
+
+    use SoftDeletes;
+    public $timestamps = true;
+
+    /**
+     * The attributes that should be mutated to dates 
+     *  
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +40,7 @@ class Indicador extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','created_at', 'update_at',
+        'id','created_at', 'update_at',
     ];
 
 

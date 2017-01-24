@@ -5,6 +5,7 @@ namespace ProyectoKpi\Models\Localizaciones;
 use Illuminate\Database\Eloquent\Model;
 use ProyectoKpi\Models\Localizaciones\GrupoDepartamento;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 
 class Departamento extends Model
@@ -12,6 +13,17 @@ class Departamento extends Model
     //
     protected $table = "departamentos";
     protected $primarykey = "id";
+
+    use SoftDeletes;
+    public $timestamps = true;
+
+    /**
+     * The attributes that should be mutated to dates 
+     *  
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+    
 
     /**
      * The attributes that are mass assignable.
@@ -28,7 +40,7 @@ class Departamento extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','created_at', 'update_at',
+        'id','created_at', 'update_at','deleted_at',
     ];
 
     public function grupoDepartamento()
@@ -41,9 +53,11 @@ class Departamento extends Model
      *
      * @var id del departamento
      */
-    public static function obtenerDepartamento($id)
+    public static function getDepartamentos()
     {
-        return Departamento::where('grupodep_id','=', $id)->where('estado','=', '1')->get();
+        return Departamento::
+            select('departamentos.id','departamentos.nombre as nombre','grupo_departamentos.nombre as grupo')
+            ->join('grupo_departamentos','grupo_departamentos.id','=','departamentos.grupodep_id')->get();
     }
 
      public static function getsupervisores($id)

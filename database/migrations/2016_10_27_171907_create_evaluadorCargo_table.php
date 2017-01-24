@@ -16,9 +16,9 @@ class CreateEvaluadorCargoTable extends Migration
         Schema::create('evaluador_cargos', function (Blueprint $table) {
             $table->integer('cargo_id')->unsigned();
             $table->integer('evaluador_id')->unsigned();
-            $table->char('estado',1)->default('1');
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->softDeletes();
             $table->engine = 'InnoDB';
 
         });

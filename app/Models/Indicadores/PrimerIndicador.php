@@ -24,7 +24,7 @@ class PrimerIndicador extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','created_at', 'update_at',
+        'id', 'created_at', 'update_at',
     ];
 
 

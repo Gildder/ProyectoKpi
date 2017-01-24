@@ -21,10 +21,10 @@ class CreateIndicadorTable extends Migration
             $table->string('condicion',120)->default('ninguna');
            // $table->enum('frecuencia',['1','2','3']); //1 semanal, 2 mensual, 3 anual
             $table->integer('frecuencia_id')->unsigned();
-            $table->char('estado',1)->default('1');
             $table->integer('tipo_indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
 

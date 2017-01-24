@@ -19,7 +19,6 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'password' => \Hash::make('123456'),
             'remember_token' => \Hash::make('123456'),
-            'state' => '1',
             'type' => '1', //1 admin, 2 normal
             'active' => true,
         ]);
@@ -33,7 +32,6 @@ class UserSeeder extends Seeder
                 //'password' => $faker->sha256('123456'),
                 'password' => \Hash::make('123456'),
                 'remember_token' => \Hash::make('123456'),
-                'state' => $faker->numberBetween($min = 0, $max = 1),
                 'type' => $faker->numberBetween($min = 1, $max = 2),
                 'active' => true,
             ]);

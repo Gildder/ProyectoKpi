@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Cargo extends Model
 {
     use SoftDeletes;
+    public $timestamps = false;
 
     /**
      * The attributes that should be mutated to dates 
@@ -39,7 +40,7 @@ class Cargo extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','created_at', 'update_at',
+        'id', 'created_at', 'update_at','deleted_at',
     ];
 
     public function empleados()

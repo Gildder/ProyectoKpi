@@ -33,7 +33,7 @@
               <select class="form-control" name="grupodep_id">
                     <option value="" >Seleccionar...</option>
                   @foreach($grupo as $item)
-                    <option value="{{$item->idgrupo}}">{{$item->nombregrupo}}</option>
+                    <option value="{{$item->id}}">{{$item->nombre}}</option>
                   @endforeach
               </select>
               @if ($errors->has('grupodep_id')) <p class="help-block">{{ $errors->first('grupodep_id') }}</p> @endif

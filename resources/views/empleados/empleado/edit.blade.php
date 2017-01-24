@@ -10,7 +10,7 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>{{ $empleado->codigo}} - {{ $empleado->nombres}}</strong>
+      <p class="titulo-panel">{{ $empleado->codigo}} - {{ $empleado->nombres}}</p>
   </div>
   <div class="panel-body">
 

@@ -18,13 +18,13 @@ class CreateEmpleadoTable extends Migration
             $table->primary('codigo');
             $table->string('nombres',50);
             $table->string('apellidos',50);
-            $table->char('estado',1)->default('1');
             $table->integer('departamento_id')->unsigned();
             $table->integer('localizacion_id')->unsigned();
             $table->integer('cargo_id')->unsigned();
             $table->integer('user_id')->unique()->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->softDeletes();
             $table->engine = 'InnoDB';
 
         });

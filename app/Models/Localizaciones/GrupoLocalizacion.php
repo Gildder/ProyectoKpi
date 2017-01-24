@@ -3,12 +3,23 @@
 namespace ProyectoKpi\Models\Localizaciones;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GrupoLocalizacion extends Model
 {
     //
     protected $table = "grupo_localizaciones";
     protected $primarykey = "id";
+
+    use SoftDeletes;
+    public $timestamps = true;
+
+    /**
+     * The attributes that should be mutated to dates 
+     *  
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
 
     /**
@@ -26,7 +37,7 @@ class GrupoLocalizacion extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','created_at', 'update_at',
+        'id','created_at', 'update_at','deleted_at',
     ];
 
     public function localizaciones()

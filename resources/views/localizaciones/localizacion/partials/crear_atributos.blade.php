@@ -12,7 +12,7 @@
             <select class="form-control" name="grupoloc_id">
                   <option value="" >Seleccionar...</option>
                 @foreach($grupo as $item)
-                  <option value="{{$item->idgrupo}}">{{$item->nombregrupo}}</option>
+                  <option value="{{$item->id}}">{{$item->nombre}}</option>
                 @endforeach
             </select>
             @if ($errors->has('grupoloc_id')) <p class="help-block">{{ $errors->first('grupoloc_id') }}</p> @endif

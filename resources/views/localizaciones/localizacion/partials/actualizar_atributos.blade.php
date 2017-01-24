@@ -12,9 +12,9 @@
             <select class="form-control" name="grupoloc_id">
                 @foreach($grupo as $item)
 				    @if($item->idgrupo == $localizacion->grupoloc_id)
-				        <option value="{{$item->idgrupo}}" selected="selected" >{{$item->nombregrupo}}</option>
+				        <option value="{{$item->id}}" selected="selected" >{{$item->nombre}}</option>
 				    @else
-				        <option value="{{$item->idgrupo}}" >{{$item->nombregrupo}}</option>
+				        <option value="{{$item->id}}" >{{$item->nombre}}</option>
 				    @endif
 				 @endforeach
             </select>

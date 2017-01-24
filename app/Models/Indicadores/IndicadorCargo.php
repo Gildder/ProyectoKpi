@@ -4,6 +4,7 @@ namespace ProyectoKpi\Models\Indicadores;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IndicadorCargo extends Model
 {
@@ -11,13 +12,23 @@ class IndicadorCargo extends Model
     protected $table = "indicadores_cargos";
     protected $primarykey = ['indicador_id', 'cargo_id'];
 
+    use SoftDeletes;
+    public $timestamps = true;
+
+    /**
+     * The attributes that should be mutated to dates 
+     *  
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'indicador_id', 'cargo_id', 'estado', 'created_at', 'update_at',
+        'indicador_id', 'cargo_id', 'created_at', 'update_at',
     ];
 
 

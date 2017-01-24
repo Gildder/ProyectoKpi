@@ -10,7 +10,7 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>Nuevo Empleado</strong>
+      <p class="titulo-panel">Nuevo Empleado</p>
   </div>
   <div class="panel-body">
 

@@ -17,8 +17,6 @@
   <div class="col-lg-12 breadcrumb">
     <a  href="{{route('empleados.cargo.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
   </div>
-      @include('partials/alert/error')
-      
 
       {!!Form::model($cargo, ['route'=>['empleados.cargo.update', $cargo->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $cargo->id) !!}

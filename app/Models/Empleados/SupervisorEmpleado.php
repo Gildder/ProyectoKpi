@@ -3,6 +3,7 @@
 namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SupervisorEmpleado extends Model
 {

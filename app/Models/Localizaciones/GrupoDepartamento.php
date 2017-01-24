@@ -6,12 +6,23 @@ namespace ProyectoKpi\Models\Localizaciones;
 use Illuminate\Database\Eloquent\Model;
 use ProyectoKpi\Models\Localizaciones\Departamento;
 use Yajra\Datatables\Facades\Datatables;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GrupoDepartamento extends Model
 {
     //
     protected $table = "grupo_departamentos";
     protected $primarykey = "id";
+
+    use SoftDeletes;
+    public $timestamps = true;
+
+    /**
+     * The attributes that should be mutated to dates 
+     *  
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
 
     /**
@@ -29,7 +40,7 @@ class GrupoDepartamento extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'estado','created_at', 'update_at',
+        'id','created_at', 'update_at','deleted_at',
     ];
 
 

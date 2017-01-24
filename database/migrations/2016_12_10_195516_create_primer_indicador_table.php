@@ -20,11 +20,11 @@ class CreatePrimerIndicadorTable extends Migration
             $table->integer('actpro'); //actividades programadas
             $table->integer('actrea'); //actividades realizadas
             $table->double('efeser'); //Eficacia del serivicio
-            $table->char('estado',1)->default('1');
             $table->string('emp_codigo',10); 
             $table->integer('indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->softDeletes();
             $table->engine = 'InnoDB';
         });
 
@@ -42,6 +42,6 @@ class CreatePrimerIndicadorTable extends Migration
      */
     public function down()
     {
-        Schema::drop('indicador_primer');
+        Schema::drop('primer_indicador');
     }
 }

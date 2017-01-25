@@ -13,6 +13,7 @@
 
 // **********************  MODULO EMPLEADOS  *****************************************
 Route::resource('empleados/cargo', 'Empleados\CargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+
 Route::get('empleados/cargo/indicadores/{cargo}', array('as' => 'empleados.cargo.indicadores', 'uses' => 'Empleados\CargoController@indicadores') );
 Route::get('empleados/cargo/empleado/{cargo}', array('as' => 'empleados.cargo.empleado', 'uses' => 'Empleados\CargoController@empleado') );
 Route::put('empleados/cargo/agregar/{cargo}', array('as' => 'empleados.cargo.agregar', 'uses' => 'Empleados\CargoController@agregar') );
@@ -25,7 +26,7 @@ Route::resource('empleados/empleado', 'Empleados\EmpleadoController', ['only' =>
 //Evaludor
 Route::resource('empleados/evaluador', 'Empleados\EvaluadorController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
-
+//Suprvisores
 Route::resource('supervisorempleado', 'Empleados\SupervisorEmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 Route::get('supervisorempleado/departamentos/getDepartamentos', array('as' => 'supervisorempleado.departamentos.getDepartamentos', 'supervisores' =>  'Empleados\SupervisorEmpleadoController') );
 

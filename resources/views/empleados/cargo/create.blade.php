@@ -9,7 +9,8 @@
 <!-- Nuevo -->
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>Nuevo Cargo</strong>
+      <p class="titulo-panel">Nuevo Cargo</p>
+      
   </div>
   <div class="panel-body">
 

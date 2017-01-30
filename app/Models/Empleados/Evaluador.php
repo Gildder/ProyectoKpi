@@ -4,6 +4,9 @@ namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Models\Empleados\Evaluador;
+use ProyectoKpi\Models\Empleados\Cargo;
+
 
 class Evaluador extends Model
 {
@@ -48,4 +51,28 @@ class Evaluador extends Model
     function cargos(){
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Cargo','evaluador_cargos', 'evaluador_id', 'cargo_id');
     }
+
+/*Metodos Repositorio */
+
+
+
+    public static function getCargos($id)
+    {   
+        $cargos = '';
+        
+        $cargosEvaluados = Cargo::select('cargos.*')
+                ->join('evaluador_cargos','evaluador_cargos.cargo_id','=', 'cargos.id')
+                ->join('evaluadores','evaluadores.id','=','evaluador_cargos.evaluador_id')
+                ->whereNull('evaluador_cargos.deleted_at')
+                ->where('evaluadores.id',$id)
+                ->get();
+
+
+        foreach ($cargosEvaluados as $p) {
+            $cargos =   $p->nombre . '; '.$cargos  ;
+        }
+
+        return $cargosEvaluados;
+    }
+   
 }

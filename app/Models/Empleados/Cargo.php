@@ -54,5 +54,5 @@ class Cargo extends Model
         return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicador','indicadores_cargos', 'cargo_id', 'indicador_id');
     }
 
-
+    
 }

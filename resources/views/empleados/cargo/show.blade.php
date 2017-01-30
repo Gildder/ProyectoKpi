@@ -16,7 +16,6 @@
 		<!--panelTab -->
 		<ul class="nav nav-tabs">
 		  <li class="active"><a data-toggle="tab" href="#datos">Datos</a></li>
-		  <li><a data-toggle="tab" href="#indicador">Indicadores</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -39,23 +38,8 @@
 
 					</div>
 			</div>
-
-
-
-			<div id="indicador" class="tab-pane fade">
-				<div class="col-lg-12 breadcrumb">
-					<a href="{{route('empleados.cargo.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-				</div>
-
-				<div class="content">
-					<p>Lista de todos los indicadores asignados al empleado segun su cargo asignado</p>
-					<br>
-					@include('empleados/cargo/partials/tabla_indicadores')
-				</div>
-			</div>
-		<!-- Fin Panel Tab -->
-
-	</div>
+			<!-- Fin Panel Tab -->
+		</div>
 
 	</div>
 	<div class="panel-footer">

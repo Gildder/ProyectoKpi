@@ -96,6 +96,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Indicador</a></li>
+            <li><a href="{{url('indicadores/indicadorcargos')}}"><i class="fa fa-circle-o"></i> Indicador Cargos</a></li>
             <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Graficos</a></li>
           </ul>
         </li>
@@ -109,7 +110,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Departamentos</a></li>
+            <li><a href="{{url('Supervisores/departamentos/getdepartamentos')}}"><i class="fa fa-circle-o"></i> Departamentos</a></li>
             <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Empleados</a></li>
           </ul>
         </li>

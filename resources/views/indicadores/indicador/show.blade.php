@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+  
 <div class="panel panel-default">
   <div class="panel-heading">
     <p class="titulo-panel">{{$indicador->nombre}}</p>
@@ -16,7 +17,6 @@
     <!--panelTab -->
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#datos">Datos</a></li>
-      <li><a data-toggle="tab" href="#cargo">Lista de Cargos</a></li>
     </ul>
 
     <div class="tab-content">
@@ -27,36 +27,25 @@
         <div class="col-sm-12">
 
           <div class="content col-lg-6">
-
             @include('indicadores/indicador/partials/ver_indicador')  
+            @include('indicadores/indicador/delete')
 
           </div>
         </div>
       
       </div>
-
-
-      <div id="cargo" class="tab-pane fade">
-          <div class="col-lg-12 breadcrumb">
-            <a href="{{route('indicadores.indicador.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-            <a href="#"  data-toggle="modal" data-target="#modal-agregar"  class="btn btn-success btn-xs"><span class="fa fa-plus"></span> Agregar</a>
-          </div>
-        <div class="content">
-          @include('indicadores/indicador/partials/tabla_cargos')
-          @include('indicadores/indicador/agregar_cargo')
-
-        </div>
-      </div>
     <!-- Fin Panel Tab -->
+      <div class="col-sm-12 panel-footer text-right">
+        <a href="{{route('indicadores.indicador.edit', $indicador->id)}}" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
+
+        <a href="#" class="btn btn-danger btn-sm"  data-toggle="modal" data-target="#modal-delete-{{$indicador->id}}"><span class="fa fa-trash"  title="Eliminar"></span><b > Borrar</b></a>
+
+      </div>
+
+    </div>
 
   </div>
-
-  </div>
-    
 </div>
 @endsection
 
-@section('script')
-  
-@endsection
 

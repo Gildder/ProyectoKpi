@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 use ProyectoKpi\Models\Empleados\Evaluador;
 use ProyectoKpi\Http\Requests\Empleados\EvaluadorFormRequest;
+use ProyectoKpi\Http\Models\Empleados\EvaluadorEmpleado;
+
 
 
 class EvaluadorController extends Controller
@@ -60,9 +62,12 @@ class EvaluadorController extends Controller
 
 	public function show($id)
 	{
+		$empleadosDisponibles = DB::select('call pa_evaluadores_empleadosDisponibles('.$id.');');
+        $empleadosEvaluadores = DB::select('call pa_evaluadores_empleadosEvaluadores('.$id.');');
+
 		$evaluador = Evaluador::findOrFail($id);
 				
-		return view('empleados/evaluador/show',['evaluador'=>$evaluador]);
+		return view('empleados/evaluador/show',['evaluador'=>$evaluador,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadosEvaluadores]);
 	}
 
 	public function destroy($id)
@@ -75,10 +80,27 @@ class EvaluadorController extends Controller
 
 	/* Cargos Evaluados*/
 
-	 public function cargosevaluados()
+	public function cargosevaluados()
 	{
 		$evaluadores = Evaluador::all();
 
 		return view('empleados/evaluador/index', ['evaluadores'=> $evaluadores]);
 	}
+
+
+	public function agregarempleado($emp_id, $eva_id)
+    {
+        DB::table('evaluador_empleados')->insert(
+            array('empleado_id' => $emp_id, 'evaluador_id' => $eva_id)
+        );
+
+        return $this->show($eva_id);
+    }
+
+    public function quitarempleado($emp_id, $eva_id)
+    {
+        DB::table('evaluador_empleados')->where('empleado_id', $emp_id)->where('evaluador_id', $eva_id)->delete();
+
+        return $this->show($eva_id);
+    }
 }

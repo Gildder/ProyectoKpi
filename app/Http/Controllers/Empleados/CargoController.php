@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Http\Requests\Empleados\CargoFormRequest;
-use ProyectoKpi\Http\Requests\Empleados\CargoRequestUpdate;
 
 use ProyectoKpi\Repositories\CargoRepository;
 
@@ -68,10 +67,8 @@ class CargoController extends Controller
 	public function show($id)
 	{
 		$cargo = Cargo::findOrFail($id);
-		$indicadores = DB::select('call pa_empleados_indicadoresCargos('.$id.')');
-
 				
-		return view('empleados/cargo/show',['cargo'=>$cargo,'indicadores'=>$indicadores]);
+		return view('empleados/cargo/show',['cargo'=>$cargo]);
 	}
 
 	public function destroy($id)

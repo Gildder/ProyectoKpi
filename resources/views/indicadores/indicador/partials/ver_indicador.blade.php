@@ -7,14 +7,8 @@
 
       <tr>
          <td class="text-right"><b>Objetivo:</b></td>
-         <td>{{$indicador->descripcion_objetivo}} {{$indicador->objetivo}}%</td>
+         <td>{{$indicador->descripcion_objetivo}}</td>
       </tr>
-
-      <tr>
-         <td class="text-right"><b>Condicion:</b></td>
-         <td>{{$indicador->condicion}}</td>
-      </tr>
-
       <tr>
          <td class="text-right"><b>Orden:</b></td>
          <td>{{$indicador->orden}}</td>
@@ -23,11 +17,6 @@
        <tr>
          <td class="text-right"><b>Tipo Indicador:</b></td>
          <td>{{$indicador->tipo}}</td>
-      </tr>
-
-      <tr>
-         <td class="text-right"><b>Frecuencia:</b></td>
-         <td>{{$indicador->frecuencia}}</td>
       </tr>
    </tbody>
 </table>

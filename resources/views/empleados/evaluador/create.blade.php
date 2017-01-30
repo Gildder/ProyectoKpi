@@ -9,7 +9,7 @@
 <!-- Nuevo -->
 <div class="panel panel-default">
   <div class="panel-heading">
-      <p class="titulo-panel">Nuevo Evaludor</p>
+      <p class="titulo-panel">Nueva Gerencia Evaluadora</p>
   </div>
   <div class="panel-body">
 

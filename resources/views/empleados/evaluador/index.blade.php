@@ -9,8 +9,7 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-  	<p class="titulo-panel">Evaluadores</p>
-
+  	<p class="titulo-panel">Gerencia Evaluadoras</p>
   </div>
   <div class="panel-body">
   	

@@ -10,9 +10,8 @@ use Session;
 
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Empleados\Cargo;
-
-
-
+use ProyectoKpi\Models\Indicadores\TipoIndicador;
+use ProyectoKpi\Http\Requests\Indicadores\IndicadorFormRequest;
 
 class IndicadorController extends Controller
 {
@@ -24,10 +23,9 @@ class IndicadorController extends Controller
     
     public function index()
 	{
-		$indicadores = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','indicadores.objetivo','tipos_indicadores.nombre as tipo','indicadores.condicion',  'frecuencias.nombre as frecuencia')
-								->join('frecuencias','frecuencias.id','=','indicadores.frecuencia_id')
-								->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
-								->where('indicadores.estado', '=', '1')->get();
+		$indicadores = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','tipos_indicadores.nombre as tipo')
+			->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
+			->whereNull('indicadores.deleted_at')->get();
 
 		return view('indicadores/indicador/index')->with('indicadores', $indicadores);
 	}
@@ -35,70 +33,62 @@ class IndicadorController extends Controller
 
 	public function create()
 	{
-		return 'Store';
+		$tipo = TipoIndicador::all();
+
+		return view('indicadores.indicador.create', ['tipo'=>$tipo]);
 	}
 
-	public function store(GrupoDepartamentoFormRequest $Request)
+	public function store(IndicadorFormRequest $Request)
 	{
-		return 'Store';
+		$indicador = new Indicador;
+		$indicador->nombre = trim(\Request::input('nombre'));
+		$indicador->orden = trim(\Request::input('orden'));
+		$indicador->descripcion_objetivo = trim(\Request::input('descripcion_objetivo'));
+		$indicador->tipo_indicador_id = \Request::input('tipo_indicador_id');
+		$indicador->save();
+
+		return redirect('indicadores/indicador')->with('message', 'El Indicador "'.$indicador->nombre.'" se guardo correctamente.');
+		
 	}
 
 	public function edit($id)
 	{
 		$indicador = Indicador::findOrFail($id);
-		$cargos_indicardor = Indicador::find($id)->cargos()->where('indicadores_cargos.indicador_id','=',$id)->get();
+		$tipo = TipoIndicador::all();
 
-		$todos_cargos = Cargo::select('cargos.*')
-								->where('estado', '=', '1')->get();
-
-		$cargos_libres = $todos_cargos->diff($cargos_indicardor);
-    	//var_dump($cargos_libres);
-
-		return view('indicadores/indicador/edit',['indicador'=>$indicador,'cargos_indicardor'=>$cargos_indicardor,'cargos_libres'=>$cargos_libres]);
+		return view('indicadores/indicador/edit',['indicador'=>$indicador,'tipo'=>$tipo]);
 	}
 
-	public function update(Request $Request,$id)
+	public function update(IndicadorFormRequest $Request,$id)
 	{
 
 		$indicador = Indicador::findOrFail($id);
-    	$nuevos_cargos = $Request->input('prov',[]);
+		$indicador->nombre = trim(\Request::input('nombre'));
+		$indicador->orden = trim(\Request::input('orden'));
+		$indicador->descripcion_objetivo = trim(\Request::input('descripcion_objetivo'));
+		$indicador->tipo_indicador_id = \Request::input('tipo_indicador_id');
+		$indicador->save();
 
-    	var_dump( count($nuevos_cargos));
-    		
-		for($i = 0; $i < count($nuevos_cargos); $i++)
-		{
-		    DB::table('indicadores_cargos')->insert(
-				    	['indicador_id' => $id, 'cargo_id' => $nuevos_cargos[$i] ]
-		    );
-		}
-
-		//return redirect('indicadores/indicador/edit')->with('message', 'Se modifico correctamente.');
-		return $this->show($id);
+		return redirect('indicadores/indicador')->with('message', 'El Indicador "'.$indicador->nombre.'" se actualizo correctamente.');
 	}
 
 	public function show($id)
 	{
 
-		$indicador = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','indicadores.objetivo','tipos_indicadores.nombre as tipo','indicadores.condicion',  'frecuencias.nombre as frecuencia')
-								->join('frecuencias','frecuencias.id','=','indicadores.frecuencia_id')
+		$indicador = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','tipos_indicadores.nombre as tipo')
 								->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 								->where('indicadores.id', '=', $id)->first();
 
-		$cargos_indicardor = Indicador::find($id)->cargos()->where('indicadores_cargos.indicador_id','=',$id)->get();
-
-
-		$todos_cargos = Cargo::select('cargos.*')->where('estado', '=', '1')->get();
-		$cargos_libres = $todos_cargos->diff($cargos_indicardor);
-
-		return view('indicadores/indicador/show',['indicador'=>$indicador,'cargos_indicardor'=>$cargos_indicardor,'cargos_libres'=>$cargos_libres]);
+		return view('indicadores/indicador/show',['indicador'=>$indicador]);
 
 	}
 
 	public function destroy($id)
 	{
-		$indicador = Indicador::findOrFail($id);
+		Indicador::destroy($id);
+		
+		return redirect('indicadores/indicador')->with('message', 'El Indicador Nro"'.$id.'" se elimino correctamente.');
 
-		return ;
 	}
 
 	public function quitar($indicador_id, $cargo_id)
@@ -121,7 +111,7 @@ var_dump($indicador_id);
 	            ->join('indicadores_cargos', 'indicadores.id', '=', 'indicadores_cargos.indicador_id')
 	            ->join('cargos', 'cargos.id', '=', 'indicadores_cargos.cargo_id')
 	            ->select('cargos.*')
-	            ->where('cargos.estado', '=', '1')
+	            ->whereNull('cargos.deleted_at')
 	            ->where('indicadores_cargos.indicador_id', '=', $id)
 	            ->get();
 

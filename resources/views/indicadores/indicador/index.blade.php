@@ -14,6 +14,9 @@
 		
 		@include('partials/alert/error')
 
+		 <div class="text-left col-lg-12 breadcrumb">
+			<a  href="{{route('indicadores.indicador.create')}}" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span><b>   Nuevo</b></a>
+		</div>
 		<div class="row">
 			<div class="col-lg-12">
 	        	@include('indicadores/indicador/partials/tabla_indicador')

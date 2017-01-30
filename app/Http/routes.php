@@ -25,6 +25,18 @@ Route::resource('empleados/empleado', 'Empleados\EmpleadoController', ['only' =>
 
 //Evaludor
 Route::resource('empleados/evaluador', 'Empleados\EvaluadorController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+Route::get('empleados/evaluador/quitarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.quitarempleado', 'uses' => 'Empleados\EvaluadorController@quitarempleado') );
+Route::get('empleados/evaluador/agregarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.agregarempleado', 'uses' => 'Empleados\EvaluadorController@agregarempleado') );
+
+
+
+//Evaludor Cargo
+Route::resource('empleados/evaluadorcargos', 'Empleados\EvaluadorCargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+Route::get('empleados/evaluadorcargos/getEvaluadores', 'Empleados\EvaluadorCargoController@getEvaluadores');
+Route::get('empleados/evaluadorcargos/getCargos/{id}', 'Empleados\EvaluadorCargoController@getCargos');
+Route::get('empleados/evaluadorcargos/quitarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluadorcargos.quitarcargo', 'uses' => 'Empleados\EvaluadorCargoController@quitarcargo') );
+Route::get('empleados/evaluadorcargos/agregarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluadorcargos.agregarcargo', 'uses' => 'Empleados\EvaluadorCargoController@agregarcargo') );
+
 
 //Suprvisores
 Route::resource('supervisorempleado', 'Empleados\SupervisorEmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
@@ -51,15 +63,31 @@ Route::resource('localizaciones/localizacion', 'Localizaciones\LocalizacionContr
 Route::resource('indicadores/indicador', 'Indicadores\IndicadorController', 
 		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
+
 Route::post('indicadores/indicador/asign/{indicador}', array('as' => 'indicadores.indicador.asign', 'uses' => 'Indicadores\IndicadorController@asign') );
 
 Route::get('indicadores/indicador/quitar/{indicador}/{param?}', array('as' => 'indicadores.indicador.quitar', 'uses' => 'Indicadores\IndicadorController@quitar') );
 
 Route::resource('indicadores/primerindicador', 'Indicadores\PrimerIndicadorController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
-
 Route::resource('indicadores/indicadorcargo', 'Indicadores\IndicadorCargoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
+// Variables de la Formual de un indicador
+Route::resource('indicadores/variable', 'Indicadores\VariableController', 
+		['only' => ['index', 'create', 'store', 'destroy', 'show']]);
+
+// Indicador Cargo
+Route::resource('indicadores/indicadorcargos', 'Indicadores\IndicadorCargoController', 
+		['only' => ['index', 'create', 'edit','store', 'destroy', 'show']]);
+
+Route::get('indicadores/indicadorcargos/quitarcargo/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.quitarcargo', 'uses' => 'Indicadores\IndicadorCargoController@quitarcargo') );
+
+Route::get('indicadores/indicadorcargos/agregarcargo/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.agregarcargo', 'uses' => 'Indicadores\IndicadorCargoController@agregarcargo') );
+
+Route::get('indicadores/indicadorcargos/editar/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.editar', 'uses' => 'Indicadores\IndicadorCargoController@editar') );
+
+Route::put('indicadores/indicadorcargos/update/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.update', 'uses' => 'Indicadores\IndicadorCargoController@update') );
+Route::delete('indicadores/indicadorcargos/destroy/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.destroy', 'uses' => 'Indicadores\IndicadorCargoController@destroy') );
 
 // **********************  MODULO SUPERVIASORES *****************************************
 Route::get('supervisores/departamentos/getdepartamentos', array('as' => 'supervisores.departamentos.getdepartamentos', 'uses' =>  'Supervisores\SupervisorController@getdepartamentos') );

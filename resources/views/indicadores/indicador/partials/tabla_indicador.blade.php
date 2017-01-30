@@ -6,23 +6,18 @@
 			<th>Tipo</th>	
 			<th>Orden</th>	
 			<th>Objetivo</th>	
-			<th>Condicion</th>	
-			<th>Frecuencia</th>	
 		</thead>
 
 		<tbody>
 		@foreach($indicadores as $indicador)
 			<tr>
-				<td><a href="{{route('indicadores.indicador.show', $indicador->id)}}" class="btn btn-primary btn-xs" ><span >{{$indicador->id}}</span></a></td>
+				<td><a href="{{route('indicadores.indicador.show', $indicador->id)}}" class="btn btn-warning btn-xs" ><span >{{$indicador->id}}</span></a></td>
 				<td>{{$indicador->nombre}}</td>
 				<td>{{$indicador->tipo}}</td>
 				<td>{{$indicador->orden}}</td>
-				<td>{{$indicador->descripcion_objetivo}} {{$indicador->objetivo}} %</td>
-				<td>{{$indicador->condicion}}</td>
-				<td>{{$indicador->frecuencia}}</td>
+				<td>{{$indicador->descripcion_objetivo}}</td>
 			</tr>
-    		@include('empleados/empleado/partials/ver_indicador')
-
+    		@include('indicadores/indicador/delete')
 		@endforeach
 		</tbody>
 

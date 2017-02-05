@@ -33,6 +33,8 @@
   <link rel="stylesheet" href="{{URL::asset('plugins/daterangepicker/daterangepicker.css')}}">  
   <!-- Datetables -->
   <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
+  <!-- jQuery UI -->
+  <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui.css')}}">
 
 
 <!-- jQuery 2.2.3 -->
@@ -114,7 +116,7 @@
 <script src="{{URL::asset('plugins/moment/moment-with-locales.js')}}"></script>
 <script src="{{URL::asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- datepicker -->
-<script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker.min.js')}}"></script>
+<script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker-es.js')}}"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{URL::asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
 <!-- Slimscroll -->

@@ -5,14 +5,31 @@ $(document).ready(function(){
     $('#myTableGrDepartamento').DataTable();
 
     /*Calendarios */
-	$('.datepicker').datepicker({
-	    format: 'yyyy-mm-dd',
-	    startDate: '-3d',
-	    autoclose:true,
-    	locale:'es'
+	from = $( ".fechaInicio" )
+		.datepicker({
+		  format: 'dd/mm/yyyy',
+		  autoclose:true,
+		  startDate: "-1m",
+		  endDate: "+1m",
+		  firstDay: 1,
+		  changeMonth: true,
+		  yearRange:1,
+		  weekHeader: "Wk",
+		});
+
+	to = $( ".fechaFin" ).datepicker({
+		format: 'dd/mm/yyyy',
+		autoclose:true,
+		startDate: "-1m",
+		endDate: "+1m",
+		defaultDate: "+1w",
+		firstDay: 1,
+		changeMonth: true,
+		yearRange:1,
+		 
 	});
 
-
+		
 	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
 	$('input').blur(function(){
 	    /* Obtengo el valor contenido dentro del input */
@@ -28,7 +45,10 @@ $(document).ready(function(){
 	    /* Cambio el valor contenido por el valor sin espacios */
 	    $(this).val(value_without_space);
 	});
+	
+
 });
+
 
 
 function agregarFormala(id)

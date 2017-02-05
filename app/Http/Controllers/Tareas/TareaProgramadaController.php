@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Localizaciones\Localizacion;
+use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 
 
 class TareaProgramadaController extends Controller
@@ -38,12 +39,13 @@ class TareaProgramadaController extends Controller
 		return view('tareas.tareaProgramadas.create', ['localizaciones'=> $localizaciones]);
 	}
 
-	public function store(TareaFormRequest $Request)
+	public function store(TareaProgramasFormRequest $Request)
 	{
 		$tareasProgramadas = new Tarea;
-		$tareasProgramadas->nombre = trim(\Request::input('nombre'));
-		$tareasProgramadas->fechaInicio = trim(\Request::input('fechaInicio'));
-		$tareasProgramadas->fechaFin = trim(\Request::input('fechaFin'));
+		$tareasProgramadas->descripcion = trim(\Request::input('descripcion'));
+		$tareasProgramadas->fechaInicioEstimado = trim(\Request::input('fechaInicioEstimado'));
+		$tareasProgramadas->fechaFinEstimado = trim(\Request::input('fechaFinEstimado'));
+		$tareasProgramadas->tiempoEstimado = trim(\Request::input('tiempoEstimado'));
 		$tareasProgramadas->save();
 
 		return redirect('tareas/tareaProgramadas')->with('message', 'El tarea "'.$tareasProgramadas->nombre.'" se guardo correctamente.');
@@ -58,7 +60,7 @@ class TareaProgramadaController extends Controller
 
 	}
 
-	public function update(TareaFormRequest $Request, $id)
+	public function update(TareaProgramasFormRequest $Request, $id)
 	{
 		$tareasProgramadas = Tarea::findOrFail($id);
 		$tareasProgramadas->nombre = trim(\Request::input('nombre'));

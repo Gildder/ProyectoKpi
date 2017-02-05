@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'active' => true,
         ]);
 
+        /*
        for($i=0; $i <3 ; $i++) 
        {
 
@@ -37,7 +38,6 @@ class UserSeeder extends Seeder
             ]);
 
        }
-        /*
         */
     }
 }

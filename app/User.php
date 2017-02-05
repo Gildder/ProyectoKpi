@@ -24,4 +24,10 @@ class User extends Authenticatable
     protected $hidden = [
         'id',  'password',  'state',  'active',  'type', 'remember_token',
     ];
+
+
+    public function empleado()
+    {
+        return $this->hasOne('ProyectoKpi\Models\Empleados\Empleado');
+    }
 }

@@ -149,7 +149,7 @@ class EmpleadoController extends Controller
 
 
 
-		return redirect('empleados/empleado')->with('message','El Empleaado de Codigo. "'.$empleado->codigo.'" se guardo correctamente.');
+		return redirect('empleados/empleado')->with('message','El Empleado de Codigo. "'.$empleado->codigo.'" se guardo correctamente.');
 
 	}
 
@@ -181,9 +181,9 @@ class EmpleadoController extends Controller
 	{
 		$empleados = $this->obtenerEmpleado($id);
 
-		$indicadores = $this->obtenerIndicadores($empleados->codigo);
+		//$indicadores = $this->obtenerIndicadores($empleados->codigo);
 
-		return view('empleados.empleado.show',['empleados'=>$empleados, 'indicadores'=>$indicadores]);
+		return view('empleados.empleado.show',['empleados'=>$empleados]);
 	}
 
 	public function destroy($id)

@@ -37,7 +37,7 @@ class EvaluadorController extends Controller
 		$evaluador->descripcion = trim(\Request::input('descripcion'));
 		$evaluador->save();
 
-		return redirect('empleados/evaluador')->with('message', 'El Evaluador "'.$evaluador->abreviatura.'" se guardo correctamente.');
+		return redirect('empleados/evaluador')->with('message', 'La Gerencia Evaluadora "'.$evaluador->abreviatura.'" se guardo correctamente.');
 	}
 
 
@@ -56,7 +56,7 @@ class EvaluadorController extends Controller
 		$evaluador->descripcion = trim(\Request::input('descripcion'));
 		$evaluador->save();
 
-		return redirect('empleados/evaluador')->with('message',  'El Cargo Nro. '.$id.' - '.$Request->abreviatura.' se actualizo correctamente.');
+		return redirect('empleados/evaluador')->with('message',  'La Gerencia Evaluadora Nro. '.$id.' - '.$Request->abreviatura.' se actualizo correctamente.');
 	}
 
 
@@ -74,7 +74,7 @@ class EvaluadorController extends Controller
 	{
 		Evaluador::destroy($id);
 
-		return redirect('empleados/evaluador')->with('message',  'El Evaluador de Nro.- '.$id.'  se elimino correctamente.');
+		return redirect('empleados/evaluador')->with('message',  'La Gerencia Evaluadora de Nro.- '.$id.'  se elimino correctamente.');
 	}
 
 
@@ -88,19 +88,4 @@ class EvaluadorController extends Controller
 	}
 
 
-	public function agregarempleado($emp_id, $eva_id)
-    {
-        DB::table('evaluador_empleados')->insert(
-            array('empleado_id' => $emp_id, 'evaluador_id' => $eva_id)
-        );
-
-        return $this->show($eva_id);
-    }
-
-    public function quitarempleado($emp_id, $eva_id)
-    {
-        DB::table('evaluador_empleados')->where('empleado_id', $emp_id)->where('evaluador_id', $eva_id)->delete();
-
-        return $this->show($eva_id);
-    }
 }

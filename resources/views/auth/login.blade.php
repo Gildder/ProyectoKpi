@@ -5,22 +5,24 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Inicio Sesion</div>
+                <div class="panel-heading"><b> Inicio Sesion</b></div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Usuario</label>
+                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                            <label for="name" class="col-md-4 control-label">Usuario</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
+                                <div class="input-group">
+                                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
+                                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                </div>
+                                    @if ($errors->has('name'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('name') }}</strong>
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 
@@ -28,13 +30,16 @@
                             <label for="password" class="col-md-4 control-label">Contraseña</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
+                                <div class="input-group">
+                                    <input id="password" type="password" class="form-control" name="password">
+                                    <div class="input-group-addon"><i class="fa fa-lock"></i></div>
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                                </div>
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
                             </div>
                         </div>
 

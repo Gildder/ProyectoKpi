@@ -1,6 +1,6 @@
  <header class="main-header">
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="#" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>K</b>PI</span>
       <!-- logo for regular state and mobile devices -->
@@ -70,6 +70,20 @@
             <li><a href="{{url('empleados/empleado')}}"><i class="fa fa-circle-o"></i>Empleado</a></li>
             <li><a href="{{url('empleados/cargo')}}"><i class="fa fa-circle-o"></i> Cargo</a></li>
           </ul>
+        </li> 
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-group"></i>
+            <span>Evaluadores</span>
+             <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{url('empleados/evaluador')}}"><i class="fa fa-circle-o"></i>Gerencia Evaluadora</a></li>
+            <li><a href="{{url('empleados/evaluadorempleados')}}"><i class="fa fa-circle-o"></i>Evaluadores de Gerencia</a></li>
+            <li><a href="{{url('empleados/evaluadorcargos')}}"><i class="fa fa-circle-o"></i>Cargos Evaluados</a></li>
+          </ul>
         </li>
         <li class="treeview">
           <a href="#">
@@ -110,8 +124,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('Supervisores/departamentos/getdepartamentos')}}"><i class="fa fa-circle-o"></i> Departamentos</a></li>
-            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Empleados</a></li>
+            <li><a href="{{url('supervisores/supervisor')}}"><i class="fa fa-circle-o"></i> Suporvisiones</a></li>
           </ul>
         </li>
       </ul>

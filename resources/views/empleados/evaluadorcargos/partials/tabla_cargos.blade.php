@@ -3,7 +3,7 @@
 		<thead>
 			<th>Nro</th>
 			<th>Nombre</th>	
-			<th>Opciones</th>	
+			<th></th>	
 		</thead>
 
 		<tbody>
@@ -12,7 +12,7 @@
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}} </td>
 				<td>
-					<a href="{{route('empleados.evaluadorcargos.agregarcargo', array($item->id, $evaluador->id)) }}"  class="btn btn-success btn-sm"> <span class="fa fa-plus"></span>  <b>Agregar</b> </a>
+					<a href="{{route('empleados.evaluadorcargos.agregarcargo', array($item->id, $evaluador->id)) }}"  class="btn btn-success btn-xs" title="Agregar Cargo"> <span class="fa fa-plus"></span>  <b></b> </a>
 				</td>
 			</tr>
 		@endforeach

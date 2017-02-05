@@ -10,7 +10,7 @@
         Eliminar Evaluador
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Empleados\CargoController@destroy', $evaluador->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Empleados\EvaluadorController@destroy', $evaluador->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a <b>{{$evaluador->abreviatura}} {{$evaluador->descripcion}}?</b></p>
                   <div class="form-group col-sm-5 ">

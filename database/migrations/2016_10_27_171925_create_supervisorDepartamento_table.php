@@ -14,7 +14,7 @@ class CreateSupervisorDepartamentoTable extends Migration
     {
         //
         Schema::create('supervisor_departamentos', function (Blueprint $table) {
-            $table->string('empleados_id');
+            $table->string('empleado_id',10);
             $table->integer('departamento_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

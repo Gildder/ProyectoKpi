@@ -31,7 +31,7 @@ class IndicadorCargoController extends Controller
 
 		$indicador = Indicador::findOrFail($id);
 				
-		return view('indicadores/indicadorcargos/show',['indicador'=>$indicador,'cargosDisponibles'=>$cargosDisponibles,'cargoAsignados'=>$cargosEvaluadores]);
+		return view('indicadores/indicadorcargos/show',['indicador'=>$indicador,'cargosDisponibles'=>$cargosDisponibles,'cargosEvaluadores'=>$cargosEvaluadores]);
 	}
 
 	public function editar($cargo_id, $ind_id)

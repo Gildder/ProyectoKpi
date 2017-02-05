@@ -3,7 +3,7 @@
     <nav class="navbar navbar-static-top"  style="margin-left: 0px;">
     
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="#" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>K</b>PI</span>
       <!-- logo for regular state and mobile devices -->
@@ -12,27 +12,40 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+
+          @if( Cache::get('depasores'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <a href="{{url('supervisores/supervisados')}}" >
               <i class="fa fa-briefcase"></i>
-              <label for="Tareas" class="hidden-xs">Tareas</label>
+              <label for="Tareas" class="hidden-xs">Supervisiones</label>
             </a>
           </li>
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-sitemap"></i>
-              <label for="Cargos" class="hidden-xs">Empleado</label>
+          @endif
+
+
+           <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+          <a href="{{url('tareas/tareaProgramadas')}}" >
+              <i class="fa fa-briefcase"></i>
+              <label for="Tareas" class="hidden-xs">Tareas Programadas</label>
             </a>
           </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-area-chart"></i>
-              <label for="Indicadores" class="hidden-xs">Indicadores</label>
+         <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+          <a href="{{url('partials/submenus/tareas')}}">
+              <i class="fa fa-briefcase"></i>
+              <label for="Tareas" class="hidden-xs">Tareas Diarias</label>
             </a>
           </li>
+         <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+          <a href="{{url('tareas/proyecto')}}">
+              <i class="fa fa-briefcase"></i>
+              <label for="Tareas" class="hidden-xs">Proyecto</label>
+            </a>
+          </li>
+        
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

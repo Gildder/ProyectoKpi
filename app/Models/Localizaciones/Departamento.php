@@ -62,16 +62,9 @@ class Departamento extends Model
 
      public static function getsupervisores($id)
     {
-
-        $supervisores = '';
         $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresDepartamento('.$id.')');
 
-
-        foreach ($empleadossupervisores as $p) {
-            $supervisores =   $p->codigo.' - '. $p->nombres .' '.$p->apellidos .'; '. $supervisores;
-        }
-
-        return $supervisores;
+        return $empleadossupervisores;
     }
 
 }

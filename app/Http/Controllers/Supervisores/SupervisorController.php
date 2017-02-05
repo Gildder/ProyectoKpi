@@ -13,11 +13,11 @@ use ProyectoKpi\Models\Empleados\Empleado;
 
 class SupervisorController extends Controller
 {
-    public function getdepartamentos()
+    public function index()
     {
     	$departamentos = Departamento::select('departamentos.*')->get();
 
-        return view('supervisores\departamentos\index', ['departamentos'=>$departamentos]);
+        return view('supervisores\supervisor\index', ['departamentos'=>$departamentos]);
     }
 
     public function show($id)
@@ -27,7 +27,7 @@ class SupervisorController extends Controller
 
         $departamento = Departamento::where('id','=',$id)->first();
 
-        return view('supervisores\departamentos\show', ['departamento'=>$departamento,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadossupervisores]);
+        return view('supervisores\supervisor\show', ['departamento'=>$departamento,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadossupervisores]);
     }
 
     public function agregardepartamento($emp_id, $dep_id)
@@ -49,7 +49,7 @@ class SupervisorController extends Controller
     // Lista de empleados asignados aa un supervisor
     public function supervisados($emp_id)
     {
-        $empleados = DB::select('call pa_supervisores_empleadosSupervisadosEmpelado('.$emp_id.')');
+        $empleados = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.$emp_id.')');
 
         return view('supervisores/indicadores/index')->with('empleados',$empleados);
     }

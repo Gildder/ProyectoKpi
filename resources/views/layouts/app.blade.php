@@ -13,7 +13,7 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{URL::asset('dist/css/ionicons.min.css')}}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{URL::asset('dist/css/AdminLTE.min.css')}}">
+  <link rel="stylesheet" href="{{URL::asset('dist/css/AdminLTE.css')}}">
   
   <!-- My style -->
   <link rel="stylesheet" href="{{URL::asset('dist/css/estilo.css')}}">
@@ -41,10 +41,10 @@
 <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.min.js')}}"></script>
 <!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
 
-   <!-- Mi Datetables -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
+ <!-- Mi Datetables -->
+<link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
 
-  <script src="{{URL::asset('dist/js/main.js')}}"></script>
+<script src="{{URL::asset('dist/js/main.js')}}"></script>
 
 
 
@@ -60,7 +60,7 @@
 <body class="skin-blue sidebar-mini" >
 <div class="wrapper">
     @if (Auth::user())
-      @if (Auth::user()->type == 2)
+      @if (Auth::user()->type == 1)
         @include("partials/menus/menu_bar_admin")
       @else
         @include("partials/menus/menu_bar_standard")
@@ -110,13 +110,11 @@
 <!-- jQuery Knob Chart -->
 <script src="{{URL::asset('plugins/knob/jquery.knob.js')}}"></script>
 <!-- daterangepicker -->
-<!--
 <script src="{{URL::asset('plugins/descargas/moment.min.js')}}"></script>
--->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="{{URL::asset('plugins/moment/moment-with-locales.js')}}"></script>
 <script src="{{URL::asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- datepicker -->
-<script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker.js')}}"></script>
+<script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker.min.js')}}"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{URL::asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
 <!-- Slimscroll -->

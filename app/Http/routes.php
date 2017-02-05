@@ -25,8 +25,13 @@ Route::resource('empleados/empleado', 'Empleados\EmpleadoController', ['only' =>
 
 //Evaludor
 Route::resource('empleados/evaluador', 'Empleados\EvaluadorController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-Route::get('empleados/evaluador/quitarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.quitarempleado', 'uses' => 'Empleados\EvaluadorController@quitarempleado') );
-Route::get('empleados/evaluador/agregarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.agregarempleado', 'uses' => 'Empleados\EvaluadorController@agregarempleado') );
+
+
+// Evaluador Empleado
+Route::get('empleados/evaluadorempleados', array('as' => 'empleados.evaluadorempleados.index', 'uses' => 'Empleados\EvaluadorEmpleadoController@index') );
+Route::get('empleados/evaluadorempleados/show/{empleado}', array('as' => 'empleados.evaluadorempleados.show', 'uses' => 'Empleados\EvaluadorEmpleadoController@show') );
+Route::get('empleados/evaluadorempleados/quitarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluadorempleados.quitarempleado', 'uses' => 'Empleados\EvaluadorEmpleadoController@quitarempleado') );
+Route::get('empleados/evaluadorempleados/agregarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluadorempleados.agregarempleado', 'uses' => 'Empleados\EvaluadorEmpleadoController@agregarempleado') );
 
 
 
@@ -37,10 +42,6 @@ Route::get('empleados/evaluadorcargos/getCargos/{id}', 'Empleados\EvaluadorCargo
 Route::get('empleados/evaluadorcargos/quitarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluadorcargos.quitarcargo', 'uses' => 'Empleados\EvaluadorCargoController@quitarcargo') );
 Route::get('empleados/evaluadorcargos/agregarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluadorcargos.agregarcargo', 'uses' => 'Empleados\EvaluadorCargoController@agregarcargo') );
 
-
-//Suprvisores
-Route::resource('supervisorempleado', 'Empleados\SupervisorEmpleadoController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
-Route::get('supervisorempleado/departamentos/getDepartamentos', array('as' => 'supervisorempleado.departamentos.getDepartamentos', 'supervisores' =>  'Empleados\SupervisorEmpleadoController') );
 
 
 // **********************  MODULO LOCALIZACIONES  *****************************************
@@ -89,15 +90,30 @@ Route::get('indicadores/indicadorcargos/editar/{cargo}/{param?}', array('as' => 
 Route::put('indicadores/indicadorcargos/update/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.update', 'uses' => 'Indicadores\IndicadorCargoController@update') );
 Route::delete('indicadores/indicadorcargos/destroy/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.destroy', 'uses' => 'Indicadores\IndicadorCargoController@destroy') );
 
-// **********************  MODULO SUPERVIASORES *****************************************
-Route::get('supervisores/departamentos/getdepartamentos', array('as' => 'supervisores.departamentos.getdepartamentos', 'uses' =>  'Supervisores\SupervisorController@getdepartamentos') );
-Route::get('supervisores/departamentos/{supervisores}', array('as' => 'supervisores.departamentos.show', 'uses' =>  'Supervisores\SupervisorController@show') );
 
-Route::get('supervisores/departamentos/agregardepartamento/{emp_id}/{param?}', array('as' => 'supervisores.departamentos.agregardepartamento', 'uses' => 'Supervisores\SupervisorController@agregardepartamento') );
+// **********************  MODULO SUPERVISORES *****************************************
+Route::resource('supervisores/supervisor', 'Supervisores\SupervisorController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+Route::get('supervisorempleado/departamentos/getDepartamentos', array('as' => 'supervisorempleado.departamentos.getDepartamentos', 'supervisores' =>  'Empleados\SupervisorEmpleadoController') );
 
-Route::get('supervisores/departamentos/quitardepartamento/{emp_id}/{param?}', array('as' => 'supervisores.departamentos.quitardepartamento', 'uses' => 'Supervisores\SupervisorController@quitardepartamento') );
+Route::get('supervisores/supervisor/agregardepartamento/{emp_id}/{param?}', array('as' => 'supervisores.supervisor.agregardepartamento', 'uses' => 'Supervisores\SupervisorController@agregardepartamento') );
+
+Route::get('supervisores/supervisor/quitardepartamento/{emp_id}/{param?}', array('as' => 'supervisores.supervisor.quitardepartamento', 'uses' => 'Supervisores\SupervisorController@quitardepartamento') );
 
 Route::get('supervisores/indicadores/supervisados/{emp_id}', array('as' => 'supervisores.indicadores.supervisados', 'uses' => 'Supervisores\SupervisorController@supervisados') );
+
+// Empleados Supervisados
+Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+
+// **********************  MODULO TAREAS  *****************************************
+Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+
+Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+
+
+
+
+
+
 
 
 Route::get('/', function () {

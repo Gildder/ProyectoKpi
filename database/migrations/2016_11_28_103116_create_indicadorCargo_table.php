@@ -16,8 +16,8 @@ class CreateIndicadorCargoTable extends Migration
             $table->integer('indicador_id')->unsigned();
             $table->integer('cargo_id')->unsigned();
             $table->double('objetivo');
-            $table->string('condicion',120)->default('ninguna');
-            $table->string('aclaraciones',120)->default('ninguna');
+            $table->string('condicion',120);
+            $table->string('aclaraciones',120);
             $table->integer('frecuencia_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

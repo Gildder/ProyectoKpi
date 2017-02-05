@@ -58,8 +58,6 @@ class Evaluador extends Model
 
     public static function getCargos($id)
     {   
-        $cargos = '';
-        
         $cargosEvaluados = Cargo::select('cargos.*')
                 ->join('evaluador_cargos','evaluador_cargos.cargo_id','=', 'cargos.id')
                 ->join('evaluadores','evaluadores.id','=','evaluador_cargos.evaluador_id')
@@ -68,11 +66,20 @@ class Evaluador extends Model
                 ->get();
 
 
-        foreach ($cargosEvaluados as $p) {
-            $cargos =   $p->nombre . '; '.$cargos  ;
-        }
-
         return $cargosEvaluados;
+    }
+
+    public static function getEmpleados($id)
+    {   
+        $Evaluadores = Empleado::select('empleados.*')
+                ->join('evaluador_empleados','evaluador_empleados.empleado_id','=', 'empleados.codigo')
+                ->join('evaluadores','evaluadores.id','=','evaluador_empleados.evaluador_id')
+                ->whereNull('evaluador_empleados.deleted_at')
+                ->where('evaluadores.id',$id)
+                ->get();
+
+
+        return $Evaluadores;
     }
    
 }

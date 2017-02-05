@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
+logo@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
 /*!
  *   AdminLTE v2.3.7
  *   Author: Almsaeed Studio
@@ -21,7 +21,7 @@ body {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, slogoans-serif;
   font-weight: 400;
   overflow-x: hidden;
   overflow-y: auto;
@@ -167,7 +167,8 @@ h6,
 }
 /* General Links */
 a {
-  color: #3c8dbc;
+  /*color: #3c8dbc;*/
+  color: #6cbc3c;
 }
 a:hover,
 a:active,

@@ -20,7 +20,7 @@ class CreatePrimerIndicadorTable extends Migration
             $table->integer('actpro'); //actividades programadas
             $table->integer('actrea'); //actividades realizadas
             $table->double('efeser'); //Eficacia del serivicio
-            $table->string('emp_codigo',10); 
+            $table->string('empleado_id',10); 
             $table->integer('indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

@@ -4,6 +4,15 @@ $(document).ready(function(){
     $('#myTable1').DataTable();
     $('#myTableGrDepartamento').DataTable();
 
+    /*Calendarios */
+	$('.datepicker').datepicker({
+	    format: 'yyyy-mm-dd',
+	    startDate: '-3d',
+	    autoclose:true,
+    	locale:'es'
+	});
+
+
 	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
 	$('input').blur(function(){
 	    /* Obtengo el valor contenido dentro del input */
@@ -20,7 +29,6 @@ $(document).ready(function(){
 	    $(this).val(value_without_space);
 	});
 });
-
 
 
 function agregarFormala(id)

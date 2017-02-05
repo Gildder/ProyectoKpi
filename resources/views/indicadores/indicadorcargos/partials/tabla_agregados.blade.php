@@ -9,7 +9,7 @@
 		</thead>
 
 		<tbody>
-			@foreach($cargoAsignados as $item)
+			@foreach($cargosEvaluadores as $item)
 			<tr>
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>

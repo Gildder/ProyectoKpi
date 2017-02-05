@@ -27,9 +27,7 @@
         </div>
         <div class="form-group @if ($errors->has('grupodep_id')) has-error @endif  col-sm-5 ">
           <label for="grupodep_id" class="hidden-xs">Grupo Departamento</label>
-              <!--
-              {!! form::select('nombregrupo',$grupo, null, ['id'=>'idgrupo', 'class'=>'form-control', 'placeholder'=>'Seleccionar..']) !!}
-              -->
+              
               <select class="form-control" name="grupodep_id">
                     <option value="" >Seleccionar...</option>
                   @foreach($grupo as $item)

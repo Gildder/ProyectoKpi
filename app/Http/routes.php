@@ -107,7 +107,20 @@ Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosControlle
 // **********************  MODULO TAREAS  *****************************************
 Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
+
+// tareas programadas
 Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+Route::get('tareas/tareaProgramadas/quitarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaProgramadas.quitarubicacion', 'uses' => 'Tareas\TareaProgramadaController@quitarubicacion') );
+Route::get('tareas/tareaProgramadas/agregarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaProgramadas.agregarubicacion', 'uses' => 'Tareas\TareaProgramadaController@agregarubicacion') );
+Route::get('tareas/tareaProgramadas/resolver/{tarea}', array('as' => 'tareas.tareaProgramadas.resolver', 'uses' => 'Tareas\TareaProgramadaController@resolver') );
+Route::put('tareas/tareaProgramadas/storeResolver/{tarea}', array('as' => 'tareas.tareaProgramadas.storeResolver', 'uses' => 'Tareas\TareaProgramadaController@storeResolver') );
+
+// tareas Diarias
+Route::resource('tareas/tareaDiaria', 'Tareas\TareaDiariaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+Route::get('tareas/tareaDiaria/quitarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaDiaria.quitarubicacion', 'uses' => 'Tareas\TareaDiariaController@quitarubicacion') );
+Route::get('tareas/tareaDiaria/agregarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaDiaria.agregarubicacion', 'uses' => 'Tareas\TareaDiariaController@agregarubicacion') );
+Route::get('tareas/tareaDiaria/resolver/{tarea}', array('as' => 'tareas.tareaDiaria.resolver', 'uses' => 'Tareas\TareaDiariaController@resolver') );
+Route::put('tareas/tareaDiaria/storeResolver/{tarea}', array('as' => 'tareas.tareaDiaria.storeResolver', 'uses' => 'Tareas\TareaDiariaController@storeResolver') );
 
 
 

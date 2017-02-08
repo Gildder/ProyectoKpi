@@ -22,7 +22,8 @@
         {!! Form::hidden('id', $proyecto->id) !!}
         <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-3">
             <label for="nombre" class="hidden-xs">Nombre</label>
-            {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
+            <input type="text" minlength="5" maxlength="40" name="nombre" value="{{ $proyecto->nombre }}"  placeholder="Ingresa el Nombre" class="form-control" required>
+
             @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
         </div>
 
@@ -34,7 +35,8 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              {!! Form::date('fechaInicio', \Carbon\Carbon::now() , ['id'=>'datepicker', 'class'=>'form-control datepicker', 'placeholder'=>'Selecciona fecha']) !!}
+              <input type="text" id="fechaFinEstimado" value="{{ $proyecto->fechaInicio }}" value="{{ $proyecto->fechaInicio }}" class="form-control datepicker" name="fechaInicio" placeholder="aaaa-mm-aa" required>
+
               @if ($errors->has('fechaInicio')) <p class="help-block">{{ $errors->first('fechaInicio') }}</p> @endif
             </div>
            </div>
@@ -45,7 +47,8 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              {!! Form::date('fechaFin', \Carbon\Carbon::now() , ['id'=>'datepicker', 'class'=>'form-control datepicker', 'placeholder'=>'Selecciona fecha']) !!}
+              <input type="text" id="fechaFinEstimado" value="{{ $proyecto->fechaFin }}" value="{{ $proyecto->fechaFin }}" class="form-control datepicker" name="fechaFin" placeholder="aaaa-mm-aa" required>
+              
               @if ($errors->has('fechaFin')) <p class="help-block">{{ $errors->first('fechaFin') }}</p> @endif
             </div>
            </div>

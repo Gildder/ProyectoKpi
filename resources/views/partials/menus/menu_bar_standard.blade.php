@@ -17,7 +17,7 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >
-              <i class="fa fa-briefcase"></i>
+              <i class="fa fa-bullseye"></i>
               <label for="Tareas" class="hidden-xs">Supervisiones</label>
             </a>
           </li>
@@ -27,14 +27,14 @@
            <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('tareas/tareaProgramadas')}}" >
-              <i class="fa fa-briefcase"></i>
+              <i class="fa  fa-calendar-check-o "></i>
               <label for="Tareas" class="hidden-xs">Tareas Programadas</label>
             </a>
           </li>
          <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-          <a href="{{url('partials/submenus/tareas')}}">
-              <i class="fa fa-briefcase"></i>
+          <a href="{{url('tareas/tareaDiaria')}}">
+              <i class="fa fa-coffee"></i>
               <label for="Tareas" class="hidden-xs">Tareas Diarias</label>
             </a>
           </li>

@@ -22,8 +22,8 @@ class CreateTareasTable extends Migration
             $table->date('fechaFinSolucion');
             $table->time('tiempoSolucion');
             $table->text('observaciones',120);
-            $table->char('estado',1);
-            $table->integer('tipo');
+            $table->char('estado',1)->default('1');
+            $table->integer('tipo'); //tareas programadas 1 , tareas diarias 0
             $table->string('empleado_id',10);
             $table->integer('proyecto_id')->unsigned()->default(0);
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));

@@ -13,7 +13,7 @@
 		<tbody>
 		@foreach($tareas as $tarea)
 			<tr>
-				<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" ><span class=""  title="Eliminar"></span><span >{{$tarea->id}}</span></a></td>
+				<td><a href="{{route('tareas.tareaDiaria.show', $tarea->id )}}" class="btn btn-warning btn-xs" ><span class=""  title="Eliminar"></span><span >{{$tarea->id}}</span></a></td>
 				<td>{{$tarea->descripcion}}</td>
 				<td>@if($tarea->fechaInicioSolucion == '') 0000-00-00 @else  {{$tarea->fechaInicioSolucion}}  @endif</td>
 				<td>@if($tarea->fechaFinSolucion == '') 0000-00-00 @else  {{$tarea->fechaFinSolucion}}  @endif</td>
@@ -25,8 +25,6 @@
 					@endforeach
 				</td>
 			</tr>
-
-			
 		@endforeach
 		</tbody>
 

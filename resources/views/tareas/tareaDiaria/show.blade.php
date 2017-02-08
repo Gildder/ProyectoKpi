@@ -21,23 +21,25 @@
 		<div class="tab-content">
 			<div id="datos" class="tab-pane fade in active">
 				<div class="col-lg-12 breadcrumb">
-					<a href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
+					<a href="{{route('tareas.tareaDiaria.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
 				</div>
 					<div class="content col-sm-6">
 
       					{{-- @include('partials/alert/error') --}}
 
-						@include('tareas/tareaProgramadas/partials/datos_tarea')	
+						@include('tareas/tareaDiaria/partials/datos_tarea')	
 
-						@include("tareas/tareaProgramadas/delete")
+						@include("tareas/tareaDiaria/editar")
 
-						{{-- @include("tareas/tareaProgramadas/partials/datos_solucion") --}}
+						@include("tareas/tareaDiaria/delete")
+
+						{{-- @include("tareas/tareaDiaria/partials/datos_solucion") --}}
 					</div>
 					<div class="col-sm-12 panel-footer text-right">
 		
-						{{-- <a href="{{route('tareas.tareaProgramadas.edit', $tarea->id)}}" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Solucion</b> </a> --}}
-						<a href="{{route('tareas.tareaProgramadas.resolver', $tarea->id)}}" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Resolver</b> </a>
-						<a href="{{route('tareas.tareaProgramadas.edit', $tarea->id)}}" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
+						{{-- <a href="{{route('tareas.tareaDiaria.edit', $tarea->id)}}" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Solucion</b> </a> --}}
+						<a href="{{route('tareas.tareaDiaria.resolver', $tarea->id)}}" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Resolver</b> </a>
+						<a  href="#"  data-toggle="modal" data-target="#modal-editar" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
 						<a href="#"  data-toggle="modal" data-target="#modal-delete-{{$tarea->id}}" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
 
 					</div>

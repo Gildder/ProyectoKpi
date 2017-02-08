@@ -10,7 +10,7 @@
         Eliminar Tarea
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Tareas\TareaProgramadaController@destroy', $tarea->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Tareas\TareaDiariaController@destroy', $tarea->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a <b>{{$tarea->descripcion}}?</b></p>
                  

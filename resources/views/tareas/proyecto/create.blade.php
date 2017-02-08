@@ -17,34 +17,39 @@
   <div class="col-lg-12 breadcrumb">
     <a  href="{{route('tareas.proyecto.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
   </div>
-
+      <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p><br></div>
+      
       {!!Form::open(['route'=>'tareas.proyecto.store', 'method'=>'POST'])!!}
 
         <div class="form-group @if ($errors->has('nombre')) has-error @endif  col-sm-6">
-            <label for="nombre" class="hidden-xs">Nombre</label>
-            {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
+            <label for="nombre" class="hidden-xs">Nombre *</label>
+            <input type="text" minlength="5" maxlength="40" name="nombre" placeholder="Ingresa el Nombre" class="form-control" required>
             @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
         </div>
 
+
+        {{-- Fecha de Inicio --}}
         <div class="row col-sm-12">
           <div class="form-group @if ($errors->has('fechaInicio')) has-error @endif  col-sm-6">
-            <label>Fecha Inicio</label>
+            <label>Fecha Inicio *</label>
             <div class="input-group date">
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              {!! Form::date('fechaInicio', \Carbon\Carbon::now() , ['id'=>'datepicker', 'class'=>'form-control datepicker', 'placeholder'=>'Selecciona fecha']) !!}
+              <input type="text" id="fechaInicio"  class="form-control datepicker" placeholder="aaaa-mm-dd" name="fechaInicio" required>
+
               @if ($errors->has('fechaInicio')) <p class="help-block">{{ $errors->first('fechaInicio') }}</p> @endif
             </div>
            </div>
 
+          {{-- Fecha de Fin --}}
            <div class="form-group @if ($errors->has('fechaFin')) has-error @endif  col-sm-6">
-            <label>Fecha Inicio</label>
+            <label>Fecha Inicio *</label>
             <div class="input-group date">
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              {!! Form::date('fechaFin', \Carbon\Carbon::now() , ['id'=>'datepicker', 'class'=>'form-control datepicker', 'placeholder'=>'Selecciona fecha']) !!}
+              <input type="text" id="fechaFin"  class="form-control datepicker" placeholder="aaaa-mm-dd" name="fechaFin" required>
               @if ($errors->has('fechaFin')) <p class="help-block">{{ $errors->first('fechaFin') }}</p> @endif
             </div>
            </div>

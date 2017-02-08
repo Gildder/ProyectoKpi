@@ -8,21 +8,22 @@ use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use  Illuminate\Database\Eloquent\Collection;
 
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Localizaciones\Localizacion;
-use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
-use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
+use ProyectoKpi\Http\Requests\Tareas\TareaDiariaFormRequest;
+use ProyectoKpi\Http\Requests\Tareas\TareaDiariasResolverRequest;
 
 
-class TareaProgramadaController extends Controller
+class TareaDiariaController extends Controller
 {
-    // protected $tareaProgramadas;
+    // protected $tareaDiaria;
     
-    // public function __contruct(CargoRepository $tareaProgramadas)
+    // public function __contruct(CargoRepository $tareaDiaria)
    	// {
    	// 	//$this->middleware('is_route');
-   	// 	$this->tareaProgramadas = $tareaProgramadas;
+   	// 	$this->tareaDiaria = $tareaDiaria;
    	// }
 
 
@@ -31,31 +32,27 @@ class TareaProgramadaController extends Controller
 
 		$user = Auth::user();  //obtenemos el usuario logueado
 
-		$tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )->get();
+		$tareas = Tarea::where('tipo','=', '2')->where('empleado_id', $user->empleado->codigo )->get();
 
-		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas]);
+		return view('tareas/tareaDiaria/index', ['tareas'=> $tareas]);
 	}
 
 	public function create()
 	{
 
-		return view('tareas.tareaProgramadas.create');
+		return view('tareas.tareaDiaria.create');
 	}
 
-	public function store(TareaProgramasFormRequest $Request)
+	public function store(TareaDiariaFormRequest $Request)
 	{
 		$user = Auth::user();  //obtenemos el usuario logueado
 		$tarea = new Tarea;
 		$tarea->descripcion = trim(\Request::input('descripcion'));
-		$tarea->fechaInicioEstimado = trim(\Request::input('fechaInicioEstimado'));
-		$tarea->fechaFinEstimado = trim(\Request::input('fechaFinEstimado'));
-		$tarea->tiempoEstimado = trim(\Request::input('tiempoEstimado'));
-		$tarea->tipo = '1';
+		$tarea->tipo = '2';
 		$tarea->empleado_id = $user->empleado->codigo;
 		$tarea->save();
 
-
-		return redirect('tareas/tareaProgramadas')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');
+		return redirect('tareas.tareaDiaria.index')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');
 	}
 
 	
@@ -63,7 +60,7 @@ class TareaProgramadaController extends Controller
 	{
 		$tarea = Tarea::findOrFail($id);
 		
-		return view('tareas/tareaProgramadas/edit',['tarea'=>$tarea]);
+		return view('tareas/tareaDiaria/edit',['tarea'=>$tarea]);
 
 	}
 
@@ -71,35 +68,32 @@ class TareaProgramadaController extends Controller
 	{
 		$tarea = Tarea::findOrFail($id);
 		$tarea->descripcion = trim(\Request::input('descripcion'));
-		$tarea->fechaInicioEstimado = trim(\Request::input('fechaInicioEstimado'));
-		$tarea->fechaFinEstimado = trim(\Request::input('fechaFinEstimado'));
-		$tarea->tiempoEstimado = trim(\Request::input('tiempoEstimado'));
 		$tarea->save();
 
-		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+		return redirect('tareas/tareaDiaria')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
 
 	public function show($id)
 	{
-		$tareaProgramadas = Tarea::findOrFail($id);
+		$tareaDiaria = Tarea::findOrFail($id);
 
-		return view('tareas/tareaProgramadas/show', ['tarea'=>$tareaProgramadas]);
+		return view('tareas/tareaDiaria/show', ['tarea'=>$tareaDiaria]);
 	}
 
 
 	public function resolver($id)
 	{
 
-		$tareaProgramadas = Tarea::findOrFail($id);
+		$tareaDiaria = Tarea::findOrFail($id);
 
 		$ubicacionesDis = Tarea::ubicacionesDisponibles($id);
 		$ubicacionesOcu = Tarea::ubicacionesOcupadas($id);
 
 				
-		return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
+		return view('tareas/tareaDiaria/resolver', ['tarea'=>$tareaDiaria,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
 	}	
 
-	public function storeResolver(TareaProgramasResolverRequest $Request,$id)
+	public function storeResolver(TareaDiariasResolverRequest $Request,$id)
 	{
 
 		$tarea = Tarea::findOrFail($id);
@@ -110,14 +104,14 @@ class TareaProgramadaController extends Controller
 		$tarea->observaciones = trim(\Request::input('observaciones'));
 		$tarea->save();
 
-		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+		return redirect('tareas/tareaDiaria')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
 
 	public function destroy($id)
 	{
 		Tarea::destroy($id);
 
-		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea de Nro.- '.$id.'  se elimino correctamente.');
+		return redirect('tareas/tareaDiaria')->with('message',  'El tarea de Nro.- '.$id.'  se elimino correctamente.');
 	}
 
 

@@ -19,9 +19,9 @@
 
     <div class="tab-content">
       <div id="datos" class="tab-pane fade in active">
-          <div class="col-lg-12 breadcrumb">
-            <a href="{{route('supervisores.supervisados.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-          </div>
+        <div class="col-lg-12 breadcrumb">
+          <a href="{{route('supervisores.supervisados.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+        </div>
         <div class="col-sm-12">
             @if($indicadores->count()<= 0)
               <p>Este empleado, No tiene asignado ningun indicador KPI.</p>

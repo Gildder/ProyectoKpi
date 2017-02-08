@@ -15,7 +15,7 @@
   <div class="panel-body">
 
   <div class="col-lg-12 breadcrumb">
-    <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+    <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
   </div>
       <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p><br></div>
       
@@ -38,10 +38,10 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input type="text" id="fechaInicioEstimado" class="form-control fechaInicio" name="fechaInicioEstimado" required>
+              <input type="text" id="fechaInicioEstimado"  class="form-control fechaInicio" min="2017-2-7"  placeholder="dd/mm/aaaa" name="fechaInicioEstimado" required>
 
             </div>
-              @if ($errors->has('fechaInicio')) <p class="help-block">{{ $errors->first('fechaInicio') }}</p> @endif
+              @if ($errors->has('fechaInicioEstimado')) <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p> @endif
            </div>
             
           {{-- Fecha Fin --}}
@@ -51,49 +51,56 @@
               <div class="input-group-addon">
                 <i class="fa fa-calendar"></i>
               </div>
-              <input type="text" id="fechaFinEstimado"  class="form-control fechaFin" name="fechaFinEstimado" required>
+              <input type="text" id="fechaFinEstimado"  class="form-control fechaFin" name="fechaFinEstimado" placeholder="dd/mm/aaaa" required>
 
             </div>
               @if ($errors->has('fechaFinEstimado')) <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p> @endif
            </div>
-        </div>
+      
+
+          {{-- Dias Trabajados --}}
+{{--              <div class="form-group @if ($errors->has('tiempoEstimado')) has-error @endif  col-sm-5">
+                <label>Dias trabajados </label><br>
+                    El total de días trabajados es: <label for="diasTrabajado">100</label>
+              @if ($errors->has('tiempoEstimado')) <p class="help-block">{{ $errors->first('tiempoEstimado') }}</p> @endif
+            </div> --}}
+          </div>
 
         {{-- Tiempo estimado --}}
         <div class="row col-sm-12">
            <div class="form-group @if ($errors->has('tiempoEstimado')) has-error @endif  col-sm-3">
               <label>Tiempo Estimado *</label>
               <div class="input-group">
-                  <input type="time" name="tiempoEstimado" class="form-control"  placeholder="Minutos" required>
+                  <input type="text" name="tiempoEstimado" class="form-control"  placeholder="Hora:Minutos" required>
                   <div class="input-group-addon">
                     <i class="fa fa-clock-o"></i>
                   </div>
               </div>
             @if ($errors->has('tiempoEstimado')) <p class="help-block">{{ $errors->first('tiempoEstimado') }}</p> @endif
           </div>
-        </div>
+        </div> 
+
 
       {{-- Ubicacion --}}
-       <div class="form-group @if ($errors->has('localizacion_id')) has-error @endif  col-sm-5 ">
+   {{--     <div class="form-group col-sm-5 ">
           <label for="localizacion_id">Ubicaciones *</label>
               <div class="form-group">
-              @if ($errors->has('localizacion_id')) <p class="help-block">{{ $errors->first('localizacion_id') }}</p> @endif
-
                 <div class="radio">
                   @foreach($localizaciones as $item)
-                    {{ Form::checkbox('prov[]', $item->id) }} {{ $item->nombre }} <br>
+                    {{ Form::checkbox('localizacion_id[]', $item->id, false) }} {{ $item->nombre }} <br>
                   @endforeach
                 </div>
               </div>
-        </div>
+        </div> --}}
     
         {{-- Observaciones --}}
-        <div class="row col-sm-12">
+       {{--  <div class="row col-sm-12">
           <div class="form-group @if ($errors->has('observaciones')) has-error @endif  col-sm-5">
               <label for="observaciones">Observaciones</label>
               <textarea type="textArea" name="observaciones" maxlength="120" placeholder="Observaciones" class="form-control" rows="5" cols="9"></textarea>
               @if ($errors->has('observaciones')) <p class="help-block">{{ $errors->first('observaciones') }}</p> @endif
           </div>
-        </div>
+        </div> --}}
       
   </div>
   <div class="panel-footer text-right">
@@ -106,3 +113,23 @@
 
 @endsection
 
+
+<script>
+
+// function calcularDias()
+// {
+
+//     var fechaIncio = $('#fechaInicioEstimado').datepicker( "getDate" );
+//     var fechaFin = $('#fechaFinEstimado').datepicker( "getDate" );
+//     var dias = 0;
+
+//     if (fechaFin != null && fechaFin != null ) {
+//         dias = restaFechas(fechaIncio, fechaFin)
+//     }
+//     alert(dias);
+
+// }
+
+    
+
+</script>

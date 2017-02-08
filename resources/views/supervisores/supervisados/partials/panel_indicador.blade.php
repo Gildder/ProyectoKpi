@@ -7,11 +7,15 @@
 
 		<div class="col-sm-6">
 			<h3>Tabla</h3>
-
-			
+			<div>
+				@include('partials/indicadores/primer_indicador/tabla_primerIndicador')
+			</div>
 		</div>
 		<div class="col-sm-6">
-			<h2>Grafico</h2>
+			<h2>Grafica</h2>
+			<div>
+				@include('partials/indicadores/primer_indicador/grafico_primerIndicador')
+			</div>
 		</div>
 	</div>
 </div>

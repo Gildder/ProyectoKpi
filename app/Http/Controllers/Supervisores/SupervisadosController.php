@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
+use ProyectoKpi\Http\Controllers\Graficas\GraficoController;
 use ProyectoKpi\Models\Localizaciones\Departamento;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
@@ -26,10 +27,13 @@ class SupervisadosController extends Controller
     public function show($id)
     {
         $indicadores = SupervisorEmpleado::getIndicadores($id);
+        $grafico =  new GraficoController();
 
-
-        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores]);
+        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'grafico' => $grafico->getPrimerIndicador($id)]);
     }
 
     
 }
+
+
+

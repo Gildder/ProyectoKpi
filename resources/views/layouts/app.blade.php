@@ -28,19 +28,25 @@
   <!-- jvectormap -->
   <link rel="stylesheet" href="{{URL::asset('plugins/jvectormap/jquery-jvectormap-1.2.2.css')}}">
   <!-- Date Picker -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/datepicker/datepicker3.css')}}">
+  <link rel="stylesheet" href="{{URL::asset('plugins/datepicker/datepicker3.css')}}"> 
+  <!-- Time Picker -->
+  <link rel="stylesheet" href="{{URL::asset('plugins/timepicker/bootstrap-timepicker.min.css')}}">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{URL::asset('plugins/daterangepicker/daterangepicker.css')}}">  
   <!-- Datetables -->
   <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
   <!-- jQuery UI -->
   <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui.css')}}">
+  <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui-12.css')}}">
+
 
 
 <!-- jQuery 2.2.3 -->
 <script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+<script src="{{URL::asset('plugins/jQuery/jquery-1.12.4.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.min.js')}}"></script>
+<script src="{{URL::asset('plugins/jQueryUI/jquery-ui.1.12.1.js')}}"></script>
 <!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
 
  <!-- Mi Datetables -->
@@ -99,7 +105,10 @@
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('bootstrap/js/bootstrap.min.js')}}"></script>
 <!-- Morris.js charts -->
-<!--
+
+<!-- ChartJS 1.0.1 -->
+<script src="{{URL::asset('/plugins/chartjs/Chart.min.js')}}"></script>
+
 <script src="{{URL::asset('plugins/descargas/raphael-min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 -->
@@ -117,6 +126,8 @@
 <script src="{{URL::asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- datepicker -->
 <script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker-es.js')}}"></script>
+<!-- timepicker -->
+<script src="{{URL::asset('plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{URL::asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
 <!-- Slimscroll -->

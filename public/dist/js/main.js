@@ -5,20 +5,37 @@ $(document).ready(function(){
     $('#myTableGrDepartamento').DataTable();
 
     /*Calendarios */
-	from = $( ".fechaInicio" )
-		.datepicker({
-		  format: 'dd/mm/yyyy',
-		  autoclose:true,
-		  startDate: "-1m",
-		  endDate: "+1m",
-		  firstDay: 1,
-		  changeMonth: true,
-		  yearRange:1,
-		  weekHeader: "Wk",
-		});
+	$( ".datepicker" ).datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		firstDay: 1,
+		changeMonth: true,
+		yearRange:1,
+	});
+
+
+	$('.timepicker').timepicker({
+	    timeFormat: 'HH:mm',
+	    dynamic: true,
+	    dropdown: true,
+	    scrollbar: true
+	});
+
+
+	from = $( ".fechaInicio" ).datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startDate: "-1m",
+		endDate: "+1m",
+		firstDay: 1,
+		changeMonth: true,
+		yearRange:1,
+	});
+
+
 
 	to = $( ".fechaFin" ).datepicker({
-		format: 'dd/mm/yyyy',
+		format: 'yyyy-mm-dd',
 		autoclose:true,
 		startDate: "-1m",
 		endDate: "+1m",
@@ -26,7 +43,6 @@ $(document).ready(function(){
 		firstDay: 1,
 		changeMonth: true,
 		yearRange:1,
-		 
 	});
 
 		
@@ -47,16 +63,25 @@ $(document).ready(function(){
 	});
 	
 
+	function agregarFormala(id)
+	{
+		var url = 'partials/formula_'+id;
+		$("#formulario").html(url);
+		alert(url);
+	}
+
+
+	function restaFechas(f1,f2)
+	{
+	    var aFecha1 = f1.split('/'); 
+	    var aFecha2 = f2.split('/'); 
+	    var fFecha1 = Date.UTC(aFecha1[2],aFecha1[1]-1,aFecha1[0]); 
+	    var fFecha2 = Date.UTC(aFecha2[2],aFecha2[1]-1,aFecha2[0]); 
+	    var dif = fFecha2 - fFecha1;
+	    var dias = Math.floor(dif / (1000 * 60 * 60 * 24)); 
+	    return dias;
+	}
 });
-
-
-
-function agregarFormala(id)
-{
-	var url = 'partials/formula_'+id;
-	$("#formulario").html(url);
-	alert(url);
-}
 
 
 

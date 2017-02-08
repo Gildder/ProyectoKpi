@@ -7,7 +7,7 @@ use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Collection;
 
 class Tarea extends Model
 {
@@ -54,6 +54,8 @@ class Tarea extends Model
     }
 
     /* ;Metodos de repositorio */
+
+    // Las localizaciones de disponibles para un empleado particular
     public static function getLocalizaciones()
     {
         $user = Auth::user();//obtenemos el usuario logueado
@@ -62,6 +64,47 @@ class Tarea extends Model
         $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
 
         return $localizaciones;
+    }
+
+    // lista de ubidadciones Ocupadas para una tarea
+    public static function ubicacionesOcupadas($tarea_id)
+    {
+        $user = Auth::user();//obtenemos el usuario logueado
+        
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+        // $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
+        $ubicacionesOcupadas = DB::table('localizaciones')->join('tarea_realizadas','tarea_realizadas.localizacion_id','=', 'localizaciones.id')
+                                ->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)
+                                ->where('tarea_realizadas.tarea_id',$tarea_id)
+                                ->select('localizaciones.id','localizaciones.nombre')->get();
+
+
+        return $ubicacionesOcupadas;
+    }
+
+    // lista de ubidadciones disponbiles para una tarea
+    public static function ubicacionesDisponibles($tarea_id)
+    {
+        $user = Auth::user();//obtenemos el usuario logueado
+        
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+
+        $ubicacionesDisponible  = DB::select('call pa_tareas_ubicaionesDisponibles('.$localizacion->grupoloc_id.','.$tarea_id.');');
+
+        return $ubicacionesDisponible;
+    }
+
+    public static function getEstado($tarea_id)
+    {
+        $tarea = Tarea::findOrFail($tarea_id);
+
+        if ($tarea->estado == '1') {
+            return 'Abierto';
+        }elseif ($tarea->estado == '2') {
+            return 'En Proceso';
+        }elseif ($tarea->estado == '3') {
+            return 'Finalizado';
+        }
     }
 
 }

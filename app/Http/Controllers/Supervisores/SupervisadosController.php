@@ -7,9 +7,10 @@ use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 
-use ProyectoKpi\Http\Controllers\Graficas\GraficoController;
+use ProyectoKpi\Http\Controllers\Graficas\GraficasController;
 use ProyectoKpi\Models\Localizaciones\Departamento;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
@@ -19,6 +20,8 @@ class SupervisadosController extends Controller
     public function index()
     {
         $user = Auth::user();
+        Cache::forever('codigoempleado', $user->empleado->codigo);
+
         $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.$user->empleado->codigo.');');
 
         return view('supervisores\supervisados\index', ['empleadosDisponibles'=>$empleadosDisponibles]);
@@ -27,9 +30,11 @@ class SupervisadosController extends Controller
     public function show($id)
     {
         $indicadores = SupervisorEmpleado::getIndicadores($id);
-        $grafico =  new GraficoController();
+        $grafico =  new GraficasController();
+        $datos_graficos = $grafico->getArrayPrimerIndicador($id);
 
-        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'grafico' => $grafico->getPrimerIndicador($id)]);
+        print_r($datos_graficos);
+        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'grafico' => $grafico->getPrimerIndicador($id), 'datos_graficos'=> $datos_graficos]);
     }
 
     

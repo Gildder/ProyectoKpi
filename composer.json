@@ -13,7 +13,10 @@
         "yajra/laravel-datatables-oracle": "~6.0",
         "predis/predis": "^1.1",
         "nesbot/carbon": "^1.22",
-        "styde/html": "~1.0"
+        "styde/html": "~1.0",
+        "fx3costa/laravelchartjs": "^1.3",
+        "scopdrag/laravel-google-chart": "^1.0",
+        "adldap2/adldap2-laravel": "1.4.4"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

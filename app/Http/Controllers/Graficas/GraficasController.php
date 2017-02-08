@@ -13,7 +13,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use ProyectoKpi\Models\Indicadores\PrimerIndicador;
 
 
-class GraficoController extends Controller
+class GraficasController extends Controller
 {
     
     public function __contruct()
@@ -36,23 +36,66 @@ class GraficoController extends Controller
 		return $indicador;
 	}
 
-	public function getBadge($semana)
+	public function getArrayPrimerIndicador($emp_id)
 	{
+		$indicador = DB::select('call pa_supervisores_primerIndicador('.$emp_id.');');
 
-		switch ($semana) {
-			case '1':
-				return 'bg-light-blue';
-				break;
-			case '2':
-				return 'bg-red';
-				break;
-			case '3':
-				return 'bg-yellow';
-				break;
-			default:
-				return 'bg-green';
-				break;
+		$datos = Array([],[]);
+		$datos[0][0] = 'Mes';
+		$datos[0][1] = 'Semama 1';
+		$datos[0][2] = 'Semama 2';
+		$datos[0][3] = 'Semama 3';
+		$datos[0][4] = 'Semama 4';
+
+		foreach ($indicador as $item) {
+			$mes = $this->getNombreMes($item->mes);
+			$datos[$item->mes][0] = $mes;
+			$datos[$item->mes][$item->semana ] = $item->efeser;
 		}
+
+		return json_encode($datos);
+	}
+
+	public function getNombreMes($num_mes)
+	{
+		switch ($num_mes) {
+				case '1':
+					return 'Enero';
+					break;
+				case '2':
+					return 'Febrero';
+					break;
+				case '3':
+					return 'Marzo';
+					break;
+				case '4':
+					return 'Abril';
+					break;
+				case '5':
+					return 'Mayo';
+					break;
+				case '6':
+					return 'Junio';
+					break;
+				case '7':
+					return 'Julio';
+					break;
+				case '8':
+					return 'Agosto';
+					break;
+				case '9':
+					return 'Septiembre';
+					break;
+				case '10':
+					return 'Octubre';
+					break;
+				case '11':
+					return 'Noviembre';
+					break;
+				default:
+					return 'Diciembre';
+					break;
+			}
 	}
 
 	public function create()

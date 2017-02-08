@@ -22,7 +22,7 @@
               <tr>
                 <td>{{$contador++}}</td>
                 <td class="m-{{$indicador->mes}}"></td>
-                <td>Semana {{$indicador->semana}}</td>
+                <td >Semana {{$indicador->semana}}</td>
                 <td>{{$indicador->actpro}}</td>
                 <td>{{$indicador->actrea}}</td>
                 <td><span class="{{$indicador->semana}}"> {{$indicador->efeser}}%</span></td>

@@ -20,24 +20,25 @@
 </div>
 <!-- /.box -->
 
-<?php $miarreglo =[]; ?>
+
 <script>
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawVisualization);
+    
+
+$(document).ready(function(){
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawVisualization);
 
 
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable([
-         ['Mes', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-         ['Enero',  78,      100,         87,      90],
-         ['Febrero',  50,      98,        90,      68],
-         ['Marzo',  89,      58,        88,      88],
+    function drawVisualization() 
+    {
+      // Some raw data (not necessarily accurate)
+      var data = google.visualization.arrayToDataTable([
+       ['Mes', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+       ['Enero',  78,      100,         87,      90],
+       ['Febrero',  50,      98,        90,      68],
+       ['Marzo',  89,      58,        88,      88],
 
-        @foreach($grafico as $indicador)
-          
-        @endforeach
-      ]);
+    ]);
 
     var options = {
       title : 'Eficacia del Servicio',
@@ -50,4 +51,7 @@
     var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
     chart.draw(data, options);
   }
+});
+
+ 
 </script>

@@ -123,6 +123,9 @@ Route::get('tareas/tareaDiaria/resolver/{tarea}', array('as' => 'tareas.tareaDia
 Route::put('tareas/tareaDiaria/storeResolver/{tarea}', array('as' => 'tareas.tareaDiaria.storeResolver', 'uses' => 'Tareas\TareaDiariaController@storeResolver') );
 
 
+/* Graficas */
+Route::get('graficas/getArrayPrimerIndicador/{data}',  array('as' => 'graficas.getArrayPrimerIndicador', 'uses' => 'Graficas\GraficasController@getArrayPrimerIndicador') );
+
 
 
 

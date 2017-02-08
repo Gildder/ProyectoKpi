@@ -148,6 +148,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Adldap\Laravel\AdldapServiceProvider::class,
+        Adldap\Laravel\AdldapAuthServiceProvider::class,
         //Adldap
         //Adldap\Laravel\AdldapServiceProvider::class,
         //Adldap\Laravel\AdldapAuthServiceProvider::class,
@@ -215,6 +217,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'Adldap' => Adldap\Laravel\Facades\Adldap::class,
         //'Adldap' => Adldap\Laravel\Facades\Adldap::class,
     ],
 

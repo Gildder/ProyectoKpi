@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading"><b> Inicio Sesion</b></div>
                 <div class="panel-body">
@@ -20,7 +20,7 @@
                                 </div>
                                     @if ($errors->has('name'))
                                         <span class="help-block">
-                                            <strong>{{ $errors->first('name') }}</strong>
+                                            <strong>{{ $errors->first('usernamae') }}</strong>
                                         </span>
                                     @endif
                             </div>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                       {{--  <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <div class="checkbox">
                                     <label>
@@ -51,7 +51,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
@@ -59,7 +59,7 @@
                                     <i class="fa fa-btn fa-sign-in"></i> Entrar
                                 </button>
 
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Recuperar Contraseña?</a>
+                                {{-- <a class="btn btn-link" href="{{ url('/password/reset') }}">Recuperar Contraseña?</a> --}}
                             </div>
                         </div>
                     </form>

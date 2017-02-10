@@ -28,23 +28,23 @@
           <li class="dropdown messages-menu">
           <a href="{{url('tareas/tareaProgramadas')}}" >
               <i class="fa  fa-calendar-check-o "></i>
-              <label for="Tareas" class="hidden-xs">Tareas Programadas</label>
+              <label for="Tareas" class="hidden-xs">Tareas</label>
             </a>
           </li>
          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
+         {{--  <li class="dropdown messages-menu">
           <a href="{{url('tareas/tareaDiaria')}}">
               <i class="fa fa-coffee"></i>
               <label for="Tareas" class="hidden-xs">Tareas Diarias</label>
             </a>
-          </li>
+          </li> --}}
          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
+         {{--  <li class="dropdown messages-menu">
           <a href="{{url('tareas/proyecto')}}">
               <i class="fa fa-briefcase"></i>
               <label for="Tareas" class="hidden-xs">Proyecto</label>
             </a>
-          </li>
+          </li> --}}
         
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">

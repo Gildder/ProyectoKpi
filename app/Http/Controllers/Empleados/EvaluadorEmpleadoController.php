@@ -16,6 +16,12 @@ use ProyectoKpi\Http\Models\Empleados\EvaluadorEmpleado;
 
 class EvaluadorEmpleadoController extends Controller
 {
+	public function __contruct()
+   	{
+   		$this->middleware('auth');
+   	}
+
+   	
     public function index()
 	{
 		$evaluadores = Evaluador::all();

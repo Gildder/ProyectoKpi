@@ -17,6 +17,12 @@ use ProyectoKpi\Http\Models\Indicadores\VariableIndicador;
 
 class VariableController extends Controller
 {
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index()
 	{
 		$variables = Variable::all();

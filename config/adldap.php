@@ -68,7 +68,7 @@ return [
         |
         */
 
-        'domain_controllers' => ['corp-dc1.corp.acme.org', 'corp-dc2.corp.acme.org'],
+        'domain_controllers' => ['ldap.forumsys.com'],
 
         /*
         |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ return [
         |
         */
 
-        'base_dn' => 'dc=corp,dc=acme,dc=org',
+        'base_dn' => 'cn=read-only-admin,dc=example,dc=com',
 
         /*
         |--------------------------------------------------------------------------

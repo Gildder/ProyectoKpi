@@ -33,11 +33,10 @@ $(document).ready(function(){
     {
       // Some raw data (not necessarily accurate)
       var data = google.visualization.arrayToDataTable([
-       ['Mes', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-       ['Enero',  78,      100,         87,      90],
-       ['Febrero',  50,      98,        90,      68],
-       ['Marzo',  89,      58,        88,      88],
-
+        ['Mes', 'Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+        @foreach($grafico as $item)
+          ['{{ $item->mes}}', {{ $item->semana}}, {{ $item->actpro}}, {{ $item->actrea}}, {{ $item->efeser}}],
+        @endforeach
     ]);
 
     var options = {

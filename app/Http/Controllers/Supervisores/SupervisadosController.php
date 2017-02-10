@@ -17,6 +17,12 @@ use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
 
 class SupervisadosController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    
     public function index()
     {
         $user = Auth::user();
@@ -30,11 +36,11 @@ class SupervisadosController extends Controller
     public function show($id)
     {
         $indicadores = SupervisorEmpleado::getIndicadores($id);
-        $grafico =  new GraficasController();
-        $datos_graficos = $grafico->getArrayPrimerIndicador($id);
+        $graficos =  new GraficasController();
+        $datos_graficos = $graficos->getArrayPrimerIndicador($id);
 
-        print_r($datos_graficos);
-        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'grafico' => $grafico->getPrimerIndicador($id), 'datos_graficos'=> $datos_graficos]);
+        // var_dump($datos_graficos);
+        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'grafico' => $graficos->getPrimerIndicador($id), 'datos_graficos'=> $datos_graficos]);
     }
 
     

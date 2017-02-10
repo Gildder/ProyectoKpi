@@ -11,7 +11,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 
 
 use ProyectoKpi\Models\Indicadores\PrimerIndicador;
-
+use ProyectoKpi\Models\Grafico\Grafico;
+use  khill\lavacharts\lavacharts;
 
 class GraficasController extends Controller
 {
@@ -41,21 +42,24 @@ class GraficasController extends Controller
 		$indicador = DB::select('call pa_supervisores_primerIndicador('.$emp_id.');');
 
 		$datos = Array([],[]);
-		$datos[0][0] = 'Mes';
-		$datos[0][1] = 'Semama 1';
-		$datos[0][2] = 'Semama 2';
-		$datos[0][3] = 'Semama 3';
-		$datos[0][4] = 'Semama 4';
+		// $datos[0][0] = 'Mes';
+		// $datos[0][1] = 'Semama_1';
+		// $datos[0][2] = 'Semama_2';
+		// $datos[0][3] = 'Semama_3';
+		// $datos[0][4] = 'Semama_4';
+
+		$grafico = new Grafico;
 
 		foreach ($indicador as $item) {
-			$mes = $this->getNombreMes($item->mes);
-			$datos[$item->mes][0] = $mes;
-			$datos[$item->mes][$item->semana ] = $item->efeser;
+			$datos[$item->mes - 1][0] = $this->getNombreMes($item->mes);
+			$datos[$item->mes - 1][$item->semana ] = $item->efeser;
 		}
 
-		return json_encode($datos);
+		print_r((object)$datos);
+		return (object)$datos;
 	}
 
+	
 	public function getNombreMes($num_mes)
 	{
 		switch ($num_mes) {

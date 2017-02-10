@@ -18,13 +18,10 @@ use ProyectoKpi\Http\Requests\Tareas\TareaDiariasResolverRequest;
 
 class TareaDiariaController extends Controller
 {
-    // protected $tareaDiaria;
-    
-    // public function __contruct(CargoRepository $tareaDiaria)
-   	// {
-   	// 	//$this->middleware('is_route');
-   	// 	$this->tareaDiaria = $tareaDiaria;
-   	// }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     public function index()

@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class EvaluadorCargoController extends Controller
 {
+	public function __contruct()
+   	{
+   		$this->middleware('auth');
+   	}
+
+   	
     public function index()
 	{
 		// $evaluadores = EvaluadorCargo::getEvaluadores();

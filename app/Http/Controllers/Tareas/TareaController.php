@@ -9,14 +9,10 @@ use ProyectoKpi\Http\Controllers\Controller;
 
 class TareaController extends Controller
 {
-    protected $tareas;
-    
-    public function __contruct(CargoRepository $tareas)
-   	{
-   		//$this->middleware('is_route');
-   		$this->tareas = $tareas;
-   	}
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
 	{

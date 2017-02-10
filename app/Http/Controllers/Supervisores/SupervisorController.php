@@ -13,6 +13,12 @@ use ProyectoKpi\Models\Empleados\Empleado;
 
 class SupervisorController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    
     public function index()
     {
     	$departamentos = Departamento::select('departamentos.*')->get();

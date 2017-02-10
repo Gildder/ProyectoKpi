@@ -22,6 +22,12 @@ use ProyectoKpi\Http\Requests\Empleados\EmpleadoRequestUpdate;
 
 class EmpleadoController extends Controller
 {
+	public function __contruct()
+   	{
+   		$this->middleware('auth');
+   	}
+
+   	
 	/**
      * [TodosEmpleados Obtenemos la lista de todos los empleados]
      */

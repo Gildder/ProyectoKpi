@@ -13,13 +13,10 @@ use ProyectoKpi\Http\Requests\Tareas\ProyectoFormRequest;
 
 class ProyectoController extends Controller
 {
-    protected $proyectos;
-    
-    public function __contruct(CargoRepository $proyectos)
-   	{
-   		//$this->middleware('is_route');
-   		$this->proyectos = $proyectos;
-   	}
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     public function index()

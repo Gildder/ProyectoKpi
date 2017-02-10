@@ -16,6 +16,10 @@ use ProyectoKpi\Http\Requests\Indicadores\IndicadorCargoFormRequest;
 
 class IndicadorCargoController extends Controller
 {
+	public function __contruct()
+   	{
+   		$this->middleware('auth');
+   	}
    
     public function index()
 	{

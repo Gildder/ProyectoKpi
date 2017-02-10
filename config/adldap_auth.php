@@ -124,6 +124,8 @@ return [
     'sync_attributes' => [
 
         'name' => 'cn',
+        'password' => 'mail',
+        'email' => 'mail',
 
     ],
 

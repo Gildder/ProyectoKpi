@@ -17,12 +17,10 @@ use ProyectoKpi\Repositories\CargoRepository;
 
 class CargoController extends Controller
 {
-	protected $cargos;
     
-    public function __contruct(CargoRepository $cargos)
+    public function __contruct()
    	{
-   		//$this->middleware('is_route');
-   		$this->cargos = $cargos;
+   		$this->middleware('auth');
    	}
 
 

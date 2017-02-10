@@ -150,10 +150,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Adldap\Laravel\AdldapServiceProvider::class,
         Adldap\Laravel\AdldapAuthServiceProvider::class,
-        //Adldap
-        //Adldap\Laravel\AdldapServiceProvider::class,
-        //Adldap\Laravel\AdldapAuthServiceProvider::class,
-
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -218,7 +215,6 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Adldap' => Adldap\Laravel\Facades\Adldap::class,
-        //'Adldap' => Adldap\Laravel\Facades\Adldap::class,
     ],
 
 ];

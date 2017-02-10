@@ -11,6 +11,10 @@
 |
 */
 
+Route::group(['middleware' => ['auth']], function () {
+    //
+
+
 // **********************  MODULO EMPLEADOS  *****************************************
 Route::resource('empleados/cargo', 'Empleados\CargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
@@ -123,12 +127,14 @@ Route::get('tareas/tareaDiaria/resolver/{tarea}', array('as' => 'tareas.tareaDia
 Route::put('tareas/tareaDiaria/storeResolver/{tarea}', array('as' => 'tareas.tareaDiaria.storeResolver', 'uses' => 'Tareas\TareaDiariaController@storeResolver') );
 
 
+
+
+///din middleware
+});
+
+
 /* Graficas */
 Route::get('graficas/getArrayPrimerIndicador/{data}',  array('as' => 'graficas.getArrayPrimerIndicador', 'uses' => 'Graficas\GraficasController@getArrayPrimerIndicador') );
-
-
-
-
 
 
 
@@ -146,6 +152,3 @@ Route::get('api/grupodepartamento', function() {
 	return Datatables::eloquent(grupodepartamento::query())->make(true);
 });
 */
-Route::auth();
-
-Route::get('/home', 'HomeController@index');

@@ -12,6 +12,11 @@ use ProyectoKpi\Models\Indicadores\Indicador;
 
 class PrimerIndicadorController extends Controller
 {
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
 	public function index()
 	{
 		$indicadores = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','indicadores.objetivo','tipos_indicadores.nombre as tipo','indicadores.condicion',  'frecuencias.nombre as frecuencia')

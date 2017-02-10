@@ -4,27 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "23b9841dc2dee9e48bf7497e12b650e2",
-    "content-hash": "5ad5d738dc334a9572448b94c9903278",
+    "hash": "48d9d24433f7bae0bf3edd31fc5e0001",
+    "content-hash": "6c10b5df5d279d208ca9eacb9abee546",
     "packages": [
         {
             "name": "adldap2/adldap2",
-            "version": "v5.2.17",
+            "version": "v6.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Adldap2/Adldap2.git",
-                "reference": "b72cd7ec6d9734e2a8ba8af69b5b279ee24c325f"
+                "reference": "d34932b46f764813a4136c2daf947dc2770f080d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/b72cd7ec6d9734e2a8ba8af69b5b279ee24c325f",
-                "reference": "b72cd7ec6d9734e2a8ba8af69b5b279ee24c325f",
+                "url": "https://api.github.com/repos/Adldap2/Adldap2/zipball/d34932b46f764813a4136c2daf947dc2770f080d",
+                "reference": "d34932b46f764813a4136c2daf947dc2770f080d",
                 "shasum": ""
             },
             "require": {
-                "doctrine/collections": "1.3.*",
                 "ext-ldap": "*",
-                "php": ">=5.4.26"
+                "illuminate/support": "~5.0",
+                "php": ">=5.5.9"
             },
             "require-dev": {
                 "mockery/mockery": "0.9.*",
@@ -47,7 +47,7 @@
                     "role": "Developer"
                 }
             ],
-            "description": "A PHP LDAP Library for Active Directory Manipulation.",
+            "description": "A PHP LDAP Package for Active Directory Manipulation.",
             "keywords": [
                 "active directory",
                 "ad",
@@ -57,24 +57,24 @@
                 "ldap",
                 "windows"
             ],
-            "time": "2016-03-29 14:34:03"
+            "time": "2016-10-22 05:28:15"
         },
         {
             "name": "adldap2/adldap2-laravel",
-            "version": "v1.4.4",
+            "version": "v2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Adldap2/Adldap2-Laravel.git",
-                "reference": "5e41c0c498f9b56803ef472613c9f951dc3e3534"
+                "reference": "4951160d8dfb7808f38a3d05be4bbf3e62035cb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Adldap2/Adldap2-Laravel/zipball/5e41c0c498f9b56803ef472613c9f951dc3e3534",
-                "reference": "5e41c0c498f9b56803ef472613c9f951dc3e3534",
+                "url": "https://api.github.com/repos/Adldap2/Adldap2-Laravel/zipball/4951160d8dfb7808f38a3d05be4bbf3e62035cb3",
+                "reference": "4951160d8dfb7808f38a3d05be4bbf3e62035cb3",
                 "shasum": ""
             },
             "require": {
-                "adldap2/adldap2": "5.2.*",
+                "adldap2/adldap2": "6.1.*",
                 "php": ">=5.5.0"
             },
             "require-dev": {
@@ -98,7 +98,7 @@
                 "laravel",
                 "ldap"
             ],
-            "time": "2016-02-11 17:36:35"
+            "time": "2016-10-03 13:08:34"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -186,72 +186,6 @@
             ],
             "description": "implementation of xdg base directory specification for php",
             "time": "2014-10-24 07:27:01"
-        },
-        {
-            "name": "doctrine/collections",
-            "version": "v1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/collections.git",
-                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Collections\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                },
-                {
-                    "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com"
-                }
-            ],
-            "description": "Collections Abstraction library",
-            "homepage": "http://www.doctrine-project.org",
-            "keywords": [
-                "array",
-                "collections",
-                "iterator"
-            ],
-            "time": "2015-04-14 22:21:58"
         },
         {
             "name": "doctrine/inflector",
@@ -667,6 +601,95 @@
             "time": "2016-12-07 09:37:55"
         },
         {
+            "name": "khill/lavacharts",
+            "version": "3.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kevinkhill/lavacharts.git",
+                "reference": "232dbfca0fb8da188b03aa00310bd52173728faf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kevinkhill/lavacharts/zipball/232dbfca0fb8da188b03aa00310bd52173728faf",
+                "reference": "232dbfca0fb8da188b03aa00310bd52173728faf",
+                "shasum": ""
+            },
+            "require": {
+                "nesbot/carbon": "~1.14",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "mybuilder/phpunit-accelerator": "~1.1",
+                "phpunit/phpunit": "~4.5",
+                "satooshi/php-coveralls": "~1.0",
+                "squizlabs/php_codesniffer": "~2.5"
+            },
+            "suggest": {
+                "khill/datatableplus": "Adds extra features to DataTables such as csv and laravel collection parsing."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Khill\\Lavacharts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Hill",
+                    "email": "kevinkhill@gmail.com",
+                    "role": "Creator"
+                },
+                {
+                    "name": "deringer",
+                    "homepage": "https://github.com/deringer",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "stevebauman",
+                    "homepage": "https://github.com/stevebauman",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "rajivseelam",
+                    "homepage": "https://github.com/rajivseelam",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "tobias-kuendig",
+                    "homepage": "https://github.com/tobias-kuendig",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Stonos",
+                    "homepage": "https://github.com/Stonos",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "MicahKV",
+                    "email": "micah138@yahoo.com",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "SendDerek",
+                    "homepage": "https://github.com/SendDerek",
+                    "role": "Contributor"
+                }
+            ],
+            "description": "PHP wrapper library for the Google Chart API",
+            "homepage": "http://lavacharts.com",
+            "keywords": [
+                "charts",
+                "google",
+                "graphs"
+            ],
+            "time": "2017-01-25 14:55:08"
+        },
+        {
             "name": "laravel/framework",
             "version": "v5.2.45",
             "source": {
@@ -852,16 +875,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.34",
+            "version": "1.0.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "469ad53c13ea19a0e54e3e5d70f61227ddcc0299"
+                "reference": "dda7f3ab94158a002d9846a97dc18ebfb7acc062"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/469ad53c13ea19a0e54e3e5d70f61227ddcc0299",
-                "reference": "469ad53c13ea19a0e54e3e5d70f61227ddcc0299",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/dda7f3ab94158a002d9846a97dc18ebfb7acc062",
+                "reference": "dda7f3ab94158a002d9846a97dc18ebfb7acc062",
                 "shasum": ""
             },
             "require": {
@@ -931,7 +954,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2017-01-30 17:41:17"
+            "time": "2017-02-09 11:33:58"
         },
         {
             "name": "league/fractal",
@@ -2711,16 +2734,16 @@
         },
         {
             "name": "yajra/laravel-datatables-oracle",
-            "version": "v6.24.3",
+            "version": "v6.24.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yajra/laravel-datatables.git",
-                "reference": "744086996ae8f9c786872f16679b1920c804bebd"
+                "reference": "3b27e3ee11253d003b03155d3df403c69bd6f4a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/744086996ae8f9c786872f16679b1920c804bebd",
-                "reference": "744086996ae8f9c786872f16679b1920c804bebd",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/3b27e3ee11253d003b03155d3df403c69bd6f4a4",
+                "reference": "3b27e3ee11253d003b03155d3df403c69bd6f4a4",
                 "shasum": ""
             },
             "require": {
@@ -2767,7 +2790,7 @@
                 "laravel4",
                 "laravel5"
             ],
-            "time": "2017-02-08 01:27:18"
+            "time": "2017-02-09 05:15:31"
         }
     ],
     "packages-dev": [

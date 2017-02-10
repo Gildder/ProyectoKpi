@@ -17,13 +17,10 @@ use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
 
 class TareaProgramadaController extends Controller
 {
-    // protected $tareaProgramadas;
-    
-    // public function __contruct(CargoRepository $tareaProgramadas)
-   	// {
-   	// 	//$this->middleware('is_route');
-   	// 	$this->tareaProgramadas = $tareaProgramadas;
-   	// }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
 
     public function index()

@@ -3,6 +3,7 @@
 namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Database\wrong;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Indicadores\Indicador;

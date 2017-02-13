@@ -30,7 +30,8 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "ProyectoKpi/Clases"
         ],
         "psr-4": {
             "ProyectoKpi\\": "app/"

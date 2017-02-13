@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
+
+use ProyectoKpi\Clases\Semana;
+
+
 class Tarea extends Model
 {
 
@@ -99,12 +103,19 @@ class Tarea extends Model
         $tarea = Tarea::findOrFail($tarea_id);
 
         if ($tarea->estado == '1') {
-            return 'Abierto';
+            return 'Programado';
         }elseif ($tarea->estado == '2') {
             return 'En Proceso';
         }elseif ($tarea->estado == '3') {
             return 'Finalizado';
         }
     }
+
+    public static function listSemana()
+    {
+        $semana = new Semana();
+        return  $semana->getSemanasProgramadas();
+    }
+
 
 }

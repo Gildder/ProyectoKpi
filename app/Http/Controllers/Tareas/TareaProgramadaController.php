@@ -25,17 +25,18 @@ class TareaProgramadaController extends Controller
 
     public function index()
 	{	
-
 		$user = Auth::user();  //obtenemos el usuario logueado
-
 		$tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )->get();
 
-		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas]);
+		$semanas = Tarea::listSemana();
+		// var_dump($semanas); 
+		// var_dump($tareas);
+
+		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=>$semanas]);
 	}
 
 	public function create()
 	{
-
 		return view('tareas.tareaProgramadas.create');
 	}
 

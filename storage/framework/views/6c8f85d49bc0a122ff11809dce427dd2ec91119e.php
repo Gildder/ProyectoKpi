@@ -41,6 +41,10 @@
 
 
 
+<!-- jQuery 1.8.23 -->
+<script src="<?php echo e(URL::asset('plugins/jQuery/jquery-ui-1.8.23.custom.min.js')); ?>"></script>
+<script src="<?php echo e(URL::asset('plugins/jQuery/jquery-1.8.0.min.js')); ?>"></script>
+
 <!-- jQuery 2.2.3 -->
 <script src="<?php echo e(URL::asset('plugins/jQuery/jquery-2.2.3.min.js')); ?>"></script>
 <script src="<?php echo e(URL::asset('plugins/jQuery/jquery-1.12.4.js')); ?>"></script>
@@ -112,7 +116,7 @@
 
 <script src="<?php echo e(URL::asset('plugins/descargas/raphael-min.js')); ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
--->
+
 <script src="<?php echo e(URL::asset('plugins/morris/morris.min.js')); ?>"></script>
 <!-- Sparkline -->
 <script src="<?php echo e(URL::asset('plugins/sparkline/jquery.sparkline.min.js')); ?>"></script>
@@ -126,7 +130,8 @@
 <script src="<?php echo e(URL::asset('plugins/moment/moment-with-locales.js')); ?>"></script>
 <script src="<?php echo e(URL::asset('plugins/daterangepicker/daterangepicker.js')); ?>"></script>
 <!-- datepicker -->
-<script src="<?php echo e(URL::asset('plugins/datepicker/bootstrap-datepicker-es.js')); ?>"></script>
+<?php /* <script src="<?php echo e(URL::asset('plugins/datepicker/bootstrap-datepicker-es.js')); ?>"></script> */ ?>
+<script src="<?php echo e(URL::asset('plugins/datepicker/datepicker-es.js')); ?>"></script>
 <!-- timepicker -->
 <script src="<?php echo e(URL::asset('plugins/timepicker/bootstrap-timepicker.min.js')); ?>"></script>
 <!-- Bootstrap WYSIHTML5 -->

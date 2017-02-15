@@ -1,23 +1,14 @@
 <div class="table-response">
-	<table id="myTable" class="table  table-striped table-bordered table-condensed table-hover">
+	<table id="myTable2" class="table  table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<th>Nro</th>
 			<th>Descripcion</th>	
-			<th>Fecha Inicio </th>	
-			<th>Fecha Fin  </th>	
-			<th>Tiempo Estimado</th>	
-			<th>Estado</th>	
-			<th>Ubicacion</th>	
-		</thead>
-		<tfoot style="display: table-header-group;" >
-			<th>Nro</th>
-			<th>Descripcion</th>	
-			<th>Fecha Inicio</th>	
-			<th>Fecha Fin </th>	
+			<th>Fecha Inicio Ejecucion</th>	
+			<th>Fecha Fin Ejecucion </th>	
 			<th>Tiempo Ejecucion</th>	
 			<th>Estado</th>	
 			<th>Ubicacion</th>	
-		</tfoot>
+		</thead>
 
 		<tbody>
 		@foreach($tareas as $tarea)

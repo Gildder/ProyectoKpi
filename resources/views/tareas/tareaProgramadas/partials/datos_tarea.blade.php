@@ -12,12 +12,12 @@
 
       <tr>
          <td class="text-right"><b>Fecha Inicio Estimado:</b></td>
-         <td>{{$tarea->fechaInicioEstimado}}</td>
+         <td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Fecha Fin Estimado:</b></td>
-         <td>{{$tarea->fechaFinEstimado}}</td>
+         <td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}</td>
       </tr>
 
        <tr>
@@ -26,17 +26,17 @@
       </tr>
 
        <tr>
-         <td class="text-right"><b>Fecha Inicio Solucion:</b></td>
-          <td>@if($tarea->fechaInicioSolucion == '') 0000-00-00 @else  {{$tarea->fechaInicioSolucion}}  @endif</td>
+         <td class="text-right"><b>Fecha Inicio Ejecucion:</b></td>
+          <td>@if($tarea->fechaInicioSolucion == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}  @endif</td>
       </tr>
       
        <tr>
-         <td class="text-right"><b>Fecha Final Solucion:</b></td>
-          <td>@if($tarea->fechaFinSolucion == '') 0000-00-00 @else  {{$tarea->fechaFinSolucion}}  @endif</td>
+         <td class="text-right"><b>Fecha Final Ejecucion:</b></td>
+          <td>@if($tarea->fechaFinSolucion == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}  @endif</td>
       </tr>
       
        <tr>
-         <td class="text-right"><b>Tiempo Solucion:</b></td>
+         <td class="text-right"><b>Tiempo Ejecucion:</b></td>
           <td>@if($tarea->tiempoSolucion == '') 00:00 @else  {{$tarea->tiempoSolucion}}  @endif</td>
       </tr>
 

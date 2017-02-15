@@ -25,10 +25,10 @@ class TareaProgramasFormRequest extends Request
     {
         return [
                 'descripcion'=>'required|min:5|max:60',
-                'fechaInicioEstimado' => 'required',
-                'fechaFinEstimado' => 'required',
-                'hora'=> 'required',
-                'minuto'=> 'required'
+                'fechaInicioEstimado' => 'required|date_format:d/m/Y',
+                'fechaFinEstimado' => 'required|date_format:d/m/Y',
+                'hora'=> 'required|numeric',
+                'minuto'=> 'required|numeric'
         ];
     }
 
@@ -39,9 +39,13 @@ class TareaProgramasFormRequest extends Request
             'descripcion.min' => 'Este campo no puede tener menos de 5 carácteres',
             'descripcion.max' => 'Este campo no puede tener más de 60 carácteres',
             'fechaInicioEstimado.required' => 'Este campo es requerido!',
+            'fechaInicioEstimado.date_format' => 'El formato es dd/mm/aaa',
             'fechaFinEstimado.required' => 'Este campo es requerido!',
+            'fechaFinEstimado.date_format' => 'El formato es dd/mm/aaa',
             'hora.required' => 'La Hora es requerido',
-            'minuto.required' => 'El minuto es requerido'
+            'hora.numeric' => 'Debe ser numerico',
+            'minuto.required' => 'El minuto es requerido',
+            'minuto.numeric' => 'Debe ser numerico'
         ];
     }
 }

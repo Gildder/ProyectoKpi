@@ -12,7 +12,7 @@
 				<td><?php echo e($item->id); ?></td>
 				<td><?php echo e($item->nombre); ?></td>
 				<td>
-					<a href="<?php echo e(route('tareas.tareaProgramadas.agregarubicacion', array( $tarea->id, $item->id ))); ?>" class="btn btn-primary btn-sm"><span class="fa fa-plus" title="Agregar Ubicacion" ></span></a>
+					<a href="<?php echo e(route('tareas.tareaProgramadas.agregarubicacion', array( $tarea->id, $item->id ))); ?>" class="btn btn-primary btn-sm"><span class="fa fa-plus" title="Agregar" ></span></a>
 				</td>
 			</tr>
 		<?php endforeach; ?>

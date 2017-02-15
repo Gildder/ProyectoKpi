@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Permiso de Usuario</title>
+        <title>Error 401</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
@@ -35,12 +35,18 @@
                 font-size: 72px;
                 margin-bottom: 40px;
             }
+            .details {
+                font-size: 32px;
+                margin-bottom: 40px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Usted no tiene permiso para este sitio.</div>
+                <div class="title">Error 401</div>
+                <div class="details"><p>Usted no tiene permiso para este sitio.</p></div>
+                
             </div>
         </div>
     </body>

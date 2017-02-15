@@ -12,7 +12,7 @@
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>
 				<td>
-					<a href="{{route('tareas.tareaProgramadas.agregarubicacion', array( $tarea->id, $item->id )) }}" class="btn btn-primary btn-sm"><span class="fa fa-plus" title="Agregar Ubicacion" ></span></a>
+					<a href="{{route('tareas.tareaProgramadas.agregarubicacion', array( $tarea->id, $item->id )) }}" class="btn btn-primary btn-sm"><span class="fa fa-plus" title="Agregar" ></span></a>
 				</td>
 			</tr>
 		@endforeach

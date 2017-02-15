@@ -16,6 +16,8 @@
   <div class="col-lg-12 breadcrumb">
     <a  href="<?php echo e(route('tareas.tareaProgramadas.show', $tarea->id)); ?>" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
   </div>
+
+
       <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p><br></div>
       
       <?php echo Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT']); ?>
@@ -39,36 +41,39 @@
   <div class="col-sm-12">
     <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
       <div class="form-group  col-xs-6 col-sm-3 col-md-2 <?php if($errors->has('hora')): ?> has-error <?php endif; ?>">
-        Horas:<input type="number" name="hora" max="999"  value="<?php echo e($tarea->tiempoEstimado); ?>"  class="form-control" value="00"  required >
+        <p>Horas:<p><input type="number" name="hora" max="999"  value="<?php echo e($tarea->sacarHoras($tarea->tiempoEstimado)); ?>"  class="form-control" value="00"  required >
         <?php if($errors->has('hora')): ?> <p class="help-block"><?php echo e($errors->first('hora')); ?></p> <?php endif; ?>
 
       </div> 
       <div class="col-xs-6 col-sm-4 col-md-2 <?php if($errors->has('minuto')): ?> has-error <?php endif; ?>">
-        Minutos: <input type="number" name="minuto" value="<?php echo e($tarea->tiempoEstimado); ?>"  max="999" class="form-control" value="00"   required>
+        <p>Minutos:</p>
+         <input type="number" name="minuto" value="<?php echo e($tarea->sacarMinutos($tarea->tiempoEstimado)); ?>"  max="999" class="form-control" value="00"   required>
         <?php if($errors->has('minuto')): ?> <p class="help-block"><?php echo e($errors->first('minuto')); ?></p> <?php endif; ?>
       </div>
   </div>
 
 <div class="form-group col-sm-12">
 <hr>
-  <label class="form-group col-xs-12 col-sm-12">Semana Programada *</label>
-  <small class="form-group col-sm-12">Selecciona la semana que deseas programas tu tarea.</small><br><br>
-  <?php /* Fecha de Inicio */ ?>
-  <div class="form-group col-sm-12">
-      Selecciona:
-      <select name="selecion_semana" id="selecion_semana">
-        <?php foreach($semanas as $item): ?>
-          <option value="<?php echo e($item['semana']); ?>">Semana <?php echo e($item['semana']); ?> del Mes de <?php echo e(nombreMes($item['mes'])); ?></option> 
-        <?php endforeach; ?>
-      </select>
-  </div>
+  <label class="form-group col-xs-12 col-sm-12">Fechas Programada *</label>
+
+  <?php /* Fecha de Estimada */ ?>
+<div class="form-group col-sm-12">
   <div class="row form-group  col-sm-12">
-    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Inicio: <input  id="fechaInicio" class="form-control" name="fechaInicioEstimado"  readonly="readonly" ></div>
-    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Fin: <input  id="fechaFin" class="form-control" name="fechaFinEstimado" readonly="readonly" ></div>
+    <div class="row col-xs-12 col-sm-4 col-md-2 <?php if($errors->has('fechaInicioEstimado')): ?> has-error <?php endif; ?>">
+      <p >De *: </p>
+      <input type="text"  id="fechaInicio" value="<?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)); ?>" class="form-control fechaInicio" name="fechaInicioEstimado" required>
+        <?php if($errors->has('fechaInicioEstimado')): ?> <p class="help-block"><?php echo e($errors->first('fechaInicioEstimado')); ?></p> <?php endif; ?>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-2  <?php if($errors->has('fechaFinEstimado')): ?> has-error <?php endif; ?>">
+      <p >Hasta *: </p>
+      <input type="text" id="fechaFin" value="<?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)); ?>" class="form-control fechaFin" name="fechaFinEstimado" required>
+        <?php if($errors->has('fechaFinEstimado')): ?> <p class="help-block"><?php echo e($errors->first('fechaFinEstimado')); ?></p> <?php endif; ?>
+    </div>
   </div>
 </div>
 
       
+  </div>
   </div>
   <div class="panel-footer text-right">
       <a  id="cancelar" href="<?php echo e(route('tareas.tareaProgramadas.show', $tarea->id)); ?>" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>

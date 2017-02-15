@@ -8,37 +8,50 @@ use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use Carbon\Carbon;
+use Debugbar;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Localizaciones\Localizacion;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
+use ProyectoKpi\Cms\Repositories\TareaRepository;
 
 
 class TareaProgramadaController extends Controller
 {
-    public function __construct()
+    protected $tareas;
+    public function __construct(TareaRepository $tareas)
     {
+        $this->tareas = $tareas;
         $this->middleware('auth');
     }
 
 
     public function index()
 	{	
-		$user = Auth::user();  //obtenemos el usuario logueado
-		$tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )->get();
+		$tareas = $this->tareas->getTareasProgramadas();
+        $semanas = $this->tareas->listSemana(date('Y-m-d'));
 
-		// var_dump($semanas); 
-		// var_dump($tareas);
+		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
+	}
 
-		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas]);
+	public function archivados()
+	{	
+		$tareas = $this->tareas->getTareasArchivados();
+
+		return redirect('tareas/tareaProgramadas/archivados')->with('tareas', $tareas);
+	}
+
+	public function eliminados()
+	{	
+		$tareas = $this->tareas->getTareasEliminados();
+
+		return view('tareas/tareaProgramadas/eliminados', ['tareas'=> $tareas]);
 	}
 
 	public function create()
 	{
-		$semanas = Tarea::listSemana(date('Y-m-d'));
-
-		return view('tareas.tareaProgramadas.create', ['semanas'=>$semanas]);
+		return view('tareas.tareaProgramadas.create');
 	}
 
 	public function store(TareaProgramasFormRequest $Request)
@@ -46,9 +59,21 @@ class TareaProgramadaController extends Controller
 		$user = Auth::user();  //obtenemos el usuario logueado
 		$tarea = new Tarea;
 		$tarea->descripcion = trim(\Request::input('descripcion'));
-		$tarea->fechaInicioEstimado = trim(\Request::input('fechaInicioEstimado'));
-		$tarea->fechaFinEstimado = trim(\Request::input('fechaFinEstimado'));
-		$tarea->tiempoEstimado = trim(\Request::input('hora')).':'.trim(\Request::input('minuto'));
+		$fechaInicio = trim(\Request::input('fechaInicioEstimado'));
+		$fechaFin = trim(\Request::input('fechaFinEstimado'));
+
+		// convertimos a fecha
+		$fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
+		$tarea->fechaInicioEstimado = $fechaInicio;
+
+		// convertimos a fecha
+		$fechaFin = $tarea->cambiarFormatoDB($fechaFin);
+		$tarea->fechaFinEstimado = $fechaFin;
+
+		$horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
+
+
+		$tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
 		$tarea->tipo = '1';
 		$tarea->empleado_id = $user->empleado->codigo;
 		$tarea->save();
@@ -61,7 +86,7 @@ class TareaProgramadaController extends Controller
 	public function edit($id)
 	{
 		$tarea = Tarea::findOrFail($id);
-		$semanas = Tarea::listSemana($tarea->fechaInicioEstimado);
+		$semanas = $this->tareas->listSemana($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado));
 		
 		return view('tareas/tareaProgramadas/edit',['tarea'=>$tarea, 'semanas'=>$semanas]);
 
@@ -71,9 +96,21 @@ class TareaProgramadaController extends Controller
 	{
 		$tarea = Tarea::findOrFail($id);
 		$tarea->descripcion = trim(\Request::input('descripcion'));
-		$tarea->fechaInicioEstimado = trim(\Request::input('fechaInicioEstimado'));
-		$tarea->fechaFinEstimado = trim(\Request::input('fechaFinEstimado'));
-		$tarea->tiempoEstimado = trim(\Request::input('tiempoEstimado'));
+		$fechaInicio = trim(\Request::input('fechaInicioEstimado'));
+		$fechaFin = trim(\Request::input('fechaFinEstimado'));
+		
+		// convertimos a fecha
+		$fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
+		$tarea->fechaInicioEstimado = $fechaInicio;
+
+		// convertimos a fecha
+		$fechaFin = $tarea->cambiarFormatoDB($fechaFin);
+		$tarea->fechaFinEstimado = $fechaFin;
+
+		$horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
+
+
+		$tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
 		$tarea->save();
 
 		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
@@ -82,6 +119,7 @@ class TareaProgramadaController extends Controller
 	public function show($id)
 	{
 		$tareaProgramadas = Tarea::findOrFail($id);
+
 
 		return view('tareas/tareaProgramadas/show', ['tarea'=>$tareaProgramadas]);
 	}
@@ -136,4 +174,7 @@ class TareaProgramadaController extends Controller
 
         return $this->resolver($tarea_id);
     }
+
+    
+
 }

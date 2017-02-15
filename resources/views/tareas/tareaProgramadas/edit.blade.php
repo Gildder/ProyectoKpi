@@ -17,6 +17,8 @@
   <div class="col-lg-12 breadcrumb">
     <a  href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
   </div>
+
+
       <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p><br></div>
       
       {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT'])!!}
@@ -38,36 +40,39 @@
   <div class="col-sm-12">
     <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
       <div class="form-group  col-xs-6 col-sm-3 col-md-2 @if ($errors->has('hora')) has-error @endif">
-        Horas:<input type="number" name="hora" max="999"  value="{{ $tarea->tiempoEstimado }}"  class="form-control" value="00"  required >
+        <p>Horas:<p><input type="number" name="hora" max="999"  value="{{$tarea->sacarHoras($tarea->tiempoEstimado)}}"  class="form-control" value="00"  required >
         @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
       </div> 
       <div class="col-xs-6 col-sm-4 col-md-2 @if ($errors->has('minuto')) has-error @endif">
-        Minutos: <input type="number" name="minuto" value="{{ $tarea->tiempoEstimado }}"  max="999" class="form-control" value="00"   required>
+        <p>Minutos:</p>
+         <input type="number" name="minuto" value="{{$tarea->sacarMinutos($tarea->tiempoEstimado)}}"  max="999" class="form-control" value="00"   required>
         @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
       </div>
   </div>
 
 <div class="form-group col-sm-12">
 <hr>
-  <label class="form-group col-xs-12 col-sm-12">Semana Programada *</label>
-  <small class="form-group col-sm-12">Selecciona la semana que deseas programas tu tarea.</small><br><br>
-  {{-- Fecha de Inicio --}}
-  <div class="form-group col-sm-12">
-      Selecciona:
-      <select name="selecion_semana" id="selecion_semana">
-        @foreach($semanas as $item)
-          <option value="{{$item['semana']}}">Semana {{$item['semana']}} del Mes de {{nombreMes($item['mes'])}}</option> 
-        @endforeach
-      </select>
-  </div>
+  <label class="form-group col-xs-12 col-sm-12">Fechas Programada *</label>
+
+  {{-- Fecha de Estimada --}}
+<div class="form-group col-sm-12">
   <div class="row form-group  col-sm-12">
-    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Inicio: <input  id="fechaInicio" class="form-control" name="fechaInicioEstimado"  readonly="readonly" ></div>
-    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Fin: <input  id="fechaFin" class="form-control" name="fechaFinEstimado" readonly="readonly" ></div>
+    <div class="row col-xs-12 col-sm-4 col-md-2 @if ($errors->has('fechaInicioEstimado')) has-error @endif">
+      <p >De *: </p>
+      <input type="text"  id="fechaInicio" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}" class="form-control fechaInicio" name="fechaInicioEstimado" required>
+        @if ($errors->has('fechaInicioEstimado')) <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p> @endif
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-2  @if ($errors->has('fechaFinEstimado')) has-error @endif">
+      <p >Hasta *: </p>
+      <input type="text" id="fechaFin" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}" class="form-control fechaFin" name="fechaFinEstimado" required>
+        @if ($errors->has('fechaFinEstimado')) <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p> @endif
+    </div>
   </div>
 </div>
 
       
+  </div>
   </div>
   <div class="panel-footer text-right">
       <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>

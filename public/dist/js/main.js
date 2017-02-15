@@ -1,12 +1,34 @@
 
 $(document).ready(function(){
-    $('#myTable').DataTable();
-    $('#myTable1').DataTable();
     $('#myTableGrDepartamento').DataTable();
+    $('#myTable1').DataTable();
+    $('#myTable').DataTable({
+        initComplete: function () {
+            this.api().columns().every( function () {
+            	
+                var column = this;
+                var select = $('<select><option value=""></option></select>')
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+ 
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+ 
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        }
+    } );
 
     /*Calendarios */
 	$( ".datepicker" ).datepicker({
-		format: 'yyyy-mm-dd',
+		format: 'dd/mm/yyyy',
 		autoclose:true,
 		firstDay: 1,
 		changeMonth: true,
@@ -22,27 +44,47 @@ $(document).ready(function(){
 	});
 
 
-	from = $( ".fechaInicio" ).datepicker({
-		format: 'yyyy-mm-dd',
-		autoclose:true,
-		startDate: "-1m",
-		endDate: "+1m",
-		firstDay: 1,
-		changeMonth: true,
-		yearRange:1,
-	});
+	// from = $( ".fechaInicio" ).datepicker({
+	// 	format: 'dd/mm/yyyy',
+	// 	autoclose:true,
+	// 	startDate: "-1m",
+	// 	endDate: "+1m",
+	// 	firstDay: 1,
+	// 	changeMonth: true,
+	// 	yearRange:1,
+	// });
 
 
 
-	to = $( ".fechaFin" ).datepicker({
-		format: 'yyyy-mm-dd',
-		autoclose:true,
-		startDate: "-1m",
-		endDate: "+1m",
+	// to = $( ".fechaFin" ).datepicker({
+	// 	format: 'dd/mm/yyyy',
+	// 	autoclose:true,
+	// 	startDate: "-1m",
+	// 	endDate: "+1m",
+	// 	defaultDate: "+1w",
+	// 	firstDay: 1,
+	// 	changeMonth: true,
+	// 	yearRange:1,
+	// });
+
+	$(".fechaInicio").datepicker({
+		format: 'dd/mm/yyyy',
 		defaultDate: "+1w",
-		firstDay: 1,
 		changeMonth: true,
-		yearRange:1,
+		numberOfMonths: 1,
+		onSelect: function(selectedDate) {
+			$(".fechaFin").datepicker("option", "minDate", selectedDate);
+		}
+	});
+	
+	$(".fechaFin").datepicker({
+		format: 'dd/mm/yyyy',
+		defaultDate: "+1w",
+		changeMonth: true,
+		numberOfMonths: 1,
+		onSelect: function(selectedDate) {
+			$(".fechaInicio").datepicker( "option", "maxDate", selectedDate);
+		}
 	});
 
 		
@@ -81,6 +123,52 @@ $(document).ready(function(){
 	    var dias = Math.floor(dif / (1000 * 60 * 60 * 24)); 
 	    return dias;
 	}
+
+    function nombreMes(nro)
+    {
+        $mes = 'mes';
+        switch(nro)
+        {
+
+            case '1':
+                $mes = 'Enero';
+                break;
+            case '2':
+                $mes = 'Febrero';
+                break;
+            case '3':
+                $mes = 'Marzo';
+                break;
+            case '4':
+                $mes = 'Abril';
+                break;
+            case '5':
+                $mes = 'Mayo';
+                break;
+            case '6':
+                $mes = 'Junio';
+                break;
+            case '7':
+                $mes = 'Julio';
+                break;
+            case '8':
+                $mes = 'Agosto';
+                break;
+            case '9':
+                $mes = 'Septiembre';
+                break;
+            case '10':
+                $mes = 'Octubre';
+                break;
+            case '11':
+                $mes = 'Noviembre';
+                break;
+            case '12':
+                $mes = 'Diciembre';
+                break;
+        }
+        return $mes;
+    }
 });
 
 

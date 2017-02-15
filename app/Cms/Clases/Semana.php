@@ -1,6 +1,6 @@
 <?php
 
-namespace ProyectoKpi\Clases;
+namespace ProyectoKpi\Cms\Clases;
 
 class Semana
 {
@@ -104,14 +104,14 @@ class Semana
         // Nro del dia de la semana
         $diaActual = date("N");
 
-        //Si es Viernes
-        if($diaActual >= 5 ){
+        //Si es Viernes = 5
+        if($diaActual >= 7 ){
            $estaSemana = $this->mesSemanaFecha($fecha);
            $nuevafecha = $this->sumarDias(date("Y-m-d"), 6);
            $siguienteSemana = $this->mesSemanaFecha($nuevafecha);
            return array($estaSemana,$siguienteSemana);
         }else{
-           $estaSemana = $this->mesSemanaFecha(date("Y-m-d"));
+           $estaSemana = $this->mesSemanaFecha($fecha);
            return array($estaSemana);
         }
 

@@ -35,12 +35,17 @@
                 font-size: 72px;
                 margin-bottom: 40px;
             }
+            .details {
+                font-size: 32px;
+                margin-bottom: 40px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Por favor vuelva atras.</div>
+                <div class="title">Encontramos Problemas</div>
+                <div class="details">Por favor vuelva atras.</div>
             </div>
         </div>
     </body>

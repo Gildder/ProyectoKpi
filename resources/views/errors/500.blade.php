@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>La página No se encuentra.</title>
+        <title>Error 500</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
@@ -35,12 +35,17 @@
                 font-size: 72px;
                 margin-bottom: 40px;
             }
+            .details {
+                font-size: 32px;
+                margin-bottom: 40px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">No se encontro el sitio que esta buscando.</div>
+                <div class="title">500</div>
+                <div class="details">No se encontro el sitio que esta buscando.</div>
             </div>
         </div>
     </body>

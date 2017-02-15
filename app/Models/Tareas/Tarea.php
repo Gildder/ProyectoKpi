@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
 
-use ProyectoKpi\Clases\Semana;
+use ProyectoKpi\Cms\Clases\Semana;
+use ProyectoKpi\Cms\Clases\Tiempo;
 
 
 class Tarea extends Model
@@ -86,6 +87,7 @@ class Tarea extends Model
         return $ubicacionesOcupadas;
     }
 
+
     // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesDisponibles($tarea_id)
     {
@@ -98,9 +100,9 @@ class Tarea extends Model
         return $ubicacionesDisponible;
     }
 
-    public static function getEstado($tarea_id)
+    public static function getEstado($id)
     {
-        $tarea = Tarea::findOrFail($tarea_id);
+        $tarea = Tarea::findOrFail($id);
 
         if ($tarea->estado == '1') {
             return 'Programado';
@@ -111,10 +113,55 @@ class Tarea extends Model
         }
     }
 
-    public static function listSemana($fecha)
+        /*
+     * Metodo para cambiar del formato Y-m-d  a d-m-Y 
+     * 
+     * @param string $fecha
+     * @return fecha en formato d-m-Y
+     */
+    function cambiarFormatoEuropeo($fecha)
+    {    
+        $partes=explode('-',$fecha);//se parte la fecha
+        $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
+        return $fecha;
+    }  
+
+    /*
+     * Metodo para cambiar del formato Y-m-d  a d-m-Y 
+     * 
+     * @param string $fecha
+     * @return fecha en formato d-m-Y
+     */
+    function cambiarFormatoDB($fecha)
+    {    
+        $partes=explode('/',$fecha);//se parte la fecha
+        $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
+
+        return $fecha;
+    }  
+
+    function obtenerHora($horas, $minutos)
     {
-        $semana = new Semana();
-        return  $semana->getSemanasProgramadas($fecha);
+        $tiempo = new Tiempo;
+        
+        print_r($tiempo->obtenerHora($horas, $minutos));
+
+        return $tiempo->obtenerHora($horas, $minutos);
     }
+
+
+    function sacarHoras($hora)
+    {    
+        $partes=explode(':',$hora);//se parte la fecha
+        return $partes[0];
+    }    
+
+    function sacarMinutos($hora)
+    {    
+        $partes=explode(':',$hora);//se parte la fecha
+        return $partes[1];
+    }  
+
+
 
 }

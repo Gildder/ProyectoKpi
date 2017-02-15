@@ -12,12 +12,12 @@
 
       <tr>
          <td class="text-right"><b>Fecha Inicio Estimado:</b></td>
-         <td><?php echo e($tarea->fechaInicioEstimado); ?></td>
+         <td><?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)); ?></td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Fecha Fin Estimado:</b></td>
-         <td><?php echo e($tarea->fechaFinEstimado); ?></td>
+         <td><?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)); ?></td>
       </tr>
 
        <tr>
@@ -26,17 +26,17 @@
       </tr>
 
        <tr>
-         <td class="text-right"><b>Fecha Inicio Solucion:</b></td>
-          <td><?php if($tarea->fechaInicioSolucion == ''): ?> 0000-00-00 <?php else: ?>  <?php echo e($tarea->fechaInicioSolucion); ?>  <?php endif; ?></td>
+         <td class="text-right"><b>Fecha Inicio Ejecucion:</b></td>
+          <td><?php if($tarea->fechaInicioSolucion == ''): ?> _/_/_ <?php else: ?>  <?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)); ?>  <?php endif; ?></td>
       </tr>
       
        <tr>
-         <td class="text-right"><b>Fecha Final Solucion:</b></td>
-          <td><?php if($tarea->fechaFinSolucion == ''): ?> 0000-00-00 <?php else: ?>  <?php echo e($tarea->fechaFinSolucion); ?>  <?php endif; ?></td>
+         <td class="text-right"><b>Fecha Final Ejecucion:</b></td>
+          <td><?php if($tarea->fechaFinSolucion == ''): ?> _/_/_ <?php else: ?>  <?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)); ?>  <?php endif; ?></td>
       </tr>
       
        <tr>
-         <td class="text-right"><b>Tiempo Solucion:</b></td>
+         <td class="text-right"><b>Tiempo Ejecucion:</b></td>
           <td><?php if($tarea->tiempoSolucion == ''): ?> 00:00 <?php else: ?>  <?php echo e($tarea->tiempoSolucion); ?>  <?php endif; ?></td>
       </tr>
 

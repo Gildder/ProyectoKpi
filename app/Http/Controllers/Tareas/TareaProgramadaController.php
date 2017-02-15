@@ -31,7 +31,7 @@ class TareaProgramadaController extends Controller
 	{	
 		$tareas = $this->tareas->getTareasProgramadas();
         $semanas = $this->tareas->listSemana(date('Y-m-d'));
-
+		
 		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
 
@@ -39,8 +39,10 @@ class TareaProgramadaController extends Controller
 	{	
 		$tareas = $this->tareas->getTareasArchivados();
 
-		return redirect('tareas/tareaProgramadas/archivados')->with('tareas', $tareas);
+var_dump($tareas);
+		return view('tareas/tareaProgramadas/eliminados', ['tareas'=> $tareas]);
 	}
+
 
 	public function eliminados()
 	{	
@@ -130,10 +132,9 @@ class TareaProgramadaController extends Controller
 
 		$tareaProgramadas = Tarea::findOrFail($id);
 
-		$ubicacionesDis = Tarea::ubicacionesDisponibles($id);
+		$ubicacionesDis = Tarea::ubicacionesTodos($id);
 		$ubicacionesOcu = Tarea::ubicacionesOcupadas($id);
 
-				
 		return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
 	}	
 
@@ -141,10 +142,21 @@ class TareaProgramadaController extends Controller
 	{
 
 		$tarea = Tarea::findOrFail($id);
-		$tarea->fechaInicioSolucion = trim(\Request::input('fechaInicioSolucion'));
-		$tarea->fechaFinSolucion = trim(\Request::input('fechaFinSolucion'));
-		$tarea->estado = trim(\Request::input('estado'));
-		$tarea->tiempoSolucion = trim(\Request::input('tiempoSolucion'));
+		$fechaInicio = trim(\Request::input('fechaInicioSolucion'));
+		$fechaFin = trim(\Request::input('fechaFinSolucion'));
+		
+		// convertimos a fecha
+		$fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
+		$tarea->fechaInicioSolucion = $fechaInicio;
+
+		// convertimos a fecha
+		$fechaFin = $tarea->cambiarFormatoDB($fechaFin);
+		$tarea->fechaFinSolucion = $fechaFin;
+
+		$horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
+
+
+		$tarea->tiempoSolucion = $horaReal[0].':'.$horaReal[1];
 		$tarea->observaciones = trim(\Request::input('observaciones'));
 		$tarea->save();
 

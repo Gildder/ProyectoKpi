@@ -113,7 +113,7 @@ Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['ind
 
 
 // tareas programadas
-Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show', 'archivados', 'eliminados']]);
+Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 Route::get('tareas/tareaProgramadas/quitarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaProgramadas.quitarubicacion', 'uses' => 'Tareas\TareaProgramadaController@quitarubicacion') );
 Route::get('tareas/tareaProgramadas/agregarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaProgramadas.agregarubicacion', 'uses' => 'Tareas\TareaProgramadaController@agregarubicacion') );
 

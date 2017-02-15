@@ -1,5 +1,5 @@
 <?php $__env->startSection('titulo'); ?>
-  Editar Proyecto
+   Tarea Programada
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -18,8 +18,11 @@
 
 <div class="col-sm-12">
   
-<div class="col-sm-6">
-      <?php echo Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT']); ?>
+    <div class="col-sm-6">
+          <?php echo Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT']); ?>
+
+
+            <?php echo $__env->make('partials/alert/error', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
   
               <div class="row col-sm-12">
@@ -90,30 +93,24 @@
                     <?php if($errors->has('observaciones')): ?> <p class="help-block"><?php echo e($errors->first('observaciones')); ?></p> <?php endif; ?>
                 </div>
               </div>
-            </div>
+
+
+        </div>
 
           <div class="col-sm-6">
   
               <b>Localizacion</b><hr class="col-sm-12">
               <div class="col-sm-12"></div>
-              <p><small>Seleccione las localizaciones donde se realizarò la tarea.</small></p>
+              <p><small>Seleccione las localizaciones donde se realizaró la tarea.</small></p>
                 <div class="col-sm-6">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <p class="titulo-panel">Seleccionar Localizacion</p>
-                    </div>
-                    <div class="panel-body">
-                      <?php echo $__env->make('tareas/tareaProgramadas/partials/tabla_localizaciones', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-sm-6">
-                      <p class="titulo-panel">Localizaciones Agregadas</p><br>
-                  <?php echo $__env->make('tareas/tareaProgramadas/partials/tabla_agregados', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                  <?php foreach($ubicacionesDis as $item): ?>
+                      <input type="checkbox" name="localizacion" value="<?php echo e($item->id); ?>">    <?php echo e($item->nombre); ?><br>
+                  <?php endforeach; ?>
                 </div>
           </div>
-        </div>
+
+
+  </div>
                   
 
 
@@ -128,7 +125,20 @@
       </div>
 <!-- Fin Nuevo -->
 <script>
+   // function recorrerLocalizaciones(){
+    $("input[name=localizacion]").each(function (index) { 
+          var id = $(this).val();
+        <?php foreach($ubicacionesOcu as $ubicacion): ?>
+          if(id == <?php echo e($ubicacion->id); ?>){
+            $(this).prop('checked', true); 
+          }
+        <?php endforeach; ?>
+          });
+    // }
 $(document).ready(function(){
+
+  <?php  ?>
+
   $(".InicioEjecucion").datepicker({
     format: 'dd/mm/yyyy',
     defaultDate: "+1w",
@@ -152,6 +162,10 @@ $(document).ready(function(){
       $(".InicioEjecucion").datepicker( "option", "maxDate", selectedDate);
     }
   });
+
+ 
+
+
 });
 </script>
 

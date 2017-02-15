@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-  Editar Proyecto
+   Tarea Programada
 @endsection
 
 @section('content')
@@ -20,8 +20,11 @@
 
 <div class="col-sm-12">
   
-<div class="col-sm-6">
-      {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT'])!!}
+    <div class="col-sm-6">
+          {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT'])!!}
+
+            @include('partials/alert/error')
+
   
               <div class="row col-sm-12">
                 <div class="col-sm-12"> 
@@ -90,30 +93,24 @@
                     @if ($errors->has('observaciones')) <p class="help-block">{{ $errors->first('observaciones') }}</p> @endif
                 </div>
               </div>
-            </div>
+
+
+        </div>
 
           <div class="col-sm-6">
   
               <b>Localizacion</b><hr class="col-sm-12">
               <div class="col-sm-12"></div>
-              <p><small>Seleccione las localizaciones donde se realizarò la tarea.</small></p>
+              <p><small>Seleccione las localizaciones donde se realizaró la tarea.</small></p>
                 <div class="col-sm-6">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <p class="titulo-panel">Seleccionar Localizacion</p>
-                    </div>
-                    <div class="panel-body">
-                      @include('tareas/tareaProgramadas/partials/tabla_localizaciones')
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-sm-6">
-                      <p class="titulo-panel">Localizaciones Agregadas</p><br>
-                  @include('tareas/tareaProgramadas/partials/tabla_agregados')
+                  @foreach($ubicacionesDis as $item)
+                      <input type="checkbox" name="localizacion" value="{{$item->id}}">    {{$item->nombre}}<br>
+                  @endforeach
                 </div>
           </div>
-        </div>
+
+
+  </div>
                   
 
 
@@ -126,7 +123,20 @@
       </div>
 <!-- Fin Nuevo -->
 <script>
+   // function recorrerLocalizaciones(){
+    $("input[name=localizacion]").each(function (index) { 
+          var id = $(this).val();
+        @foreach($ubicacionesOcu as $ubicacion)
+          if(id == {{$ubicacion->id}}){
+            $(this).prop('checked', true); 
+          }
+        @endforeach
+          });
+    // }
 $(document).ready(function(){
+
+  <?php  ?>
+
   $(".InicioEjecucion").datepicker({
     format: 'dd/mm/yyyy',
     defaultDate: "+1w",
@@ -150,6 +160,10 @@ $(document).ready(function(){
       $(".InicioEjecucion").datepicker( "option", "maxDate", selectedDate);
     }
   });
+
+ 
+
+
 });
 </script>
 

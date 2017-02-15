@@ -100,6 +100,17 @@ class Tarea extends Model
         return $ubicacionesDisponible;
     }
 
+     // lista de ubidadciones disponbiles para una tarea
+    public static function ubicacionesTodos($tarea_id)
+    {
+        $user = Auth::user();//obtenemos el usuario logueado
+        
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+        $localizaciones = DB::table('localizaciones')->select('localizaciones.id', 'localizaciones.nombre')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->get();
+
+        return $localizaciones;
+    }
+
     public static function getEstado($id)
     {
         $tarea = Tarea::findOrFail($id);

@@ -35,7 +35,7 @@
 					<div class="col-sm-12 panel-footer text-right">
 		
 						<?php /* <a href="<?php echo e(route('tareas.tareaProgramadas.edit', $tarea->id)); ?>" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Solucion</b> </a> */ ?>
-						<a href="<?php echo e(route('tareas.tareaProgramadas.resolver', $tarea->id)); ?>" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Resolver</b> </a>
+						<a href="<?php echo e(route('tareas.tareaProgramadas.resolver', $tarea->id)); ?>" class="btn btn-primary btn-sm"><span class="fa fa-thumbs-up text-left"></span><b> Resolver</b> </a>
 						<a href="<?php echo e(route('tareas.tareaProgramadas.edit', $tarea->id)); ?>" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
 						<a href="#"  data-toggle="modal" data-target="#modal-delete-<?php echo e($tarea->id); ?>" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
 

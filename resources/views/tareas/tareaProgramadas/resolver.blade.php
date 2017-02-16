@@ -104,7 +104,8 @@
               <p><small>Seleccione las localizaciones donde se realizaró la tarea.</small></p>
                 <div class="col-sm-6">
                   @foreach($ubicacionesDis as $item)
-                      <input type="checkbox" name="localizacion" value="{{$item->id}}">    {{$item->nombre}}<br>
+                      {{-- <input type="checkbox" name="localizacion" value="{{$item->id}}">    {{$item->nombre}}<br> --}}
+                      <label>{{ Form::checkbox('prov[]', $item->id) }} {{ $item->nombre }}</label><br>
                   @endforeach
                 </div>
           </div>
@@ -124,7 +125,7 @@
 <!-- Fin Nuevo -->
 <script>
    // function recorrerLocalizaciones(){
-    $("input[name=localizacion]").each(function (index) { 
+    $("input[type=checkbox]").each(function (index) { 
           var id = $(this).val();
         @foreach($ubicacionesOcu as $ubicacion)
           if(id == {{$ubicacion->id}}){

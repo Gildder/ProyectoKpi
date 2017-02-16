@@ -104,7 +104,8 @@
               <p><small>Seleccione las localizaciones donde se realizaró la tarea.</small></p>
                 <div class="col-sm-6">
                   <?php foreach($ubicacionesDis as $item): ?>
-                      <input type="checkbox" name="localizacion" value="<?php echo e($item->id); ?>">    <?php echo e($item->nombre); ?><br>
+                      <?php /* <input type="checkbox" name="localizacion" value="<?php echo e($item->id); ?>">    <?php echo e($item->nombre); ?><br> */ ?>
+                      <label><?php echo e(Form::checkbox('prov[]', $item->id)); ?> <?php echo e($item->nombre); ?></label><br>
                   <?php endforeach; ?>
                 </div>
           </div>
@@ -126,7 +127,7 @@
 <!-- Fin Nuevo -->
 <script>
    // function recorrerLocalizaciones(){
-    $("input[name=localizacion]").each(function (index) { 
+    $("input[type=checkbox]").each(function (index) { 
           var id = $(this).val();
         <?php foreach($ubicacionesOcu as $ubicacion): ?>
           if(id == <?php echo e($ubicacion->id); ?>){

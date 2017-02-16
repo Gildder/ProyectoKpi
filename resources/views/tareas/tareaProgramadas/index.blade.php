@@ -22,17 +22,17 @@
         <a  href="{{route('tareas.tareaProgramadas.create')}}" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
         
       </div>
-      <div class="text-right col-xs-6 col-sm-6 col-md-6 col-lg-6">
+      <div class="text-right col-xs-6 col-sm-6 col-md-6 col-lg-6" tabindex="2" >
         {{-- Finalizado --}}
         <a  href="{{route('tareas.tareaProgramadas.archivados')}}" class="btn btn-success btn-sm" ><span class="fa  fa-archive" title="Archivados"></span><b></b></a>
         {{-- Eliminados --}}
-        <a  href="{{route('tareas.tareaProgramadas.eliminados')}}" class="btn btn-danger btn-sm" ><span class="fa fa-trash" title="Eliminados">  </span><b></b></a>
+        <a  href="{{route('tareas.tareaProgramadas.eliminados')}}" class="btn btn-danger  btn-sm" ><span class="fa fa-trash" title="Eliminados">  </span><b></b></a>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-lg-12">
-          <div class="col-sm-12 form-group" ><small>Semana {{$semanas[0]['semana']}} del mes de {{nombreMes($semanas[0]['mes'])}}, del <b>{{cambiarFormatoEuropeo($semanas[0]['fechaInicio'])}}</b> al <b>{{cambiarFormatoEuropeo($semanas[0]['fechaFin'])}}</b></small>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="col-sm-12" ><small>Semana {{$semanas[0]['semana']}} del mes de {{nombreMes($semanas[0]['mes'])}}, del <b>{{cambiarFormatoEuropeo($semanas[0]['fechaInicio'])}}</b> al <b>{{cambiarFormatoEuropeo($semanas[0]['fechaFin'])}}</b></small>
               </div>
           <hr/>
         @include('tareas/tareaProgramadas/partials/tabla_tareaProgramadas')

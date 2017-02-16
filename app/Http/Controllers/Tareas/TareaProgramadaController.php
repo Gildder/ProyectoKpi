@@ -37,18 +37,12 @@ class TareaProgramadaController extends Controller
 
 	public function archivados()
 	{	
-		$tareas = $this->tareas->getTareasArchivados();
-
-var_dump($tareas);
-		return view('tareas/tareaProgramadas/eliminados', ['tareas'=> $tareas]);
+		return view('tareas/tareaProgramadas/archivados');
 	}
-
 
 	public function eliminados()
 	{	
-		$tareas = $this->tareas->getTareasEliminados();
-
-		return view('tareas/tareaProgramadas/eliminados', ['tareas'=> $tareas]);
+		return view('tareas/tareaProgramadas/eliminados');
 	}
 
 	public function create()
@@ -160,6 +154,17 @@ var_dump($tareas);
 		$tarea->observaciones = trim(\Request::input('observaciones'));
 		$tarea->save();
 
+		//  salvando tareas por localizacion
+		$localizaciones = $Request->input('prov',[]);
+		DB::table('tarea_realizadas')->where('tarea_id', '=', $id)->delete();
+
+		for($i = 0; $i < count($localizaciones); $i++)
+		{
+		    DB::table('tarea_realizadas')->insert(
+				    	['tarea_id' => $id, 'localizacion_id' => $localizaciones[$i] ]
+		    );
+		}
+
 		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
 
@@ -171,22 +176,5 @@ var_dump($tareas);
 	}
 
 
-	public function agregarubicacion($tarea_id, $ubi_id)
-    {
-        DB::table('tarea_realizadas')->insert(
-            array('tarea_id' => $tarea_id, 'localizacion_id' => $ubi_id)
-        );
-
-        return $this->resolver($tarea_id);
-    }
-
-    public function quitarubicacion($tarea_id, $ubi_id)
-    {
-        DB::table('tarea_realizadas')->where('tarea_id', $tarea_id)->where('localizacion_id', $ubi_id)->delete();
-
-        return $this->resolver($tarea_id);
-    }
-
-    
 
 }

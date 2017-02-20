@@ -42,20 +42,43 @@ class GraficasController extends Controller
 		$indicador = DB::select('call pa_supervisores_primerIndicador('.$emp_id.');');
 
 		$datos = Array([],[]);
-		// $datos[0][0] = 'Mes';
-		// $datos[0][1] = 'Semama_1';
-		// $datos[0][2] = 'Semama_2';
-		// $datos[0][3] = 'Semama_3';
-		// $datos[0][4] = 'Semama_4';
 
 		$grafico = new Grafico;
 
+		// foreach ($indicador as $item) {
+		// 	$datos[$item->mes - 1][0] = $this->getNombreMes($item->mes);
+		// 	$datos[$item->mes - 1][$item->semana ] = $item->efeser;
+		// }
+
+		$contadorMes = -1;
+		$mesActual = 0;
 		foreach ($indicador as $item) {
-			$datos[$item->mes - 1][0] = $this->getNombreMes($item->mes);
-			$datos[$item->mes - 1][$item->semana ] = $item->efeser;
+			if($item->mes != $mesActual){
+				$contadorMes++;
+				$mesActual = $item->mes;
+				$datos[$contadorMes] = $this->obtenerSemanaMes($item->mes, $emp_id);
+			}
 		}
 
-		return (object)$datos;
+		print_r($datos);
+		return $datos;
+	}
+
+	public function obtenerSemanaMes($mes, $emp_id)
+	{
+		$indicador = DB::select('call pa_supervisores_primerIndicador('.$emp_id.');');
+
+		$datos = Array();
+		$contador = 0;
+		$datos[$contador] = $this->getNombreMes($mes);
+		foreach ($indicador as $item) {
+			if($item->mes == $mes){
+				$contador++;
+				$datos[$item->semana] = $item->efeser;
+			}
+		}
+
+		return $datos;
 	}
 
 	

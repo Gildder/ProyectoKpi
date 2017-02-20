@@ -29,17 +29,18 @@ class CargoController extends Controller
 		return view('empleados/cargo/index', ['cargos'=> Cargo::all()]);
 	}
 
-	public function eliminados()
-	{
-		$cargos = Cargo::onlyTrashed()->get();
-		
-		return view('empleados/cargo/eliminados', ['cargos'=> $cargos]);
-	}
 
 	public function create()
 	{
 
 		return view('empleados.cargo.create');
+	}
+
+	public function eliminados()
+	{
+		$cargos = Cargo::onlyTrashed()->get();
+		
+		return view('empleados/cargo/eliminados', ['cargos'=> $cargos]);
 	}
 
 	function restaurar($id)
@@ -49,7 +50,7 @@ class CargoController extends Controller
         ->where('id', $id)
         ->restore();
 
-		return $this->index();
+        return redirect()->back()->with('message', 'Se restauro el cargo '.$id.' correctamente.');
 	}
 
 	public function store(CargoFormRequest $Request)

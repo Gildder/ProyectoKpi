@@ -52,16 +52,34 @@ Route::get('empleados/evaluadorcargos/getCargos/{id}', 'Empleados\EvaluadorCargo
 
 
 // **********************  MODULO LOCALIZACIONES  *****************************************
+// Grupo departamento
+Route::get('localizaciones/grupodepartamento/eliminados', array('as' => 'localizaciones.grupodepartamento.eliminados', 'uses' => 'Localizaciones\GrupoDepartamentoController@eliminados') );
+Route::put('localizaciones/grupodepartamento/restaurar/{departamento}', array('as' => 'localizaciones.grupodepartamento.restaurar', 'uses' => 'Localizaciones\GrupoDepartamentoController@restaurar') );
+
 Route::resource('localizaciones/grupodepartamento', 'Localizaciones\GrupoDepartamentoController', 
 		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
 Route::get('localizaciones/grupodepartamento/obtenerDepartamento/{id}', 'Localizaciones\GrupoDepartamentoController@getDepartamentos');
 
+
+// departamento
+Route::get('localizaciones/departamento/eliminados', array('as' => 'localizaciones.departamento.eliminados', 'uses' => 'Localizaciones\DepartamentoController@eliminados') );
+Route::put('localizaciones/departamento/restaurar/{departamento}', array('as' => 'localizaciones.departamento.restaurar', 'uses' => 'Localizaciones\DepartamentoController@restaurar') );
+
 Route::resource('localizaciones/departamento', 'Localizaciones\DepartamentoController', 
 		['only' => ['index', 'create',  'edit','store', 'update', 'destroy', 'show']]);
 
+// GRupo Localizacion
+Route::get('localizaciones/grupolocalizacion/eliminados', array('as' => 'localizaciones.grupolocalizacion.eliminados', 'uses' => 'Localizaciones\GrupoLocalizacionController@eliminados') );
+Route::put('localizaciones/grupolocalizacion/restaurar/{localizacion}', array('as' => 'localizaciones.grupolocalizacion.restaurar', 'uses' => 'Localizaciones\GrupoLocalizacionController@restaurar') );
+
 
 Route::resource('localizaciones/grupolocalizacion', 'Localizaciones\GrupoLocalizacionController', ['only' => ['index', 'edit', 'create', 'store', 'update', 'destroy', 'show']]);
+
+
+// Localizacion
+Route::get('localizaciones/localizacion/eliminados', array('as' => 'localizaciones.localizacion.eliminados', 'uses' => 'Localizaciones\LocalizacionController@eliminados') );
+Route::put('localizaciones/localizacion/restaurar/{localizacion}', array('as' => 'localizaciones.localizacion.restaurar', 'uses' => 'Localizaciones\LocalizacionController@restaurar') );
 
 Route::resource('localizaciones/localizacion', 'Localizaciones\LocalizacionController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy','show']]);
 

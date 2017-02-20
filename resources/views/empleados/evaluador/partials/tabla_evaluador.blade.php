@@ -9,7 +9,7 @@
 		<tbody>
 		@foreach($evaluadores as $item)
 			<tr>
-				<td><a href="{{route('empleados.evaluador.show', $item->id)}}" class="btn btn-warning btn-xs" >{{$item->id}}</a></td>
+				<td><a href="{{route('empleados.evaluador.show', $item->id)}}" class="btn btn-warning btn-xs" title="Ver">{{$item->id}}</a></td>
 				<td>{{$item->abreviatura}}</td>
 				<td>{{$item->descripcion}}</td>
 			</tr>

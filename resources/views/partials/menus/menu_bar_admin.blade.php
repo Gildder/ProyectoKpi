@@ -29,9 +29,15 @@
               <label for="Cargos" class="hidden-xs">Cargos</label>
             </a>
           </li>
+          <li class="dropdown notifications-menu">
+            <a href="{{url('empleados/evaluador')}}" >
+              <i class="fa fa-sitemap"></i>
+              <label for="Cargos" class="hidden-xs">Evaluadores</label>
+            </a>
+          </li>
           <!-- Tasks: style can be found in dropdown.less -->
           <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="{{url('indicadores/indicador')}}" >
               <i class="fa fa-area-chart"></i>
               <label for="Indicadores" class="hidden-xs">Indicadores</label>
             </a>
@@ -82,20 +88,6 @@
         </li> 
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-group"></i>
-            <span>Evaluadores</span>
-             <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="{{url('empleados/evaluador')}}"><i class="fa fa-circle-o"></i>Gerencia Evaluadora</a></li>
-            <li><a href="{{url('empleados/evaluadorempleados')}}"><i class="fa fa-circle-o"></i>Evaluadores de Gerencia</a></li>
-            <li><a href="{{url('empleados/evaluadorcargos')}}"><i class="fa fa-circle-o"></i>Cargos Evaluados</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
             <i class="fa fa-building"></i>
             <span>Ubicaciones</span>
              <span class="pull-right-container">
@@ -109,7 +101,7 @@
             <li><a href="{{url('localizaciones/departamento')}}"><i class="fa fa-circle-o"></i> Departamento</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        {{-- <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Indicadores</span>
@@ -122,7 +114,7 @@
             <li><a href="{{url('indicadores/indicadorcargos')}}"><i class="fa fa-circle-o"></i> Indicador Cargos</a></li>
             <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Graficos</a></li>
           </ul>
-        </li>
+        </li> --}}
         <!-- Supervisores -->
          <li class="treeview">
           <a href="#">

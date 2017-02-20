@@ -28,6 +28,7 @@ class PrimerIndicadorController extends Controller
 	}
 
 
+
 	public function create()
 	{
 		return "metodo create";

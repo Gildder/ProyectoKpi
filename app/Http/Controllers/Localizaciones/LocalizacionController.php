@@ -86,4 +86,20 @@ class LocalizacionController extends Controller
 
 		return redirect('localizaciones/localizacion')->with('message', 'La Localizacion de Nro.- '.$id.'  se elimino correctamente.');
 	}
+
+	public function eliminados()
+	{
+		$localizaciones = Localizacion::onlyTrashed()->get();
+		
+		return view('localizaciones/localizacion/eliminados', ['localizaciones'=> $localizaciones]);
+	}
+	
+	function restaurar($id)
+	{
+		$localizacion = Localizacion::withTrashed()
+        ->where('id', $id)
+        ->restore();
+
+		return redirect()->back()->with('message', 'La localizacion '.$id.' se restauro correctamente.');
+	}
 }

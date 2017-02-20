@@ -23,13 +23,10 @@
     <div class="col-sm-6">
           {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT'])!!}
 
-            @include('partials/alert/error')
-
-  
               <div class="row col-sm-12">
                 <div class="col-sm-12"> 
                   <label>Fechas de Ejecucion *</label><br>
-                  <small><p>Se toma en cuenta las fecha estimadas de progamadas.</p></small>
+                  <small><p>Se toma en cuenta las fecha estimadas progamadas.</p></small>
                 </div>
                 
                 {{-- Fecha de Inicio --}}
@@ -39,7 +36,7 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" min="2017-2-7"  placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}} " required>
+                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}} " required>
 
                   </div>
                     @if ($errors->has('fechaInicioSolucion')) <p class="help-block">{{ $errors->first('fechaInicioSolucion') }}</p> @endif
@@ -66,13 +63,13 @@
               <div class="row col-sm-12">
                 <label class="form-group col-sm-12 col-xs-12">Tiempo Ejecucion *</label>
                   <div class="form-group  col-xs-6 col-sm-3 col-md-2 @if ($errors->has('hora')) has-error @endif">
-                    <p>Horas:<p><input type="number" name="hora" max="999"  value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}"  class="form-control" value="00"  required >
+                    <p>Horas:<p><input type="number" name="hora" min="0" max="999"  value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}"  class="form-control" value="00"  required >
                     @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
                   </div> 
                   <div class="col-xs-6 col-sm-4 col-md-2 @if ($errors->has('minuto')) has-error @endif">
                     <p>Minutos:</p>
-                     <input type="number" name="minuto" value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"  max="999" class="form-control" value="00"   required>
+                     <input type="number" name="minuto" min="0" value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"  max="999" class="form-control" value="00"   required>
                     @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
                   </div>
               </div>
@@ -81,7 +78,7 @@
               <div class="row col-sm-12">
                   <div class="form-group  col-sm-4">
                       <label >Estado </label>
-                      {!! Form::select('estado', ['1' => 'Programado', '2' => 'En Progreso', '3' => 'Finalizado'], $tarea->estado, ['class' => 'form-control' ]) !!}
+                      {!! Form::select('estado', [ '1' => 'Programado', '2' => 'En Progreso', '3' => 'Finalizado'], $tarea->estado, ['class' => 'form-control' ]) !!}
                   </div>
               </div> 
 

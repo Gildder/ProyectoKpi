@@ -12,7 +12,7 @@
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<h2>Grafica</h2>
+			<h3>Grafica</h3>
 			<div>
 				@include('partials/indicadores/primer_indicador/grafico_primerIndicador')
 			</div>

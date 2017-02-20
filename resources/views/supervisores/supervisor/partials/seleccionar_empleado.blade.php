@@ -14,14 +14,23 @@
   <div class="panel-body">
 
 	<div class="content">
+
+
 		<div class="col-lg-12 breadcrumb">
-			<a href="{{route('supervisores.supervisor.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+			<a href="{{route('supervisores.supervisor.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
+		</div>
+
+		<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			@include('partials/alert/error')
+		</div>
+
+
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<p>Elije a los empleados que supervisaran el departamento <b>{{$departamento->nombre}}</b>.</p><br>
 		</div>
 		
-		@include('partials/alert/error')
 
-
-		<div class="col-sm-6">
+		<div class="col-sm-8">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 				  <p class="titulo-panel">Seleccionar Empleado</p>
@@ -32,8 +41,8 @@
 			</div>
 		</div>
 
-		<div class="col-sm-6">
-      		<p class="titulo-panel">Encargados - {{$departamento->nombre}}</p><br>
+		<div class="col-sm-4">
+      		<p class="titulo-panel">Supervisores</p><br>
 			@include('supervisores/supervisor/partials/tabla_agregados')
 		</div>
 	</div>

@@ -42,14 +42,16 @@ class SupervisorController extends Controller
             array('empleado_id' => $emp_id, 'departamento_id' => $dep_id)
         );
 
-        return $this->show($dep_id);
+        return redirect()->back()->with('message', 'Se agrego el empleado: '.$emp_id. ' correctamente.');
     }
 
     public function quitardepartamento($emp_id, $dep_id)
     {
         DB::table('supervisor_departamentos')->where('empleado_id', $emp_id)->where('departamento_id', $dep_id)->delete();
 
-        return $this->show($dep_id);
+
+        return redirect()->back()->with('message', 'Se quito el empleado: '.$emp_id. ' correctamente.');
+
     }
 
     // Lista de empleados asignados aa un supervisor

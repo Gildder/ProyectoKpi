@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-	{{$evaluador->id}} - {{$evaluador->abreviatura}}
+	{{$evaluador->abreviatura}} - {{$evaluador->abreviatura}}
 @endsection
 
 @section('content')
@@ -40,9 +40,14 @@
 
 			{{-- Evaluadores --}}
 			<div id="evaluadores" class="tab-pane">
-				<div class="col-lg-12 breadcrumb">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
 					<a href="{{route('empleados.evaluador.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
 				</div>
+
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<p>Elija a los empleados perteneceran a la Gerencia evaluadora <b>{{$evaluador->abreviatura}}</b>.</p><br>
+				</div>
+
 				{{-- Capa de Seleccion Empleado --}}
 				<div class="col-sm-7">
 					<div class="panel panel-default">
@@ -68,8 +73,10 @@
 				<div class="col-lg-12 breadcrumb">
 					<a href="{{route('empleados.evaluador.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
 				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<p>Elija los cargos se evaluaran por Gerencia  <b>{{$evaluador->abreviatura}}</b>.</p><br>
+				</div>
 				{{-- Capa de Seleccion cargos --}}
-
 				<div class="row col-sm-6">
 					<div class="panel panel-default">
 						<div class="panel-heading">
@@ -95,6 +102,36 @@
 	</div>
 		
 </div>
+
+{{-- <script>
+$(document)	.ready(function() {
+	var tabSelect = sessionStorage.getItem('tabActive');
+
+	if(tabSelect != undefined)
+	{
+
+		IdActive = $('.active > a').attr('href');
+
+		$(IdActive).removeClass('fade in active');
+		$('.active').removeClass('active');
+
+
+		$(tabSelect).addClass('fade in active');
+		var padre = $("[href= tabSelect]").parent();
+		$(padre).removeClass('active');
+
+		
+	}
+	IdActive = $('.active > a').attr('href');
+	sessionStorage.setItem(tabActive, IdActive);
+	alert(IdActive);
+
+
+
+
+
+});
+</script> --}}
 
 @endsection
 

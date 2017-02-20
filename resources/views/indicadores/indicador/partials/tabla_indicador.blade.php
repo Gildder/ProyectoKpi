@@ -6,6 +6,7 @@
 			<th>Tipo</th>	
 			<th>Orden</th>	
 			<th>Objetivo</th>	
+			<th>Cargo</th>	
 		</thead>
 
 		<tbody>
@@ -16,6 +17,8 @@
 				<td>{{$indicador->tipo}}</td>
 				<td>{{$indicador->orden}}</td>
 				<td>{{$indicador->descripcion_objetivo}}</td>
+				<td><a href="{{route('indicadores.indicadorcargos.show', $indicador->id)}}" class="btn btn-info btn-sm" ><span >Cargos</span></a></td>
+
 			</tr>
     		@include('indicadores/indicador/delete')
 		@endforeach

@@ -73,4 +73,20 @@ class GrupoLocalizacionController extends Controller
 
 		return redirect('localizaciones/grupolocalizacion')->with('message', 'El Grupo de Nro.- '.$id.'  se elimino correctamente.');
 	}
+
+	public function eliminados()
+	{
+		$grupolocalizaciones = GrupoLocalizacion::onlyTrashed()->get();
+		
+		return view('localizaciones/grupolocalizacion/eliminados', ['grupolocalizaciones'=> $grupolocalizaciones]);
+	}
+	
+	function restaurar($id)
+	{
+		GrupoLocalizacion::withTrashed()
+        ->where('id', $id)
+        ->restore();
+
+		return redirect()->back()->with('message', 'El grupo localizacion '.$id.' se restauro correctamente.');
+	}
 }

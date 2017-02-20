@@ -23,11 +23,13 @@ use ProyectoKpi\Events\Tarea\TareaUpdated;
 class TareaProgramadaController extends Controller
 {
     protected $tareas;
+    protected $semanas;
 
 
     public function __construct(TareaRepository $tareas)
     {
         $this->tareas = $tareas;
+        $this->semanas = $tareas->listSemana(date('Y-m-d'));
         $this->middleware('auth');
     }
 
@@ -35,9 +37,8 @@ class TareaProgramadaController extends Controller
     public function index()
 	{	
 		$tareas = $this->tareas->getTareasProgramadas();
-        $semanas = $this->tareas->listSemana(date('Y-m-d'));
 
-		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
+		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $this->semanas]);
 	}
 
 	public function archivados()
@@ -54,7 +55,7 @@ class TareaProgramadaController extends Controller
 
 	public function create()
 	{
-		return view('tareas.tareaProgramadas.create');
+		return view('tareas.tareaProgramadas.create', [ 'semanas'=> $this->semanas]);
 	}
 
 	public function store(TareaProgramasFormRequest $Request)
@@ -64,7 +65,6 @@ class TareaProgramadaController extends Controller
 		$tarea->descripcion = trim(\Request::input('descripcion'));
 		$fechaInicio = trim(\Request::input('fechaInicioEstimado'));
 		$fechaFin = trim(\Request::input('fechaFinEstimado'));
-
 		// convertimos a fecha
 		$fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
 		$tarea->fechaInicioEstimado = $fechaInicio;
@@ -108,6 +108,7 @@ class TareaProgramadaController extends Controller
 
 
 		$tarea->descripcion = trim(\Request::input('descripcion'));
+		$tarea->estado = 1;
 		$fechaInicio = trim(\Request::input('fechaInicioEstimado'));
 		$fechaFin = trim(\Request::input('fechaFinEstimado'));
 		
@@ -173,6 +174,7 @@ class TareaProgramadaController extends Controller
 
 
 		$tarea->tiempoSolucion = $horaReal[0].':'.$horaReal[1];
+		$tarea->estado = trim(\Request::input('estado'));
 		$tarea->observaciones = trim(\Request::input('observaciones'));
 		$tarea->save();
 

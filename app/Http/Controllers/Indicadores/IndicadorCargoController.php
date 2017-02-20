@@ -60,7 +60,7 @@ class IndicadorCargoController extends Controller
 				'frecuencia_id' => \Request::input('frecuencia_id'),
             	]);
 
-		return $this->show($ind_id);
+		return redirect('indicadores/indicadorcargos/'.$ind_id)->with('message', 'Se modifico el cargo '.$cargo_id.' correctamente.');
 	}
 
 	public function store(IndicadorCargoFormRequest $Request)
@@ -74,7 +74,8 @@ class IndicadorCargoController extends Controller
 		$indicadorcargo->frecuencia_id = \Request::input('frecuencia_id');
 		$indicadorcargo->save();
 
-		return $this->show($indicadorcargo->indicador_id);
+		return redirect('indicadores/indicadorcargos/'.$indicadorcargo->indicador_id)->with('message', 'Se agrego el cargo '.$indicadorcargo->cargo_id.' correctamente.');
+
 	}
 
 	public function destroy($cargo_id, $ind_id)
@@ -82,7 +83,9 @@ class IndicadorCargoController extends Controller
 		DB::table('indicador_cargos')->where('indicador_id', $ind_id)->where('cargo_id', $cargo_id)->delete();
     	$indicador = Indicador::findOrFail($ind_id);
 
-		return $this->show($indicador->id);
+		return redirect('indicadores/indicadorcargos/'.$ind_id)->with('message', 'Se quito el cargo '.$ind_id.' correctamente.');
+
+
 	}
 
 	/* Cargos Evaluados*/
@@ -108,6 +111,8 @@ class IndicadorCargoController extends Controller
     {
         DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('indicador_id', $ind_id)->delete();
 
-        return $this->show($ind_id);
+        // return $this->show($ind_id);
+		return redirect()->back()->with('message', 'Se agrego el cargo '.$cargo_id.' correctamente.');
+
     }
 }

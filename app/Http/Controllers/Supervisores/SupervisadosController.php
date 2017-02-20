@@ -39,6 +39,8 @@ class SupervisadosController extends Controller
         $graficos =  new GraficasController();
         $datos_graficos = $graficos->getArrayPrimerIndicador($id);
 
+        
+
         // var_dump($datos_graficos);
         return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'grafico' => $graficos->getPrimerIndicador($id), 'datos_graficos'=> $datos_graficos]);
     }

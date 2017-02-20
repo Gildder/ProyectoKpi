@@ -85,4 +85,20 @@ class DepartamentoController extends Controller
 		return redirect('localizaciones/departamento')->with('message', 'El Departamento de Nro.- '.$id.'  se elimino correctamente.');
 	}
 
+	public function eliminados()
+	{
+		$departamentos = Departamento::onlyTrashed()->get();
+		
+		return view('localizaciones/departamento/eliminados', ['departamentos'=> $departamentos]);
+	}
+	
+	function restaurar($id)
+	{
+		$cargo = Departamento::withTrashed()
+        ->where('id', $id)
+        ->restore();
+
+		return redirect()->back()->with('message', 'El departamento '.$id.' se restauro correctamente.');
+	}
+
 }

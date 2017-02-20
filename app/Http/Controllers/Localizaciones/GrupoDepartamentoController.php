@@ -83,4 +83,20 @@ class GrupoDepartamentoController extends Controller
 
 			return $departamentos;
 	}
+
+	public function eliminados()
+	{
+		$grupodepartamentos = GrupoDepartamento::onlyTrashed()->get();
+		
+		return view('localizaciones/grupodepartamento/eliminados', ['grupodepartamentos'=> $grupodepartamentos]);
+	}
+	
+	function restaurar($id)
+	{
+		GrupoDepartamento::withTrashed()
+        ->where('id', $id)
+        ->restore();
+
+		return redirect()->back()->with('message', 'El grupo departamento '.$id.' se restauro correctamente.');
+	}
 }

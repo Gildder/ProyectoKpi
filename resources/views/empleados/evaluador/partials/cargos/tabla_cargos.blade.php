@@ -1,5 +1,5 @@
 <div class="table-response">
-	<table id="myTable" class="table table-striped table-bordered table-condensed table-hover">
+	<table id="myTable3" class="table table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<th>Nro</th>
 			<th>Nombre</th>	

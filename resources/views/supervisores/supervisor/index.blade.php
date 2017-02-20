@@ -16,11 +16,16 @@
 			<ul class="nav nav-tabs">
 			  <li class="active"><a data-toggle="tab" href="#datos">Departamentos</a></li>
 			</ul>
-			
 			<br>
+
+			
 			<div class="tab-content">
 				<div id="datos" class="tab-pane fade in active">
-					@include('partials/alert/error')
+
+				@include('partials/alert/error')
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<p>Puede agregar empleados que supervisen los indicadores por departamentos.</p><br>
+				</div>
 
 					<div class="row">
 						<div class="col-lg-12">

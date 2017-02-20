@@ -12,6 +12,9 @@ use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Indicadores\TipoIndicador;
 use ProyectoKpi\Http\Requests\Indicadores\IndicadorFormRequest;
+use ProyectoKpi\Models\Indicadores\Frecuencia;
+use ProyectoKpi\Models\Indicadores\IndicadorCargo;
+use ProyectoKpi\Http\Requests\Indicadores\IndicadorCargoFormRequest;
 
 class IndicadorController extends Controller
 {
@@ -74,12 +77,14 @@ class IndicadorController extends Controller
 
 	public function show($id)
 	{
+		$cargosDisponibles = DB::select('call pa_indicadores_cargosDisponibles('.$id.');');
+        $cargosEvaluadores = DB::select('call pa_indicadores_cargosIndicadores('.$id.');');
 
 		$indicador = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','tipos_indicadores.nombre as tipo')
 								->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 								->where('indicadores.id', '=', $id)->first();
 
-		return view('indicadores/indicador/show',['indicador'=>$indicador]);
+		return view('indicadores/indicador/show',['indicador'=>$indicador, 'cargosDisponibles'=>$cargosDisponibles,'cargosEvaluadores'=>$cargosEvaluadores]);
 
 	}
 
@@ -99,7 +104,6 @@ class IndicadorController extends Controller
 	            ->where('indicadores_cargos.cargo_id', $cargo_id)
 	            ->delete();
 
-var_dump($indicador_id);
 	   return $this->show($indicador_id);
 		
 	}
@@ -118,5 +122,11 @@ var_dump($indicador_id);
 		return view('indicadores/indicador/asignar',['cargos'=>$cargos]);
 	}
 
+	public function cargosevaluados()
+	{
+		$evaluadores = Evaluador::all();
+
+		return view('empleados/evaluador/index', ['evaluadores'=> $evaluadores]);
+	}
 
 }

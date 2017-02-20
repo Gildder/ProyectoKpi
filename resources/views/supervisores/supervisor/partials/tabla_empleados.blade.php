@@ -3,8 +3,8 @@
 		<thead>
 			<th>Codigo</th>
 			<th>Nombre</th>	
+			<th>Departamento</th>	
 			<th>Cargo</th>	
-			<th>Departamentos</th>	
 			<th></th>	
 		</thead>
 
@@ -13,10 +13,10 @@
 			<tr>
 				<td>{{$item->codigo}}</td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
-				<td>{{$item->cargo}}</td>
 				<td>{{$item->departamento}}</td>
+				<td>{{$item->cargo}}</td>
 				<td>
-					<a href="{{route('supervisores.supervisor.agregardepartamento', array($item->codigo, $departamento->id)) }}" class="btn btn-primary btn-sm"><span class="fa fa-plus" title="Agregar Empleado" ></span></a>
+					<a href="{{route('supervisores.supervisor.agregardepartamento', array($item->codigo, $departamento->id)) }}" class="btn btn-success btn-sm"><span class="fa fa-plus" title="Agregar Empleado" ></span></a>
 				</td>
 			</tr>
 		@endforeach

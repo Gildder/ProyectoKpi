@@ -38,9 +38,9 @@ class TareaProgramasResolverRequest extends Request
     {
         return [
             'fechaInicioSolucion.required' => 'La fecha de Inicio es requerido!',
-            'fechaInicioSolucion.date_format' => 'El formato es dd/mm/aaa',
+            'fechaInicioSolucion.date_format' => 'El formato es dd/mm/aaaa',
             'fechaFinSolucion.required' => 'La fecha de Fin es requerido!',
-            'fechaFinSolucion.date_format' => 'El formato es dd/mm/aaa',
+            'fechaFinSolucion.date_format' => 'El formato es dd/mm/aaaa',
             'estado.required' => 'El estado es requerido!',
              'hora.required' => 'La Hora es requerido',
             'hora.numeric' => 'Debe ser numerico',

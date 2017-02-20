@@ -136,7 +136,7 @@ class Tarea extends Model
         }
         $partes=explode('-',$fecha);//se parte la fecha
         $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
-        return $fecha;
+        return trim($fecha);
     }  
 
     /*
@@ -153,7 +153,7 @@ class Tarea extends Model
         $partes=explode('/',$fecha);//se parte la fecha
         $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
 
-        return $fecha;
+        return trim($fecha);
     }  
 
     public function obtenerHora($horas, $minutos)

@@ -7,10 +7,10 @@
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        Restaurar Cargo
+        Restaurar Departamento
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Empleados\CargoController@restaurar', $item->id], 'method'=>'PUT'])!!}
+           {!!Form::open(['action'=>['Localizaciones\DepartamentoController@restaurar', $item->id], 'method'=>'PUT'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas restaurar a <b>{{$item->nombre}}?</b></p>
                   <div class="form-group col-sm-5 ">

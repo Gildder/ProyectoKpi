@@ -21,7 +21,11 @@
 		<div class="tab-content">
 			<div id="cargos" class="tab-pane fade in active">
 				<div class="col-lg-12 breadcrumb">
-					<a href="{{route('indicadores.indicadorcargos.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+					<a href="{{route('indicadores.indicador.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
+				</div>
+
+				<div class="col-lg-12">
+					@include('partials/alert/error')
 				</div>
 
 				<div class="row content">

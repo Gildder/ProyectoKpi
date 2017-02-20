@@ -7,11 +7,11 @@
 		</thead>
 
 		<tbody>
-		@foreach($cargos as $cargo)
+		@foreach($cargos as $item)
 			<tr>
-				<td>{{$cargo->id}}</td>
-				<td>{{$cargo->nombre}}</td>
-				<td><a  href="#"  data-toggle="modal" data-target="#modal-restaurar-{{$cargo->id}}"  class="btn btn-success btn-xs" ><span class="fa fa-check"  title="Restaurar"></span><span >  Restaurar</span></a></td>
+				<td>{{$item->id}}</td>
+				<td>{{$item->nombre}}</td>
+				<td><a  href="#"  data-toggle="modal" data-target="#modal-restaurar-{{$item->id}}"  class="btn btn-success btn-xs" ><span class="fa fa-check"  title="Restaurar"></span><span >  Restaurar</span></a></td>
 			</tr>
 			@include("empleados/cargo/restaurar")
 

@@ -25,8 +25,10 @@ class TareaProgramasFormRequest extends Request
     {
         return [
                 'descripcion'=>'required|min:5|max:60',
+                'fechaInicioEstimado' => 'required',
+                'fechaFinEstimado' => 'required',
                 'hora'=> 'required',
-                'minuto'=> 'required',
+                'minuto'=> 'required'
         ];
     }
 
@@ -36,8 +38,10 @@ class TareaProgramasFormRequest extends Request
             'descripcion.required' => 'La descripcion es requerida!',
             'descripcion.min' => 'Este campo no puede tener menos de 5 carácteres',
             'descripcion.max' => 'Este campo no puede tener más de 60 carácteres',
-            'hora.required' => 'La Hora es requerido!',
-            'minuto.required' => 'El minuto es requerido!',
+            'fechaInicioEstimado.required' => 'Este campo es requerido!',
+            'fechaFinEstimado.required' => 'Este campo es requerido!',
+            'hora.required' => 'La Hora es requerido',
+            'minuto.required' => 'El minuto es requerido'
         ];
     }
 }

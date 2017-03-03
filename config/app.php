@@ -151,6 +151,9 @@ return [
         Adldap\Laravel\AdldapServiceProvider::class,
         Adldap\Laravel\AdldapAuthServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -215,6 +218,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Adldap' => Adldap\Laravel\Facades\Adldap::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
     ],
 
 ];

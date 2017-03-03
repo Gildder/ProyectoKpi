@@ -1,28 +1,36 @@
 <?php $__env->startSection('titulo'); ?>
-  Nueva Tarea
+  <?php echo e($tarea->id); ?> - <?php echo e($tarea->descripcion); ?>
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 
+<!-- Nuevo -->
+
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>Nueva Tarea</strong>
+      <strong><?php echo e($tarea->id); ?> - <?php echo e($tarea->descripcion); ?></strong>
   </div>
   <div class="panel-body">
 
   <div class="col-lg-12 breadcrumb">
-    <a  href="<?php echo e(route('tareas.tareaProgramadas.index')); ?>" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
+    <a  href="<?php echo e(route('tareas.tareaProgramadas.show', $tarea->id)); ?>" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
   </div>
-  <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p></div>
+      <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p><br></div>
+      
+      <?php echo Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT']); ?>
 
-      <?php echo Form::open(['route'=>'tareas.tareaProgramadas.store', 'method'=>'POST']); ?>
+        <?php echo Form::hidden('id', $tarea->id); ?>
+
+
+
 
 
 <?php /* Descripcion */ ?>
 <div class="col-sm-12">
   <div class="form-group <?php if($errors->has('descripcion')): ?> has-error <?php endif; ?>  col-sm-4">
     <label class="form-group">Descripcion *</label>
-    <input  type="text" minlength="5" maxlength="60" name="descripcion" placeholder="Descripcion" class="form-control" required>
+    <input  type="text" minlength="5" maxlength="60" name="descripcion" placeholder="Descripcion" class="form-control" value="<?php echo e($tarea->descripcion); ?>" required>
     <?php if($errors->has('descripcion')): ?> <p class="help-block"><?php echo e($errors->first('descripcion')); ?></p> <?php endif; ?>
   </div>
 </div>
@@ -31,12 +39,12 @@
   <div class="col-sm-12">
     <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
       <div class="form-group  col-xs-6 col-sm-3 col-md-2 <?php if($errors->has('hora')): ?> has-error <?php endif; ?>">
-        Horas:<input type="number" name="hora" max="999"  class="form-control" value="00"  required >
+        Horas:<input type="number" name="hora" max="999"  value="<?php echo e($tarea->tiempoEstimado); ?>"  class="form-control" value="00"  required >
         <?php if($errors->has('hora')): ?> <p class="help-block"><?php echo e($errors->first('hora')); ?></p> <?php endif; ?>
 
       </div> 
       <div class="col-xs-6 col-sm-4 col-md-2 <?php if($errors->has('minuto')): ?> has-error <?php endif; ?>">
-        Minutos: <input type="number" name="minuto" max="999" class="form-control" value="00"   required>
+        Minutos: <input type="number" name="minuto" value="<?php echo e($tarea->tiempoEstimado); ?>"  max="999" class="form-control" value="00"   required>
         <?php if($errors->has('minuto')): ?> <p class="help-block"><?php echo e($errors->first('minuto')); ?></p> <?php endif; ?>
       </div>
   </div>
@@ -44,7 +52,7 @@
 <div class="form-group col-sm-12">
 <hr>
   <label class="form-group col-xs-12 col-sm-12">Semana Programada *</label>
-  <small class="form-group col-sm-12">Selecciona la semana que deseas programar tu tarea.</small><br><br>
+  <small class="form-group col-sm-12">Selecciona la semana que deseas programas tu tarea.</small><br><br>
   <?php /* Fecha de Inicio */ ?>
   <div class="form-group col-sm-12">
       Selecciona:
@@ -55,26 +63,23 @@
       </select>
   </div>
   <div class="row form-group  col-sm-12">
-    <div class="col-xs-12 col-sm-4 col-md-2">
-      <b>Fecha Inicio: </b>
-      <input type="date"  id="fechaInicio" class="form-control" name="fechaInicioEstimado"  readonly="readonly"  >
-    </div>
-    <div class="col-xs-12 col-sm-4 col-md-2">
-      <b>Fecha Fin: </b>
-      <input type="date" id="fechaFin" class="form-control" name="fechaFinEstimado" readonly="readonly" >
-    </div>
+    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Inicio: <input  id="fechaInicio" class="form-control" name="fechaInicioEstimado"  readonly="readonly" ></div>
+    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Fin: <input  id="fechaFin" class="form-control" name="fechaFinEstimado" readonly="readonly" ></div>
   </div>
 </div>
-        <?php /* Fin body  model */ ?>
-        </div>
+
+      
+  </div>
   <div class="panel-footer text-right">
-      <a  id="cancelar" href="<?php echo e(route('tareas.tareaProgramadas.index')); ?>" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>
-      <?php echo form::button('<i class="fa fa-save"></i> Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success', 'type'=>'submit']); ?>
+      <a  id="cancelar" href="<?php echo e(route('tareas.tareaProgramadas.show', $tarea->id)); ?>" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>
+      <?php echo form::button('<i class="fa fa-save"></i> Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success', 'type'=>'submit' ]); ?>
 
   </div>
       <?php echo Form::close(); ?>
 
 </div>
+
+<!-- Fin Nuevo -->
 
 <script>
   $(document).ready(function(){
@@ -100,6 +105,12 @@
 
 
 <?php $__env->stopSection(); ?>
+
+
+
+
+
+
 
 <?php
   function nombreMes($nro)

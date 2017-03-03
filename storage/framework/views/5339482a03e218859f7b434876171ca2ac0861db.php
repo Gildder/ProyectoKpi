@@ -14,12 +14,11 @@
     <?php echo $__env->make('partials/alert/error', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
     <div class="text-left col-lg-12 breadcrumb">
-      <a  href="#" data-target="#modal-nuevo" data-toggle="modal" onclick="refresCampos();" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
+      <a  href="<?php echo e(route('tareas.tareaProgramadas.create')); ?>" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
     </div>
     <div class="row">
       <div class="col-lg-12">
         <?php echo $__env->make('tareas/tareaProgramadas/partials/tabla_tareaProgramadas', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-        <?php echo $__env->make('tareas/tareaProgramadas/create', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
       </div>
     
     </div>

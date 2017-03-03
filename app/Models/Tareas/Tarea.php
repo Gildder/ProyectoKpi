@@ -111,11 +111,10 @@ class Tarea extends Model
         }
     }
 
-    public static function listSemana()
+    public static function listSemana($fecha)
     {
         $semana = new Semana();
-        return  $semana->getSemanasProgramadas();
+        return  $semana->getSemanasProgramadas($fecha);
     }
-
 
 }

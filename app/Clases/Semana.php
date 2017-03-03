@@ -99,14 +99,14 @@ class Semana
     }
 
     /* Retorna la semanas habilitadas*/
-    function getSemanasProgramadas()
+    function getSemanasProgramadas($fecha)
     {
         // Nro del dia de la semana
         $diaActual = date("N");
 
         //Si es Viernes
         if($diaActual >= 5 ){
-           $estaSemana = $this->mesSemanaFecha(date("Y-m-d"));
+           $estaSemana = $this->mesSemanaFecha($fecha);
            $nuevafecha = $this->sumarDias(date("Y-m-d"), 6);
            $siguienteSemana = $this->mesSemanaFecha($nuevafecha);
            return array($estaSemana,$siguienteSemana);
@@ -116,9 +116,5 @@ class Semana
         }
 
     }
-
-
-   
-
 
 }

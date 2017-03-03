@@ -28,16 +28,17 @@ class TareaProgramadaController extends Controller
 		$user = Auth::user();  //obtenemos el usuario logueado
 		$tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )->get();
 
-		$semanas = Tarea::listSemana();
 		// var_dump($semanas); 
 		// var_dump($tareas);
 
-		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=>$semanas]);
+		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas]);
 	}
 
 	public function create()
 	{
-		return view('tareas.tareaProgramadas.create');
+		$semanas = Tarea::listSemana(date('Y-m-d'));
+
+		return view('tareas.tareaProgramadas.create', ['semanas'=>$semanas]);
 	}
 
 	public function store(TareaProgramasFormRequest $Request)
@@ -47,7 +48,7 @@ class TareaProgramadaController extends Controller
 		$tarea->descripcion = trim(\Request::input('descripcion'));
 		$tarea->fechaInicioEstimado = trim(\Request::input('fechaInicioEstimado'));
 		$tarea->fechaFinEstimado = trim(\Request::input('fechaFinEstimado'));
-		$tarea->tiempoEstimado = trim(\Request::input('tiempoEstimado'));
+		$tarea->tiempoEstimado = trim(\Request::input('hora')).':'.trim(\Request::input('minuto'));
 		$tarea->tipo = '1';
 		$tarea->empleado_id = $user->empleado->codigo;
 		$tarea->save();
@@ -60,8 +61,9 @@ class TareaProgramadaController extends Controller
 	public function edit($id)
 	{
 		$tarea = Tarea::findOrFail($id);
+		$semanas = Tarea::listSemana($tarea->fechaInicioEstimado);
 		
-		return view('tareas/tareaProgramadas/edit',['tarea'=>$tarea]);
+		return view('tareas/tareaProgramadas/edit',['tarea'=>$tarea, 'semanas'=>$semanas]);
 
 	}
 

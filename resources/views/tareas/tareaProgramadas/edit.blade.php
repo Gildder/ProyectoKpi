@@ -21,65 +21,52 @@
       
       {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $tarea->id) !!}
-         {{-- Descripcion --}}
-        <div class="form-group @if ($errors->has('descripcion')) has-error @endif  col-sm-5">
-            <label for="descripcion">Descripcion *</label>
-            <input type="text" minlength="5" maxlength="60" name="descripcion"  placeholder="Descripcion" class="form-control" value="{{ $tarea->descripcion }}" required>
-            @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
-        </div>
 
-        <div class="row col-sm-12">
-          <div class="col-sm-12"> <label>Fechas Estimadas *</label></div>
 
-          {{-- Fecha de Inicio --}}
-          <div class="form-group @if ($errors->has('fechaInicioEstimado')) has-error @endif  col-sm-3">
-            De *: 
-            <div class="input-group date">
-              <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
-              </div>
-              <input type="date" id="fechaInicioEstimado"  class="form-control fechaInicio"  placeholder="dd/mm/aaaa" name="fechaInicioEstimado" value="{{ $tarea->fechaInicioEstimado }}" required>
 
-            </div>
-              @if ($errors->has('fechaInicioEstimado')) <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p> @endif
-           </div>
-            
-          {{-- Fecha Fin --}}
-           <div class="form-group @if ($errors->has('fechaFinEstimado')) has-error @endif  col-sm-3">
-            Hasta *:
-            <div class="input-group date">
-              <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
-              </div>
-              <input type="text" id="fechaFinEstimado" value="{{ $tarea->fechaFinEstimado }}"  class="form-control fechaFin" name="fechaFinEstimado" placeholder="dd/mm/aaaa" required>
 
-            </div>
-              @if ($errors->has('fechaFinEstimado')) <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p> @endif
-           </div>
-      
+{{-- Descripcion --}}
+<div class="col-sm-12">
+  <div class="form-group @if ($errors->has('descripcion')) has-error @endif  col-sm-4">
+    <label class="form-group">Descripcion *</label>
+    <input  type="text" minlength="5" maxlength="60" name="descripcion" placeholder="Descripcion" class="form-control" value="{{ $tarea->descripcion }}" required>
+    @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
+  </div>
+</div>
 
-          {{-- Dias Trabajados --}}
-           {{--   <div class="form-group @if ($errors->has('tiempoEstimado')) has-error @endif  col-sm-5">
-                <label>Dias trabajados </label><br>
-                    El total de días trabajados es: <label for="diasTrabajado">100</label>
-              @if ($errors->has('tiempoEstimado')) <p class="help-block">{{ $errors->first('tiempoEstimado') }}</p> @endif
-            </div>
-           --}}
-          </div>
+{{-- Tiempo estimado --}}
+  <div class="col-sm-12">
+    <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
+      <div class="form-group  col-xs-6 col-sm-3 col-md-2 @if ($errors->has('hora')) has-error @endif">
+        Horas:<input type="number" name="hora" max="999"  value="{{ $tarea->tiempoEstimado }}"  class="form-control" value="00"  required >
+        @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
-        {{-- Tiempo estimado --}}
-        <div class="row col-sm-12">
-           <div class="form-group @if ($errors->has('tiempoEstimado')) has-error @endif  col-sm-3">
-              <label>Tiempo Estimado *</label>
-              <div class="input-group">
-                  <input type="time" name="tiempoEstimado" value="{{ $tarea->tiempoEstimado }}" class="form-control"  placeholder="Hora:Minutos" required>
-                  <div class="input-group-addon">
-                    <i class="fa fa-clock-o"></i>
-                  </div>
-              </div>
-            @if ($errors->has('tiempoEstimado')) <p class="help-block">{{ $errors->first('tiempoEstimado') }}</p> @endif
-          </div>
-        </div> 
+      </div> 
+      <div class="col-xs-6 col-sm-4 col-md-2 @if ($errors->has('minuto')) has-error @endif">
+        Minutos: <input type="number" name="minuto" value="{{ $tarea->tiempoEstimado }}"  max="999" class="form-control" value="00"   required>
+        @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
+      </div>
+  </div>
+
+<div class="form-group col-sm-12">
+<hr>
+  <label class="form-group col-xs-12 col-sm-12">Semana Programada *</label>
+  <small class="form-group col-sm-12">Selecciona la semana que deseas programas tu tarea.</small><br><br>
+  {{-- Fecha de Inicio --}}
+  <div class="form-group col-sm-12">
+      Selecciona:
+      <select name="selecion_semana" id="selecion_semana">
+        @foreach($semanas as $item)
+          <option value="{{$item['semana']}}">Semana {{$item['semana']}} del Mes de {{nombreMes($item['mes'])}}</option> 
+        @endforeach
+      </select>
+  </div>
+  <div class="row form-group  col-sm-12">
+    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Inicio: <input  id="fechaInicio" class="form-control" name="fechaInicioEstimado"  readonly="readonly" ></div>
+    <div class="col-xs-12 col-sm-4 col-md-2">Fecha Fin: <input  id="fechaFin" class="form-control" name="fechaFinEstimado" readonly="readonly" ></div>
+  </div>
+</div>
+
       
   </div>
   <div class="panel-footer text-right">
@@ -91,5 +78,82 @@
 
 <!-- Fin Nuevo -->
 
+<script>
+  $(document).ready(function(){
+      cargarFechas();
+
+      $('#selecion_semana').change(function() {
+          cargarFechas();
+      });
+
+      function cargarFechas()
+      {
+        var result = $('#selecion_semana option:selected').attr('value');
+          @foreach ($semanas as $item) 
+            if({{$item['semana']}} == result)
+            {
+              $('#fechaInicio').val('{{$item['fechaInicio']}}');
+              $('#fechaFin').val('{{$item['fechaFin']}}');
+            }
+          @endforeach
+      }
+  });
+</script>
+
 
 @endsection
+
+
+
+
+
+
+
+<?php
+  function nombreMes($nro)
+  {
+    $mes = 'mes';
+    switch($nro)
+    {
+
+      case '1':
+        $mes = 'Enero';
+        break;
+      case '2':
+        $mes = 'Febrero';
+        break;
+      case '3':
+        $mes = 'Marzo';
+        break;
+      case '4':
+        $mes = 'Abril';
+        break;
+      case '5':
+        $mes = 'Mayo';
+        break;
+      case '6':
+        $mes = 'Junio';
+        break;
+      case '7':
+        $mes = 'Julio';
+        break;
+      case '8':
+        $mes = 'Agosto';
+        break;
+      case '9':
+        $mes = 'Septiembre';
+        break;
+      case '10':
+        $mes = 'Octubre';
+        break;
+      case '11':
+        $mes = 'Noviembre';
+        break;
+      case '12':
+        $mes = 'Diciembre';
+        break;
+
+    }
+    return $mes;
+  }
+?>

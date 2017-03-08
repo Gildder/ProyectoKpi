@@ -8,18 +8,23 @@ use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Carbon\Carbon;
-use Debugbar;
+
+
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Localizaciones\Localizacion;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
+use ProyectoKpi\Events\Tarea\TareaSaved;
+use ProyectoKpi\Events\Tarea\TareaUpdating;
+use ProyectoKpi\Events\Tarea\TareaUpdated;
 
 
 class TareaProgramadaController extends Controller
 {
     protected $tareas;
+
+
     public function __construct(TareaRepository $tareas)
     {
         $this->tareas = $tareas;
@@ -31,13 +36,15 @@ class TareaProgramadaController extends Controller
 	{	
 		$tareas = $this->tareas->getTareasProgramadas();
         $semanas = $this->tareas->listSemana(date('Y-m-d'));
-		
+
 		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
 
 	public function archivados()
 	{	
-		return view('tareas/tareaProgramadas/archivados');
+		$tareas = $this->tareas->getTareasArchivados();
+
+		return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas]);
 	}
 
 	public function eliminados()
@@ -72,10 +79,15 @@ class TareaProgramadaController extends Controller
 		$tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
 		$tarea->tipo = '1';
 		$tarea->empleado_id = $user->empleado->codigo;
-		$tarea->save();
 
+		if($tarea->save())
+		{
+			// $eventSaved = \Event::fire(new TareaSaved($tarea));
 
-		return redirect('tareas/tareaProgramadas')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');
+			return redirect('tareas/tareaProgramadas')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');
+		}else{
+			return back()->withInput();
+		}
 	}
 
 	
@@ -91,6 +103,10 @@ class TareaProgramadaController extends Controller
 	public function update(TareaProgramasFormRequest $Request, $id)
 	{
 		$tarea = Tarea::findOrFail($id);
+		// Evento para actualizar indicador 
+		// $eventUpdating = \Event::fire(new TareaUpdating($tarea));
+
+
 		$tarea->descripcion = trim(\Request::input('descripcion'));
 		$fechaInicio = trim(\Request::input('fechaInicioEstimado'));
 		$fechaFin = trim(\Request::input('fechaFinEstimado'));
@@ -104,12 +120,18 @@ class TareaProgramadaController extends Controller
 		$tarea->fechaFinEstimado = $fechaFin;
 
 		$horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
-
-
 		$tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
-		$tarea->save();
 
-		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+
+		if($tarea->save())
+		{
+			// $eventSaved = \Event::fire(new TareaUpdated($tarea));
+
+			return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+		}else{
+			return back()->withInput();
+		}
+
 	}
 
 	public function show($id)

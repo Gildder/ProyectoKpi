@@ -71,9 +71,12 @@ class EvaluadorController extends Controller
 		$empleadosDisponibles = DB::select('call pa_evaluadores_empleadosDisponibles('.$id.');');
         $empleadosEvaluadores = DB::select('call pa_evaluadores_empleadosEvaluadores('.$id.');');
 
+        $cargosDisponibles = DB::select('call pa_evaluadores_cargosDisponibles('.$id.');');
+        $cargosEvaluadores = DB::select('call pa_evaluadores_cargosEvaluados('.$id.');');
+
 		$evaluador = Evaluador::findOrFail($id);
 				
-		return view('empleados/evaluador/show',['evaluador'=>$evaluador,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadosEvaluadores]);
+		return view('empleados/evaluador/show',['evaluador'=>$evaluador,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadosEvaluadores, 'cargosdis'=>$cargosDisponibles,'cargosup'=>$cargosEvaluadores]);
 	}
 
 	public function destroy($id)
@@ -93,5 +96,37 @@ class EvaluadorController extends Controller
 		return view('empleados/evaluador/index', ['evaluadores'=> $evaluadores]);
 	}
 
+
+	public function agregarempleado($emp_id, $eva_id)
+    {
+        DB::table('evaluador_empleados')->insert(
+            array('empleado_id' => $emp_id, 'evaluador_id' => $eva_id)
+        );
+        return redirect()->back()->with('message', 'Se agrego el evaluador '.$emp_id.' correctamente.');
+    }
+
+    public function quitarempleado($emp_id, $eva_id)
+    {
+        DB::table('evaluador_empleados')->where('empleado_id', $emp_id)->where('evaluador_id', $eva_id)->delete();
+
+        return redirect()->back()->with('message', 'Se quito el evaluador '.$emp_id.' correctamente.');
+        
+    }
+
+    public function agregarcargo($cargo_id, $eva_id)
+    {
+        DB::table('evaluador_cargos')->insert(
+            array('cargo_id' => $cargo_id, 'evaluador_id' => $eva_id)
+        );
+
+        return redirect()->back()->with('message', 'Se agrego el cargo '.$cargo_id.' correctamente.');
+    }
+
+    public function quitarcargo($cargo_id, $eva_id)
+    {
+        DB::table('evaluador_cargos')->where('cargo_id', $cargo_id)->where('evaluador_id', $eva_id)->delete();
+
+        return redirect()->back()->with('message', 'Se quito el cargo '.$cargo_id.' correctamente.');
+    }
 
 }

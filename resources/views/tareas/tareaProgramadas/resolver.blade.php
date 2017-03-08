@@ -39,7 +39,7 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" min="2017-2-7"  placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}" required>
+                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" min="2017-2-7"  placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}} " required>
 
                   </div>
                     @if ($errors->has('fechaInicioSolucion')) <p class="help-block">{{ $errors->first('fechaInicioSolucion') }}</p> @endif
@@ -52,7 +52,7 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaFinSolucion"  class="form-control FinEjecucion" name="fechaFinSolucion" placeholder="dd/mm/aaaa" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}"  requvalue="{{ $tarea->fechaInicioSolucion }}" red>
+                    <input type="text" id="fechaFinSolucion"  class="form-control FinEjecucion" name="fechaFinSolucion" placeholder="dd/mm/aaaa" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}"  required>
 
                   </div>
                     @if ($errors->has('fechaFinSolucion')) <p class="help-block">{{ $errors->first('fechaFinSolucion') }}</p> @endif
@@ -136,7 +136,6 @@
     // }
 $(document).ready(function(){
 
-  <?php  ?>
 
   $(".InicioEjecucion").datepicker({
     format: 'dd/mm/yyyy',
@@ -161,10 +160,6 @@ $(document).ready(function(){
       $(".InicioEjecucion").datepicker( "option", "maxDate", selectedDate);
     }
   });
-
- 
-
-
 });
 </script>
 

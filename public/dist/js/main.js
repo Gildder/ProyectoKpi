@@ -2,6 +2,7 @@
 $(document).ready(function(){
     $('#myTableGrDepartamento').DataTable();
     $('#myTable1').DataTable();
+    $('#myTable2').DataTable();
     $('#myTable').DataTable({
         initComplete: function () {
             this.api().columns().every( function () {

@@ -17,9 +17,9 @@ class CreatePrimerIndicadorTable extends Migration
             $table->integer('gestion');
             $table->integer('mes');
             $table->integer('semana');
-            $table->integer('actpro'); //actividades programadas
-            $table->integer('actrea'); //actividades realizadas
-            $table->double('efeser'); //Eficacia del serivicio
+            $table->integer('actpro')->default(0); //actividades programadas
+            $table->integer('actrea')->default(0);  //actividades realizadas
+            $table->double('efeser')->default(0); //Eficacia del serivicio
             $table->string('empleado_id',10); 
             $table->integer('indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));

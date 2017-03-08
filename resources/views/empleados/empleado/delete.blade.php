@@ -7,7 +7,7 @@
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        Eliminar Empleado
+        <b>Eliminar Empleado</b>
       </div>
       <div class="modal-body modal-delete-body">
            {!!Form::open(['action'=>['Empleados\EmpleadoController@destroy', $empleados->codigo], 'method'=>'DELETE'])!!}

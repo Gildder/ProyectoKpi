@@ -38,7 +38,7 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" min="2017-2-7"  placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="<?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)); ?>" required>
+                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" min="2017-2-7"  placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="<?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)); ?> " required>
 
                   </div>
                     <?php if($errors->has('fechaInicioSolucion')): ?> <p class="help-block"><?php echo e($errors->first('fechaInicioSolucion')); ?></p> <?php endif; ?>
@@ -51,7 +51,7 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaFinSolucion"  class="form-control FinEjecucion" name="fechaFinSolucion" placeholder="dd/mm/aaaa" value="<?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)); ?>"  requvalue="<?php echo e($tarea->fechaInicioSolucion); ?>" red>
+                    <input type="text" id="fechaFinSolucion"  class="form-control FinEjecucion" name="fechaFinSolucion" placeholder="dd/mm/aaaa" value="<?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)); ?>"  required>
 
                   </div>
                     <?php if($errors->has('fechaFinSolucion')): ?> <p class="help-block"><?php echo e($errors->first('fechaFinSolucion')); ?></p> <?php endif; ?>
@@ -138,7 +138,6 @@
     // }
 $(document).ready(function(){
 
-  <?php  ?>
 
   $(".InicioEjecucion").datepicker({
     format: 'dd/mm/yyyy',
@@ -163,10 +162,6 @@ $(document).ready(function(){
       $(".InicioEjecucion").datepicker( "option", "maxDate", selectedDate);
     }
   });
-
- 
-
-
 });
 </script>
 

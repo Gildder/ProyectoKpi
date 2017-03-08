@@ -16,8 +16,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 // **********************  MODULO EMPLEADOS  *****************************************
+Route::get('empleados/cargo/eliminados', array('as' => 'empleados.cargo.eliminados', 'uses' => 'Empleados\CargoController@eliminados') );
+Route::put('empleados/cargo/restaurar/{cargo}', array('as' => 'empleados.cargo.restaurar', 'uses' => 'Empleados\CargoController@restaurar') );
 Route::resource('empleados/cargo', 'Empleados\CargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-
 Route::get('empleados/cargo/indicadores/{cargo}', array('as' => 'empleados.cargo.indicadores', 'uses' => 'Empleados\CargoController@indicadores') );
 Route::get('empleados/cargo/empleado/{cargo}', array('as' => 'empleados.cargo.empleado', 'uses' => 'Empleados\CargoController@empleado') );
 Route::put('empleados/cargo/agregar/{cargo}', array('as' => 'empleados.cargo.agregar', 'uses' => 'Empleados\CargoController@agregar') );
@@ -28,14 +29,17 @@ Route::delete('empleados/cargo/quitar/{cargo}/{param?}', array('as' => 'empleado
 Route::resource('empleados/empleado', 'Empleados\EmpleadoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
 //Evaludor
-Route::resource('empleados/evaluador', 'Empleados\EvaluadorController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+Route::get('empleados/evaluador/quitarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluador.quitarcargo', 'uses' => 'Empleados\EvaluadorController@quitarcargo') );
+Route::get('empleados/evaluador/agregarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluador.agregarcargo', 'uses' => 'Empleados\EvaluadorController@agregarcargo') );
 
+Route::get('empleados/evaluador/quitarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.quitarempleado', 'uses' => 'Empleados\EvaluadorController@quitarempleado') );
+Route::get('empleados/evaluador/agregarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.agregarempleado', 'uses' => 'Empleados\EvaluadorController@agregarempleado') );
+Route::resource('empleados/evaluador', 'Empleados\EvaluadorController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
 // Evaluador Empleado
 Route::get('empleados/evaluadorempleados', array('as' => 'empleados.evaluadorempleados.index', 'uses' => 'Empleados\EvaluadorEmpleadoController@index') );
 Route::get('empleados/evaluadorempleados/show/{empleado}', array('as' => 'empleados.evaluadorempleados.show', 'uses' => 'Empleados\EvaluadorEmpleadoController@show') );
-Route::get('empleados/evaluadorempleados/quitarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluadorempleados.quitarempleado', 'uses' => 'Empleados\EvaluadorEmpleadoController@quitarempleado') );
-Route::get('empleados/evaluadorempleados/agregarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluadorempleados.agregarempleado', 'uses' => 'Empleados\EvaluadorEmpleadoController@agregarempleado') );
+
 
 
 
@@ -43,8 +47,7 @@ Route::get('empleados/evaluadorempleados/agregarempleado/{empleado}/{param?}', a
 Route::resource('empleados/evaluadorcargos', 'Empleados\EvaluadorCargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 Route::get('empleados/evaluadorcargos/getEvaluadores', 'Empleados\EvaluadorCargoController@getEvaluadores');
 Route::get('empleados/evaluadorcargos/getCargos/{id}', 'Empleados\EvaluadorCargoController@getCargos');
-Route::get('empleados/evaluadorcargos/quitarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluadorcargos.quitarcargo', 'uses' => 'Empleados\EvaluadorCargoController@quitarcargo') );
-Route::get('empleados/evaluadorcargos/agregarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluadorcargos.agregarcargo', 'uses' => 'Empleados\EvaluadorCargoController@agregarcargo') );
+
 
 
 
@@ -113,12 +116,12 @@ Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['ind
 
 
 // tareas programadas
-Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 Route::get('tareas/tareaProgramadas/archivados', array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );
-Route::get('tareas/tareaProgramadas/eliminados', array('as' => 'tareas.tareaProgramadas.eliminados', 'uses' => 'Tareas\TareaProgramadaController@eliminados') );
+Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
 Route::get('tareas/tareaProgramadas/resolver/{tarea}', array('as' => 'tareas.tareaProgramadas.resolver', 'uses' => 'Tareas\TareaProgramadaController@resolver') );
 Route::put('tareas/tareaProgramadas/storeResolver/{tarea}', array('as' => 'tareas.tareaProgramadas.storeResolver', 'uses' => 'Tareas\TareaProgramadaController@storeResolver') );
+
 
 // tareas Diarias
 Route::resource('tareas/tareaDiaria', 'Tareas\TareaDiariaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);

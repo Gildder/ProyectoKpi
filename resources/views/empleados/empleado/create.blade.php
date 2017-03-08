@@ -17,7 +17,7 @@
 	<div class="col-lg-12 breadcrumb">
 		<a  href="{{route('empleados.empleado.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
 	</div>
-      <p>Todos los campos del formulario son requiridos, por favor llene todos.</p>
+      <p>Todos los campos con (*) son requiridos</p>
 
       {!!Form::open(['route'=>'empleados.empleado.store', 'method'=>'POST'])!!}
 

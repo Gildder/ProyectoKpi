@@ -42,19 +42,4 @@ class EvaluadorEmpleadoController extends Controller
 
 	/* Cargos Evaluados*/
 
-	public function agregarempleado($emp_id, $eva_id)
-    {
-        DB::table('evaluador_empleados')->insert(
-            array('empleado_id' => $emp_id, 'evaluador_id' => $eva_id)
-        );
-
-        return $this->show($eva_id);
-    }
-
-    public function quitarempleado($emp_id, $eva_id)
-    {
-        DB::table('evaluador_empleados')->where('empleado_id', $emp_id)->where('evaluador_id', $eva_id)->delete();
-
-        return $this->show($eva_id);
-    }
 }

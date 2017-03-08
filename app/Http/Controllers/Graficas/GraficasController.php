@@ -55,7 +55,6 @@ class GraficasController extends Controller
 			$datos[$item->mes - 1][$item->semana ] = $item->efeser;
 		}
 
-		print_r((object)$datos);
 		return (object)$datos;
 	}
 

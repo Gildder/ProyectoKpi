@@ -17,14 +17,14 @@
         <ul class="nav navbar-nav">
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="{{url('empleados/empleado')}}">
               <i class="fa fa-briefcase"></i>
               <label for="Empleados" class="hidden-xs">Empleados</label>
             </a>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="{{url('empleados/cargo')}}" >
               <i class="fa fa-sitemap"></i>
               <label for="Cargos" class="hidden-xs">Cargos</label>
             </a>
@@ -60,6 +60,14 @@
       <ul class="sidebar-menu">
         <li class="treeview">
           <a href="#">
+            <i class="fa fa-dashboard"></i>
+            <span>Dashboard</span>
+             <span class="pull-right-container">
+            </span>
+          </a>
+        </li> 
+         <li class="treeview">
+          <a href="#">
             <i class="fa fa-group"></i>
             <span>Empleados</span>
              <span class="pull-right-container">
@@ -67,8 +75,9 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('empleados/empleado')}}"><i class="fa fa-circle-o"></i>Empleado</a></li>
-            <li><a href="{{url('empleados/cargo')}}"><i class="fa fa-circle-o"></i> Cargo</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i>Opciones</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Permisos</a></li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Importar AD</a></li>
           </ul>
         </li> 
         <li class="treeview">

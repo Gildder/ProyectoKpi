@@ -62,6 +62,7 @@ class Semana
     {
         $fechas = $this->inicioFinSemana($fecha);
         //mes de inicio de semana
+        $anio = date("Y", strtotime($fechas['fechaInicio']));
         $mes = date("n", strtotime($fechas['fechaInicio']));
         $semana = $this->numeroSemanaFecha($fechas['fechaInicio']);
         $diasMes = $this->numeroDiasMes($fechas['fechaInicio']);
@@ -76,7 +77,7 @@ class Semana
             $semana = $this->numeroSemanaFecha($fechas['fechaFin']);
         } 
 
-        return array('mes'=>$mes, 'semana'=>$semana, 'fechaInicio'=>$fechas['fechaInicio'], 'fechaFin'=>$fechas['fechaFin']);
+        return array('anio'=>$anio,'mes'=>$mes, 'semana'=>$semana, 'fechaInicio'=>$fechas['fechaInicio'], 'fechaFin'=>$fechas['fechaFin']);
     }
 
     /* retorna la semana de una fecha */

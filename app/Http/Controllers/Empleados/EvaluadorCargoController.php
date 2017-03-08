@@ -48,19 +48,5 @@ class EvaluadorCargoController extends Controller
 	}
 
 
-	public function agregarcargo($cargo_id, $eva_id)
-    {
-        DB::table('evaluador_cargos')->insert(
-            array('cargo_id' => $cargo_id, 'evaluador_id' => $eva_id)
-        );
-
-        return $this->show($eva_id);
-    }
-
-    public function quitarcargo($cargo_id, $eva_id)
-    {
-        DB::table('evaluador_cargos')->where('cargo_id', $cargo_id)->where('evaluador_id', $eva_id)->delete();
-
-        return $this->show($eva_id);
-    }
+	
 }

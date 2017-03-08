@@ -7,7 +7,6 @@ use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Collection;
 
 
 use ProyectoKpi\Cms\Clases\Semana;
@@ -111,7 +110,7 @@ class Tarea extends Model
         return $localizaciones;
     }
 
-    public static function getEstado($id)
+    public function getEstado($id)
     {
         $tarea = Tarea::findOrFail($id);
 
@@ -130,8 +129,11 @@ class Tarea extends Model
      * @param string $fecha
      * @return fecha en formato d-m-Y
      */
-    function cambiarFormatoEuropeo($fecha)
-    {    
+    public function cambiarFormatoEuropeo($fecha)
+    {     
+        if($fecha == null){
+            return '00/00/0000';
+        }
         $partes=explode('-',$fecha);//se parte la fecha
         $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
         return $fecha;
@@ -143,32 +145,39 @@ class Tarea extends Model
      * @param string $fecha
      * @return fecha en formato d-m-Y
      */
-    function cambiarFormatoDB($fecha)
+    public function cambiarFormatoDB($fecha)
     {    
+        if($fecha == null){
+            return '0000-00-00';
+        }
         $partes=explode('/',$fecha);//se parte la fecha
         $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
 
         return $fecha;
     }  
 
-    function obtenerHora($horas, $minutos)
+    public function obtenerHora($horas, $minutos)
     {
         $tiempo = new Tiempo;
         
-        print_r($tiempo->obtenerHora($horas, $minutos));
-
         return $tiempo->obtenerHora($horas, $minutos);
     }
 
 
-    function sacarHoras($hora)
-    {    
+    public function sacarHoras($hora)
+    {   
+        if($hora == null){
+            return '00';
+        } 
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[0];
     }    
 
-    function sacarMinutos($hora)
-    {    
+    public function sacarMinutos($hora)
+    {     
+        if($hora == null){
+            return '00';
+        }
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[1];
     }  

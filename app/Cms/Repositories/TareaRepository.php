@@ -1,4 +1,5 @@
-<?php namespace ProyectoKpi\Cms\Repositories;
+<?php 
+namespace ProyectoKpi\Cms\Repositories;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -9,25 +10,22 @@ use ProyectoKpi\Cms\Clases\Semana;
 
 class TareaRepository
 {
-    protected $semanaprogramada;
 
 
     /*contructores */
     public function __construct()
     {
-        $semana = new Semana;
-        $this->semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
+       
     }
     // /* Metodos */
-
-
     public function getTareasProgramadas()
     {
         $user = Auth::user();  //obtenemos el usuario logueado
-        
-        $tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )
-                        ->where('fechaInicioEstimado','>=', $this->semanaprogramada[0]['fechaInicio'])
-                        // ->where('fechaFinEstimado', '<=', $this->semanaprogramada[0]['fechaFin'])
+        $semana = new Semana;
+        $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
+        $tareas = Tarea::where('tipo','=','1')->where('empleado_id','=', $user->empleado->codigo )
+                        ->where('fechaInicioEstimado','>=', $semanaprogramada[0]['fechaInicio'])
+                        ->where('fechaFinEstimado', '<=', $semanaprogramada[0]['fechaFin'])
                         ->whereNull('tareas.deleted_at')
                         ->get();
 
@@ -40,8 +38,8 @@ class TareaRepository
         $semana = new Semana;
         $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
 
-        $tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )
-                        ->where('fechaInicioEstimado','<', $this->semanaprogramada[0]['fechaInicio'])
+        $tareas = Tarea::where('tipo','=', '1')->where('empleado_id','=', $user->empleado->codigo )
+                        ->where('fechaFinEstimado','<', $semanaprogramada[0]['fechaFin'])
                         ->whereNull('tareas.deleted_at')
                         ->get();
 
@@ -53,7 +51,7 @@ class TareaRepository
     {
         $user = Auth::user();  //obtenemos el usuario logueado
 
-        $tareas = Tarea::where('tipo','=', '1')->where('empleado_id', $user->empleado->codigo )
+        $tareas = Tarea::where('tipo', '=','1')->where('empleado_id','=', $user->empleado->codigo )
                         ->whereNotNull('tareas.deleted_at')
                         ->get();
 

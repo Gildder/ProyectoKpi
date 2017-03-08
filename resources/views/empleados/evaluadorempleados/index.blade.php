@@ -20,6 +20,9 @@
 	   @endif
 	<div class="row">
 		<div class="col-lg-12">
+			<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<p>Los empleados que podran </p><hr>
+			</div>
 			@include('empleados/evaluadorempleados/partials/tabla_evaluadorempleados')
 		</div>
 	</div>

@@ -22,6 +22,3 @@
 
 
 
-@section('script')
-	
-@endsection

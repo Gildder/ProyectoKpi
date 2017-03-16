@@ -9,15 +9,10 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <p class="titulo-panel">Nuevo Grupo Departamento</p>
+    <a  href="{{route('localizaciones.grupodepartamento.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
+    <p class="titulo-panel">Nuevo Grupo Departamento</p>
   </div>
   <div class="panel-body">
-
-
-      <div class="col-lg-12 breadcrumb">
-            <a  href="{{route('localizaciones.grupodepartamento.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-      </div>
-
       {!!Form::open(['route'=>'localizaciones.grupodepartamento.store', 'method'=>'POST'])!!}
       <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-4">
             <label for="nombre" class="hidden-xs">Nombre</label>

@@ -31,7 +31,7 @@ class Localizacion extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'direccion',  'telefono',  'ciudad',  'pais',  'grupoloc_id',
+       'id', 'nombre', 'direccion',  'telefono',  'ciudad',  'pais',  'grupoloc_id',
     ];
 
     /**
@@ -40,7 +40,7 @@ class Localizacion extends Model
      * @var array
      */
     protected $hidden = [
-        'id','created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
     public function grupoLocalizaciones()

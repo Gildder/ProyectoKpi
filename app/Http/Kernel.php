@@ -44,15 +44,14 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \ProyectoKpi\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth' => \ProyectoKpi\Http\Middleware\Authenticate::class,                         //  utenticacion para outing
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,       // contenido basico de autenticacion
         'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest' => \ProyectoKpi\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
 
-        'is_route' => \App\Http\Middleware\IsTouteMiddleware::class,
-        'usuarioadmin' => \App\Http\Middleware\MwUsuarioAdmin::class,
-        'usuariostandard' => \App\Http\Middleware\MwUsuarioStandard::class,
+        'administrador' => \ProyectoKpi\Http\Middleware\AdministradorMiddleware::class,
+        'estandard' => \ProyectoKpi\Http\Middleware\EstandarMiddleware::class,
     ];
 }

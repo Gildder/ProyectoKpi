@@ -16,16 +16,13 @@ class CreateSupervisorDepartamentoTable extends Migration
         Schema::create('supervisor_departamentos', function (Blueprint $table) {
             $table->string('empleado_id',10);
             $table->integer('departamento_id')->unsigned();
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->softDeletes();
             $table->engine = 'InnoDB';
 
         });
 
          Schema::table('supervisor_departamentos', function ($table) {
-            $table->primary(['empleados_id','departamento_id']);
-            $table->foreign('empleados_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->primary(['empleado_id','departamento_id']);
+            $table->foreign('empleado_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('departamento_id')->references('id')->on('departamentos')->onDelete('cascade')->onUpdate('cascade');
         });
     }

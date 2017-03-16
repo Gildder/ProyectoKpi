@@ -8,15 +8,11 @@
 
 <div class="panel panel-default">
    <div class="panel-heading">
+     <a  href="{{route('localizaciones.departamento.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
       <p class="titulo-panel">{{$departamento->id}} - {{$departamento->nombre}}</p>
    </div>
    <div class="panel-body">
 
-
-      <div class="col-lg-12 breadcrumb">
-            <a  href="{{route('localizaciones.departamento.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-      </div>
-      
       {!!Form::model($departamento, ['route'=>['localizaciones.departamento.update', $departamento->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $departamento->id) !!}
       

@@ -151,7 +151,6 @@ return [
         Adldap\Laravel\AdldapServiceProvider::class,
         Adldap\Laravel\AdldapAuthServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         /*

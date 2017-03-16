@@ -1,13 +1,16 @@
+@section('titulo')
+    Inicio de Sesion
+@endsection
+
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
+<div class="container" style="margin-top: 10%;  ">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading"><b> Inicio Sesion</b></div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -56,7 +59,7 @@
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i> Entrar
+                                    <i class="fa fa-btn fa-sign-in"></i><strong>Entrar</strong> 
                                 </button>
 
                                 {{-- <a class="btn btn-link" href="{{ url('/password/reset') }}">Recuperar Contraseña?</a> --}}
@@ -68,4 +71,3 @@
         </div>
     </div>
 </div>
-@endsection

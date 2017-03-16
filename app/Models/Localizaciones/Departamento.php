@@ -31,7 +31,7 @@ class Departamento extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'grupodep_id',
+        'id', 'nombre', 'grupodep_id',
     ];
 
     /**
@@ -40,7 +40,7 @@ class Departamento extends Model
      * @var array
      */
     protected $hidden = [
-        'id','created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
     public function grupoDepartamento()
@@ -60,7 +60,7 @@ class Departamento extends Model
             ->join('grupo_departamentos','grupo_departamentos.id','=','departamentos.grupodep_id')->get();
     }
 
-     public static function getsupervisores($id)
+    public static function getsupervisores($id)
     {
         $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresDepartamento('.$id.')');
 

@@ -2,13 +2,13 @@
 
 	<div class="row">
 		<div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-5 ">
-              <label for="nombre" class="hidden-xs">Nombre</label>
+              <label for="nombre">Nombre</label>
               {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
               @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
         </div>
         
 		<div class="form-group @if ($errors->has('grupoloc_id')) has-error @endif  col-sm-5 ">
-          <label for="grupoloc_id" class="hidden-xs">Grupo Localizacion</label>
+          <label for="grupoloc_id">Grupo Localizacion</label>
             <select class="form-control" name="grupoloc_id">
                   <option value="" >Seleccionar...</option>
                 @foreach($grupo as $item)

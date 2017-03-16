@@ -10,23 +10,19 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
+     <a  href="{{route('localizaciones.departamento.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
       <p class="titulo-panel">Nuevo Departamento</p>
   </div>
   <div class="panel-body">
 
-
-      <div class="col-lg-12 breadcrumb">
-        <a  href="{{route('localizaciones.departamento.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
-      </div>
-
       {!!Form::open(['route'=>'localizaciones.departamento.store', 'method'=>'POST'])!!}
         <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-5 ">
-              <label for="nombre" class="hidden-xs">Nombre</label>
+              <label for="nombre" >Nombre</label>
               {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
               @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
         </div>
         <div class="form-group @if ($errors->has('grupodep_id')) has-error @endif  col-sm-5 ">
-          <label for="grupodep_id" class="hidden-xs">Grupo Departamento</label>
+          <label for="grupodep_id" >Grupo Departamento</label>
               
               <select class="form-control" name="grupodep_id">
                     <option value="" >Seleccionar...</option>

@@ -108,7 +108,7 @@ class IndicadorController extends Controller
 		
 	}
 
-	public function asign($id)
+	public function asignados($id)
 	{
 
 	    $cargos = DB::table('indicadores')

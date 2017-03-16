@@ -40,7 +40,7 @@
 
         <div class="form-group @if ($errors->has('descripcion_objetivo')) has-error @endif  col-sm-9">
             <label for="descripcion_objetivo" class="hidden-xs">Objetivo del Indicador</label>
-            {!! form::text('descripcion_objetivo',null, ['id'=>'descripcion_objetivo', 'class'=>'form-control', 'placeholder'=>'Describe el descripcion_objetivo']) !!}
+            {!! form::text('descripcion_objetivo',null, ['id'=>'descripcion_objetivo', 'class'=>'form-control', 'placeholder'=>'Describe el Objetivo']) !!}
             @if ($errors->has('descripcion_objetivo')) <p class="help-block">{{ $errors->first('descripcion_objetivo') }}</p> @endif
         </div>
 

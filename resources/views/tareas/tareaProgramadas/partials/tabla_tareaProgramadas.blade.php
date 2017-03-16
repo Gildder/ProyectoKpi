@@ -11,7 +11,7 @@
 			<th>Tiempo Ejecucion</th>	
 			<th>Estado</th>	
 			<th>Observacion</th>	
-			<th>Ubicacion</th>	
+			<th>Ubicaciones</th>	
 		</thead>
 	{{-- 	<tfoot style="display: table-header-group;" >
 			<th>Nro</th>
@@ -26,7 +26,7 @@
 		<tbody>
 @foreach($tareas as $tarea)
 <tr>
-	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" ><span >{{$tarea->id}}</span></a></td>
+	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" title="Ver"><span >{{$tarea->id}}</span></a></td>
 	<td>{{$tarea->descripcion}}</td>
 	<td>@if($tarea->fechaInicioEstimado == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}  @endif</td>
 	<td>@if($tarea->fechaFinEstimado == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}  @endif</td>

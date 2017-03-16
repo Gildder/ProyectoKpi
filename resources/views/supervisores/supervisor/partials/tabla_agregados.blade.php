@@ -12,7 +12,11 @@
 				<td>{{$item->codigo}}</td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
 				<td>
-					<a href="{{route('supervisores.supervisor.quitardepartamento', array($item->codigo, $departamento->id)) }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
+					@if($tipo == 0)
+					<a href="{{route('supervisores.supervisor.quitarcargo', array($item->codigo, $lista->id)) }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
+					@else
+					<a href="{{route('supervisores.supervisor.quitardepartamento', array($item->codigo, $lista->id)) }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
+					@endif
 				</td>
 			</tr>
 			@endforeach

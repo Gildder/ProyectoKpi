@@ -33,7 +33,7 @@ class TareaController extends Controller
 		$tarea->fechaFin = trim(\Request::input('fechaFin'));
 		$tarea->save();
 
-		return redirect('tareas/tarea')->with('message', 'El tarea "'.$tarea->nombre.'" se guardo correctamente.');
+		return redirect()->back()->with('message', 'El tarea "'.$tarea->nombre.'" se guardo correctamente.');
 	}
 
 	
@@ -53,7 +53,7 @@ class TareaController extends Controller
 		$tarea->fechaFin = trim(\Request::input('fechaFin'));
 		$tarea->save();
 
-		return redirect('tareas/tarea')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+		return redirect()->back()->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
 
 	public function show($id)

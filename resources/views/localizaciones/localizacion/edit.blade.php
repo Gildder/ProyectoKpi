@@ -3,15 +3,10 @@
 @section('content')
 <div class="panel panel-default">
    <div class="panel-heading">
+      <a  href="{{route('localizaciones.localizacion.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
       <p class="titulo-panel">{{$localizacion->id}} - {{$localizacion->nombre}}</p>
    </div>
    <div class="panel-body">
-
-
-      <div class="col-lg-12 breadcrumb">
-            <a  href="{{route('localizaciones.localizacion.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-      </div>
-      
       {!!Form::model($localizacion, ['route'=>['localizaciones.localizacion.update', $localizacion->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $localizacion->id) !!}
 

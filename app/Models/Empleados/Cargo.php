@@ -54,5 +54,12 @@ class Cargo extends Model
         return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicador','indicadores_cargos', 'cargo_id', 'indicador_id');
     }
 
+    public static function getsupervisores($id)
+    {
+        $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresCargo('.$id.')');
+
+        return $empleadossupervisores;
+    }
+
     
 }

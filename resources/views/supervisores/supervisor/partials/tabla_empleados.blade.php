@@ -16,7 +16,11 @@
 				<td>{{$item->departamento}}</td>
 				<td>{{$item->cargo}}</td>
 				<td>
-					<a href="{{route('supervisores.supervisor.agregardepartamento', array($item->codigo, $departamento->id)) }}" class="btn btn-success btn-sm"><span class="fa fa-plus" title="Agregar Empleado" ></span></a>
+					@if($tipo == 1)
+					<a href="{{route('supervisores.supervisor.agregardepartamento', array($item->codigo, $lista->id)) }}" class="btn btn-success btn-xs" title="Agregar Empleado"><span class="fa fa-plus" title="Agregar Empleado" ></span></a>
+					@else
+					<a href="{{route('supervisores.supervisor.agregarcargo', array($item->codigo, $lista->id)) }}" class="btn btn-success btn-xs" title="Agregar Empleado"><span class="fa fa-plus" title="Agregar Empleado" ></span></a>
+					@endif
 				</td>
 			</tr>
 		@endforeach

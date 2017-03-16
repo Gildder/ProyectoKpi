@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Empleados\Cargo;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
+
 
 class Indicador extends Model
 {
@@ -71,4 +73,7 @@ class Indicador extends Model
 
         return $cargosindicadores;
     }
+
+   
+
 }

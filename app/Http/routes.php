@@ -11,166 +11,307 @@
 |
 */
 
-Route::group(['middleware' => ['auth']], function () {
-    //
 
+/**************************** LOGIN ******************************************++*/
+
+
+Route::auth();
+
+Route::get('/', 'HomeController@index');
+
+
+// **********************  MODULO ADMINISTRADOR  *****************************************
+
+/*  CARGO */
+Route::group(['middleware'=> ['auth', 'administrador'] ], function ()
+{
+	
+	Route::resource('administrador', 'Admin\AdminController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+
+});
 
 // **********************  MODULO EMPLEADOS  *****************************************
-Route::get('empleados/cargo/eliminados', array('as' => 'empleados.cargo.eliminados', 'uses' => 'Empleados\CargoController@eliminados') );
-Route::put('empleados/cargo/restaurar/{cargo}', array('as' => 'empleados.cargo.restaurar', 'uses' => 'Empleados\CargoController@restaurar') );
-Route::resource('empleados/cargo', 'Empleados\CargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-Route::get('empleados/cargo/indicadores/{cargo}', array('as' => 'empleados.cargo.indicadores', 'uses' => 'Empleados\CargoController@indicadores') );
-Route::get('empleados/cargo/empleado/{cargo}', array('as' => 'empleados.cargo.empleado', 'uses' => 'Empleados\CargoController@empleado') );
-Route::put('empleados/cargo/agregar/{cargo}', array('as' => 'empleados.cargo.agregar', 'uses' => 'Empleados\CargoController@agregar') );
-Route::delete('empleados/cargo/quitar/{cargo}/{param?}', array('as' => 'empleados.cargo.quitar', 'uses' => 'Empleados\CargoController@quitar') );
+
+/*  CARGO */
+Route::group(['middleware'=> ['auth', 'administrador'] ], function ()
+{
+	Route::get('empleados/cargo/eliminados', 
+		array('as' => 'empleados.cargo.eliminados', 'uses' => 'Empleados\CargoController@eliminados') );
+
+	Route::put('empleados/cargo/restaurar/{cargo}', 
+		array('as' => 'empleados.cargo.restaurar', 'uses' => 'Empleados\CargoController@restaurar') );
 
 
-//Empleado
-Route::resource('empleados/empleado', 'Empleados\EmpleadoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
-
-//Evaludor
-Route::get('empleados/evaluador/quitarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluador.quitarcargo', 'uses' => 'Empleados\EvaluadorController@quitarcargo') );
-Route::get('empleados/evaluador/agregarcargo/{cargo}/{param?}', array('as' => 'empleados.evaluador.agregarcargo', 'uses' => 'Empleados\EvaluadorController@agregarcargo') );
-
-Route::get('empleados/evaluador/quitarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.quitarempleado', 'uses' => 'Empleados\EvaluadorController@quitarempleado') );
-Route::get('empleados/evaluador/agregarempleado/{empleado}/{param?}', array('as' => 'empleados.evaluador.agregarempleado', 'uses' => 'Empleados\EvaluadorController@agregarempleado') );
-Route::resource('empleados/evaluador', 'Empleados\EvaluadorController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-
-// Evaluador Empleado
-Route::get('empleados/evaluadorempleados', array('as' => 'empleados.evaluadorempleados.index', 'uses' => 'Empleados\EvaluadorEmpleadoController@index') );
-Route::get('empleados/evaluadorempleados/show/{empleado}', array('as' => 'empleados.evaluadorempleados.show', 'uses' => 'Empleados\EvaluadorEmpleadoController@show') );
+	Route::resource('empleados/cargo', 'Empleados\CargoController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
 
+	Route::get('empleados/cargo/indicadores/{cargo}', 
+		array('as' => 'empleados.cargo.indicadores', 'uses' => 'Empleados\CargoController@indicadores') );
 
 
-//Evaludor Cargo
-Route::resource('empleados/evaluadorcargos', 'Empleados\EvaluadorCargoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-Route::get('empleados/evaluadorcargos/getEvaluadores', 'Empleados\EvaluadorCargoController@getEvaluadores');
-Route::get('empleados/evaluadorcargos/getCargos/{id}', 'Empleados\EvaluadorCargoController@getCargos');
+	Route::get('empleados/cargo/empleado/{cargo}', 
+		array('as' => 'empleados.cargo.empleado', 'uses' => 'Empleados\CargoController@empleado') );
+
+	Route::put('empleados/cargo/agregar/{cargo}', 
+		array('as' => 'empleados.cargo.agregar', 'uses' => 'Empleados\CargoController@agregar') );
+
+
+	Route::delete('empleados/cargo/quitar/{cargo}/{param?}', 
+		array('as' => 'empleados.cargo.quitar', 'uses' => 'Empleados\CargoController@quitar') );
+
+});
+
+
+/* EMPLEADO */
+Route::group(['middleware'=>['auth', 'administrador']], function ()
+{
+	Route::get('empleados/listaDepartamento/{item}', 'Empleados\EmpleadoController@listaDepartamento');
+	Route::get('empleados/listaLocalizacion/{item}', 'Empleados\EmpleadoController@listaLocalizacion');
+
+
+
+	Route::resource('empleados/empleado', 'Empleados\EmpleadoController', 
+		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
+});
+
+// **********************  MODULO EVALUADORES  *****************************************
+
+/* ESCALAS  */
+Route::group(['middleware'=>['auth', 'administrador']], function ()
+{
+	Route::resource('evaluadores/escala', 'Evaluadores\EscalaController', 
+		['only' => ['index','create', 'edit', 'store', 'update', 'destroy', 'show']]);
+});
+
+
+/* PONDERACIONES  */
+Route::group(['middleware'=>['auth', 'administrador']], function ()
+{
+	// Escalas
+	Route::get('evaluadores/ponderacion/quitarescala/{item}/{param?}', 
+		array('as' => 'evaluadores.ponderacion.quitarescala', 'uses' => 'Evaluadores\PonderacionController@quitarescala') );
+
+	Route::get('evaluadores/ponderacion/agregarescala/{item}/{param?}', 
+		array('as' => 'evaluadores.ponderacion.agregarescala', 'uses' => 'Evaluadores\PonderacionController@agregarescala') );
+
+	// Tipo Indicador
+	Route::get('evaluadores/ponderacion/quitartipo/{item}/{param?}', 
+		array('as' => 'evaluadores.ponderacion.quitartipo', 'uses' => 'Evaluadores\PonderacionController@quitartipo') );
+
+	Route::get('evaluadores/ponderacion/agregartipo/{item}/{param?}', 
+		array('as' => 'evaluadores.ponderacion.agregartipo', 'uses' => 'Evaluadores\PonderacionController@agregartipo') );
+
+	//  Indicador
+	Route::get('evaluadores/ponderacion/quitarindicador/{item}/{param?}', 
+		array('as' => 'evaluadores.ponderacion.quitarindicador', 'uses' => 'Evaluadores\PonderacionController@quitarindicador') );
+
+	Route::get('evaluadores/ponderacion/agregarindicador/{item}/{param?}', 
+		array('as' => 'evaluadores.ponderacion.agregarindicador', 'uses' => 'Evaluadores\PonderacionController@agregarindicador') );
+
+	Route::resource('evaluadores/ponderacion', 'Evaluadores\PonderacionController', 
+		['only' => ['index','create', 'edit', 'store', 'update', 'destroy', 'show']]);
+});
+
+
+/* EVALUADOR */
+Route::group(['middleware'=>['auth', 'administrador']], function ()
+{
+	//Cargo
+	Route::get('evaluadores/evaluador/quitarcargo/{cargo}/{param?}', 
+		array('as' => 'evaluadores.evaluador.quitarcargo', 'uses' => 'Evaluadores\EvaluadorController@quitarcargo') );
+
+	Route::get('evaluadores/evaluador/agregarcargo/{cargo}/{param?}', 
+		array('as' => 'evaluadores.evaluador.agregarcargo', 'uses' => 'Evaluadores\EvaluadorController@agregarcargo') );
+
+	// Empleado
+	Route::get('evaluadores/evaluador/quitarempleado/{empleado}/{param?}', 
+		array('as' => 'evaluadores.evaluador.quitarempleado', 'uses' => 'Evaluadores\EvaluadorController@quitarempleado') );
+
+	Route::get('evaluadores/evaluador/agregarempleado/{empleado}/{param?}', 
+		array('as' => 'evaluadores.evaluador.agregarempleado', 'uses' => 'Evaluadores\EvaluadorController@agregarempleado') );
+
+	Route::resource('evaluadores/evaluador', 'Evaluadores\EvaluadorController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+	
+});
+
+/* EVALUADORES */
+Route::group(['middleware'=>['auth', 'estandard']], function ()
+{
+	Route::resource('evaluadores/evaluados', 'Evaluadores\EvaluadosController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+});
+
 
 
 
 
 // **********************  MODULO LOCALIZACIONES  *****************************************
-// Grupo departamento
-Route::get('localizaciones/grupodepartamento/eliminados', array('as' => 'localizaciones.grupodepartamento.eliminados', 'uses' => 'Localizaciones\GrupoDepartamentoController@eliminados') );
-Route::put('localizaciones/grupodepartamento/restaurar/{departamento}', array('as' => 'localizaciones.grupodepartamento.restaurar', 'uses' => 'Localizaciones\GrupoDepartamentoController@restaurar') );
+/* LOCALIZACIOENS */
+Route::group(['middleware'=>['auth', 'administrador']], function ()
+{
 
-Route::resource('localizaciones/grupodepartamento', 'Localizaciones\GrupoDepartamentoController', 
-		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
+	// Grupo departamento
+	Route::get('localizaciones/grupodepartamento/eliminados', 
+		array('as' => 'localizaciones.grupodepartamento.eliminados', 'uses' => 'Localizaciones\GrupoDepartamentoController@eliminados') );
 
-Route::get('localizaciones/grupodepartamento/obtenerDepartamento/{id}', 'Localizaciones\GrupoDepartamentoController@getDepartamentos');
+	Route::put('localizaciones/grupodepartamento/restaurar/{departamento}', 
+		array('as' => 'localizaciones.grupodepartamento.restaurar', 'uses' => 'Localizaciones\GrupoDepartamentoController@restaurar') );
 
+	Route::resource('localizaciones/grupodepartamento', 'Localizaciones\GrupoDepartamentoController', 
+			['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
-// departamento
-Route::get('localizaciones/departamento/eliminados', array('as' => 'localizaciones.departamento.eliminados', 'uses' => 'Localizaciones\DepartamentoController@eliminados') );
-Route::put('localizaciones/departamento/restaurar/{departamento}', array('as' => 'localizaciones.departamento.restaurar', 'uses' => 'Localizaciones\DepartamentoController@restaurar') );
-
-Route::resource('localizaciones/departamento', 'Localizaciones\DepartamentoController', 
-		['only' => ['index', 'create',  'edit','store', 'update', 'destroy', 'show']]);
-
-// GRupo Localizacion
-Route::get('localizaciones/grupolocalizacion/eliminados', array('as' => 'localizaciones.grupolocalizacion.eliminados', 'uses' => 'Localizaciones\GrupoLocalizacionController@eliminados') );
-Route::put('localizaciones/grupolocalizacion/restaurar/{localizacion}', array('as' => 'localizaciones.grupolocalizacion.restaurar', 'uses' => 'Localizaciones\GrupoLocalizacionController@restaurar') );
-
-
-Route::resource('localizaciones/grupolocalizacion', 'Localizaciones\GrupoLocalizacionController', ['only' => ['index', 'edit', 'create', 'store', 'update', 'destroy', 'show']]);
+	Route::get('localizaciones/grupodepartamento/getDepartamentos/{id}', 
+			array(
+					'as' => 'localizaciones.grupodepartamento.getDepartamentos',
+					'uses'=>'Localizaciones\GrupoDepartamentoController@getDepartamentos'
+			));
 
 
-// Localizacion
-Route::get('localizaciones/localizacion/eliminados', array('as' => 'localizaciones.localizacion.eliminados', 'uses' => 'Localizaciones\LocalizacionController@eliminados') );
-Route::put('localizaciones/localizacion/restaurar/{localizacion}', array('as' => 'localizaciones.localizacion.restaurar', 'uses' => 'Localizaciones\LocalizacionController@restaurar') );
+	// departamento
+	Route::get('localizaciones/departamento/eliminados', 
+		array('as' => 'localizaciones.departamento.eliminados', 'uses' => 'Localizaciones\DepartamentoController@eliminados'));
 
-Route::resource('localizaciones/localizacion', 'Localizaciones\LocalizacionController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy','show']]);
+	Route::put('localizaciones/departamento/restaurar/{departamento}', 
+		array('as' => 'localizaciones.departamento.restaurar', 'uses' => 'Localizaciones\DepartamentoController@restaurar'));
+
+	Route::resource('localizaciones/departamento', 'Localizaciones\DepartamentoController', 
+			['only' => ['index', 'create',  'edit','store', 'update', 'destroy', 'show']]);
+
+	// GRupo Localizacion
+	Route::get('localizaciones/grupolocalizacion/eliminados', 
+		array('as' => 'localizaciones.grupolocalizacion.eliminados', 'uses' => 'Localizaciones\GrupoLocalizacionController@eliminados') );
+
+	Route::put('localizaciones/grupolocalizacion/restaurar/{localizacion}', 
+		array('as' => 'localizaciones.grupolocalizacion.restaurar', 'uses' => 'Localizaciones\GrupoLocalizacionController@restaurar') );
+
+	Route::resource('localizaciones/grupolocalizacion', 'Localizaciones\GrupoLocalizacionController', ['only' => ['index', 'edit', 'create', 'store', 'update', 'destroy', 'show']]);
+
+
+	// Localizacion
+	Route::get('localizaciones/localizacion/eliminados', 
+		array('as' => 'localizaciones.localizacion.eliminados', 'uses' => 'Localizaciones\LocalizacionController@eliminados') );
+
+	Route::put('localizaciones/localizacion/restaurar/{localizacion}', 
+		array('as' => 'localizaciones.localizacion.restaurar', 'uses' => 'Localizaciones\LocalizacionController@restaurar') );
+
+	Route::resource('localizaciones/localizacion', 'Localizaciones\LocalizacionController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy','show']]);
+
+});
+
 
 
 // **********************  MODULO INDICADORES *****************************************
+/* LOCALIZACIOENS */
+Route::group(['middleware'=>['auth', 'administrador']], function ()
+{
+	// Indicador
+	Route::post('indicadores/indicador/asignados/{indicador}', array('as' => 'indicadores.indicador.asignados', 'uses' => 'Indicadores\IndicadorController@asignados') );
 
-Route::resource('indicadores/indicador', 'Indicadores\IndicadorController', 
+	Route::get('indicadores/indicador/quitar/{indicador}/{param?}', array('as' => 'indicadores.indicador.quitar', 'uses' => 'Indicadores\IndicadorController@quitar') );
+
+	Route::resource('indicadores/indicador', 'Indicadores\IndicadorController', 
+			['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
+
+
+	//  Primer Indicador
+	Route::resource('indicadores/primerindicador', 'Indicadores\PrimerIndicadorController', 
 		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 
 
-Route::post('indicadores/indicador/asign/{indicador}', array('as' => 'indicadores.indicador.asign', 'uses' => 'Indicadores\IndicadorController@asign') );
+	// Variables
+	Route::resource('indicadores/variable', 'Indicadores\VariableController', 
+			['only' => ['index', 'create', 'store', 'destroy', 'show']]);
 
-Route::get('indicadores/indicador/quitar/{indicador}/{param?}', array('as' => 'indicadores.indicador.quitar', 'uses' => 'Indicadores\IndicadorController@quitar') );
+	// Indicador Cargos
+	Route::get('indicadores/indicadorcargos/quitarcargo/{cargo}/{param}', 
+		array('as' => 'indicadores.indicadorcargos.quitarcargo', 'uses' => 'Indicadores\IndicadorCargoController@quitarcargo') );
 
-Route::resource('indicadores/primerindicador', 'Indicadores\PrimerIndicadorController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
+	Route::get('indicadores/indicadorcargos/agregarcargo/{cargo}/{param?}', 
+		array('as' => 'indicadores.indicadorcargos.agregarcargo', 'uses' => 'Indicadores\IndicadorCargoController@agregarcargo') );
 
-Route::resource('indicadores/indicadorcargo', 'Indicadores\IndicadorCargoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
+	Route::get('indicadores/indicadorcargos/editar/{cargo}/{param?}', 
+		array('as' => 'indicadores.indicadorcargos.editar', 'uses' => 'Indicadores\IndicadorCargoController@editar') );
 
-// Variables de la Formual de un indicador
-Route::resource('indicadores/variable', 'Indicadores\VariableController', 
-		['only' => ['index', 'create', 'store', 'destroy', 'show']]);
+	Route::put('indicadores/indicadorcargos/update/{cargo}/{param?}', 
+		array('as' => 'indicadores.indicadorcargos.update', 'uses' => 'Indicadores\IndicadorCargoController@update') );
 
-// Indicador Cargo
-Route::resource('indicadores/indicadorcargos', 'Indicadores\IndicadorCargoController', 
-		['only' => ['index', 'create', 'edit','store', 'destroy', 'show']]);
+	Route::delete('indicadores/indicadorcargos/destroy/{cargo}/{param?}', 
+		array('as' => 'indicadores.indicadorcargos.destroy', 'uses' => 'Indicadores\IndicadorCargoController@destroy') );
 
-Route::get('indicadores/indicadorcargos/quitarcargo/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.quitarcargo', 'uses' => 'Indicadores\IndicadorCargoController@quitarcargo') );
+	Route::resource('indicadores/indicadorcargos', 'Indicadores\IndicadorCargoController', 
+			['only' => ['index', 'create', 'edit','store', 'destroy', 'show']]);
 
-Route::get('indicadores/indicadorcargos/agregarcargo/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.agregarcargo', 'uses' => 'Indicadores\IndicadorCargoController@agregarcargo') );
 
-Route::get('indicadores/indicadorcargos/editar/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.editar', 'uses' => 'Indicadores\IndicadorCargoController@editar') );
-
-Route::put('indicadores/indicadorcargos/update/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.update', 'uses' => 'Indicadores\IndicadorCargoController@update') );
-Route::delete('indicadores/indicadorcargos/destroy/{cargo}/{param?}', array('as' => 'indicadores.indicadorcargos.destroy', 'uses' => 'Indicadores\IndicadorCargoController@destroy') );
-
+});
 
 // **********************  MODULO SUPERVISORES *****************************************
-Route::resource('supervisores/supervisor', 'Supervisores\SupervisorController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
-Route::get('supervisorempleado/departamentos/getDepartamentos', array('as' => 'supervisorempleado.departamentos.getDepartamentos', 'supervisores' =>  'Empleados\SupervisorEmpleadoController') );
 
-Route::get('supervisores/supervisor/agregardepartamento/{emp_id}/{param?}', array('as' => 'supervisores.supervisor.agregardepartamento', 'uses' => 'Supervisores\SupervisorController@agregardepartamento') );
+/*  SUPERVISORES */
+route::group(['middleware'=>['auth', 'administrador']], function()
+{
+	/* Metodo Supervisados */
+	Route::get('supervisores/supervisor/supervisados/{emp_id}', 
+		array('as' => 'supervisores.indicadores.supervisados', 'uses' => 'Supervisores\SupervisorController@supervisados') );
 
-Route::get('supervisores/supervisor/quitardepartamento/{emp_id}/{param?}', array('as' => 'supervisores.supervisor.quitardepartamento', 'uses' => 'Supervisores\SupervisorController@quitardepartamento') );
+	/* Metodo Show */
+	Route::get('supervisores/supervisor/{supervisor}/{param?}', 
+		array('as' => 'supervisores.supervisor.show', 'uses' => 'Supervisores\SupervisorController@show') );
+	
+	/* Metodo agregarcargo */
+	Route::get('supervisores/supervisor/agregarcargo/{emp_id}/{param?}', 
+		array('as' => 'supervisores.supervisor.agregarcargo', 'uses' => 'Supervisores\SupervisorController@agregarcargo') );
+	
+	/* Metodo quitarcargo */
+	Route::get('supervisores/supervisor/quitarcargo/{emp_id}/{param?}', 
+		array('as' => 'supervisores.supervisor.quitarcargo', 'uses' => 'Supervisores\SupervisorController@quitarcargo') );
+	
+	/* Metodo agregardepartamento */
+	Route::get('supervisores/supervisor/agregardepartamento/{emp_id}/{param?}', 
+		array('as' => 'supervisores.supervisor.agregardepartamento', 'uses' => 'Supervisores\SupervisorController@agregardepartamento') );
 
-Route::get('supervisores/indicadores/supervisados/{emp_id}', array('as' => 'supervisores.indicadores.supervisados', 'uses' => 'Supervisores\SupervisorController@supervisados') );
+	/* Metodo quitardepartamento */
+	Route::get('supervisores/supervisor/quitardepartamento/{emp_id}/{param?}', 
+		array('as' => 'supervisores.supervisor.quitardepartamento', 'uses' => 'Supervisores\SupervisorController@quitardepartamento') );
 
-// Empleados Supervisados
-Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', ['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+	/* Metodos Genericos */
+	Route::resource('supervisores/supervisor', 'Supervisores\SupervisorController', 
+		['only' => ['index', 'create', 'store', 'update', 'destroy']]);
+});
 
+
+/*  SUPERVISADOS */
+route::group(['middleware'=>['auth', 'estandard']], function()
+{
+
+	/* Metodos Genericos */
+	Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', 
+		['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
+
+});
 // **********************  MODULO TAREAS  *****************************************
-Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
+/*  TAREAS */
+route::group(['middleware'=>['auth', 'estandard']], function()
+{
+	// Proyectos
+	Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+	
+	// tareas programadas
+	Route::get('tareas/tareaProgramadas/archivados', 
+		array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );
 
-// tareas programadas
-Route::get('tareas/tareaProgramadas/archivados', array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );
-Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+	Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
-Route::get('tareas/tareaProgramadas/resolver/{tarea}', array('as' => 'tareas.tareaProgramadas.resolver', 'uses' => 'Tareas\TareaProgramadaController@resolver') );
-Route::put('tareas/tareaProgramadas/storeResolver/{tarea}', array('as' => 'tareas.tareaProgramadas.storeResolver', 'uses' => 'Tareas\TareaProgramadaController@storeResolver') );
+	Route::get('tareas/tareaProgramadas/resolver/{tarea}', 
+		array('as' => 'tareas.tareaProgramadas.resolver', 'uses' => 'Tareas\TareaProgramadaController@resolver') );
 
-
-// tareas Diarias
-Route::resource('tareas/tareaDiaria', 'Tareas\TareaDiariaController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-Route::get('tareas/tareaDiaria/quitarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaDiaria.quitarubicacion', 'uses' => 'Tareas\TareaDiariaController@quitarubicacion') );
-Route::get('tareas/tareaDiaria/agregarubicacion/{ubicacion}/{param?}', array('as' => 'tareas.tareaDiaria.agregarubicacion', 'uses' => 'Tareas\TareaDiariaController@agregarubicacion') );
-Route::get('tareas/tareaDiaria/resolver/{tarea}', array('as' => 'tareas.tareaDiaria.resolver', 'uses' => 'Tareas\TareaDiariaController@resolver') );
-Route::put('tareas/tareaDiaria/storeResolver/{tarea}', array('as' => 'tareas.tareaDiaria.storeResolver', 'uses' => 'Tareas\TareaDiariaController@storeResolver') );
-
-
-
-
-///fin middleware
+	Route::put('tareas/tareaProgramadas/storeResolver/{tarea}', 
+		array('as' => 'tareas.tareaProgramadas.storeResolver', 
+			'uses'=> 'Tareas\TareaProgramadaController@storeResolver'));
 });
 
-
-/* Graficas */
-Route::get('graficas/getArrayPrimerIndicador/{data}',  array('as' => 'graficas.getArrayPrimerIndicador', 'uses' => 'Graficas\GraficasController@getArrayPrimerIndicador') );
-
-
-
-Route::get('/', function () {
-    return view('auth/login');
-});
-
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');
-
-/*
-Route::get('api/grupodepartamento', function() {
-	return Datatables::eloquent(grupodepartamento::query())->make(true);
-});
-*/

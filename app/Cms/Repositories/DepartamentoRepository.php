@@ -1,6 +1,6 @@
 <?php
 
-namespace ProyectoKpi\REpositories;
+namespace ProyectoKpi\Cms\Repositories;
 
 use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Localizaciones\Departamento;

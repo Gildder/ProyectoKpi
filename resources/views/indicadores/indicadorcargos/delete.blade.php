@@ -10,7 +10,7 @@
         Quitar Cargo
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Indicadores\IndicadorCargoController@destroy', $item->id, $indicador->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Indicadores\IndicadorCargoController@quitarcargo', $item->id, $indicador->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas quitar a <b>{{$item->nombre}}?</b></p>
                   <div class="form-group col-sm-5 ">

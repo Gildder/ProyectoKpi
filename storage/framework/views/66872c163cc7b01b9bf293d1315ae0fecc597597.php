@@ -11,7 +11,7 @@
 			<th>Tiempo Ejecucion</th>	
 			<th>Estado</th>	
 			<th>Observacion</th>	
-			<th>Ubicacion</th>	
+			<th>Ubicaciones</th>	
 		</thead>
 	<?php /* 	<tfoot style="display: table-header-group;" >
 			<th>Nro</th>
@@ -26,7 +26,7 @@
 		<tbody>
 <?php foreach($tareas as $tarea): ?>
 <tr>
-	<td><a href="<?php echo e(route('tareas.tareaProgramadas.show', $tarea->id )); ?>" class="btn btn-warning btn-xs" ><span ><?php echo e($tarea->id); ?></span></a></td>
+	<td><a href="<?php echo e(route('tareas.tareaProgramadas.show', $tarea->id )); ?>" class="btn btn-warning btn-xs" title="Ver"><span ><?php echo e($tarea->id); ?></span></a></td>
 	<td><?php echo e($tarea->descripcion); ?></td>
 	<td><?php if($tarea->fechaInicioEstimado == ''): ?> _/_/_ <?php else: ?>  <?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)); ?>  <?php endif; ?></td>
 	<td><?php if($tarea->fechaFinEstimado == ''): ?> _/_/_ <?php else: ?>  <?php echo e($tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)); ?>  <?php endif; ?></td>

@@ -30,4 +30,17 @@ class User extends Authenticatable
     {
         return $this->hasOne('ProyectoKpi\Models\Empleados\Empleado');
     }
+
+    public function tipo()
+    {
+        return $this->belongsTo('ProyectoKpi\Models\Empleados\TipoUsuario','type');
+    }
+
+
+    public function isAdmin()
+    {
+        return $this->type == '1';
+    }
+
+
 }

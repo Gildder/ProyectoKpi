@@ -10,13 +10,13 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>{{ $cargo->id}} - {{ $cargo->nombre}}</strong>
+    <a  href="{{route('empleados.cargo.index')}}" class="btn btn-primary btn-xs btn-back pull-left" title="Volver"><span class="fa fa-reply"></span></a>
+      <strong></strong>
+      <p class="titulo-panel">{{ $cargo->id}} - {{ $cargo->nombre}}</p>
+
   </div>
   <div class="panel-body">
 
-  <div class="col-lg-12 breadcrumb">
-    <a  href="{{route('empleados.cargo.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-  </div>
 
       {!!Form::model($cargo, ['route'=>['empleados.cargo.update', $cargo->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $cargo->id) !!}

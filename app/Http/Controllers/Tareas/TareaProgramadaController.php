@@ -22,30 +22,26 @@ use ProyectoKpi\Events\Tarea\TareaUpdated;
 
 class TareaProgramadaController extends Controller
 {
-    protected $tareas;
-    protected $semanas;
 
-
-    public function __construct(TareaRepository $tareas)
+    public function __construct()
     {
-        $this->tareas = $tareas;
-        $this->semanas = $tareas->listSemana(date('Y-m-d'));
         $this->middleware('auth');
     }
-
-
     public function index()
 	{	
-		$tareas = $this->tareas->getTareasProgramadas();
+		$tareas = TareaRepository::getTareasProgramadas();
+		$semanas = TareaRepository::listSemana(date('Y-m-d'));
 
-		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $this->semanas]);
+		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
 
 	public function archivados()
 	{	
-		$tareas = $this->tareas->getTareasArchivados();
+		$tareas = TareaRepository::getTareasArchivados();
+		$semanas = TareaRepository::listSemana(date('Y-m-d'));
 
-		return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas]);
+
+		return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas,  'semanas'=> $semanas]);
 	}
 
 	public function eliminados()
@@ -55,7 +51,9 @@ class TareaProgramadaController extends Controller
 
 	public function create()
 	{
-		return view('tareas.tareaProgramadas.create', [ 'semanas'=> $this->semanas]);
+		$semanas = TareaRepository::listSemana(date('Y-m-d'));
+
+		return view('tareas.tareaProgramadas.create', [ 'semanas'=> $semanas]);
 	}
 
 	public function store(TareaProgramasFormRequest $Request)
@@ -94,7 +92,7 @@ class TareaProgramadaController extends Controller
 	public function edit($id)
 	{
 		$tarea = Tarea::findOrFail($id);
-		$semanas = $this->tareas->listSemana($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado));
+		$semanas = TareaRepository::listSemana($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado));
 		
 		return view('tareas/tareaProgramadas/edit',['tarea'=>$tarea, 'semanas'=>$semanas]);
 

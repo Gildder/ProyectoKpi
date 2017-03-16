@@ -31,7 +31,7 @@ class GrupoDepartamento extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'id','nombre', 
     ];
 
     /**
@@ -40,7 +40,7 @@ class GrupoDepartamento extends Model
      * @var array
      */
     protected $hidden = [
-        'id','created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
 
@@ -48,12 +48,7 @@ class GrupoDepartamento extends Model
 
     public function departamentos()
     {
-        return $this->hasMany('ProyectoKpi\Models\Localizaciones\Departamento');
+        return $this->hasMany('ProyectoKpi\Models\Localizaciones\Departamento', 'grupodep_id', 'id');
     }
-
-
-    public static function validarRepetido()
-    {
-
-    }
+   
 }

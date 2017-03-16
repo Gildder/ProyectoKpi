@@ -7,7 +7,7 @@
 @section('content')
 <div class="panel panel-default">
   <div class="panel-heading">
-    <p class="titulo-panel">{{$departamento->nombre}}</p>
+    <p class="titulo-panel">{{$lista->nombre}}</p>
   </div>
 
   <div class="panel-body">

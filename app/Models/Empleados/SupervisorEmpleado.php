@@ -32,15 +32,6 @@ class SupervisorEmpleado extends Model
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado','empleados_id');
     }
 
-     /* Metodos de Repositorio*/
 
-     // Obtenemos todos los indicadores de un empleado 
-   public static function getIndicadores($codigo)
-    {
-        return Empleado::select('indicadores.*')
-                ->join('indicador_cargos','indicador_cargos.cargo_id','=','empleados.cargo_id')
-                ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
-                ->where('empleados.codigo',$codigo)
-                ->get();
-    }
+   
 }

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
+
 
 class Empleado extends Model
 {
@@ -77,26 +79,25 @@ class Empleado extends Model
         return $this->hasMany('ProyectoKpi\Models\Indicadores\IndicadorPrimer');
     }
 
-
-
-    // /* Metodos de Repositorio */
-    public static function isSupervisor()
+    public function getCargo($id)
     {
-        $user = Auth::user();//obtenemos el usuario logueado
-        
-        $result = Empleado::
-            select('empleados.codigo')
-            ->join('supervisor_departamentos','supervisor_departamentos.empleado_id','=','empleados.codigo')
-            ->where('supervisor_departamentos.empleado_id', '=', $user->empleado->codigo)
-            ->count();
+        $cargo =  DB::table('cargos')->select('cargos.nombre')->where('cargos.id',$id)->first();
 
-        if ($result > 0 ) {
-            Cache::forever('depasores', encrypt($user->empleado->codigo));
-        }else{
-            Cache::forever('depasores', '');
-        }
-
-        return $result;
+        return $cargo->nombre;
     }
 
+
+
+
+
+
+     public static function getTablaIndicador($emp_id, $ind_id)
+    {
+        return IndicadorRepository::getTablaIndicador($emp_id, $ind_id);
+    }
+
+    public static function getGraficoIndicador($emp_id, $ind_id)
+    {
+        return IndicadorRepository::getGraficoIndicador($emp_id, $ind_id);
+    }
 }

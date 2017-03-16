@@ -7,15 +7,10 @@
 @section('content')
 <div class="panel panel-default">
   <div class="panel-heading">
+      <a  href="{{route('localizaciones.grupodepartamento.index')}}" class="btn btn-primarybtn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
       <p class="titulo-panel">{{$grupodepartamento->id}} - {{$grupodepartamento->nombre}}</p>
   </div>
   <div class="panel-body">
-
-
-      <div class="col-lg-12 breadcrumb">
-            <a  href="{{route('localizaciones.grupodepartamento.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-      </div>
-
       {!!Form::model($grupodepartamento, ['route'=>['localizaciones.grupodepartamento.update', $grupodepartamento->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $grupodepartamento->id) !!}
       <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-5">

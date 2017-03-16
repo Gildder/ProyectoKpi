@@ -8,13 +8,12 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>Nueva Tarea</strong>
+    <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-xs pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
+    <p class="titulo-panel">Nueva Tarea</p>
+
   </div>
   <div class="panel-body">
 
-  <div class="col-lg-12 breadcrumb">
-    <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
-  </div>
   <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p></div>
 
       {!!Form::open(['route'=>'tareas.tareaProgramadas.store', 'method'=>'POST'])!!}

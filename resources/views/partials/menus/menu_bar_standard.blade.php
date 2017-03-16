@@ -13,6 +13,16 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
+          @if( Cache::get('evadores'))
+          <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+          <a href="{{url('evaluadores/evaluados') }}" >
+              <i class="fa fa-bullseye"></i>
+              <label for="Tareas" class="hidden-xs">Evaluadores</label>
+            </a>
+          </li>
+          @endif
+
           @if( Cache::get('depasores'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
@@ -22,7 +32,6 @@
             </a>
           </li>
           @endif
-
 
            <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">

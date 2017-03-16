@@ -58,35 +58,20 @@
 
 <script src="{{URL::asset('dist/js/main.js')}}"></script>
 
-
-
-
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 </head>
-<body class="skin-blue sidebar-mini" >
-<div class="wrapper">
-    @if (Auth::user())
-      @if (Auth::user()->type == 1)
+<body class="hold-transition skin-yellow sidebar-mini"  style="background: #ECF0F5;" >
+
+
+@if(! Auth::guest())
+  <div class="wrapper">
+      @if (Auth::user()->isAdmin())
         @include("partials/menus/menu_bar_admin")
       @else
         @include("partials/menus/menu_bar_standard")
       @endif
-    @else
-        @include("partials/menus/menu_bar_guess")
-    @endif
-
-  <!-- Content Wrapper. Contains page content -->
+@endif
   
     <!-- Main content -->
-    <section class="content-header">
-          @yield('content-header')     
-    </section>
     <section class="content">
           @if(session('success'))
             <div class="alert alert-success"> 
@@ -97,21 +82,16 @@
           @yield('content')     
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
       
 </div>
-<!-- ./wrapper -->
-
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('bootstrap/js/bootstrap.min.js')}}"></script>
-<!-- Morris.js charts -->
 
-<!-- ChartJS 1.0.1 -->
-<script src="{{URL::asset('/plugins/chartjs/Chart.min.js')}}"></script>
+<!-- Google ChartJS -->
+<script src="{{URL::asset('/plugins/GoogleChart/loader.js')}}"></script>
 
 <script src="{{URL::asset('plugins/descargas/raphael-min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
@@ -139,16 +119,17 @@
 <script src="{{URL::asset('plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{URL::asset('plugins/fastclick/fastclick.js')}}"></script>
+
+<!-- ChartJS 1.0.1 -->
+<script src="{{URL::asset('plugins/chartjs/Chart.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{URL::asset('dist/js/app.min.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{URL::asset('dist/js/pages/dashboard.js')}}"></script>
 
-<script>
-  @yield('script')   
-</script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{URL::asset('dist/js/demo.js')}}"></script>
+
 
 </body>
 </html>

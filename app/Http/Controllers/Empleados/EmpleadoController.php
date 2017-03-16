@@ -125,6 +125,7 @@ class EmpleadoController extends Controller
 		$grdepartamento = GrupoDepartamento::all();
 		$departamento = Departamento::all();
 
+// var_dump(json_encode($grlocalizacion));
 
 		return view('empleados.empleado.create',['cargos'=>$cargos, 'grdepartamento'=>$grdepartamento, 'grlocalizacion'=>$grlocalizacion,'localizacion'=>$localizacion, 'departamento'=>$departamento]);
 	}
@@ -198,5 +199,19 @@ class EmpleadoController extends Controller
 
 		return redirect('empleados/empleado')->with('message',  'El Empleado de Codigo.- '.$id.'  se elimino correctamente.');
 
+	}
+
+	public function listaDepartamento($id)
+	{
+		// $id = \Request::input('option');
+        $grupo = GrupoDepartamento::find($id);
+        return json_decode($grupo->departamentos) ;
+	}
+
+	public function listaLocalizacion($id)
+	{
+		// $id = \Request::input('option');
+        $grupo = GrupoLocalizacion::find($id);
+        return json_decode($grupo->localizaciones) ;
 	}
 }

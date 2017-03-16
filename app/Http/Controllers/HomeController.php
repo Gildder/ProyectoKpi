@@ -8,6 +8,10 @@ use ProyectoKpi\Models\Empleados\Empleado;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use ProyectoKpi\Cms\repositories\SupervisoresRepository;
+use ProyectoKpi\Cms\repositories\EvaluadoresRepository;
+use ProyectoKpi\Models\Controllers\Tareas\TareaProgramadaController;
+use ProyectoKpi\Cms\Repositories\TareaRepository;
 
 class HomeController extends Controller
 {
@@ -19,6 +23,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
     }
 
     /**
@@ -28,12 +33,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
-        $user = Auth::user();
-        if ($user->type != '1') {
-            $result = Empleado::isSupervisor();
+        if(! Auth::guest()){
+            if (Auth::user()->isAdmin()) {
+
+                return redirect()->route('administrador.index');
+
+            }else{
+                // direccionamso a las tareas programadas
+                SupervisoresRepository::isSupervisor();
+                EvaluadoresRepository::isEvaluador();
+
+                return redirect()->route('tareas.tareaProgramadas.index');
+
+            }
         }
-        
-        return view('home');
+
     }
+
 }

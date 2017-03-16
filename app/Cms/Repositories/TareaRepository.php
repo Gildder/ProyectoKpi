@@ -18,14 +18,14 @@ class TareaRepository
        
     }
     // /* Metodos */
-    public function getTareasProgramadas()
+    public static function getTareasProgramadas()
     {
         $user = Auth::user();  //obtenemos el usuario logueado
         $semana = new Semana;
         $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
-        $tareas = Tarea::where('tipo','=','1')->where('empleado_id','=', $user->empleado->codigo )
+        $tareas = Tarea::where('empleado_id','=', $user->empleado->codigo )
                         ->where('fechaInicioEstimado','>=', $semanaprogramada[0]['fechaInicio'])
-                        ->where('fechaFinEstimado', '<=', $semanaprogramada[0]['fechaFin'])
+                        // ->where('fechaFinEstimado', '<=', $semanaprogramada[0]['fechaFin'])
                         ->whereNull('tareas.deleted_at')
                         ->get();
 
@@ -38,8 +38,9 @@ class TareaRepository
         $semana = new Semana;
         $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
 
-        $tareas = Tarea::where('tipo','=', '1')->where('empleado_id','=', $user->empleado->codigo )
-                        ->where('fechaFinEstimado','<', $semanaprogramada[0]['fechaFin'])
+        $tareas = Tarea::where('empleado_id','=', $user->empleado->codigo )
+                        ->where('fechaInicioEstimado','>', $semanaprogramada[0]['fechaInicio'])
+                        ->where('fechaFinEstimado','<', $semanaprogramada[0]['fechaInicio'])
                         ->whereNull('tareas.deleted_at')
                         ->get();
 
@@ -51,14 +52,14 @@ class TareaRepository
     {
         $user = Auth::user();  //obtenemos el usuario logueado
 
-        $tareas = Tarea::where('tipo', '=','1')->where('empleado_id','=', $user->empleado->codigo )
+        $tareas = Tarea::where('empleado_id','=', $user->empleado->codigo )
                         ->whereNotNull('tareas.deleted_at')
                         ->get();
 
         return $tareas;
     }
 
-    public function listSemana($fecha)
+    public static function listSemana($fecha)
     {
         $semana = new Semana();
         return  $semana->getSemanasProgramadas($fecha);

@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Error 404</title>
+@extends('layouts.app')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
+@section('titulo')
+      Error 404
+@endsection
+
+@section('content')
         <style>
             html, body {
                 height: 100%;
@@ -41,13 +42,11 @@
                 margin-bottom: 40px;
             }
         </style>
-    </head>
-    <body>
+
         <div class="container">
             <div class="content">
                 <div class="title">Error 404</div>
                 <div class="details">Lo sentimos, No se encontro el sitio que esta buscando.<br>  Vuelva atras.</div>
             </div>
         </div>
-    </body>
-</html>
+@endsection

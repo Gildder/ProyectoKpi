@@ -4,16 +4,20 @@
 			<th>Codigo</th>
 			<th>Nombre</th>	
 			<th>Cargo</th>	
-			<th>Departamentos</th>	
+			<th>Departamento</th>	
+			<th></th>	
 		</thead>
 
 		<tbody>
 		@foreach($empleadosDisponibles as $item)
 			<tr>
-				<td><a href="{{route('supervisores.supervisados.show', $item->codigo)}}" onclick="{{Cache::forever('emp_sado', $item->codigo.': '. $item->nombres .' '. $item->apellidos )}}" class="btn btn-warning btn-xs" ><span class=""  title="Ver"></span><span >{{$item->codigo}}</span></a></td>
+				<td><a href="#" class="btn btn-warning btn-xs"  title="Ver"><span >{{$item->codigo}}</span></a></td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
 				<td>{{$item->cargo}}</td>
 				<td>{{$item->departamento}}</td>
+				<td><a href="{{route('supervisores.supervisados.show', $item->codigo)}}" 
+				class="btn btn-info btn-xs" title="Ver Indicadores"><span class="fa fa-bar-chart"></span><span ></span></a></td>
+				
 			</tr>
 		@endforeach
 		</tbody>

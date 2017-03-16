@@ -10,14 +10,11 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <strong>{{$tarea->id}} - {{$tarea->descripcion}}</strong>
+    <a  href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" class="btn btn-primary btn-xs pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
+    <p class="titulo-panel">{{$tarea->id}} - {{$tarea->descripcion}}</p>
+
   </div>
   <div class="panel-body">
-
-  <div class="col-lg-12 breadcrumb">
-    <a  href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-  </div>
-
 
       <div class="col-sm-12"><p>Los campos con (*) son obligatorios</p><br></div>
       
@@ -52,7 +49,6 @@
   </div>
 
 <div class="form-group col-sm-12">
-<hr>
   <label class="form-group col-xs-12 col-sm-12">Fechas Programada *</label>
 
   {{-- Fecha de Estimada --}}

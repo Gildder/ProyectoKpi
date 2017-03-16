@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Be right back.</title>
+@extends('layouts.app')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
+@section('titulo')
+      Error 503
+@endsection
+
+@section('content')
         <style>
             html, body {
                 height: 100%;
@@ -40,13 +41,10 @@
                 margin-bottom: 40px;
             }
         </style>
-    </head>
-    <body>
         <div class="container">
             <div class="content">
                 <div class="title">Encontramos Problemas</div>
                 <div class="details">Por favor vuelva atras.</div>
             </div>
         </div>
-    </body>
-</html>
+@endsection

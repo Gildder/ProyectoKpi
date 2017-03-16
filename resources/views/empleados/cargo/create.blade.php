@@ -9,14 +9,11 @@
 <!-- Nuevo -->
 <div class="panel panel-default">
   <div class="panel-heading">
+    <a  href="{{route('empleados.cargo.index')}}" class="btn btn-primary btn-xs btn-back pull-left" title="Volver"><span class="fa fa-reply"></span></a>
       <p class="titulo-panel">Nuevo Cargo</p>
       
   </div>
   <div class="panel-body">
-
-  <div class="col-lg-12 breadcrumb">
-    <a  href="{{route('empleados.cargo.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-  </div>
 
       {!!Form::open(['route'=>'empleados.cargo.store', 'method'=>'POST'])!!}
 

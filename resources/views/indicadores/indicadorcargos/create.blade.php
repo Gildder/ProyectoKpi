@@ -26,7 +26,6 @@
         {!! Form::hidden('cargo_id', $cargo->id) !!}
 
 <div class="row col-sm-12">
-  
         <div class="form-group @if ($errors->has('condicion')) has-error @endif  col-sm-6">
             <label for="condicion" class="hidden-xs">Condicion</label>
             {!! form::text('condicion',null, ['id'=>'condicion', 'class'=>'form-control', 'placeholder'=>'La condicion que se aplicara']) !!}

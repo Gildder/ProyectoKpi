@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Error 500</title>
+@extends('layouts.app')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
+@section('titulo')
+      Error 500
+@endsection
+
+@section('content')
         <style>
             html, body {
                 height: 100%;
@@ -40,13 +41,11 @@
                 margin-bottom: 40px;
             }
         </style>
-    </head>
-    <body>
+
         <div class="container">
             <div class="content">
                 <div class="title">500</div>
                 <div class="details">No se encontro el sitio que esta buscando.</div>
             </div>
         </div>
-    </body>
-</html>
+@endsection

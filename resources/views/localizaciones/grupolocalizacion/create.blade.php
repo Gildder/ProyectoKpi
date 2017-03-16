@@ -8,14 +8,10 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <p class="titulo-panel">Nuevo Grupo Localizacion</p>
+    <a  href="{{route('localizaciones.grupolocalizacion.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
+    <p class="titulo-panel">Nuevo Grupo Localizacion</p>
   </div>
   <div class="panel-body">
-
-
-      <div class="col-lg-12 breadcrumb">
-        <a  href="{{route('localizaciones.grupolocalizacion.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-      </div>
 
       {!!Form::open(['route'=>'localizaciones.grupolocalizacion.store', 'method'=>'POST'])!!}
             <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-4 ">

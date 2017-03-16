@@ -98,20 +98,20 @@ class IndicadorCargoController extends Controller
 	}
 
 
-	public function agregarcargo($cargo_id, $ind_id)
+	public function agregarcargo($cargo_id, $indicador_id)
     {
     	$cargo = Cargo::findOrFail($cargo_id);
-    	$indicador = Indicador::findOrFail($ind_id);
+    	$indicador = Indicador::findOrFail($indicador_id);
     	$frecuencia = Frecuencia::all();
 
         return view('indicadores.indicadorcargos.create',['frecuencia'=>$frecuencia, 'indicador'=>$indicador, 'cargo'=>$cargo]);
     }
 
-    public function quitarcargo($cargo_id, $ind_id)
+    public function quitarcargo($cargo_id, $indicador_id)
     {
-        DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('indicador_id', $ind_id)->delete();
+    	var_dump('ver');
+        DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('indicador_id', $indicador_id)->delete();
 
-        // return $this->show($ind_id);
 		return redirect()->back()->with('message', 'Se agrego el cargo '.$cargo_id.' correctamente.');
 
     }

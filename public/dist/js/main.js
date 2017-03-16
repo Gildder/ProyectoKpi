@@ -71,7 +71,7 @@ $(document).ready(function(){
 
 	$(".fechaInicio").datepicker({
 		format: 'dd/mm/yyyy',
-		defaultDate: "+1w",
+		//defaultDate: "+1w",
 		changeMonth: true,
 		numberOfMonths: 1,
 		onSelect: function(selectedDate) {
@@ -81,7 +81,7 @@ $(document).ready(function(){
 	
 	$(".fechaFin").datepicker({
 		format: 'dd/mm/yyyy',
-		defaultDate: "+1w",
+		//defaultDate: "+1w",
 		changeMonth: true,
 		numberOfMonths: 1,
 		onSelect: function(selectedDate) {

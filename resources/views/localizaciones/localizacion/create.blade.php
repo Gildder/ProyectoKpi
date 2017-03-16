@@ -3,14 +3,10 @@
 @section('content')
 <div class="panel panel-default">
   <div class="panel-heading">
+      <a  href="{{route('localizaciones.localizacion.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
       <p class="titulo-panel">Nueva Localizacion</p>
   </div>
   <div class="panel-body">
-
-
-      <div class="col-lg-12 breadcrumb">
-            <a  href="{{route('localizaciones.localizacion.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
-      </div>
 
       {!!Form::open(['route'=>'localizaciones.localizacion.store', 'method'=>'POST'])!!}
         @include('localizaciones/localizacion/partials/crear_atributos')

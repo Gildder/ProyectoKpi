@@ -8,15 +8,11 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <p class="titulo-panel">{{$grupolocalizacion->id}} - {{$grupolocalizacion->nombre}}</p>
+    <a  href="{{route('localizaciones.grupolocalizacion.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
+    <p class="titulo-panel">{{$grupolocalizacion->id}} - {{$grupolocalizacion->nombre}}</p>
   </div>
   <div class="panel-body">
 
-
-      <div class="col-lg-12 breadcrumb">
-            <a  href="{{route('localizaciones.grupolocalizacion.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-      </div>
-      
       {!!Form::model($grupolocalizacion, ['route'=>['localizaciones.grupolocalizacion.update', $grupolocalizacion->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $grupolocalizacion->id) !!}
       

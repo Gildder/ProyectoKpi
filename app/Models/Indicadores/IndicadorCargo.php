@@ -64,7 +64,7 @@ class IndicadorCargo extends Model
      + Obtener Indicadores 
      */
 
-     public static function getIndicadores()
+     public static function getIndicadoresCargos()
      {
         $indicadores = Indicador::
             select('indicadores.id', 'indicadores.nombre','indicadores.descripcion_objetivo' , 'tipo_indicadores.nombre as tipo')

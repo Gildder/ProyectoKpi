@@ -86,12 +86,7 @@ class Empleado extends Model
         return $cargo->nombre;
     }
 
-
-
-
-
-
-     public static function getTablaIndicador($emp_id, $ind_id)
+    public static function getTablaIndicador($emp_id, $ind_id)
     {
         return IndicadorRepository::getTablaIndicador($emp_id, $ind_id);
     }

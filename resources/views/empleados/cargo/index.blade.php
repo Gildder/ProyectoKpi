@@ -20,7 +20,6 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <a  href="{{route('empleados.cargo.create')}}" class="btn btn-primary btn-sm" title="Nuevo"><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
-        
       </div>
       <div class="text-right col-xs-6 col-sm-6 col-md-6 col-lg-6" tabindex="2" >
         {{-- Importar --}}

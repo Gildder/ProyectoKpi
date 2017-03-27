@@ -35,7 +35,7 @@ class Indicador extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 'orden', 'descripcion_objetivo',  'tipo_indicador_id',  
+        'id','nombre', 'orden', 'descripcion',  'tipo_indicador_id',  
     ];
 
     /**
@@ -44,7 +44,7 @@ class Indicador extends Model
      * @var array
      */
     protected $hidden = [
-        'id','created_at', 'update_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
 

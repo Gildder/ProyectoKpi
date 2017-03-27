@@ -3,10 +3,14 @@
 namespace ProyectoKpi\Http\Controllers\Evaluadores;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Models\Evaluadores\Evaluador;
+
 
 class EvaluadosController extends Controller
 {
@@ -18,10 +22,25 @@ class EvaluadosController extends Controller
     public function index()
     {
         $id = json_decode(\Cache::get('evadores'));
+        $user = Auth::user();
 
-        $evaluados = EvaluadoresRepository::getEvaluados($id->evaluador_id);
+        $evaluados = EvaluadoresRepository::getEvaluados($id->evaluador_id, $user->empleado->codigo );
 
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
+    }
+
+    public function dashboard()
+    {
+        $id = json_decode(\Cache::get('evadores'));
+        $evaluador = Evaluador::findOrFail($id->evaluador_id);
+
+        $tipos = DB::select('call pa_ponderaciones_tipoPonderacion('.$id->evaluador_id.');');
+        $escalas = DB::select('call pa_ponderaciones_escalaPonderaciones('.$id->evaluador_id.');');
+        $indicadores = DB::select('call pa_evaluadores_indicadoresAgregados('.$id->evaluador_id.');');
+
+
+        
+        return view('evaluadores/evaluados/dashboard/index', ['tipos'=> $tipos, 'evaluador'=> $evaluador, 'escalas'=> $escalas, 'indicadores'=> $indicadores]);
     }
 
     /**
@@ -53,7 +72,10 @@ class EvaluadosController extends Controller
      */
     public function show($id)
     {
-        //
+        $empleado = Empleado::findOrFail($id);
+        
+
+        return view('evaluadores/evaluados/show',  ['empleado'=> $empleado]);
     }
 
     /**

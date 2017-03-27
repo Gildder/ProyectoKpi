@@ -13,17 +13,28 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
-          @if( Cache::get('evadores'))
+           @if( Cache::has('evadores'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
-          <a href="{{url('evaluadores/evaluados') }}" >
+          <a href="{{url('evaluadores/evaluados/dashboard') }}" >
               <i class="fa fa-bullseye"></i>
-              <label for="Tareas" class="hidden-xs">Evaluadores</label>
+              <label for="Tareas" class="hidden-xs">DashBoard</label>
             </a>
           </li>
           @endif
 
-          @if( Cache::get('depasores'))
+
+          @if( Cache::has('evadores'))
+          <!-- Messages: style can be found in dropdown.less-->
+          <li class="dropdown messages-menu">
+          <a href="{{url('evaluadores/evaluados') }}" >
+              <i class="fa fa-bullseye"></i>
+              <label for="Tareas" class="hidden-xs">Mis Evaluados</label>
+            </a>
+          </li>
+          @endif
+
+          @if( Cache::has('depasores'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >
@@ -33,6 +44,7 @@
           </li>
           @endif
 
+          @if( Cache::has('iseficacia'))
            <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('tareas/tareaProgramadas')}}" >
@@ -40,6 +52,7 @@
               <label for="Tareas" class="hidden-xs">Tareas</label>
             </a>
           </li>
+          @endif
          <!-- Messages: style can be found in dropdown.less-->
          {{--  <li class="dropdown messages-menu">
           <a href="{{url('tareas/tareaDiaria')}}">

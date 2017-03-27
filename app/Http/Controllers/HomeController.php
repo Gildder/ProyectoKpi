@@ -8,15 +8,14 @@ use ProyectoKpi\Models\Empleados\Empleado;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-use ProyectoKpi\Cms\repositories\SupervisoresRepository;
-use ProyectoKpi\Cms\repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\repositories\UserRepository;
 use ProyectoKpi\Models\Controllers\Tareas\TareaProgramadaController;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
 
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller <instance class=""></instance>
      *
      * @return void
      */
@@ -40,8 +39,11 @@ class HomeController extends Controller
 
             }else{
                 // direccionamso a las tareas programadas
-                SupervisoresRepository::isSupervisor();
-                EvaluadoresRepository::isEvaluador();
+                // dd(UserRepository::isEficaciaIndicador('1'));
+                UserRepository::isSupervisor();
+                UserRepository::isEvaluador();
+                UserRepository::isEficaciaIndicador('1');
+
 
                 return redirect()->route('tareas.tareaProgramadas.index');
 

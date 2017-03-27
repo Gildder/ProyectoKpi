@@ -14,9 +14,9 @@ class CreateIndicadorTable extends Migration
     {
         Schema::create('indicadores', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre',100)->unique();
+            $table->string('nombre',50)->unique();
             $table->integer('orden');
-            $table->string('descripcion_objetivo',100);
+            $table->string('descripcion',120);
             $table->string('formula',150);
             $table->integer('tipo_indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));

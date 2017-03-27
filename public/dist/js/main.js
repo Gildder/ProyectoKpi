@@ -1,10 +1,22 @@
 
 $(document).ready(function(){
+    $('#myTableCargos').DataTable();
+    $('#myTableEmpleado').DataTable();
+    $('#myTableIndicadores').DataTable();
+    $('#myTableEvaluador').DataTable();
     $('#myTableGrDepartamento').DataTable();
+    $('#myTableIndicadorEvalaudor').DataTable({
+    	"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+    	 "responsive": true,
+    	 "autoWidth": false
+    });
+    $('#myTable').DataTable();
     $('#myTable1').DataTable();
     $('#myTable2').DataTable();
     $('#myTable3').DataTable();
-    $('#myTable').DataTable({
+    $('#myTable4').DataTable();
+    
+    $('#myTableFiltro').DataTable({
         initComplete: function () {
             this.api().columns().every( function () {
             	
@@ -27,6 +39,11 @@ $(document).ready(function(){
             } );
         }
     } );
+
+	$('#myTableIndicadorEvalaudor').on('hidden.bs.modal', function () {
+	        $('.modal-body').find('textarea,input,checkbox').val('');
+	});
+
 
     /*Calendarios */
 	$( ".datepicker" ).datepicker({

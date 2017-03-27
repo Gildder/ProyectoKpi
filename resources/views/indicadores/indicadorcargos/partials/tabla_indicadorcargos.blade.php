@@ -14,7 +14,7 @@
 					<td><a href="{{route('indicadores.indicadorcargos.show', $item->id)}}" class="btn btn-warning btn-xs" >{{$item->id}}</a></td>
 					<td>{{$item->nombre}}</td>
 					<td>{{$item->tipo}}</td>
-					<td>{{$item->descripcion_objetivo}}</td>
+					<td>{{$item->descripcion}}</td>
 					<td> 
 						@foreach($item->getCargos($item->id) as $cargo)
 							{{ $cargo->nombre }} <br>

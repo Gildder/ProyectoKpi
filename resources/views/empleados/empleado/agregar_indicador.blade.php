@@ -34,8 +34,6 @@
 
           @endif
 	    </div>
-
-
             </div>
             <div class="modal-footer">
                   {!! form::submit('Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'<span class="glyphicon glyphicon-ok">Guardar</span>', 'class'=>'btn btn-success col-sm' ]) !!}

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-	Ponderaciones 
+	Mis Evaluados 
 @endsection
 
 @section('content')

@@ -52,16 +52,14 @@ class Ponderacion extends Model
     public function ponderacionIndicador($id)
     {
         $result = DB::table('indicador_ponderacion')
-                    ->select(DB::raw('sum(indicador_ponderacion.ponderacion)'))
+                    ->select(DB::raw('sum(indicador_ponderacion.ponderacion) as ponderacion'))
                     ->where('indicador_ponderacion.ponderacion_id',$id)
                     ->get();
-
-                    print_r($result);
 
         if (is_null($result)) {
             return 100;
         } else {
-            return (100 - $result);
+            return (100 - $result[0]->ponderacion);
         }
         
     } 
@@ -73,8 +71,6 @@ class Ponderacion extends Model
                     ->select(DB::raw('sum(tipo_ponderaciones.ponderacion) as ponderacion'))
                     ->where('tipo_ponderaciones.ponderacion_id',$id)
                     ->get();
-
-
 
         if (!is_null($result)) {
             $ponderacion = $ponderacion - $result[0]->ponderacion;

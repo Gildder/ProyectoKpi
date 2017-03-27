@@ -8,6 +8,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
+	  <a href="{{route('indicadores.indicador.index')}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
 	  <p class="titulo-panel">{{$indicador->id}} - {{$indicador->nombre}}</p>
 	</div>
 
@@ -20,11 +21,8 @@
 
 		<div class="tab-content">
 			<div id="cargos" class="tab-pane fade in active">
-				<div class="col-lg-12 breadcrumb">
-					<a href="{{route('indicadores.indicador.index')}}" class="btn btn-primary btn-xs"><span class="fa fa-reply"></span></a>
-				</div>
 
-				<div class="col-lg-12">
+				<div class="row col-lg-12">
 					@include('partials/alert/error')
 				</div>
 

@@ -28,7 +28,7 @@
       </div>
 
       <div class="row col-md-12">
-        <div class="form-group @if ($errors->has('abreviatura')) has-error @endif  col-sm-1">
+        <div class="form-group @if ($errors->has('abreviatura')) has-error @endif  col-sm-2">
             <label for="abreviatura" >Abreviatura *</label>
             <input  type="text"  maxlength="10" name="abreviatura" placeholder="eg: GADM" class="form-control" required>
             @if ($errors->has('abreviatura')) <p class="help-block">{{ $errors->first('abreviatura') }}</p> @endif

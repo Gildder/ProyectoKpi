@@ -48,6 +48,8 @@
 <!-- jQuery 2.2.3 -->
 <script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
 <script src="{{URL::asset('plugins/jQuery/jquery-1.12.4.js')}}"></script>
+
+
 <!-- jQuery UI 1.11.4 -->
 <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.min.js')}}"></script>
 <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.1.12.1.js')}}"></script>

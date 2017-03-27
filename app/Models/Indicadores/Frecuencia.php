@@ -29,7 +29,7 @@ class Frecuencia extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'id','nombre', 
     ];
 
     /**
@@ -38,7 +38,7 @@ class Frecuencia extends Model
      * @var array
      */
     protected $hidden = [
-        'id','created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
 

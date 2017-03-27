@@ -28,7 +28,7 @@
 	<div class="col-sm-12 panel-footer text-right">
 
 		<a href="{{route('empleados.cargo.edit', $cargo->id)}}" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
-		<a href="#"  data-toggle="modal" data-target="#modal-delete-{{$cargo->id}}" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
+		<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-delete-{{$cargo->id}}" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
 
 	</div>
 		

@@ -63,25 +63,20 @@ class PonderacionController extends Controller
      */
     public function show($id)
     {
+
         $ponderacion = Ponderacion::FindOrFail($id);
 
-        // tiposDisponibles,  tiposAgregados, tipoponderacion = ponderacion restante del 100
         $indicadoresAgregados = DB::select('call pa_ponderaciones_indicadoresAgregados('.$id.');');
         $indicadoresDisponibles = DB::select('call pa_ponderaciones_indicadoresDisponibles('.$id.');');
-        // $indicadorponderacion = DB::select('call pa_ponderaciones_ponderacionIndicador('.$id.');');
 
-        // indicadoresDisponibles,  indicadoresAgregados, indicadorponderacion = ponderacion restante del 100
+        // dd(json_encode($indicadoresDisponibles)); 
+
         $tiposAgregados = DB::select('call pa_ponderaciones_tiposAgregados('.$id.');');
         $tiposDisponibles = DB::select('call pa_ponderaciones_tiposDisponibles('.$id.');');
-        // $tipoponderacion = DB::select('call pa_ponderaciones_ponderacionTipo('.$id.');');
 
-        // Escalas Disponibles y escalas Agregadas 
         $escalasAgregados = DB::select('call pa_ponderaciones_escalasAgregados('.$id.');');
         $escalasDisponibles = DB::select('call pa_ponderaciones_escalasDisponibles('.$id.');');
 
-        // var_dump($tipoponderacion[0]->ponderacion);
-
-                
         return view('evaluadores/ponderacion/show',['ponderacion'=>$ponderacion,'indicadoresAgregados'=>$indicadoresAgregados,'indicadoresDisponibles'=>$indicadoresDisponibles,'tiposAgregados'=>$tiposAgregados, 'tiposDisponibles'=>$tiposDisponibles,'escalasAgregados'=>$escalasAgregados, 'escalasDisponibles'=>$escalasDisponibles]);
     }
 

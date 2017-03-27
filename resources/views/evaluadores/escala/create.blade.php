@@ -18,7 +18,7 @@
       {!!Form::open(['route'=>'evaluadores.escala.store', 'method'=>'POST'])!!}
 
         <div class="form-group @if ($errors->has('nombre')) has-error @endif  col-sm-3">
-            <label for="nombre" class="hidden-xs">Nombre</label>
+            <label for="nombre" >Nombre</label>
     <input  type="text" maxlength="50" name="nombre" placeholder="Ingresa el Nombre" class="form-control" required>
             @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
         </div>

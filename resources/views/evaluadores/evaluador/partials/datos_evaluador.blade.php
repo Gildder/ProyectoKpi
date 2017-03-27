@@ -1,5 +1,4 @@
 <table class="table">
-   <tbody>
       <tr>
          <td class="text-right"><b>Nro.:</b></td>
          <td>{{$evaluador->id}}</td>
@@ -19,5 +18,4 @@
          <td class="text-right"><b>Ponderacion:</b></td>
          <td>{{$evaluador->ponderaciones->nombre}}</td>
       </tr>
-   </tbody>
 </table>

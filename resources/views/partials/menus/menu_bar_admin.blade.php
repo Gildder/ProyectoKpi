@@ -15,31 +15,10 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu" title="Empleados">
-            <a href="{{url('empleados/empleado')}}">
-              <i class="fa fa-briefcase"></i>
-              <label for="Empleados" class="hidden-xs">Empleados</label>
-            </a>
-          </li>
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu" title="Cargos">
-            <a href="{{url('empleados/cargo')}}" >
-              <i class="fa fa-sitemap"></i>
-              <label for="Cargos" class="hidden-xs">Cargos</label>
-            </a>
-          </li>
           <li class="dropdown notifications-menu" title="Evaluadores">
             <a href="{{url('evaluadores/evaluador')}}" >
               <i class="fa fa-balance-scale"></i>
-              <label for="Cargos" class="hidden-xs">Evaluadores</label>
-            </a>
-          </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu" title="Indicadores">
-            <a href="{{url('indicadores/indicador')}}" >
-              <i class="fa fa-area-chart"></i>
-              <label for="Indicadores" class="hidden-xs">Indicadores</label>
+              <label for="Cargos" class="hidden-xs">Gerencia</label>
             </a>
           </li>
           <!-- Tasks: style can be found in dropdown.less -->
@@ -91,6 +70,8 @@
             <li><a href="#"><i class="fa fa-circle-o"></i>Opciones</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Permisos</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Importar AD</a></li>
+            <li><a href="{{url('empleados/empleado')}}"><i class="fa fa-circle-o"></i>Empleado</a></li>
+            <li><a href="{{url('empleados/cargo')}}"><i class="fa fa-circle-o"></i>Cargo</a></li>
           </ul>
         </li> 
         <li class="treeview">
@@ -108,18 +89,20 @@
             <li><a href="{{url('localizaciones/departamento')}}"><i class="fa fa-circle-o"></i> Departamento</a></li>
           </ul>
         </li>
+
+        {{-- Indicadores --}}
         <li class="treeview">
           <a href="#">
             <i class="fa fa-building"></i>
-            <span>Ponderaciones</span>
+            <span>Indicadores</span>
              <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i>Indicador</a></li>
           <li><a href="{{url('evaluadores/ponderacion')}}"><i class="fa fa-circle-o"></i>Ponderacion</a></li>
-            <li><a href="{{url('evaluadores/escala
-            ')}}"><i class="fa fa-circle-o"></i>Escalas</a></li>
+            <li><a href="{{url('evaluadores/escala')}}"><i class="fa fa-circle-o"></i>Escalas</a></li>
           </ul>
         </li>
         {{-- <li class="treeview">

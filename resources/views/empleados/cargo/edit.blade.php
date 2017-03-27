@@ -21,7 +21,7 @@
       {!!Form::model($cargo, ['route'=>['empleados.cargo.update', $cargo->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $cargo->id) !!}
       <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-3">
-          <label for="nombre" class="hidden-xs">Nombre</label>
+          <label for="nombre" >Nombre</label>
           {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
           @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
       </div>

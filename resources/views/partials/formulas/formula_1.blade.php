@@ -1,20 +1,20 @@
 
 
-<div class="col-sm-12">
+{{-- <div class="col-sm-12">
 	<ul>
 		<li><b><i>ESA</i> = </b>Eficacia del Serivico/Actividades.</li>
 		<li><b><i>SAR</i> = </b>Servicio/Actividades Realizadas.</li>
 		<li><b><i>SAP</i> = </b>Servicio/Actividades Programadas.</li>
 	</ul>
-</div>
+</div> --}}
 
 <div class="text-center" >
 	
-	<i><b>ESA</b> = 
+	<i><b>Eficacia</b> = 
 	<div class="fraction">
-		<span class="fup">  SAR  </span>
+		<span class="fup">  Actividades Programadas  </span>
 		<span class="bar">/</span>
-		<span class="fdn">  SAP  </span>
+		<span class="fdn">  Actividades Realizadas  </span>
 	</div>
 	x 100
 	</i>

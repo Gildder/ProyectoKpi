@@ -4,19 +4,19 @@
          <td class="text-right"><b>Nro.:</b></td>
          <td>{{$indicador->id}}</td>
       </tr>
-
       <tr>
-         <td class="text-right"><b>Objetivo:</b></td>
-         <td>{{$indicador->descripcion_objetivo}}</td>
+         <td class="text-right"><b>Descripción:</b></td>
+         <td>
+          <p class="row col-xs-12 col-sm-8">Agregar este campo descripcion para los indicadores</p>
+          </td>
+      </tr>
+       <tr>
+         <td class="text-right"><b>Tipo Indicador:</b></td>
+         <td>{{$indicador->tipo}}</td>
       </tr>
       <tr>
          <td class="text-right"><b>Orden:</b></td>
          <td>{{$indicador->orden}}</td>
-      </tr>
-
-       <tr>
-         <td class="text-right"><b>Tipo Indicador:</b></td>
-         <td>{{$indicador->tipo}}</td>
       </tr>
    </tbody>
 </table>

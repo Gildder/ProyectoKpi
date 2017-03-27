@@ -26,7 +26,7 @@ class IndicadorController extends Controller
     
     public function index()
 	{
-		$indicadores = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','tipos_indicadores.nombre as tipo')
+		$indicadores = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion','tipos_indicadores.nombre as tipo')
 			->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 			->whereNull('indicadores.deleted_at')->get();
 
@@ -46,7 +46,7 @@ class IndicadorController extends Controller
 		$indicador = new Indicador;
 		$indicador->nombre = trim(\Request::input('nombre'));
 		$indicador->orden = trim(\Request::input('orden'));
-		$indicador->descripcion_objetivo = trim(\Request::input('descripcion_objetivo'));
+		$indicador->descripcion = trim(\Request::input('descripcion'));
 		$indicador->tipo_indicador_id = \Request::input('tipo_indicador_id');
 		$indicador->save();
 
@@ -68,7 +68,7 @@ class IndicadorController extends Controller
 		$indicador = Indicador::findOrFail($id);
 		$indicador->nombre = trim(\Request::input('nombre'));
 		$indicador->orden = trim(\Request::input('orden'));
-		$indicador->descripcion_objetivo = trim(\Request::input('descripcion_objetivo'));
+		$indicador->descripcion = trim(\Request::input('descripcion'));
 		$indicador->tipo_indicador_id = \Request::input('tipo_indicador_id');
 		$indicador->save();
 
@@ -80,7 +80,7 @@ class IndicadorController extends Controller
 		$cargosDisponibles = DB::select('call pa_indicadores_cargosDisponibles('.$id.');');
         $cargosEvaluadores = DB::select('call pa_indicadores_cargosIndicadores('.$id.');');
 
-		$indicador = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion_objetivo','tipos_indicadores.nombre as tipo')
+		$indicador = Indicador::select('indicadores.id','indicadores.orden','indicadores.nombre','indicadores.descripcion','tipos_indicadores.nombre as tipo')
 								->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 								->where('indicadores.id', '=', $id)->first();
 

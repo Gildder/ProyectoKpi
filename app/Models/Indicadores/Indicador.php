@@ -67,7 +67,6 @@ class Indicador extends Model
         $cargosindicadores = Cargo::select('cargos.*')
                 ->join('indicador_cargos','indicador_cargos.cargo_id','=', 'cargos.id')
                 ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
-                ->whereNull('indicador_cargos.deleted_at')
                 ->where('indicadores.id',$id)
                 ->get();
 

@@ -86,7 +86,7 @@ class EvaluadorController extends Controller
 
 
 		$indicadores = Indicador::
-	    select('indicadores.id', 'indicadores.nombre','indicadores.descripcion' , 'tipos_indicadores.nombre as tipo')
+	       select('indicadores.id', 'indicadores.nombre','indicadores.descripcion' , 'tipos_indicadores.nombre as tipo')
 			    ->join('evaluador_indicadores','evaluador_indicadores.indicador_id','=','indicadores.id')
 			    ->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 			    ->where('evaluador_indicadores.evaluador_id', $id)
@@ -216,7 +216,7 @@ class EvaluadorController extends Controller
 
     public function agregarcargoasignado($indicador_id, $evaluador_id, Request $Request)
     {
-        $this->validate($Request, [
+        $validator = \Validator::make($Request->all(), [
             'cargo_id' => 'required',
             'condicion'=>'max:120',
             'aclaraciones'=>'max:120',
@@ -226,22 +226,30 @@ class EvaluadorController extends Controller
 
         if($validator->fails())
         {
-           $input = Input::all();
-           return Redirect::back()->withErrors($validator)->withInput($input);
+           return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        DB::table('evaluador_indicadores')->insert(
-            array('indicador_id' => $indicador_id, 'evaluador_id' => $evaluador_id, 'cargo_id' => $cargo_id)
+        $cargo_id = \Request::input('cargo_id');
+        $frecuencia_id = \Request::input('frecuencia_id');
+        $objetivo = \Request::input('objetivo');
+        $aclaraciones = trim(\Request::input('aclaraciones'));
+        $condicion = trim(\Request::input('condicion'));
+
+        $ids = DB::table('indicador_cargos')->insertGetId(
+            array('indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion)
         );
 
-        $cargo = Cargo::findOrFail($cargo_id);
 
-        return redirect()->back()->with('message', 'Se agrego el cargo'.$cargo->nombre.' correctamente.');
+        if (isset($ids)) {
+            $cargo = Cargo::findOrFail($cargo_id);
+
+            return redirect()->back()->with('message', 'Se agrego el cargo'.$cargo->nombre.' correctamente.');
+        }
     }
 
     public function quitarcargoasignado($indicador_id, $evaluador_id, $cargo_id)
     {
-        DB::table('evaluador_indicadores')->where('indicador_id', $indicador_id)->where('evaluador_id', $evaluador_id)->where('cargo_id', $cargo_id)->delete();
+        DB::table('indicador_cargos')->where('indicador_id', $indicador_id)->where('evaluadorIndicador_id', $evaluador_id)->where('evaluadorCargo_id', $evaluador_id)->where('cargo_id', $cargo_id)->delete();
 
         $cargo = Cargo::findOrFail($cargo_id);
 

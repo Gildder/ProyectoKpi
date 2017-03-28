@@ -15,6 +15,8 @@ $(document).ready(function(){
     $('#myTable2').DataTable();
     $('#myTable3').DataTable();
     $('#myTable4').DataTable();
+
+
     
     $('#myTableFiltro').DataTable({
         initComplete: function () {

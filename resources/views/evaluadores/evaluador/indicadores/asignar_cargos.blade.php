@@ -6,8 +6,6 @@
 
 @section('content')
 
-
-
 <div class="panel panel-default">
 	{{-- Header --}}
 	<div class="panel-heading">

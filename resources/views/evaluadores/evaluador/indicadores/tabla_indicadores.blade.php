@@ -7,13 +7,15 @@
 </div>
 
 <div class="table-response">
-	<table  class="table table-striped table-bordered table-condensed table-hover">
+	<table id="myTableMultiple" class="table table-striped table-bordered table-condensed table-hover display">
 		<thead>
-			<th>Nro</th>
-			<th>Nombre</th>	
-			<th>Tipos</th>
-			<th>Cagos Asignados</th>	
-			<tr></tr>	
+			<tr>
+				<th rowspan="2">Nro</th>
+				<th rowspan="3">Nombre</th>	
+				<th rowspan="4">Tipos</th>
+				<th rowspan="5">Cagos Asignados</th>
+				<th></th>	
+			</tr>
 		</thead>
 		<tbody>
 		@foreach($indicadores as $item)
@@ -29,13 +31,23 @@
 				<td>
 					<a href="{{route('evaluadores.evaluador.asignarcargo', array($item->id, $evaluador->id)) }}"  class="btn btn-warning btn-xs" title="Indicadores por Cargos"> <span class="fa fa-sitemap"></span>  <b></b> </a>
 					
-					<a href="{{route('evaluadores.evaluador.quitarindicador', array($item->id, $evaluador->id)) }}"  class="btn btn-danger btn-xs" title="Quitar Indicador"> <span class="fa fa-trash"></span>  <b></b> </a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-quitarindicador-{{$item->id}}" class="btn btn-danger btn-xs" title="Quitar Indicador"> <span class="fa fa-trash"></span>  <b></b> </a>
 				</td>
 			</tr>
+     		@include('evaluadores/evaluador/indicadores/delete');
 		@endforeach
 		</tbody>
 	</table>
-     @include('evaluadores/evaluador/indicadores/nuevosindicadores/agregar');
 </div>
+@include('evaluadores/evaluador/indicadores/nuevosindicadores/agregar');
 
-
+<script>
+	$(document).ready(function(){
+	    $('#myTableMultiple').DataTable( {
+	    "columnDefs": [{
+	        "visible": false,
+	        "targets": 0
+	    }]
+    } );
+	});
+</script>

@@ -4,4 +4,5 @@
 Homestead.yaml
 Homestead.json
 storage/framework/views/
+.idea/
 .env

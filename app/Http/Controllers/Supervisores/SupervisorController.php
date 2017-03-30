@@ -45,38 +45,49 @@ class SupervisorController extends Controller
         return view('supervisores\supervisor\show', ['lista'=>$lista,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadossupervisores,'tipo'=>$tipo]);
     }
 
-    public function agregardepartamento($emp_id, $dep_id)
+    public function agregardepartamento($empleado_id, $departamento_id)
     {
+        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
+
         DB::table('supervisor_departamentos')->insert(
-            array('empleado_id' => $emp_id, 'departamento_id' => $dep_id)
+            array('empleado_id' => $empleado_id, 'departamento_id' => $departamento_id)
         );
 
-        return redirect()->back()->with('message', 'Se agrego el empleado: '.$emp_id. ' correctamente.');
+        return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
     }
 
-    public function quitardepartamento($emp_id, $dep_id)
+    public function quitardepartamento($empleado_id, $departamento_id)
     {
-        DB::table('supervisor_departamentos')->where('empleado_id', $emp_id)->where('departamento_id', $dep_id)->delete();
+        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
+
+        
+        DB::table('supervisor_departamentos')->where('empleado_id', $empleado_id)->where('departamento_id', $departamento_id)->delete();
 
 
-        return redirect()->back()->with('message', 'Se quito el empleado: '.$emp_id. ' correctamente.');
+        return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
     }
 
-    public function agregarcargo($emp_id, $cargo_id)
+    public function agregarcargo($empleado_id, $cargo_id)
     {
+        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
+
+
         DB::table('supervisor_cargos')->insert(
-            array('empleado_id' => $emp_id, 'cargo_id' => $cargo_id)
+            array('empleado_id' => $empleado_id, 'cargo_id' => $cargo_id)
         );
 
-        return redirect()->back()->with('message', 'Se agrego el empleado: '.$emp_id. ' correctamente.');
+        return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
     }
 
-    public function quitarcargo($emp_id, $cargo_id)
+    public function quitarcargo($empleado_id, $cargo_id)
     {
-        DB::table('supervisor_cargos')->where('empleado_id', $emp_id)->where('cargo_id', $cargo_id)->delete();
+        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
 
 
-        return redirect()->back()->with('message', 'Se quito el empleado: '.$emp_id. ' correctamente.');
+        DB::table('supervisor_cargos')->where('empleado_id', $empleado_id)->where('cargo_id', $cargo_id)->delete();
+
+
+        return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
     }
 
 }

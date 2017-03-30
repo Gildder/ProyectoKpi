@@ -5,6 +5,22 @@
 @endsection
 
 @section('content')
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+  });
+
+  
+  var activeTab = localStorage.getItem('activeTab');
+  if(activeTab){
+    $('#myTab a[href="' + activeTab + '"]').tab('show');
+  }
+});
+</script>
+
 	<div class="panel panel-default">
 		<div class="panel-heading">
       		<p class="titulo-panel" style="display: inline-block;">Supervisores</p>
@@ -13,7 +29,7 @@
 		<div class="panel-body">
 
 			<!--panelTab -->
-			<ul class="nav nav-tabs">
+			<ul class="nav nav-tabs" id="myTab">
 			  <li class="active"><a data-toggle="tab" href="#departamentos">Departamentos</a></li>
 			  <li><a data-toggle="tab" href="#cargos">Cargos</a></li>
 			</ul>

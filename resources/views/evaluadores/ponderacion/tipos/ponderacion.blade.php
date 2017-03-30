@@ -24,7 +24,14 @@
             </div>
             <div class="modal-footer modal-delete-footer">
               <a  href="javascript:void(0)" data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
+              @if($ponderacion->ponderacionTipo($ponderacion->id) != 0)
+
               {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
+
+              @else
+                  {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit','disabled'=> 'disabled' ]) !!}
+
+              @endif
             </div>
             {!! Form::close()!!}
       </div>

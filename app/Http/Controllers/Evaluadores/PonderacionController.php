@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 use ProyectoKpi\Cms\Repositories\PonderacionRepository;
 use ProyectoKpi\Models\Empleados\Evaluador;
+use ProyectoKpi\Models\Evaluadores\Escala;
 use ProyectoKpi\Models\Evaluadores\Ponderacion;
+use ProyectoKpi\Models\Indicadores\Indicador;
+use ProyectoKpi\Models\Indicadores\TipoIndicador;
 use ProyectoKpi\Http\Requests\Evaluadores\PonderacionFormRequest;
 
 
@@ -107,7 +110,7 @@ class PonderacionController extends Controller
         $ponderacion->descripcion = trim(\Request::input('descripcion'));
         $ponderacion->save();
 
-        return redirect('evaluadores/ponderacion')->with('message',  'La Ponderacion Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+        return redirect('evaluadores/ponderacion')->with('message',  'La Ponderacion '.$Request->nombre.' se actualizo correctamente.');
     }
 
     /**
@@ -128,41 +131,53 @@ class PonderacionController extends Controller
     public function agregarindicador(Request $request, $ponderacion_id, $indicador_id)
     {
         $ponderacion = \Request::input('ponderacion');
+        $indicador = Indicador::FindOrFail($indicador_id);
 
         DB::table('indicador_ponderacion')->insert(
             array('ponderacion' => $ponderacion,'ponderacion_id' => $ponderacion_id, 'indicador_id' => $indicador_id)
         );
-        return redirect()->back()->with('message', 'Se agrego el indicador Nro '.$emp_id.' correctamente.');
+
+
+        return redirect()->back()->with('message', 'Se agrego el indicador "'.$indicador->nombre.'" correctamente.');
     }
 
-    public function quitarindicador( $ponderacion_id, $indicador_id)
+    public function quitarindicador( $indicador_id,  $ponderacion_id)
     {
+        $indicador = Indicador::FindOrFail($indicador_id);
+
+
         DB::table('indicador_ponderacion')->where('ponderacion_id', $ponderacion_id)->where('indicador_id', $indicador_id)->delete();
 
-        return redirect()->back()->with('message', 'Se quito el indicador Nro '.$indicador_id.' correctamente.');
+        return redirect()->back()->with('message', 'Se quito el indicador  "'.$indicador->nombre.'" correctamente.');
         
     }
 
     public function agregartipo(Request $request, $ponderacion_id, $tipoIndicador_id)
     {
         $ponderacion = \Request::input('ponderacion');
+        $tipo = TipoIndicador::FindOrFail($tipoIndicador_id);
         
         DB::table('tipo_ponderaciones')->insert(
              array('ponderacion' => $ponderacion,'ponderacion_id' => $ponderacion_id, 'tipoIndicador_id' => $tipoIndicador_id)
         );
 
-        return redirect()->back()->with('message', 'Se agrego el tipo de indicador Nro '.$tipoIndicador_id.' correctamente.');
+        return redirect()->back()->with('message', 'Se agrego el tipo de indicador "'.$tipo->nombre.'" correctamente.');
     }
 
-    public function quitartipo($ponderacion_id, $tipoIndicador_id)
+    public function quitartipo($tipoIndicador_id, $ponderacion_id)
     {
+        $tipo = TipoIndicador::FindOrFail($tipoIndicador_id);
+
+
         DB::table('tipo_ponderaciones')->where('ponderacion_id', $ponderacion_id)->where('tipoIndicador_id', $tipoIndicador_id)->delete();
 
-        return redirect()->back()->with('message', 'Se quito el tipo de indicador Nro '.$tipoIndicador_id.' correctamente.');
+        return redirect()->back()->with('message', 'Se quito el tipo de indicador "'.$tipo->nombre.'" correctamente.');
     }
 
     public function agregarescala(Request $request, $ponderacion_id, $escala_id)
     {
+        $escala = Escala::FindOrFail($escala_id);
+
         $minimo = \Request::input('minimo');
         $maximo = \Request::input('maximo');
         
@@ -170,14 +185,15 @@ class PonderacionController extends Controller
              array('minimo' => $minimo,'maximo' => $maximo,'ponderacion_id' => $ponderacion_id, 'escala_id' => $escala_id)
         );
 
-        return redirect()->back()->with('message', 'Se agrego la escala de cumplimiento Nro '.$escala_id.' correctamente.');
+        return redirect()->back()->with('message', 'Se agrego la escala de cumplimiento "'.$escala->nombre.'" correctamente.');
     }
 
-    public function quitarescala($ponderacion_id, $escala_id)
+    public function quitarescala($escala_id, $ponderacion_id)
     {
+        $escala = Escala::FindOrFail($escala_id);
         DB::table('escala_ponderacion')->where('ponderacion_id', $ponderacion_id)->where('escala_id', $escala_id)->delete();
 
-        return redirect()->back()->with('message', 'Se quito la escala de cumplimiento Nro '.$escala_id.' correctamente.');
+        return redirect()->back()->with('message', 'Se quito la escala de cumplimiento "'.$escala->nombre.'" correctamente.');
     }
 
 }

@@ -6,6 +6,21 @@
 
 @section('content')
 
+<script type="text/javascript">
+$(document).ready(function(){
+	$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+		localStorage.setItem('activeTab', $(e.target).attr('href'));
+	});
+
+	
+	var activeTab = localStorage.getItem('activeTab');
+	if(activeTab){
+		$('#myTab a[href="' + activeTab + '"]').tab('show');
+	}
+});
+</script>
+
+
 <div class="panel panel-default">
 	<div class="panel-heading">
 	  <a href="{{route('evaluadores.ponderacion.index')}}" class="btn btn-primary btn-xs btn-back pull-left" title="Volver"><span class="fa fa-reply"></span></a>
@@ -16,7 +31,7 @@
 
   		@include('partials/alert/error')
 		<!--panelTab -->
-		<ul class="nav nav-tabs">
+		<ul class="nav nav-tabs"  id="myTab">
 		  <li class="active"><a data-toggle="tab" href="#datos">Datos</a></li>
 		  <li ><a data-toggle="tab" href="#tipos">Tipo Indicadores</a></li>
 		  <li ><a data-toggle="tab" href="#indicadores">Indicadores</a></li>
@@ -39,8 +54,8 @@
 
 			{{-- Tipos Indicadores --}}
 			<div id="tipos" class="tab-pane">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<p>Agregar las ponderacion que desea estimar a los Tipos de Indicadoers para <b>{{$ponderacion->nombre}}</b>.</p><br>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 10px;">
+					<p>Agregar las ponderacion para los Tipos de Indicadores de <b>{{$ponderacion->nombre}}</b>.</p><br>
 				</div>
 
 				{{-- Capa de Seleccion Empleado --}}
@@ -65,7 +80,7 @@
 
 			{{-- Indicadores --}}
 			<div id="indicadores" class="tab-pane">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  style="margin-top: 10px;">
 					<p>Agregar ponderacion a los Indicadores de  <b>{{$ponderacion->nombre}}</b>.</p><br>
 				</div>
 				{{-- Capa de Seleccion cargos --}}
@@ -89,7 +104,7 @@
 
 			{{-- Escalas --}}
 			<div id="escalas" class="tab-pane">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"  style="margin-top: 10px;">
 					<p>Agregar escala a los Indicadores de  <b>{{$ponderacion->nombre}}</b>.</p><br>
 				</div>
 				{{-- Capa de Seleccion cargos --}}

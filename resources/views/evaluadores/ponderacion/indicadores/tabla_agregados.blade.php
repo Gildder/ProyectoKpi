@@ -11,12 +11,14 @@
 			@foreach($indicadoresAgregados as $item)
 			<tr>
 				<td>{{$item->id}}</td>
-				<td>{{$item->nombres}}</td>
+				<td>{{$item->nombre}}</td>
 				<td>{{$item->ponderacion}}</td>
 				<td>
-					<a href="{{route('evaluadores.ponderacion.quitarindicador', array($item->id, $ponderacion->id)) }}" class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"  title="Quitar Indicador"></span></a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteIndicadorPonderacion-{{$item->id}}"  class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"  title="Quitar Indicador"></span></a>
 				</td>
 			</tr>
+     			@include('evaluadores/ponderacion/indicadores/delete');
+
 			@endforeach
 		</tbody>
 	</table>

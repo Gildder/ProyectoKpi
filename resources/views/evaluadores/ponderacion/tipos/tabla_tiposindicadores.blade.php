@@ -17,7 +17,7 @@
 					<a href="#"  data-toggle="modal" data-target="#modal-tipo-{{$item->id}}" class="btn btn-success btn-sm"><span class="fa fa-plus"></span><b></b> </a>
 				</td>
 			</tr>
-			@include("evaluadores/ponderacion/tipos/ponderacion")
+				@include("evaluadores/ponderacion/tipos/ponderacion")
 
 		@endforeach
 		</tbody>

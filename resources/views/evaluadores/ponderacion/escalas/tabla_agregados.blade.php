@@ -16,9 +16,11 @@
 				<td>{{$item->minimo}}</td>
 				<td>{{$item->maximo}}</td>
 				<td>
-					<a href="{{route('evaluadores.ponderacion.quitarescala', array($item->id, $ponderacion->id)) }}" class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"  title="Quitar Indicador"></span></a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteEscala-{{$item->id}}"  class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"  title="Quitar Escala"></span></a>
 				</td>
 			</tr>
+     			@include('evaluadores/ponderacion/escalas/delete')
+
 			@endforeach
 		</tbody>
 	</table>

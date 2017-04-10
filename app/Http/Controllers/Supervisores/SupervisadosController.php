@@ -78,8 +78,20 @@ class SupervisadosController  extends Controller
         return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'empleado'=>$empleado]);
     }
 
+    // tareas finalizadas estedo = 3
+    public function obtenerTareasDinalizadas($mes, $semana, $empleado)
+    {
+        // obtener las tareas finalizadas con los parametros enviados, mas los tareas que estan marcadas con errores de manera desabilitada
+        // pero espeficicando que ya esta agregada con error 
 
-    
+
+
+    }
+
+    public function FunctionName($value='')
+    {
+        # code...
+    }
     
 }
 

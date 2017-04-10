@@ -10,6 +10,7 @@ use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
+use ProyectoKpi\Models\Empleados\Empleado;
 
 
 class EvaluadosController extends Controller
@@ -37,10 +38,11 @@ class EvaluadosController extends Controller
         $id = json_decode(\Cache::get('evadores'));
         $evaluador = Evaluador::findOrFail($id->evaluador_id);
 
-        $tipos = DB::select('call pa_ponderaciones_tipoPonderacion('.$id->evaluador_id.');');
+        $tipos = DB::select('call pa_ponderaciones_tipoPonderacion('.$evaluador->ponderacion_id.');');
         $escalas = DB::select('call pa_ponderaciones_escalaPonderaciones('.$id->evaluador_id.');');
         $indicadores = DB::select('call evaluadores_totalIndicadores('.$id->evaluador_id.');');
 
+// dd($tipos, $escalas, $indicadores);
 
         
         return view('evaluadores/evaluados/dashboard/index', ['tipos'=> $tipos, 'evaluador'=> $evaluador, 'escalas'=> $escalas, 'indicadores'=> $indicadores]);
@@ -72,15 +74,17 @@ class EvaluadosController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
+    
+     /* Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $empleado = Empleado::findOrFail($id);
+        $empleado = Empleado::where('codigo', $id)->get();
+
+        dd(json_encode($empleado));
         
 
         return view('evaluadores/evaluados/show',  ['empleado'=> $empleado]);

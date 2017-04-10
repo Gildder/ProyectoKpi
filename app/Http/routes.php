@@ -33,6 +33,16 @@ Route::group(['middleware'=> ['auth', 'administrador'] ], function ()
 
 // **********************  MODULO EMPLEADOS  *****************************************
 
+
+
+/*  PERFIL */
+Route::group(['middleware'=> ['auth', 'estandard'] ], function ()
+{
+	Route::resource('empleados/perfil', 'Empleados\PerfilController', 
+		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+});
+
+
 /*  CARGO */
 Route::group(['middleware'=> ['auth', 'administrador'] ], function ()
 {
@@ -118,28 +128,6 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 /* EVALUADOR */
 Route::group(['middleware'=>['auth', 'administrador']], function ()
 {
-	// Indicador Cargos
-	Route::get('evaluadores/evaluador/indicadorcargos/indicadores/{indicadores}', 
-		array('as' => 'evaluadores.evaluador.indicadorcargos.indicadores', 'uses' => 'Evaluadores\IndicadorCargoController@indicadores') );
-
-	Route::get('evaluadores/evaluador/indicadorcargos/quitarcargo/{cargo}/{param}', 
-		array('as' => 'evaluadores.evaluador.indicadorcargos.quitarcargo', 'uses' => 'Evaluadores\IndicadorCargoController@quitarcargo') );
-
-	Route::get('evaluadores/evaluador/indicadorcargos/agregarcargo/{cargo}/{param?}', 
-		array('as' => 'evaluadores.evaluador.indicadorcargos.agregarcargo', 'uses' => 'Evaluadores\IndicadorCargoController@agregarcargo') );
-
-	Route::get('evaluadores/evaluador/indicadorcargos/editar/{cargo}/{param?}', 
-		array('as' => 'evaluadores.evaluador.indicadorcargos.editar', 'uses' => 'Evaluadores\IndicadorCargoController@editar') );
-
-	Route::put('evaluadores/evaluador/indicadorcargos/update/{cargo}/{param?}', 
-		array('as' => 'evaluadores.evaluador.indicadorcargos.update', 'uses' => 'Evaluadores\IndicadorCargoController@update') );
-
-	Route::delete('evaluadores/evaluador/indicadorcargos/destroy/{cargo}/{param?}', 
-		array('as' => 'evaluadores.evaluador.indicadorcargos.destroy', 'uses' => 'Evaluadores\IndicadorCargoController@destroy') );
-
-	Route::resource('evaluadores/evaluador/indicadorcargos', 'Evaluadores\IndicadorCargoController', 
-			['only' => ['index','create', 'edit','store', 'destroy', 'show']]);
-
 
 	//Cargo
 	Route::get('evaluadores/evaluador/quitarcargo/{cargo}/{param?}', 
@@ -166,7 +154,7 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 	Route::get('evaluadores/evaluador/agregarcargoasignado/{indicador}/{evaluador}', 
 		array('as' => 'evaluadores.evaluador.agregarcargoasignado', 'uses' => 'Evaluadores\EvaluadorController@agregarcargoasignado') );
 
-	Route::get('evaluadores/evaluador/editarcargoasignado/{indicador}/{evaluador}/{cargo}', 
+	Route::get('evaluadores/evaluador/editarcargoasignado/{indicador}/{evaluador}', 
 		array('as' => 'evaluadores.evaluador.editarcargoasignado', 'uses' => 'Evaluadores\EvaluadorController@editarcargoasignado') );
 
 	Route::get('evaluadores/evaluador/quitarcargoasignado/{indicador}/{evaluador}/{cargo}', 

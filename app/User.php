@@ -4,6 +4,7 @@ namespace ProyectoKpi;
 
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use ProyectoKpi\Cms\repositories\UserRepository;
 
 class User extends Authenticatable
 {

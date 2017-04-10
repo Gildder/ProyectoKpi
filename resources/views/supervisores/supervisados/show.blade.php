@@ -14,9 +14,11 @@
   <div class="panel-body">
         @if($indicadores->count()<= 0)
           <p>Este empleado, No tiene asignado ningun indicador KPI.</p>
-        @endif
+
+        @else
 
         <p>Lista de Indicadores asignados al empleado Actual.</p>
+        @endif
         <?php $contador = 1; ?>
   </div>
             

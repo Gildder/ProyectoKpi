@@ -12,9 +12,11 @@
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>
 				<td>
-					<a href="{{route('evaluadores.evaluador.quitarcargo', array($item->id, $evaluador->id)) }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar Cargo"></span></a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteCargoEvaluador-{{$evaluador->id}}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar Cargo"></span></a>
 				</td>
 			</tr>
+			@include('evaluadores/evaluador/cargos/delete')
+
 			@endforeach
 		</tbody>
 	</table>

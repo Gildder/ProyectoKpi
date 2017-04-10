@@ -4,6 +4,7 @@ namespace ProyectoKpi\Cms\Repositories;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Collection;
 
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Empleados\Cargo;
@@ -28,7 +29,7 @@ class IndicadorRepository
 	 */
 	public static function getIndicadoresEmpleado($codigo)
 	{
-	    return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion_objetivo','tipos_indicadores.nombre as tipo', 'indicador_cargos.objetivo', 'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
+	    return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion','tipos_indicadores.nombre as tipo', 'indicador_cargos.objetivo', 'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
 	            ->join('indicador_cargos','indicador_cargos.cargo_id','=','empleados.cargo_id')
 	            ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
 	            ->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
@@ -87,11 +88,10 @@ class IndicadorRepository
      * @param  id de Cargo
      * @return boolean
      */
-	public static function isUserIndicador($indicador_id, $cargo_id)
+	public static function isUserIndicador($cargo_id)
 	{
 		$result = DB::table('indicador_cargos')->select('indicador_cargos.cargo_id')
             ->where('indicador_cargos.cargo_id', $cargo_id)
-            ->where('indicador_cargos.indicador_id', $indicador_id)
             ->count();
 
         if ($result > 0) {
@@ -99,6 +99,17 @@ class IndicadorRepository
         } else {
             return false;
         }
+	}
+
+
+	/** 
+	 * Obtener los numeros del Orden ocupados
+	 */
+	public static function NroOrdenOcupadas()
+	{
+		$result = DB::table('indicadores')->select('indicadores.orden')->get();
+
+		return  $result;
 	}
 	
 

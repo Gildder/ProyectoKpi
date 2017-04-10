@@ -14,7 +14,7 @@
 			<div id="datos" class="tab-pane fade in active">
 				@include('partials/alert/error')
 				
-				<p>Todos los empleados que se te asignaron para supervisar el avance de los indicadores.</p><br>
+				<p>Todos los empleados que se te asignaron para supervisar sus indicadores.</p><br>
 				<div class="row">
 					<div class="col-lg-12">
 			        	@include("supervisores/supervisados/partials/tabla_empleados")

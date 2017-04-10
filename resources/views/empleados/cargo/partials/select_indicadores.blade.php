@@ -15,7 +15,6 @@
             {!!Form::open(['route'=>['empleados.cargo.update', $cargo->id], 'method'=>'PUT'])!!}
                <label for="cargos">Seleccionar Indicador:</label><br>
       			@foreach($indicadores_libres as $item)
-      			<!--<option value="{{$item->id}}">{{$item->nombre}}</option>-->
       			<label>{{ Form::checkbox('prov[]', $item->id) }} {{ $item->nombre }}</label><br>
       			@endforeach
                <div class="col-sm-12">

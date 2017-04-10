@@ -7,7 +7,7 @@
       <tr>
          <td class="text-right"><b>Descripción:</b></td>
          <td>
-          <p class="row col-xs-12 col-sm-8">Agregar este campo descripcion para los indicadores</p>
+          <p class="row col-xs-12 col-sm-8">{{$indicador->descripcion}}</p>
           </td>
       </tr>
        <tr>

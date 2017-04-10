@@ -34,8 +34,8 @@ $(document).ready(function(){
 		<ul class="nav nav-tabs" id="myTab">
 		  <li class="active"><a data-toggle="tab" href="#datos">Datos</a></li>
 		  <li ><a data-toggle="tab" href="#evaluadores">Evaluadores</a></li>
-		  <li ><a data-toggle="tab" href="#indicadores">Indicadores</a></li>
 		  <li ><a data-toggle="tab" href="#cargos">Cargos</a></li>
+		  <li ><a data-toggle="tab" href="#indicadores">Indicadores</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -108,7 +108,7 @@ $(document).ready(function(){
 					@include('evaluadores/evaluador/cargos/tabla_agregados')
 				</div>
 			</div>
-			{{-- Fin cargos --}}.
+			{{-- Fin cargos --}}
 		
 		</div>
 		<!-- Fin Panel Tab -->

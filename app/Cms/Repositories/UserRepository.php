@@ -36,20 +36,22 @@ class UserRepository
     /*
 	 * Verificamos si tiene asignado el Indicador de Eficacia
 	*/
-	public static function isEficaciaIndicador($indicador_id)
+	public static function isIndicadores()
 	{
-        $result = false;
     	$user = Auth::user(); 
         $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-        	$result = IndicadorRepository::isUserIndicador($indicador_id, $user->empleado->cargo_id);
+        	$result = IndicadorRepository::isUserIndicador($user->empleado->cargo_id);
         }
 
         if (!$result) {
             Cache::forget('iseficacia');
+            return false;
         }else{
             Cache::forever('iseficacia', $result);
+
+            return true;
         }
 
 	}
@@ -65,13 +67,18 @@ class UserRepository
           $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-        	$result = EvaluadoresRepository::isEvaluador($user->empleado->codigo);
+        	$result = EvaluadoresRepository::verificarsEvaluador($user->empleado->codigo);
         }
 
-        if (!$result) {
+        // dd(isset($result), $result);
+
+        if (!isset($result)) {
             Cache::forget('evadores');
+            return false;
         }else{
             Cache::forever('evadores', $result);
+
+            return true;
         }
             
 
@@ -84,18 +91,19 @@ class UserRepository
      */
     public static function isSupervisor()
     {
-    	$result = false;
     	$user = Auth::user(); 
         $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-        	$result = SupervisoresRepository::isSupervisor($user->empleado->codigo);
+        	$result = SupervisoresRepository::verificarSupervisor($user->empleado->codigo);
         }
 
         if (!$result) {
             Cache::forget('depasores');
+            return false;
         }else{
             Cache::forever('depasores', $result);
+            return true;
         }
             
 

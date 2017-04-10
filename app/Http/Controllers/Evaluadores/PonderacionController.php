@@ -133,8 +133,10 @@ class PonderacionController extends Controller
         $ponderacion = \Request::input('ponderacion');
         $indicador = Indicador::FindOrFail($indicador_id);
 
+        // dd($ponderacion, $indicador_id, $ponderacion_id);
+
         DB::table('indicador_ponderacion')->insert(
-            array('ponderacion' => $ponderacion,'ponderacion_id' => $ponderacion_id, 'indicador_id' => $indicador_id)
+            array('ponderacion' => $ponderacion,'indicador_id' => $indicador_id,'ponderacion_id' => $ponderacion_id)
         );
 
 
@@ -144,7 +146,6 @@ class PonderacionController extends Controller
     public function quitarindicador( $indicador_id,  $ponderacion_id)
     {
         $indicador = Indicador::FindOrFail($indicador_id);
-
 
         DB::table('indicador_ponderacion')->where('ponderacion_id', $ponderacion_id)->where('indicador_id', $indicador_id)->delete();
 

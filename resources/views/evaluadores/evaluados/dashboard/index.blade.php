@@ -6,13 +6,27 @@
 
 @section('content')
 
+<script type="text/javascript">
+$(document).ready(function(){
+  $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+    localStorage.setItem('activeTab', $(e.target).attr('href'));
+  });
+
+  
+  var activeTab = localStorage.getItem('activeTab');
+  if(activeTab){
+    $('#myTab a[href="' + activeTab + '"]').tab('show');
+  }
+});
+</script>
+
+
 <div class="panel panel-default">
   <div class="panel-heading">
   	<p class="titulo-panel">{!! $evaluador->abreviatura  !!} - {!! $evaluador->descripcion !!}</p>
   </div>
   <div class="panel-body">
-  	      <!-- Small boxes (Stat box) -->
-      <div class="row">
+      <!-- Ponracion de Tipos de Indicadores-->
         @foreach($tipos as $item)
         <div class="col-lg-3 col-xs-6">
           <!-- small box -->
@@ -25,25 +39,25 @@
             <div class="icon">
               <i id="ico" class="fa "></i>
             </div>
-            <div class="completo">
-              <p>ESta es una inforamcion de prueba</p>
-            </div>
-            <a href="#" class="text-{{ $item->id }}  small-box-footer">Mas Informacion <i class="fa fa-arrow-circle-right"></i></a>
+          {{--   <div class="completo">
+              <p>Esta es una inforamcion de prueba</p>
+            </div> --}}
+            <a href="#" class="text-{{ $item->id }}  small-box-footer">{{-- Mas Informacion <i class="fa fa-arrow-circle-right"></i> --}}</a>
           </div>
         </div>
         @endforeach
 
-
+        {{-- Panel de Tipo de Indicadores --}}
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
               <h3 class="box-title">Tipo de Indicadores </h3>
 
               <!-- Tabs within a box -->
-              <ul class="nav nav-tabs pull-right" >
+              <ul class="nav nav-tabs pull-right" id="myTab" >
                 @foreach($tipos as $item)
                   @if($item->id == '1')
-                    <li class=" tipos-{!! $item->id !!} active"  ><a href="#tipoPanel-{!! $item->id !!}" style="font-weight: bold;" data-toggle="tab"><i id="ico" class="fa "></i>   {!! $item->nombre !!}</a></li>
+                    <li class=" tipos-{!! $item->id !!} active"  ><a href="#tipoPanel-{!! $item->id !!}" style="font-weight: bold;" data-toggle="tab"><i id="ico" class="fa "></i> <strong>{!! $item->nombre !!}</strong>  </a></li>
                   @else
                     <li class="tipos-{!! $item->id !!}"><a href="#tipoPanel-{!! $item->id !!}" data-toggle="tab"  style="font-weight: bold;"><i id="ico" class="fa "></i>   {!! $item->nombre !!}</a></li>
                   @endif
@@ -51,45 +65,42 @@
               </ul>
             </div>
 
-            <!-- /.box-header -->
+            <!-- Tabla de Totales de Tipos Indicadores -->
             <div class="box-body">
-              <div class="row">
-                <div class="tab-content no-padding">
-                  <!-- Morris chart - Sales -->
-                  
-                  
-                    @foreach($tipos as $item)
-                      @if($item->id == '1')
-                        <div class="chart tab-pane active" id="tipoPanel-{!! $item->id !!}" style="position: relative; height: 300px;">
-                          <div class="panel-filtros">
-                            Filtros 
-                          </div>
-                          <div class="panel-tabla">
-                            @include('evaluadores/evaluados/dashboard/partials/procesos/tabla_tipoProcesos');
-                          </div>
+              <div class="tab-content no-padding">
+                <!-- Morris chart - Sales -->
+                  @foreach($tipos as $item)
+                    @if($item->id == '1')
+                      <div class="chart tab-pane active" id="tipoPanel-{!! $item->id !!}" style="position: relative; height: 300px;">
+                        <div class="panel-filtros">
+                          
                         </div>
-                      @else
-                        <div class="chart  tab-pane" id="tipoPanel-{!! $item->id !!}" style="position: relative; height: 300px;">
-                          <h1>{!! $item->id !!}</h1>
+                        <div class="panel-tabla">
+                          @include('evaluadores/evaluados/dashboard/partials/procesos/tabla_tipoProcesos')
                         </div>
-                      @endif
-                    @endforeach
-                  </div>
+                      </div>
+                    @else
+                      <div class="chart  tab-pane" id="tipoPanel-{!! $item->id !!}" style="position: relative; height: 300px;">
+                        <h1>{!! $item->id !!}</h1>
+                      </div>
+                    @endif
+                  @endforeach
                 </div>
               </div>
               <!-- /.row -->
-            </div>
+          </div>
 
 
 
-            <!-- ./box-body -->
+            <!-- Escalas-->
             <div class="box-footer">
               <div class="row">
+              <div class="col-sm-12" style="text-align: center; padding: 10px; background: #e7e6e8;  box-shadow: 1px 1px 0 0 #909090; border-right: 0.3em;"><b>Escala de Colores</b> </div>
                 @foreach($escalas as $escala)
-                  <div class="col-sm-3 col-xs-6">
+                  <div class="col-sm-3 col-xs-6"  style="background: #{{ $escala->fondo }}; border-right: 0.2em solid white; box-shadow: 0 1px 1px 0 #909090; color: #{{ $escala->color }};">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-green">{{ $escala->minimo }} - {{ $escala->maximo }} %</span>
-                      <h5 class="description-header">{{ $escala->nombre }}</h5>
+                      <span class="description-percentage" style="font-size: 25px;"><b> {{ $escala->minimo }} - {{ $escala->maximo }} % </b></span>
+                      <h5 class="description-header" >{{ $escala->nombre }}</h5>
                       {{-- <span class="description-text">{{ $escala->nombre }}</span> --}}
                     </div>
                     <!-- /.description-block -->
@@ -97,17 +108,10 @@
                 @endforeach
 
               </div>
-              <!-- /.row -->
             </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /.box -->
+
         </div>
-        <!-- /.col -->
-      </div>
-      <!-- /.row -->
-
-
+          <!-- /.box -->
   </div>
   <div class="panel-footer">
   </div>

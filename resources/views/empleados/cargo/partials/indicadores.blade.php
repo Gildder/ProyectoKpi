@@ -15,7 +15,6 @@
           <div class="col-sm-12" style="background: white; padding: 10px;">
             {!!Form::open(['route'=>['empleados.cargo.agregar', $cargo->id], 'method'=>'PUT'])!!}
                 @foreach($indicadores_libres as $item)
-                <!--<option value="{{$item->id}}">{{$item->nombre}}</option>-->
                 <label>{{ Form::checkbox('ind[]', $item->id) }} {{ $item->nombre }}</label><br>
                 @endforeach
                 <div class="text-right">

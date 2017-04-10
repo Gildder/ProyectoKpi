@@ -19,7 +19,7 @@ class SupervisoresRepository
 	 * @param  Codigo Empleado
    * @return boolean
 	 */
-   public static function isSupervisor($param)
+   public static function verificarSupervisor($param)
    {
    	 	// obtenemos los empelados supoer
       $result = Empleado::

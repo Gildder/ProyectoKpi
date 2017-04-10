@@ -32,20 +32,28 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $rutaPrincipal = 'empleados.perfil.index';
+
         if(! Auth::guest()){
             if (Auth::user()->isAdmin()) {
-
                 return redirect()->route('administrador.index');
-
             }else{
-                // direccionamso a las tareas programadas
-                // dd(UserRepository::isEficaciaIndicador('1'));
-                UserRepository::isSupervisor();
-                UserRepository::isEvaluador();
-                UserRepository::isEficaciaIndicador('1');
+                // tiene indicadores asignado
+                if(UserRepository::isIndicadores()){
+                    $rutaPrincipal = 'tareas.tareaProgramadas.index';
+                }   
 
+// dd(UserRepository::isSupervisor());
 
-                return redirect()->route('tareas.tareaProgramadas.index');
+                if(UserRepository::isSupervisor()){
+                    $rutaPrincipal = 'supervisores.supervisados.index';
+                }
+
+                if (UserRepository::isEvaluador()) {
+                    $rutaPrincipal = 'evaluadores.evaluados.dashboard';
+                }
+               
+                return redirect()->route($rutaPrincipal);
 
             }
         }

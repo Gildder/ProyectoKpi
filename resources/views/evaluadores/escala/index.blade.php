@@ -9,7 +9,7 @@
 	
 <div class="panel panel-default">
   <div class="panel-heading">
-    <p class="titulo-panel">Escalas de Cumplimientos</p>
+    <p class="titulo-panel">Escalas de Medida</p>
 
   </div>
   <div class="panel-body">

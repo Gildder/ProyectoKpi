@@ -10,7 +10,7 @@
 		<tbody>
 		@foreach($departamentos as $item)
 			<tr>
-				<td><a href="#" class="btn btn-warning btn-xs" class="btn btn-primary btn-xs" title="Ver"><span >{{$item->id}}</span></a></td>
+				<td>{{$item->id}} </td>
 				<td>{{$item->nombre}}</td>
 				<td> 
 					@foreach($item->getsupervisores($item->id) as $empleado)

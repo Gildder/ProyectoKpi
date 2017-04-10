@@ -42,9 +42,9 @@
           <label for="orden">Orden *</label>
           <select class="form-control" name="orden">
               <option value="" >Seleccionar...</option>
-              @for($i = 1; $i<= 20; $i++)
-                <option value="{{$i}}">{{$i}}</option>
-              @endfor
+              @foreach($orden as $item)
+                <option value="{{$item}}">{{$item}}</option>
+              @endforeach
           </select>
           @if ($errors->has('orden')) <p class="help-block">{{ $errors->first('orden') }}</p> @endif
         </div>

@@ -5,15 +5,14 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0 0 10px 0">
 	<p class="pull-left">Lista de indicadores asignadas a la Gerencia evaluadora  <b>{{$evaluador->abreviatura}}</b>.</p>
 </div>
-
 <div class="table-response">
 	<table id="myTableMultiple" class="table table-striped table-bordered table-condensed table-hover display">
 		<thead>
 			<tr>
-				<th rowspan="2">Nro</th>
-				<th rowspan="3">Nombre</th>	
-				<th rowspan="4">Tipos</th>
-				<th rowspan="5">Cagos Asignados</th>
+				<th>Nro</th>
+				<th>Nombre</th>	
+				<th>Tipos</th>
+				<th>Cagos Asignados</th>
 				<th></th>	
 			</tr>
 		</thead>
@@ -34,20 +33,11 @@
 					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-quitarindicador-{{$item->id}}" class="btn btn-danger btn-xs" title="Quitar Indicador"> <span class="fa fa-trash"></span>  <b></b> </a>
 				</td>
 			</tr>
-     		@include('evaluadores/evaluador/indicadores/delete');
+     		@include('evaluadores/evaluador/indicadores/delete')
 		@endforeach
 		</tbody>
 	</table>
 </div>
-@include('evaluadores/evaluador/indicadores/nuevosindicadores/agregar');
+@include('evaluadores/evaluador/indicadores/nuevosindicadores/agregar')
 
-<script>
-	$(document).ready(function(){
-	    $('#myTableMultiple').DataTable( {
-	    "columnDefs": [{
-	        "visible": false,
-	        "targets": 0
-	    }]
-    } );
-	});
-</script>
+

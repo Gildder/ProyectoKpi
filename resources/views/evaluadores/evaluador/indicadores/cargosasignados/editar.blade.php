@@ -1,3 +1,9 @@
+<script>
+  $(document).ready(function() {
+
+  });
+</script>
+
 
    <!-- Modal -->
 <div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-editarcargo-{{$item->id}}">

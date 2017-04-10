@@ -17,25 +17,30 @@ class TareaRepository
     {
        
     }
+
     // /* Metodos */
     public static function getTareasProgramadas()
     {
         $user = Auth::user();  //obtenemos el usuario logueado
         $semana = new Semana;
+
         $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
+
+
         $tareas = Tarea::where('empleado_id','=', $user->empleado->codigo )
-                        ->where('fechaInicioEstimado','>=', $semanaprogramada[0]['fechaInicio'])
-                        // ->where('fechaFinEstimado', '<=', $semanaprogramada[0]['fechaFin'])
-                        ->whereNull('tareas.deleted_at')
-                        ->get();
+                    ->where('fechaInicioEstimado','>=', $semanaprogramada[0]['fechaInicio'])
+                    // ->where('fechaFinEstimado', '<=', $semanaprogramada[0]['fechaFin'])
+                    ->whereNull('tareas.deleted_at')
+                    ->get();
 
         return $tareas;
     }
 
-    public function getTareasArchivados()
+    public static function getTareasArchivados()
     {
         $user = Auth::user();  //obtenemos el usuario logueado
         $semana = new Semana;
+
         $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
 
         $tareas = Tarea::where('empleado_id','=', $user->empleado->codigo )

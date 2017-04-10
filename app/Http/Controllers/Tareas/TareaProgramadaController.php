@@ -32,6 +32,8 @@ class TareaProgramadaController extends Controller
 		$tareas = TareaRepository::getTareasProgramadas();
 		$semanas = TareaRepository::listSemana(date('Y-m-d'));
 
+		// dd($tareas, $semanas);
+
 		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
 

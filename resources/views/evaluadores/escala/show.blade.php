@@ -16,7 +16,7 @@
 		<div id="datos" class="tab-pane fade in active">
 			<div class="content col-sm-6">
 
-					@include('partials/alert/error')
+				@include('partials/alert/error')
 
 				@include('evaluadores/escala/partials/datos_escala')	
 
@@ -25,7 +25,7 @@
 		</div>
 
 	</div>
-	<div class="col-sm-12 panel-footer text-right">
+	<div class="panel-footer text-right">
 
 		<a href="{{route('evaluadores.escala.edit', $escala->id)}}" class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
 		<a href="#"  data-toggle="modal" data-target="#modal-delete-{{$escala->id}}" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>

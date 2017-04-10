@@ -70,9 +70,9 @@
         
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="{{url('empleados/perfil')}}">
               <i class="fa fa-user"></i>
-              <span class="hidden-xs">{{ Auth::user()->name  }}</span>
+              <span class="hidden-xs">{{ Auth::user()->name }}</span>
             </a>
           </li>
           <li class="dropdown tasks-menu" style="background: #DD4B39;">

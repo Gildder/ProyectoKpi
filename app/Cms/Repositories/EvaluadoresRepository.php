@@ -43,7 +43,7 @@ class EvaluadoresRepository
      * @param  Codigo Empleado
      * @return boolean
      */
-    public static function isEvaluador($param)
+    public static function verificarsEvaluador($param)
     {
         // obtenemos los empelados supoer
         $result = Empleado::select('evaluador_empleados.evaluador_id')
@@ -51,15 +51,7 @@ class EvaluadoresRepository
             ->where('evaluador_empleados.empleado_id', '=', $param)
             ->first();
 
-        if (is_null($result)) {
-            return false;
-        } else {
-            if ( $result->count() > 0) {
-                return $result;
-            } else {
-                return false;
-            }
-        }
+        return $result;
         
 
     }

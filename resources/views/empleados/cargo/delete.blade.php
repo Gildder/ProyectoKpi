@@ -13,9 +13,6 @@
            {!!Form::open(['action'=>['Empleados\CargoController@destroy', $cargo->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a <b>{{$cargo->nombre}}?</b></p>
-                  <div class="form-group col-sm-5 ">
-                        <label id="nombregrupo"></label>
-                  </div>
             </div>
             <div class="modal-footer modal-delete-footer">
               <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>

@@ -5,7 +5,6 @@
 			<th>Abreviatura</th>	
 			<th>Descripcion</th>	
 			<th>Ponderacion</th>	
-			<th></th>
 		</thead>
 
 		<tbody>
@@ -15,7 +14,6 @@
 				<td>{{$item->abreviatura}}</td>
 				<td>{{$item->descripcion}}</td>
 				<td>{{$item->ponderaciones->nombre}}</td>
-				<td><a href="{{route('evaluadores.evaluador.indicadorcargos.index')}}" class="btn btn-info btn-xs" title="Indicador por Cargo"><span class="fa fa-pie-chart"></span></a></td>
 			</tr>
 		@endforeach
 		</tbody>

@@ -21,14 +21,14 @@ class PrimerIndicadorRepository
     /* Metodos */
     public static function getPrimerIndicador($emp_id)
 	{	
-		$indicador = DB::select('call pa_supervisores_PrimerIndicador('.$emp_id.');');
+		$indicador = DB::select('call pa_supervisores_EficaciaIndicador('.$emp_id.');');
 
 		return $indicador;
 	}
 
 	public static function getPrimerIndicadorChart($emp_id)
 	{
-		$indicador = DB::select('call pa_supervisores_PrimerIndicador('.$emp_id.');');
+		$indicador = DB::select('call pa_supervisores_EficaciaIndicador('.$emp_id.');');
 
 		$lista = Array();
 		$datos = Array(0,0,0,0,0,0);

@@ -21,7 +21,9 @@ class EvaluadosController extends Controller
      */
     public function index()
     {
+        // Obtenemos el Id del Evaluador
         $id = json_decode(\Cache::get('evadores'));
+
         $user = Auth::user();
 
         $evaluados = EvaluadoresRepository::getEvaluados($id->evaluador_id, $user->empleado->codigo );
@@ -31,16 +33,22 @@ class EvaluadosController extends Controller
 
     public function dashboard()
     {
+        // Obtenermos el Id del evaluador
         $id = json_decode(\Cache::get('evadores'));
         $evaluador = Evaluador::findOrFail($id->evaluador_id);
 
         $tipos = DB::select('call pa_ponderaciones_tipoPonderacion('.$id->evaluador_id.');');
         $escalas = DB::select('call pa_ponderaciones_escalaPonderaciones('.$id->evaluador_id.');');
-        $indicadores = DB::select('call pa_evaluadores_indicadoresAgregados('.$id->evaluador_id.');');
+        $indicadores = DB::select('call evaluadores_totalIndicadores('.$id->evaluador_id.');');
 
 
         
         return view('evaluadores/evaluados/dashboard/index', ['tipos'=> $tipos, 'evaluador'=> $evaluador, 'escalas'=> $escalas, 'indicadores'=> $indicadores]);
+    }
+
+    public function tablaTipoIndicadores()
+    {
+        
     }
 
     /**

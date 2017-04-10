@@ -41,13 +41,10 @@
           <label for="orden">Orden *</label>
           <select class="form-control" name="orden">
               <option value="" >Seleccionar...</option>
-              @for($i = 1; $i<= 20; $i++)
-                 @if($i==$indicador->orden)
-                  <option value="{{$indicador->orden}}" selected="selected" >{{$indicador->orden}}</option>
-                 @else
-                  <option value="{{$i}}" >{{$i}}</option>
-                 @endif
-              @endfor
+              <option value="{{$indicador->orden}}" selected="selected" >{{$indicador->orden}}</option>
+              @foreach($orden as $item)
+                  <option value="{{$item}}" >{{$item}}</option>
+              @endforeach
           </select>
           @if ($errors->has('orden')) <p class="help-block">{{ $errors->first('orden') }}</p> @endif
         </div>

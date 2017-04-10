@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Models\Empleados\Cargo;
+use Illuminate\Support\Facades\DB;
 
 
 class Evaluador extends Model
@@ -85,6 +86,18 @@ class Evaluador extends Model
 
 
         return $Evaluadores;
+    }
+
+     public static function isCargosAgregados($evaluador_id)
+    {
+        $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$evaluador_id.');');
+
+        if (isset($cargoAgregados)) {
+            return false;
+        } else {
+            return true;
+        }
+        
     }
    
 }

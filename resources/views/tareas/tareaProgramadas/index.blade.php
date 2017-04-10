@@ -33,7 +33,9 @@
           <div class="col-sm-12" ><small>Semana {{$semanas[0]['semana']}} del mes de {{nombreMes($semanas[0]['mes'])}}, del <b>{{cambiarFormatoEuropeo($semanas[0]['fechaInicio'])}}</b> al <b>{{cambiarFormatoEuropeo($semanas[0]['fechaFin'])}}</b></small>
           </div><br>
           <hr/>
-        @include('tareas/tareaProgramadas/partials/tabla_tareaProgramadas')
+
+          @include('tareas/tareaProgramadas/partials/tabla_tareaProgramadas')
+
       </div>
     </div>
 

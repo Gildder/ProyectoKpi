@@ -1,19 +1,10 @@
-
-<div class="col-sm-12">
-	<ul>
-		<li><b><i>EA</i> = </b>Eficacia en la Actividad.</li>
-		<li><b><i>NE</i> = </b>Numero de Errores.</li>
-		<li><b><i>TO</i> = </b>Total Operaciones.</li>
-	</ul>
-</div>
-
 <div class="text-center" >
 	
-	<i><b>EA</b> = 
+	<i><b>Eficiencia </b> = 
 	<div class="fraction">
-		<span class="fup">  NE  </span>
+		<span class="fup">  Números de Errores  </span>
 		<span class="bar">/</span>
-		<span class="fdn">  TO  </span>
+		<span class="fdn">  Total de Operaciones  </span>
 	</div>
 	x 100
 	</i>

@@ -6,7 +6,6 @@
 
 @section('content')
 
-
 <div class="panel panel-default">
   <div class="panel-heading">
   	<p class="titulo-panel">Mis evaluados</p>
@@ -14,7 +13,6 @@
   <div class="panel-body">
   	
 	@include('partials/alert/error')
-	
 
 	<div class="row">
 		<div class="col-lg-12">

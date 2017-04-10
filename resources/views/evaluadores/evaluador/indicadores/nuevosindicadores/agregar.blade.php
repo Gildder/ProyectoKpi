@@ -14,7 +14,7 @@
             <div class="modal-body">
               <p>Seleccionar indicadores que desea agregar a <b>{{$evaluador->abreviatura}}</b></p>
 
-              @include('evaluadores/evaluador/indicadores/nuevosindicadores/tabla_disponibles');
+              @include('evaluadores/evaluador/indicadores/nuevosindicadores/tabla_disponibles')
             </div>
             <div class="modal-footer modal-delete-footer">
               <a id="cancelar"  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>

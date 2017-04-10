@@ -1,15 +1,17 @@
-<div class="table-response">
-	<table id="myTable" class="table table-striped table-bordered table-condensed table-hover">
+<div class="row col-sm-12">
+	<table id="myTableFiltro" class="table table-striped table-bordered table-condensed table-hover table-response">
 		<thead>
-			<th>Nro</th>
-			<th>Nombres</th>	
-			<th>Apellidos</th>	
-			<th>Departamento</th>	
-			<th>Usuario</th>	
-			<th>Correo</th>	
-			<th>Cargo</th>	
-			<th>Gerencia Evaluadora</th>	
-			<th></th>	
+			<tr>
+				<th>Nro</th>
+				<th>Nombres</th>	
+				<th>Apellidos</th>	
+				<th>Departamento</th>	
+				<th>Usuario</th>	
+				<th>Correo</th>	
+				<th>Cargo</th>	
+				<th>Gerencia Evaluadora</th>	
+				<th></th>	
+			</tr>
 		</thead>
 		<tfoot style="display: table-header-group;" >
 			<th>Nro</th>

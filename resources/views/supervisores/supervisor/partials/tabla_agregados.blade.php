@@ -13,12 +13,15 @@
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
 				<td>
 					@if($tipo == 0)
-					<a href="{{route('supervisores.supervisor.quitarcargo', array($item->codigo, $lista->id)) }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteCargoSupervisor-{{ $item->codigo }}"  class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
 					@else
-					<a href="{{route('supervisores.supervisor.quitardepartamento', array($item->codigo, $lista->id)) }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteDepartamentoSupervisor-{{ $item->codigo }}" class="btn btn-danger btn-xs" ><span class="fa fa-trash"  title="Quitar"></span></a>
 					@endif
 				</td>
 			</tr>
+			@include('supervisores/supervisor/partials/deleteCargo')
+			@include('supervisores/supervisor/partials/deleteDepartamento')
+
 			@endforeach
 		</tbody>
 	</table>

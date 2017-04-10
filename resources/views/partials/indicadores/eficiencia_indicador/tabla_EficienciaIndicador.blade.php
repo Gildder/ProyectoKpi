@@ -13,6 +13,7 @@
               <th>Total Operaciones</th>
               <th>Número de Errores</th>
               <th>Eficiencia Actividad</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -25,6 +26,10 @@
                 <td>{{$indicador->totope}}</td>
                 <td>{{$indicador->numerr}}</td>
                 <td><span class="{{$indicador->semana}}"> {{$indicador->efeact}}%</span></td>
+                <td>
+                  <a href="#" class="btn btn-danger btn-xs" @if($indicador->totope <= 0)  disabled  @endif  ><i class="fa fa-thumbs-down" title="Agregar Error"></i></a>
+                  <a href="#" class="btn btn-success btn-xs" @if($indicador->numerr <= 0)  disabled  @endif><i class="fa fa-thumbs-up" title="Quitar Error"></i></a>
+                </td>
               </tr>
             @endforeach
           </tbody>

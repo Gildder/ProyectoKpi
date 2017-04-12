@@ -143,7 +143,6 @@ class TareaProgramadaController extends Controller
 		return view('tareas/tareaProgramadas/show', ['tarea'=>$tareaProgramadas]);
 	}
 
-
 	public function resolver($id)
 	{
 
@@ -155,10 +154,13 @@ class TareaProgramadaController extends Controller
 		return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
 	}	
 
-	public function storeResolver(TareaProgramasResolverRequest $Request,$id)
+	public function storeResolver(TareaProgramasResolverRequest $Request, $id)
 	{
 
 		$tarea = Tarea::findOrFail($id);
+		// DB::select("call pa_eficacia_actualizarTarea(".$tarea->fechaFinSolucion.", ".$tarea->empleado_id.", 0 );");
+
+
 		$fechaInicio = trim(\Request::input('fechaInicioSolucion'));
 		$fechaFin = trim(\Request::input('fechaFinSolucion'));
 		
@@ -189,14 +191,30 @@ class TareaProgramadaController extends Controller
 		    );
 		}
 
+		if($tarea->estado == 3){
+			DB::select("call pa_eficacia_actualizarTarea(".$tarea->fechaFinSolucion.", ".$tarea->empleado_id.", 1 );");
+		}
+
 		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
 
 	public function destroy($id)
 	{
 		Tarea::destroy($id);
+		$tarea = Tarea::findOrFail($id);
 
-		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea de Nro.- '.$id.'  se elimino correctamente.');
+		return redirect('tareas/tareaProgramadas')->with('message',  'La tarea se elimino correctamente.');
+	}
+
+	public function cancelarSolucion($id)
+	{
+		$tarea = Tarea::findOrFail($id);
+		$tarea->estado = 2;
+		$tarea->save();
+
+		DB::select("call pa_eficacia_cancelarSolucionTarea(".$tarea->fechaFinSolucion.", '".$tarea->empleado_id."');");
+
+		return redirect()->back()->with('message', 'Se cancelo la tarea '.$id.' correctamente.');
 	}
 
 

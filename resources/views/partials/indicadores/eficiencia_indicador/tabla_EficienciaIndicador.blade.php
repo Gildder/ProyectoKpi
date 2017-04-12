@@ -8,6 +8,7 @@
           <thead>
             <tr>
               <th>Nro</th>
+              <th>Gestion</th>
               <th>Meses</th>
               <th>Semanas</th>
               <th>Total Operaciones</th>
@@ -21,13 +22,14 @@
             @foreach($listaTablas as $indicador)
               <tr>
                 <td>{{$contador++}}</td>
+                <td>{{$indicador->gestion}}</td>
                 <td class="m-{{$indicador->mes}}"></td>
                 <td >Semana {{$indicador->semana}}</td>
                 <td>{{$indicador->totope}}</td>
                 <td>{{$indicador->numerr}}</td>
                 <td><span class="{{$indicador->semana}}"> {{$indicador->efeact}}%</span></td>
                 <td>
-                  <a href="#" class="btn btn-danger btn-xs" @if($indicador->totope <= 0)  disabled  @endif  ><i class="fa fa-thumbs-down" title="Agregar Error"></i></a>
+                  <a href="{{route('supervisores.supervisados.obtenerTareasFinalizadas', [$indicador->gestion, $indicador->mes, $indicador->semana, $empleado->codigo ] )}}" class="btn btn-danger btn-xs" @if($indicador->totope <= 0)  disabled  @endif  ><i class="fa fa-thumbs-down" title="Agregar Error"></i></a>
                   <a href="#" class="btn btn-success btn-xs" @if($indicador->numerr <= 0)  disabled  @endif><i class="fa fa-thumbs-up" title="Quitar Error"></i></a>
                 </td>
               </tr>

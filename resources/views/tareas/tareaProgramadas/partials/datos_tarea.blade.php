@@ -42,7 +42,11 @@
 
       <tr>
          <td class="text-right"><b>Estado:</b></td>
-         <td>{{$tarea->getEstado($tarea->id)}}</td>
+        <td>
+          <span class="{{$tarea->estado}}">
+            {{$tarea->getEstado($tarea->id)}}
+          </span>
+        </td>
       </tr>
 
        <tr>
@@ -52,3 +56,15 @@
       </tr>
    </tbody>
 </table>
+<script>
+
+$(document).ready(function(){
+    $(".1").addClass("badge bg-red");
+    $(".2").addClass("badge bg-yellow");
+    $(".3").addClass("badge bg-green");
+
+});
+
+
+
+</script>

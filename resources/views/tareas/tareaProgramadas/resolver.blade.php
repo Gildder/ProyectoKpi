@@ -8,15 +8,14 @@
 
 <!-- Nuevo -->
 
+
 <div class="panel panel-default">
   <div class="panel-heading">
+      <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-xs  pull-left btn-back"><span class="fa fa-reply"></span></a>
       <strong>{{ $tarea->id}} - {{ $tarea->descripcion}}</strong>
   </div>
   <div class="panel-body">
 
-  <div class="col-lg-12 breadcrumb">
-    <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-sm"><span class="fa fa-reply"></span></a>
-  </div>
 
 <div class="col-sm-12">
   
@@ -62,14 +61,15 @@
               {{-- Tiempo estimado --}}
               <div class="row col-sm-12">
                 <label class="form-group col-sm-12 col-xs-12">Tiempo Ejecucion *</label>
-                  <div class="form-group  col-xs-6 col-sm-3 col-md-2 @if ($errors->has('hora')) has-error @endif">
-                    <p>Horas:<p><input type="number" name="hora" min="0" max="999"  value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}"  class="form-control" value="00"  required >
+                  <div class="form-group  @if ($errors->has('hora')) has-error @endif col-xs-6 col-sm-3 col-md-2">
+                    <p>Horas:<p>
+                    <input type="number" name="hora" min="0" max="999"  value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}"  class="form-control"   required >
                     @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
                   </div> 
-                  <div class="col-xs-6 col-sm-4 col-md-2 @if ($errors->has('minuto')) has-error @endif">
+                  <div class="form-group  @if ($errors->has('minuto')) has-error @endif col-xs-6 col-sm-4 col-md-2 ">
                     <p>Minutos:</p>
-                     <input type="number" name="minuto" min="0" value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"  max="999" class="form-control" value="00"   required>
+                    <input type="number" name="minuto" min="0"  max="999" value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"  class="form-control"    required>
                     @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
                   </div>
               </div>
@@ -102,7 +102,7 @@
                 <div class="col-sm-6">
                   @foreach($ubicacionesDis as $item)
                       {{-- <input type="checkbox" name="localizacion" value="{{$item->id}}">    {{$item->nombre}}<br> --}}
-                      <label>{{ Form::checkbox('prov[]', $item->id) }} {{ $item->nombre }}</label><br>
+                      <label>{{ Form::checkbox('prov[]', $item->id, null, ['class'=>'micheckbox']) }} {{ $item->nombre }}</label><br>
                   @endforeach
                 </div>
           </div>

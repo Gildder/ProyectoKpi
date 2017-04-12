@@ -24,12 +24,12 @@ class TareaProgramasResolverRequest extends Request
     public function rules()
     {
         return [
-                'fechaInicioSolucion' => 'required|date_format:d/m/Y',
-                'fechaFinSolucion' => 'required|date_format:d/m/Y',
-                'hora'=> 'required|numeric',
-                'minuto'=> 'required|numeric',
-                'estado'=> 'required',
-                'observaciones'=>'max:120',
+            'fechaInicioSolucion' => 'required',
+            'fechaFinSolucion' => 'required|date_format:d/m/Y',
+            'hora'=> 'required',
+            'minuto'=> 'required',
+            'estado'=> 'required',
+            'observaciones'=>'max:120',
 
         ];
     }
@@ -38,14 +38,12 @@ class TareaProgramasResolverRequest extends Request
     {
         return [
             'fechaInicioSolucion.required' => 'La fecha de Inicio es requerido!',
-            'fechaInicioSolucion.date_format' => 'El formato es dd/mm/aaaa',
             'fechaFinSolucion.required' => 'La fecha de Fin es requerido!',
+            //'fechaInicioSolucion.date_format' => 'El formato es dd/mm/aaaa',
             'fechaFinSolucion.date_format' => 'El formato es dd/mm/aaaa',
             'estado.required' => 'El estado es requerido!',
-             'hora.required' => 'La Hora es requerido',
-            'hora.numeric' => 'Debe ser numerico',
+            'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El minuto es requerido',
-            'minuto.numeric' => 'Debe ser numerico',
             'observaciones.max' => 'Este campo no puede tener más de 120 carácteres',
 
         ];

@@ -36,7 +36,7 @@ class Tarea extends Model
      * @var array
      */
     protected $fillable = [
-        'descripcion', 'fechaInicioEstimado', 'fechaFinEstimado', 'tiempoEstimado', 'fechaInicioSolucion', ' fechaFinSolucion', 'tiempoSolucion', 'estado', ' tipo', 'proyecto_id', 'empleado_id','localizacion_id'
+        'descripcion', 'fechaInicioEstimado', 'fechaFinEstimado', 'tiempoEstimado', 'fechaInicioSolucion', ' fechaFinSolucion', 'tiempoSolucion', 'estado', ' tipo', 'proyecto_id', 'empleado_id','localizacion_id', 'hora', 'minuto'
     ];
 
     /**

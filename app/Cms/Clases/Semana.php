@@ -51,11 +51,6 @@ class Semana
        }
     }
 
-    /* retorna la semana del mes de la fecha actual */
-    function numeroSemanaMes()
-    {
-        return $weekNum = date("W") - date("W",strtotime(date("Y-m-01"))) + 1;
-    }
 
     /* retorna la semana de una fecha */
     function mesSemanaFecha($fecha)
@@ -66,10 +61,9 @@ class Semana
         $mes = date("n", strtotime($fechas['fechaInicio']));
         $semana = $this->numeroSemanaFecha($fechas['fechaInicio']);
         $diasMes = $this->numeroDiasMes($fechas['fechaInicio']);
-        $diaActual = date("d",strtotime($fechas['fechaInicio']));
+        $diaActual = date("j",strtotime($fechas['fechaInicio']));
 
         $diasRestantes = $diasMes - $diaActual;
-// print_r($diasMes.'-'.$diaActual.'='.$diasRestantes.';  ');
 
         if ($diasRestantes < 4) {
             //mes de fin de semana
@@ -84,12 +78,17 @@ class Semana
     function numeroSemanaFecha($fecha)
     {
         // Calculamos la semana del mes
-        $var1 =  date("W",strtotime(date("Y-m-01", strtotime($fecha)))) + 1;
-        $var2 =  date("W",strtotime($fecha)) + 1;
+        $semanaInicioMes =  date("W",strtotime(date("Y-m-01", strtotime($fecha))));
+        $semanaActualFecha =  date("W",strtotime($fecha)) ;
 
-        $result = $var2 - $var1;
+        $result = $semanaActualFecha - $semanaInicioMes;
+
+        if($result == 0) {
+            if(date('j', strtotime($fecha)) > 4)
+                return $result + 1;
+        }
         
-        return $result + 1;
+        return $result;
     }
 
     function sumarDias($fecha, $dias)

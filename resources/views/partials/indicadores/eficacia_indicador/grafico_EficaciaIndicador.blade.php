@@ -22,10 +22,10 @@ $(document).ready(function(){
     ]);
 
     var options = {
-      title : 'Eficacia del Servicio',
-      vAxis: {title: 'Eficiencia %', maxValue: '105',  gridlines:{count: 10}, format: '#',  textStyle:{ bold: true }},
+      // title : 'Eficacia del Servicio',
+      vAxis: {title: 'Eficacia %', maxValue: '100',  gridlines:{count: 10}, format: '#'},
       hAxis: {title: 'Meses', textStyle:{ bold: true}},
-      legend : { maxLines:2, position: 'right', textStyle: { fontSize: 12}},
+      legend : { maxLines:2, position: 'top', textStyle: { fontSize: 12}},
       seriesType: 'bars',
       series: {5: {type: 'bares'}},
       height: 400,

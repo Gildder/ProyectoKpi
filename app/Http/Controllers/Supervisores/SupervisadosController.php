@@ -14,9 +14,12 @@ use Khill\Lavacharts\Laravel\Lavacharts;
 use ProyectoKpi\Http\Controllers\Graficas\GraficasController;
 use ProyectoKpi\Models\Localizaciones\Departamento;
 use ProyectoKpi\Models\Empleados\Empleado;
+use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
 use ProyectoKpi\Cms\Repositories\PrimerIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
+use ProyectoKpi\Http\Requests\Indicadores\ErrorFormRequest;
+
 
 class SupervisadosController  extends Controller
 {
@@ -26,7 +29,6 @@ class SupervisadosController  extends Controller
     {
         $this->middleware('auth');
         $this->primerIndicador = $primerIndicador;
-
     }
 
     
@@ -46,51 +48,79 @@ class SupervisadosController  extends Controller
     {
         $indicadores = IndicadorRepository::getIndicadoresEmpleado($id);
         $empleado = Empleado::where('codigo', $id)->first();
-        // $listaTablas;
-        // $listaGraficas;
-        // $contador = 0;
-
-
-        // foreach ($indicadores as $item) {
-        //     $listaTablas[$contador] = IndicadorRepository::getTablaIndicador($id, $item->id);
-        //     $listaGraficas[$contador] = IndicadorRepository::getGraficoIndicador($id, $item->id);
-        //     $contador++;
-        // }
-
-// print_r(json_encode($listaGraficas));
-// // print_r($listaTablas);
-
-//         foreach ($indicadores as $key) {
-//             $index = 0;
-//             foreach ($listaGraficas as $item) {
-//                 if ($key->id  == $item[$index]->indicador_id) {
-//                 # code...
-//                     print_r($item);
-//                     print_r(json_encode($item[0]->empleado_id));
-//                 }else{
-//                     print_r('error');
-//                 }
-//                 $index++;
-//                 // print_r(json_encode($key->id));
-//             }
-//         }
 
         return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'empleado'=>$empleado]);
     }
 
-    // tareas finalizadas estedo = 3
-    public function obtenerTareasDinalizadas($mes, $semana, $empleado)
+    // tareas finalizadas estado = 3 isError = 0
+    public function obtenerTareasFinalizadas($anio, $mes, $semana, $empleado_id)
     {
         // obtener las tareas finalizadas con los parametros enviados, mas los tareas que estan marcadas con errores de manera desabilitada
         // pero espeficicando que ya esta agregada con error 
+        $tareas = DB::select("call pa_eficiencia_tareasTerminadas(".$anio.", ".$mes.", ".$semana.", '".$empleado_id."',0);");
 
-
-
+        return view('supervisores\numeroErrores\create',['tareas'=> $tareas, 'empleado_id'=>$empleado_id]);
     }
 
-    public function FunctionName($value='')
+    // tareas finalizadas estado  = 3 isError = 1
+    public function obtenerTareasErrores($anio, $mes, $semana, $empleado_id)
     {
-        # code...
+        // obtener las tareas finalizadas con los parametros enviados, mas los tareas que estan marcadas con errores de manera desabilitada
+        // pero espeficicando que ya esta agregada con error 
+        $tareas = DB::select("call pa_eficiencia_tareasTerminadas(".$anio.", ".$mes.", ".$semana.", '".$empleado_id."', 1);");
+
+        return view('supervisores\numeroErrores\delete',['tareas'=> $tareas, 'empleado_id'=>$empleado_id]);
+    }
+
+    public function agregarErrorTarea(ErrorFormRequest $Request, $empleado_id)
+    {
+
+        $tarea_id = \Request::input('tarea_id');
+        $descripcion = trim(\Request::input('descripcion'));
+
+        // dd($tarea_id, $descripcion);
+
+        $tarea = Tarea::findOrFail($tarea_id);
+        $tarea->isError = 1;
+        $tarea->save();
+
+        $nota_id = DB::table('nota_errores')->insertGetId([
+            'descripcion'=> $descripcion,
+            'tarea_id'=> $tarea_id,
+            'razonNota'=> 1,
+            'supervisor_id'=> $empleado_id,
+        ]);
+        
+        
+        DB::select("call pa_eficiencia_actualizarNroErrores('".$tarea->fechaFinSolucion."', '".$empleado_id."', 1);");
+
+
+        return redirect()->back()->with('El numero de Errores se aumento correctamente.');
+    }
+
+    public function quitarErrorTarea(ErrorFormRequest $Request, $empleado_id)
+    {
+         $tarea_id = \Request::input('tarea_id');
+        $descripcion = trim(\Request::input('descripcion'));
+
+        // dd($tarea_id, $descripcion);
+
+        $tarea = Tarea::findOrFail($tarea_id);
+        $tarea->isError = 0;
+        $tarea->save();
+
+        $nota_id = DB::table('nota_errores')->insertGetId([
+            'descripcion'=> $descripcion,
+            'tarea_id'=> $tarea_id,
+            'razonNota'=> 0,
+            'supervisor_id'=> $empleado_id,
+        ]);
+        
+        
+        DB::select("call pa_eficiencia_actualizarNroErrores('".$tarea->fechaFinSolucion."', '".$empleado_id."', 0);");
+
+
+        return redirect()->back()->with('El numero de Errores se aumento correctamente.');
     }
     
 }

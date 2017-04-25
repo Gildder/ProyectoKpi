@@ -32,7 +32,8 @@ class TareaProgramadaController extends Controller
 		$tareas = TareaRepository::getTareasProgramadas();
 		$semanas = TareaRepository::listSemana(date('Y-m-d'));
 
-		// dd($tareas, $semanas);
+
+	 // dd($tareas, $semanas);
 
 		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
@@ -139,7 +140,6 @@ class TareaProgramadaController extends Controller
 	{
 		$tareaProgramadas = Tarea::findOrFail($id);
 
-
 		return view('tareas/tareaProgramadas/show', ['tarea'=>$tareaProgramadas]);
 	}
 
@@ -191,17 +191,17 @@ class TareaProgramadaController extends Controller
 		    );
 		}
 
-		if($tarea->estado == 3){
-			DB::select("call pa_eficacia_actualizarTarea(".$tarea->fechaFinSolucion.", ".$tarea->empleado_id.", 1 );");
-		}
+		// if($tarea->estado == 3){
+		// 	DB::select("call pa_eficacia_actualizarTarea(".$tarea->fechaFinSolucion.", ".$tarea->empleado_id.", 1 );");
+		// }
 
 		return redirect('tareas/tareaProgramadas')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
 	}
 
 	public function destroy($id)
 	{
-		Tarea::destroy($id);
 		$tarea = Tarea::findOrFail($id);
+		Tarea::destroy($id);
 
 		return redirect('tareas/tareaProgramadas')->with('message',  'La tarea se elimino correctamente.');
 	}
@@ -212,7 +212,7 @@ class TareaProgramadaController extends Controller
 		$tarea->estado = 2;
 		$tarea->save();
 
-		DB::select("call pa_eficacia_cancelarSolucionTarea(".$tarea->fechaFinSolucion.", '".$tarea->empleado_id."');");
+		// DB::select("call pa_eficacia_cancelarSolucionTarea(".$tarea->fechaFinSolucion.", '".$tarea->empleado_id."');");
 
 		return redirect()->back()->with('message', 'Se cancelo la tarea '.$id.' correctamente.');
 	}

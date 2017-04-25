@@ -45,7 +45,7 @@ $(document).ready(function(){
 
 						<div class="row">
 							<div class="col-lg-12">
-					        	@include("supervisores/supervisor/partials/tabla_departamentos")
+			        	@include("supervisores/supervisor/partials/tabla_departamentos")
 							</div>
 						</div>
 				</div>

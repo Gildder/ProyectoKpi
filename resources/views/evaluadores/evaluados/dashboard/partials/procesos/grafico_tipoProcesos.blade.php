@@ -1,5 +1,5 @@
     <div class="chart">
-      <div id="chart_Eficiencia"></div>
+      <div id="chart_tipoProcesos"></div>
     </div>
 
 <script>
@@ -31,7 +31,7 @@ $(document).ready(function(){
       height: 400,
     };
 
-    var chart = new google.visualization.ComboChart(document.getElementById('chart_Eficiencia'));
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_tipoProcesos'));
     chart.draw(data, options);
   }
 });

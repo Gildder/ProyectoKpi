@@ -27,9 +27,10 @@ class TareaProgramasResolverRequest extends Request
             'fechaInicioSolucion' => 'required',
             'fechaFinSolucion' => 'required|date_format:d/m/Y',
             'hora'=> 'required',
-            'minuto'=> 'required',
+            'minuto'=> 'required|min:1',
             'estado'=> 'required',
             'observaciones'=>'max:120',
+            'prov'=> 'required',
 
         ];
     }
@@ -44,7 +45,9 @@ class TareaProgramasResolverRequest extends Request
             'estado.required' => 'El estado es requerido!',
             'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El minuto es requerido',
+            'minuto.min' => 'El minuto es requerido',
             'observaciones.max' => 'Este campo no puede tener más de 120 carácteres',
+            'prov.required' => 'Seleccionar minimo una casilla',
 
         ];
     }

@@ -35,12 +35,12 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" placeholder="dd/mm/aaaa" name="fechaInicioSolucion" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}} " required>
-
+                    <input type="text" id="fechaInicioSolucion"  class="form-control InicioEjecucion" placeholder="dd/mm/aaaa" name="fechaInicioSolucion" 
+                   @if($tarea->fechaInicioSolucion != '0000-00-00')  value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}" @endif required>
                   </div>
                     @if ($errors->has('fechaInicioSolucion')) <p class="help-block">{{ $errors->first('fechaInicioSolucion') }}</p> @endif
                  </div>
-                  
+
                 {{-- Fecha Fin --}}
                  <div class="form-group @if ($errors->has('fechaFinSolucion')) has-error @endif  col-sm-4">
                   <p>Hasta *:</p>
@@ -48,8 +48,7 @@
                     <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                     </div>
-                    <input type="text" id="fechaFinSolucion"  class="form-control FinEjecucion" name="fechaFinSolucion" placeholder="dd/mm/aaaa" value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}"  required>
-
+                    <input type="text" id="fechaFinSolucion"  class="form-control FinEjecucion" name="fechaFinSolucion" placeholder="dd/mm/aaaa"  @if($tarea->fechaFinSolucion != '0000-00-00') value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}"  @endif required>
                   </div>
                     @if ($errors->has('fechaFinSolucion')) <p class="help-block">{{ $errors->first('fechaFinSolucion') }}</p> @endif
                  </div>
@@ -63,13 +62,13 @@
                 <label class="form-group col-sm-12 col-xs-12">Tiempo Ejecucion *</label>
                   <div class="form-group  @if ($errors->has('hora')) has-error @endif col-xs-6 col-sm-3 col-md-2">
                     <p>Horas:<p>
-                    <input type="number" name="hora" min="0" max="999"  value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}"  class="form-control"   required >
+                    <input type="number" name="hora" min="0" max="999"  @if($tarea->tiempoSolucion <> '') value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}" @else '' @endif class="form-control"   required >
                     @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
                   </div> 
                   <div class="form-group  @if ($errors->has('minuto')) has-error @endif col-xs-6 col-sm-4 col-md-2 ">
                     <p>Minutos:</p>
-                    <input type="number" name="minuto" min="0"  max="999" value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"  class="form-control"    required>
+                    <input type="number" name="minuto" min="0"  max="999"  @if($tarea->tiempoSolucion <> '') value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}" @else '' @endif  class="form-control"    required>
                     @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
                   </div>
               </div>
@@ -97,13 +96,15 @@
           <div class="col-sm-6">
   
               <b>Localizacion</b><hr class="col-sm-12">
-              <div class="col-sm-12"></div>
+              <div class="col-sm-12 @if ($errors->has('prov')) has-error @endif "></div>
               <p><small>Seleccione las localizaciones donde se realizaró la tarea.</small></p>
+              
                 <div class="col-sm-6">
                   @foreach($ubicacionesDis as $item)
                       {{-- <input type="checkbox" name="localizacion" value="{{$item->id}}">    {{$item->nombre}}<br> --}}
                       <label>{{ Form::checkbox('prov[]', $item->id, null, ['class'=>'micheckbox']) }} {{ $item->nombre }}</label><br>
                   @endforeach
+            @if ($errors->has('prov')) <p class="help-block" style="color: red;">{{ $errors->first('prov') }}</p> @endif
                 </div>
           </div>
 

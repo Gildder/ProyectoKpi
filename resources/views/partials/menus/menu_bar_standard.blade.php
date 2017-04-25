@@ -17,7 +17,7 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados/dashboard') }}" >
-              <i class="fa fa-bullseye"></i>
+              <i class="fa fa-line-chart"></i>
               <label for="Tareas" class="hidden-xs">DashBoard</label>
             </a>
           </li>
@@ -28,7 +28,7 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados') }}" >
-              <i class="fa fa-bullseye"></i>
+              <i class="fa fa-users"></i>
               <label for="Tareas" class="hidden-xs">Mis Evaluados</label>
             </a>
           </li>
@@ -38,7 +38,7 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >
-              <i class="fa fa-bullseye"></i>
+              <i class="fa fa-binoculars"></i>
               <label for="Tareas" class="hidden-xs">Supervisiones</label>
             </a>
           </li>

@@ -22,13 +22,17 @@ class SupervisoresRepository
    public static function verificarSupervisor($param)
    {
    	 	// obtenemos los empelados supoer
-      $result = Empleado::
-          select('empleados.codigo')
-          ->join('supervisor_departamentos','supervisor_departamentos.empleado_id','=','empleados.codigo')
+      $deparCount = DB::
+          table('supervisor_departamentos')
           ->where('supervisor_departamentos.empleado_id', '=', $param)
           ->count();
 
-      if ($result > 0) {
+      $cargoCount = DB::
+          table('supervisor_cargos')
+          ->where('supervisor_cargos.empleado_id', '=', $param)
+          ->count();
+
+      if ($deparCount > 0  || $cargoCount > 0) {
       	return true;
       } else {
       	return false;

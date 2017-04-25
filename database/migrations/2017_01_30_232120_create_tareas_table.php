@@ -23,6 +23,7 @@ class CreateTareasTable extends Migration
             $table->time('tiempoSolucion');
             $table->text('observaciones',120);
             $table->char('estado',1)->default('1');
+            $table->integer('isError')->default(null);
             $table->integer('tipo'); //tareas programadas 1 , tareas diarias 0
             $table->string('empleado_id',10);
             $table->integer('proyecto_id')->unsigned()->default(0);

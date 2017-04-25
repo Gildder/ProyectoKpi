@@ -25,9 +25,9 @@ $(document).ready(function(){
 
     var options = {
       // title : 'Eficacia del Servicio',
-      vAxis: {title: 'Eficacia %', maxValue: '105', format: '#' , gridlines:{count: 10}},
+      vAxis: {title: 'Eficiencia %', maxValue: '100', format: '#' , gridlines:{count: 10}},
       hAxis: {title: 'Meses', textStyle:{ bold: true}},
-      legend : { maxLines:2, position: 'right', textStyle: { fontSize: 12}},
+      legend : { maxLines:2, position: 'top', textStyle: { fontSize: 12}},
       seriesType: 'bars',
       series: {5: {type: 'bares'}},
       height: 400,

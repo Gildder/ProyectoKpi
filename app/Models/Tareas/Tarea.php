@@ -167,7 +167,7 @@ class Tarea extends Model
     public function sacarHoras($hora)
     {   
         if($hora == null){
-            return '00';
+            return '';
         } 
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[0];
@@ -176,7 +176,7 @@ class Tarea extends Model
     public function sacarMinutos($hora)
     {     
         if($hora == null){
-            return '00';
+            return '';
         }
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[1];

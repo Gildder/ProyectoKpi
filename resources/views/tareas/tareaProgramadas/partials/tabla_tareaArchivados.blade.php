@@ -1,3 +1,13 @@
+<script>
+
+$(document).ready(function(){
+    $(".1").addClass("bg-danger");
+    $(".2").addClass("bg-warning");
+    $(".3").addClass("bg-success");
+
+});
+
+</script>
 <div class="table-response">
 	<table id="myTable2" class="table  table-striped table-bordered table-condensed table-hover">
 		<thead>
@@ -25,7 +35,7 @@
 			<td>@if($tarea->fechaInicioSolucion == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}  @endif</td>
 			<td>@if($tarea->fechaFinSolucion == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}  @endif</td>
 			<td>@if($tarea->tiempoSolucion == '') 00:00 @else  {{$tarea->tiempoSolucion}}  @endif</td>
-			<td>{{$tarea->getEstado($tarea->id)}}</td>
+			<td class="{{$tarea->estado}}" >{{$tarea->getEstado($tarea->id)}}</td>
 			<td>@if($tarea->observaciones == '') ninguna @else  {{$tarea->observaciones}}  @endif</td>
 			<td>
 				@foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)

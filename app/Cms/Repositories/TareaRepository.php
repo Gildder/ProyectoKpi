@@ -44,10 +44,13 @@ class TareaRepository
         $semanaprogramada = $semana->getSemanasProgramadas(date('Y-m-d'));
 
         $tareas = Tarea::where('empleado_id','=', $user->empleado->codigo )
-                        ->where('fechaInicioEstimado','>', $semanaprogramada[0]['fechaInicio'])
-                        ->where('fechaFinEstimado','<', $semanaprogramada[0]['fechaInicio'])
+                        ->where('fechaFinEstimado','<', $semanaprogramada[0]['fechaFin'])
+                        ->whereOr('fechaFinEstimado','>', $semanaprogramada[0]['fechaFin'])
+                        // ->where('fechaFinEstimado','>', $semanaprogramada[0]['fechaFin'])
                         ->whereNull('tareas.deleted_at')
                         ->get();
+
+                        // dd($semanaprogramada);
 
         return $tareas;
     }

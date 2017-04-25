@@ -53,5 +53,7 @@ class Kernel extends HttpKernel
 
         'administrador' => \ProyectoKpi\Http\Middleware\AdministradorMiddleware::class,
         'estandard' => \ProyectoKpi\Http\Middleware\EstandarMiddleware::class,
+        'evaludores' => \ProyectoKpi\Http\Middleware\EvaluadorMiddleware::class,
+        'supervisores' => \ProyectoKpi\Http\Middleware\SupervisorMiddleware::class,
     ];
 }

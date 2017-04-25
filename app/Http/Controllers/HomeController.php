@@ -43,14 +43,13 @@ class HomeController extends Controller
                     $rutaPrincipal = 'tareas.tareaProgramadas.index';
                 }   
 
-// dd(UserRepository::isSupervisor());
-
                 if(UserRepository::isSupervisor()){
                     $rutaPrincipal = 'supervisores.supervisados.index';
                 }
 
                 if (UserRepository::isEvaluador()) {
-                    $rutaPrincipal = 'evaluadores.evaluados.dashboard';
+                    // $rutaPrincipal = 'evaluadores.evaluados.dashboard';
+                     $rutaPrincipal = 'evaluadores.evaluados.dashboard';
                 }
                
                 return redirect()->route($rutaPrincipal);

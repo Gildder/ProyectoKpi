@@ -31,12 +31,12 @@
   <div class="col-sm-12">
     <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
       <div class="form-group  col-xs-6 col-sm-3 col-md-2 @if ($errors->has('hora')) has-error @endif">
-        Horas:<input type="number" min="0"  name="hora" max="999"  class="form-control" value="00"  required >
+        Horas:<input type="number" min="0"  name="hora" max="999"  class="form-control"  required >
 
       </div> 
         @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
       <div class="col-xs-6 col-sm-4 col-md-2 @if ($errors->has('minuto')) has-error @endif">
-        Minutos: <input type="number" min="0" name="minuto" max="999" class="form-control" value="00"   required>
+        Minutos: <input type="number" min="0" name="minuto" max="999" class="form-control"    required>
       </div>
         @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
   </div>

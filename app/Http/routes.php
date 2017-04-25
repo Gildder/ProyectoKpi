@@ -308,8 +308,24 @@ route::group(['middleware'=>['auth', 'administrador']], function()
 
 
 /*  SUPERVISADOS */
-route::group(['middleware'=>['auth', 'estandard']], function()
+route::group(['middleware'=>['auth', 'supervisores', 'estandard']], function()
 {
+	/* Metodo agregarErrorTarea */
+	Route::get('supervisores/numeroErrores/agregarErrorTarea/{empleado?}', 
+		array('as' => 'supervisores.numeroErrores.agregarErrorTarea', 'uses' => 'Supervisores\SupervisadosController@agregarErrorTarea') );
+
+	/* Metodo quitarErrorTarea */
+	Route::get('supervisores/numeroErrores/quitarErrorTarea/{empleado}', 
+		array('as' => 'supervisores.numeroErrores.quitarErrorTarea', 'uses' => 'Supervisores\SupervisadosController@quitarErrorTarea') );
+
+
+	/* Metodo obtenerTareasFinalizadas */
+	Route::get('supervisores/supervisados/obtenerTareasFinalizadas/{anio}/{mes}/{semana}/{emp}', 
+		array('as' => 'supervisores.supervisados.obtenerTareasFinalizadas', 'uses' => 'Supervisores\SupervisadosController@obtenerTareasFinalizadas') );
+
+	/* Metodo obtenerTareasFinalizadas */
+	Route::get('supervisores/supervisados/obtenerTareasErrores/{anio}/{mes}/{semana}/{emp}', 
+		array('as' => 'supervisores.supervisados.obtenerTareasErrores', 'uses' => 'Supervisores\SupervisadosController@obtenerTareasErrores') );
 
 	/* Metodos Genericos */
 	Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', 
@@ -324,6 +340,10 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 	// Proyectos
 	Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 	
+	// tareas cancelar programadas
+	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}', 
+		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
+
 	// tareas programadas
 	Route::get('tareas/tareaProgramadas/archivados', 
 		array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );

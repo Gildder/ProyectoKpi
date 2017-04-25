@@ -9,12 +9,19 @@ use Illuminate\Support\Facades\DB;
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Clases\Semana;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Models\Empleados\Empleado;
 
 
 class EvaluadosController extends Controller
 {
+    public function __contruct()
+    {
+        $this->middleware('auth', 'evaluadores', 'estandard');
+    }
+
+    
     /**
      * Display a listing of the resource.
      *
@@ -34,23 +41,39 @@ class EvaluadosController extends Controller
 
     public function dashboard()
     {
-        // Obtenermos el Id del evaluador
+        $anio = 2017;
+        $mes = 4;
+
+        // Obtenemos el Id del evaluador
         $id = json_decode(\Cache::get('evadores'));
         $evaluador = Evaluador::findOrFail($id->evaluador_id);
 
-        $tipos = DB::select('call pa_ponderaciones_tipoPonderacion('.$evaluador->ponderacion_id.');');
-        $escalas = DB::select('call pa_ponderaciones_escalaPonderaciones('.$id->evaluador_id.');');
-        $indicadores = DB::select('call evaluadores_totalIndicadores('.$id->evaluador_id.');');
-
-// dd($tipos, $escalas, $indicadores);
-
+        $tipos = EvaluadoresRepository::getPonderacionTipoIndicadores($evaluador->id);
+        $escalas = EvaluadoresRepository::getLimitesEscalas($evaluador->id);
         
-        return view('evaluadores/evaluados/dashboard/index', ['tipos'=> $tipos, 'evaluador'=> $evaluador, 'escalas'=> $escalas, 'indicadores'=> $indicadores]);
+        $indicadores = EvaluadoresRepository::getIndicadoresPromediosSemanales($evaluador->id, $anio, $mes);
+
+        // dd($indicadores);
+
+        // Semana Actual
+        $semanaHoy = array_pop($indicadores);
+        $semanaCant = array_pop($indicadores);
+        $cumplimiento = array_pop($indicadores);
+
+        return view('evaluadores/evaluados/dashboard/index', [
+            'tipos'=> $tipos, 
+            'evaluador'=> $evaluador, 
+            'escalas'=> $escalas, 
+            'indicadores'=> $indicadores, 
+            'semanaCant'=> $semanaCant,
+            'semanaHoy'=> $semanaHoy,
+            'cumplimiento'=> $cumplimiento,
+            'mes'=> Semana::getNombreMes($mes)
+        ]);
     }
 
     public function tablaTipoIndicadores()
     {
-        
     }
 
     /**
@@ -83,9 +106,6 @@ class EvaluadosController extends Controller
     public function show($id)
     {
         $empleado = Empleado::where('codigo', $id)->get();
-
-        dd(json_encode($empleado));
-        
 
         return view('evaluadores/evaluados/show',  ['empleado'=> $empleado]);
     }

@@ -117,7 +117,7 @@ class EvaluadorController extends Controller
 		return redirect('evaluadores/evaluador')->with('message',  'La Gerencia Evaluadora de Nro.- '.$id.'  se elimino correctamente.');
 	}
 
-
+  
 	/* Cargos Evaluados*/
 
 	public function cargosevaluados()
@@ -169,10 +169,18 @@ class EvaluadorController extends Controller
     {
         $cargo = Cargo::findOrFail($cargo_id);
 
+        $isCargoConIndicador = DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('evaluadorCargo_id', $evaluador_id)->count();
 
-        DB::table('evaluador_cargos')->where('cargo_id', $cargo_id)->where('evaluador_id', $evaluador_id)->delete();
+        // verificamos si cargo tiene indicador asignado
+        if($isCargoConIndicador <= 0){
+            DB::table('evaluador_cargos')->where('cargo_id', $cargo_id)->where('evaluador_id', $evaluador_id)->delete();
+        
+            return redirect()->back()->with('message', 'Se quito el cargo "'.$cargo->nombre.'" correctamente.');
+        }else{
+            return redirect()->back()->withErrors('No puede quitar cargo '.$cargo->nombre.' porque esta asignado a un indicador.');
+        }
 
-        return redirect()->back()->with('message', 'Se quito el cargo "'.$cargo->nombre.'" correctamente.');
+        
     }
 
     /* INDICADORES */

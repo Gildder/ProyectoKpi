@@ -68,7 +68,7 @@ $(document).ready(function () {
                 
               {{-- Inicio de DAtos de los Indicadores --}}
                 <?php  
-                  $listaTablas = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);  https://www.w3schools.com/bootstrap/bootstrap_ref_all_classes.asp
+                  $listaTablas = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);  
                   $listaGraficas = $indicador::getGraficoIndicador($empleado->codigo, $indicador->id);
 
                 ?>

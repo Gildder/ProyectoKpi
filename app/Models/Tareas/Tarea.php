@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 
-use ProyectoKpi\Cms\Clases\Semana;
+use ProyectoKpi\Cms\Clases\CalcularSemana;
 use ProyectoKpi\Cms\Clases\Tiempo;
 
 
@@ -110,15 +110,13 @@ class Tarea extends Model
         return $localizaciones;
     }
 
-    public function getEstado($id)
+    public function getEstado($estado)
     {
-        $tarea = Tarea::findOrFail($id);
-
-        if ($tarea->estado == '1') {
+        if ($estado == '1') {
             return 'Programado';
-        }elseif ($tarea->estado == '2') {
+        }elseif ($estado == '2') {
             return 'En Proceso';
-        }elseif ($tarea->estado == '3') {
+        }elseif ($estado == '3') {
             return 'Finalizado';
         }
     }

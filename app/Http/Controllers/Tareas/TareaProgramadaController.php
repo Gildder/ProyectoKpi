@@ -27,13 +27,14 @@ class TareaProgramadaController extends Controller
     {
         $this->middleware('auth');
     }
+    
     public function index()
 	{	
 		$tareas = TareaRepository::getTareasProgramadas();
-		$semanas = TareaRepository::listSemana(date('Y-m-d'));
+		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
 
-	 // dd($tareas, $semanas);
+	  dd($tareas, $semanas);
 
 		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
@@ -41,7 +42,7 @@ class TareaProgramadaController extends Controller
 	public function archivados()
 	{	
 		$tareas = TareaRepository::getTareasArchivados();
-		$semanas = TareaRepository::listSemana(date('Y-m-d'));
+		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
 
 		return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas,  'semanas'=> $semanas]);
@@ -54,7 +55,7 @@ class TareaProgramadaController extends Controller
 
 	public function create()
 	{
-		$semanas = TareaRepository::listSemana(date('Y-m-d'));
+		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
 		return view('tareas.tareaProgramadas.create', [ 'semanas'=> $semanas]);
 	}
@@ -95,7 +96,7 @@ class TareaProgramadaController extends Controller
 	public function edit($id)
 	{
 		$tarea = Tarea::findOrFail($id);
-		$semanas = TareaRepository::listSemana($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado));
+		$semanas = TareaRepository::getSemanasTareas($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado));
 		
 		return view('tareas/tareaProgramadas/edit',['tarea'=>$tarea, 'semanas'=>$semanas]);
 

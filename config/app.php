@@ -169,6 +169,11 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        /**
+         * Mis Providers
+         */
+        ProyectoKpi\Providers\CalcularSemanaServideProvider::class,
     ],
 
     /*
@@ -182,7 +187,7 @@ return [
     |
     */
 
-    'aliases' => [
+    'aliases' => array(
 
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -222,6 +227,11 @@ return [
         'Hashids' => Vinkla\Hashids\Facades\Hashids::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-    ],
+
+        /**
+         * Mis Alies
+         */
+        'Calcana' => ProyectoKpi\Facades\CalcularSemana::class,
+    ),
 
 ];

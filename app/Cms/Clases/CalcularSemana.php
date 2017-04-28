@@ -6,7 +6,7 @@ use \Illuminate\Support\Facades\Facade;
 
 use ProyectoKpi\Cms\Clases\SemanaTarea;
 
-class CalcularSemana  extends Facade
+class CalcularSemana
 {
 
     /*contructores */

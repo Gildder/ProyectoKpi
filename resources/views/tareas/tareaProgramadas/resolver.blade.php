@@ -137,7 +137,7 @@ $(document).ready(function(){
 
   $(".InicioEjecucion").datepicker({
     format: 'dd/mm/yyyy',
-    defaultDate: "+1w",
+    //defaultDate: "+1w",
     changeMonth: true,
     numberOfMonths: 1,
     minDate: '{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}',

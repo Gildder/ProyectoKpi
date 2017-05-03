@@ -13,7 +13,7 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
-           @if( Cache::has('evadores'))
+           @if( \Usuario::get('isEvaluador'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados/dashboard') }}" >
@@ -24,7 +24,7 @@
           @endif
 
 
-          @if( Cache::has('evadores'))
+          @if( \Usuario::get('isEvaluador'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados') }}" >
@@ -34,7 +34,7 @@
           </li>
           @endif
 
-          @if( Cache::has('depasores'))
+          @if( \Usuario::get('isSupervisor'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >
@@ -44,7 +44,7 @@
           </li>
           @endif
 
-          @if( Cache::has('iseficacia'))
+          @if(  \Usuario::get('isIndicadores'))
            <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('tareas/tareaProgramadas')}}" >

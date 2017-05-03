@@ -174,6 +174,7 @@ return [
          * Mis Providers
          */
         ProyectoKpi\Providers\CalcularSemanaServideProvider::class,
+        ProyectoKpi\Providers\UsuarioActivoServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,7 @@ return [
          * Mis Alies
          */
         'Calcana' => ProyectoKpi\Facades\CalcularSemana::class,
+        'Usuario' => ProyectoKpi\Facades\UsuarioActivo::class,
     ),
 
 ];

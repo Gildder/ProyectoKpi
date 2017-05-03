@@ -25,27 +25,27 @@ $(document).ready(function(){
 		</thead>
 
 		<tbody>
-		@foreach($tareas as $tarea)
-			<tr>
-				<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" ><span >{{$tarea->id}}</span></a></td>
-			<td>{{$tarea->descripcion}}</td>
-			<td>@if($tarea->fechaInicioEstimado == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}  @endif</td>
-			<td>@if($tarea->fechaFinEstimado == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}  @endif</td>
-			<td>@if($tarea->tiempoEstimado == '') 00:00 @else  {{$tarea->tiempoEstimado}}  @endif</td>
-			<td>@if($tarea->fechaInicioSolucion == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}  @endif</td>
-			<td>@if($tarea->fechaFinSolucion == '') _/_/_ @else  {{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}  @endif</td>
-			<td>@if($tarea->tiempoSolucion == '') 00:00 @else  {{$tarea->tiempoSolucion}}  @endif</td>
-			<td class="{{$tarea->estado}}" >{{$tarea->getEstado($tarea->id)}}</td>
-			<td>@if($tarea->observaciones == '') ninguna @else  {{$tarea->observaciones}}  @endif</td>
-			<td>
-				@foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
-					{{ $ubicacion->nombre }}  <br>
-				@endforeach
-			</td>
-			</tr>
-
-			
+@foreach($tareas as $tarea)
+<tr>
+	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" title="Ver"><span >{{$tarea->id}}</span></a></td>
+	<td>{{$tarea->descripcion}}</td>
+	<td> {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}} </td>
+	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}</td>
+	<td>{{$tarea->tiempoEstimado}}</td>
+	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}</td>
+	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}</td>
+	<td> {{$tarea->tiempoSolucion}}</td>
+	<td> <span class="badge bg-{{ $tarea->getEstadoColor() }}"> {{$tarea->getEstado()}} </span> </td>
+	<td>{{$tarea->getObservacion() }}</td>
+	<td>
+		<ul>
+		@foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
+			o <li>{{ $ubicacion->nombre }} </li>
 		@endforeach
+		</ul>
+	</td>
+</tr>
+@endforeach
 		</tbody>
 
 	</table>

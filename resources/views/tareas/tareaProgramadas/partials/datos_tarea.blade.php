@@ -43,7 +43,7 @@
       <tr>
          <td class="text-right"><b>Estado:</b></td>
         <td>
-          <span class="{{$tarea->estado}}">
+          <span >
             {{$tarea->getEstado($tarea->id)}}
           </span>
         </td>

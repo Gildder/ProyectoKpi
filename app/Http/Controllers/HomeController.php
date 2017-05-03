@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 use ProyectoKpi\Cms\repositories\UserRepository;
-use ProyectoKpi\Models\Controllers\Tareas\TareaProgramadaController;
+use ProyectoKpi\Http\Controllers\Tareas\TareaProgramadaController;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
 
 class HomeController extends Controller
@@ -33,21 +33,21 @@ class HomeController extends Controller
     public function index()
     {
         $rutaPrincipal = 'empleados.perfil.index';
-
         if(! Auth::guest()){
-            if (Auth::user()->isAdmin()) {
+            if (\Usuario::get('isAdmin')) {
                 return redirect()->route('administrador.index');
             }else{
                 // tiene indicadores asignado
-                if(UserRepository::isIndicadores()){
+                if(\Usuario::get('isIndicadores')){
                     $rutaPrincipal = 'tareas.tareaProgramadas.index';
                 }   
 
-                if(UserRepository::isSupervisor()){
+                if(\Usuario::get('isSupervisor')){
                     $rutaPrincipal = 'supervisores.supervisados.index';
                 }
 
-                if (UserRepository::isEvaluador()) {
+                if(\Usuario::get('isEvaluador')){
+                    
                     // $rutaPrincipal = 'evaluadores.evaluados.dashboard';
                      $rutaPrincipal = 'evaluadores.evaluados.dashboard';
                 }

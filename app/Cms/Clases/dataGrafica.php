@@ -5,7 +5,9 @@ namespace ProyectoKpi\Cms\Clases;
 
 /* Inidicadores asignados a una gerencia con ponderacion y resultado de los indicadores semanalmente */
 
-class dataGrafica
+use ProyectoKpi\Cms\Interfaces\Clases;
+
+class dataGrafica implements Clases
 {
     /*Atributos*/
     public $mes = 0;
@@ -24,28 +26,12 @@ class dataGrafica
     }
 
     /* Metodos */
-    public function insertarSemana($semana, $valor)
+    public function set($atributo, $valor)
     {
-        switch ($semana) {
-            case 1:
-                $this->semana1 = $valor;
-                break;
-            case 2:
-                $this->semana2 = $valor;
-                break;
-            case 3:
-                $this->semana3 = $valor;
-                break;
-            case 4:
-                $this->semana4 = $valor;
-                break;
-            case 5:
-                $this->semana5 = $valor;
-                break;
-            case 6:
-                $this->semana6 = $valor;
-                break;
-        }
+        $this->$atributo = $valor;
     }
 
+    public function get($atributo){
+        return $this->$atributo;
+    }
 }

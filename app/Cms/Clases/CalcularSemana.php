@@ -5,9 +5,9 @@ namespace ProyectoKpi\Cms\Clases;
 use \Illuminate\Support\Facades\Facade;
 
 use ProyectoKpi\Cms\Clases\SemanaTarea;
+use ProyectoKpi\Cms\Interfaces\Clases;
 
-class CalcularSemana
-{
+class CalcularSemana {
 
     /*contructores */
     public function __construct()
@@ -129,19 +129,18 @@ class CalcularSemana
      */
     function getSemanasProgramadas($fecha)
     {
-        $semanasTareas = array();
         // Semana de Tarea de la fecha Solicitada
-        array_push($semanasTareas, $this->getSemanaTarea($fecha) );
+        $semanaTarea = $this->getSemanaTarea($fecha);
 
         // date("N") Día de la semana, desde 1 (lunes) hasta 7 (domingo)
         //Si es Viernes = 5 entonces tomamos tambien la semana siguiente
         if(date("N") >= 5 ){
            $nuevafecha = $this->sumarDias(date("Y-m-d"), 6);
 
-           array_push($semanasTareas, $this->getSemanaTarea($nuevafecha) );
+            $semanaTarea->set('siguiente', $this->getSemanaTarea($nuevafecha) );
         }
 
-        return $semanasTareas;
+        return $semanaTarea;
     }
 
     static function getNombreMes($num_mes)
@@ -185,6 +184,5 @@ class CalcularSemana
                 break;
         }
     }
-
 
 }

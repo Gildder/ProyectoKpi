@@ -2,27 +2,42 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-class Tiempo
+use ProyectoKpi\Cms\Interfaces\Clases;
+
+class Tiempo implements Clases
 {
+    private $hora;
+    private $minuto;
+
 	public function __construct()
     {
 
     }
 
+    /* Metodos */
+
+    public function set($atributo, $valor)
+    {
+        $this->$atributo = $valor;
+    }
+
+    public function get($atributo){
+        return $this->$atributo;
+    }
+
 	function obtenerHora($horas, $minutos)
 	{
 		$horaEntera = floor($minutos/60);
-		$minutoResiduo = 0;
 
 		if(($minutos % 60)!=0)
 		{
 			$horaDecimal = ($minutos/60) - $horaEntera;
-			$minutoResiduo = floor($horaDecimal * 60);
+			$this->minuto = floor($horaDecimal * 60);
 		}
 
-		$horaTotal = $horas + $horaEntera;
+		$this->hora = $horas + $horaEntera;
 
-		return array($horaTotal, $minutoResiduo);
+		return array($this->hora, $this->minuto);
 	}
 
 }

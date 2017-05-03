@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Indicadores\PrimerIndicador;
-use ProyectoKpi\Cms\Clases\Semana;
+use ProyectoKpi\Cms\Clases\CalcularSemana;
 use Illuminate\Support\Facades\DB;
 
 class IndicadorSavedListener
@@ -34,7 +34,7 @@ class IndicadorSavedListener
     public function handle(TareaSaved $event)
     {
         $user = \Auth::user();
-        $semana = new Semana;
+        $semana = new CalcularSemana;
         $infoSemana = $semana->getSemanasProgramadas($event->tarea['fechaFinEstimado']);
         $indicador = 'Error';
 

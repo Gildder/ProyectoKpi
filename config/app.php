@@ -175,6 +175,7 @@ return [
          */
         ProyectoKpi\Providers\CalcularSemanaServideProvider::class,
         ProyectoKpi\Providers\UsuarioActivoServiceProvider::class,
+        ProyectoKpi\Providers\LabelServiceProvider::class,
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
          */
         'Calcana' => ProyectoKpi\Facades\CalcularSemana::class,
         'Usuario' => ProyectoKpi\Facades\UsuarioActivo::class,
+        'LabelApps' => ProyectoKpi\Facades\LabelApps::class,
     ),
 
 ];

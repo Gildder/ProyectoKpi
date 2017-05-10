@@ -27,7 +27,7 @@ class IndicadorController extends Controller
 
     public function cargarOrden	()
     {
-    	$ordenes = IndicadorRepository::NroOrdenOcupadas();
+    	$ordenes = IndicadorRepository::cnNroOrdenOcupadas();
     	$collection = collect();
 
     	for ($i=0; $i < 21; $i++) { 

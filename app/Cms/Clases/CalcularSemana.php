@@ -5,7 +5,7 @@ namespace ProyectoKpi\Cms\Clases;
 use \Illuminate\Support\Facades\Facade;
 
 use ProyectoKpi\Cms\Clases\SemanaTarea;
-use ProyectoKpi\Cms\Interfaces\Clases;
+use ProyectoKpi\Cms\Interfaces\IClases;
 
 class CalcularSemana {
 
@@ -181,6 +181,30 @@ class CalcularSemana {
                 break;
             default:
                 return 'Diciembre';
+                break;
+        }
+    }
+
+    static function getNombreSemana($num_semana)
+    {
+        switch ($num_semana) {
+            case 1:
+                return 'Semana 1';
+                break;
+            case 2:
+                return 'Semana 2';
+                break;
+            case 3:
+                return 'Semana 3';
+                break;
+            case 4:
+                return 'Semana 4';
+                break;
+            case 5:
+                return 'Semana 5';
+                break;
+            default:
+                return 'Semana 6';
                 break;
         }
     }

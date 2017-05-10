@@ -180,6 +180,14 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
 	Route::get('evaluadores/evaluados/dashboard', 
 		array('as' => 'evaluadores.evaluados.dashboard', 'uses' => 'Evaluadores\EvaluadosController@dashboard') );
 
+	Route::get('evaluadores/evaluados/reportesProcesos', 
+		array('as' => 'evaluadores.evaluados.reportesProcesos', 'uses' => 'Evaluadores\EvaluadosController@reportesProcesos') );
+
+	Route::get('evaluadores/evaluados/empleadosEvaluados/{indicador}/{evaluador}', 
+			array('as' => 'evaluadores.evaluados.empleadosEvaluados', 'uses' => 'Evaluadores\EvaluadosController@empleadosEvaluados') );
+
+	Route::get('evaluadores/evaluados/showIndicadorEmpleado/{empleado}/{indicador}', 
+			array('as' => 'evaluadores.evaluados.showIndicadorEmpleado', 'uses' => 'Evaluadores\EvaluadosController@showIndicadorEmpleado') );
 
 	Route::resource('evaluadores/evaluados', 'Evaluadores\EvaluadosController', 
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);

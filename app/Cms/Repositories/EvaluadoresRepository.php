@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 use ProyectoKpi\Models\Tareas\Tarea;
-use ProyectoKpi\Cms\Clases\IndicadorEvaluados;
+use ProyectoKpi\Cms\Clases\IndicadorPersonal;
+use ProyectoKpi\Cms\Clases\IndicadorReporte;
 use ProyectoKpi\Models\Empleados\Empleado;
 
 
@@ -19,10 +20,10 @@ class EvaluadoresRepository
        
     }
 
-    public static function getEvaluados($evaluador_id, $empleado_id)
+    public static function cnGetEvaluados($evaluador_id, $empleado_id)
     {
- 
-        $evaluados = DB::table('evaluador_cargos')
+
+        return  DB::table('evaluador_cargos')
             ->select('empleados.codigo', 'empleados.nombres', 'empleados.apellidos', 'departamentos.nombre as departamento', 'users.name as usuario', 'users.email as correo', 'cargos.nombre as cargo', 'evaluadores.descripcion as gerencia')
             ->join('cargos', 'cargos.id', '=', 'evaluador_cargos.cargo_id')
             ->join('empleados', 'empleados.cargo_id', '=', 'evaluador_cargos.cargo_id')
@@ -33,8 +34,6 @@ class EvaluadoresRepository
             ->where('empleados.codigo', '<>', $empleado_id)
             ->where('evaluador_empleados.evaluador_id',  $evaluador_id)
             ->get();
-
-        return $evaluados;
     }
 
     /**
@@ -43,77 +42,120 @@ class EvaluadoresRepository
      * @param  Codigo Empleado
      * @return boolean
      */
-    public static function verificarsEvaluador($param)
+    public static function cnVerificarsEvaluador($param)
     {
         // obtenemos los empelados supoer
-        $result = Empleado::select('evaluador_empleados.evaluador_id')
+        return Empleado::select('evaluador_empleados.evaluador_id')
             ->join('evaluador_empleados','evaluador_empleados.empleado_id','=','empleados.codigo')
             ->where('evaluador_empleados.empleado_id', '=', $param)
             ->first();
+    }
 
-        return $result;
 
+    public static function cnGetPonderacionTipoIndicadores($evaluador)
+    {
+        return DB::select('call pa_ponderaciones_tipoPonderacion('.$evaluador.');');
+    }
+
+    public static function cnGetLimitesEscalas($evaluador)
+    {
+        return DB::select('call pa_ponderaciones_escalaPonderaciones('.$evaluador.');');
+    }
+
+    /*
+     * Lista de empleados que se evaluados en la gerencia de evaluadores
+    */
+    public static function cnGetEmpleadosEvaluados($indicador_id, $evaluador_id)
+    {
+        return DB::select('call pa_evaluadores_empleadosEvaluados('.$indicador_id.', '.$evaluador_id.');');
+    }
+
+    /**
+     * @param $evaluador
+     * @return mixed
+     */
+    public static function cnGetTotalIndicadores($evaluador)
+    {
+        return DB::select('call pa_evaluadores_totalIndicadores(' . $evaluador . ');');
+
+    }
+
+    /**
+     * Retorna los datos de un Indicador para un Mes
+     *
+     * @param $evaluador
+     * @param $anio
+     * @param $mes
+     * @param $indicador
+     * @return mixed
+     */
+    public static function cnGetIndicadoresSemana($evaluador, $indicador, $anio, $mes)
+    {
+        return DB::select('call pa_evaludados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
     }
 
     public static function getIndicadoresPromediosSemanales($evaluador, $anio, $mes)
     {
         $lista = array();
-        $isCantidad = False;
         $cumplimiento = 0;
-        $SemanaCant = 0;    // cantidad de semanas
-        $semanaAct = 0; // semana Actual
+        $cantidadSemanaMes = 0;    // cantidad de semanas
+        $semanaActual = 0; // semana Actual
 
-        $indicadores = DB::select('call pa_evaluadores_totalIndicadores('.$evaluador.');');
+        $indicadores = self::cnGetTotalIndicadores($evaluador);
 
         foreach ($indicadores as $item) {
             // obtenemos los promedios de los indicadores
-            $pon = DB::select('call pa_evaludados_procesosSemana('.$evaluador.', '.$item->id.', '.$anio.', '.$mes.');');
+            $pon = self::cnGetIndicadoresSemana($evaluador, $item->id, $anio, $mes);
 
-            
-            // indicador el nuevo indicador
-            $indicador = new IndicadorEvaluados();
-            $indicador->id      = $item->id;
-            $indicador->nombre  = $item->nombre;
-            $indicador->ponderacion = $item->ponderacion;
-            $indicador->semana1 = $pon[0]->semana_1;
-            $indicador->semana2 = $pon[0]->semana_2;
-            $indicador->semana3 = $pon[0]->semana_3;
-            $indicador->semana4 = $pon[0]->semana_4;
-            $indicador->promedio = $pon[0]->promedio;
+
+            $indicador = self::getIndicadorDeMesPorSemana($item, $pon);
 
             // guardamos las semanas
-            $SemanaCant = $pon[0]->cantidadSemana;
-            $semanaAct = $pon[0]->semanaActual;
+            $cantidadSemanaMes = $pon[0]->cantidadSemana;
+            $semanaActual = $pon[0]->semanaActual;
 
             // Calculamos el promedio total
             $cumplimiento = $cumplimiento + (($indicador->ponderacion * $indicador->promedio)/100);
-
-            switch ($pon[0]->cantidadSemana) {
-                case 5:
-                    $indicador->semana5 = $pon[0]->semana_5;
-                    break;
-                case 6:
-                    $indicador->semana6 = $pon[0]->semana_6;
-                    break;
-            }
 
             array_push($lista, $indicador);
         }
 
         array_push($lista, $cumplimiento);
-        array_push($lista, $SemanaCant);
-        array_push($lista, $semanaAct);
+        array_push($lista, $cantidadSemanaMes);
+        array_push($lista, $semanaActual);
 
         return $lista;
     }
 
-    public static function getPonderacionTipoIndicadores($evaluador)
+    /**
+     * @param $item
+     * @param $ponderacion
+     * @return IndicadorReporte
+     */
+    private static function getIndicadorDeMesPorSemana($item, $ponderacion)
     {
-        return DB::select('call pa_ponderaciones_tipoPonderacion('.$evaluador.');');
+        // indicador el nuevo indicador
+        $indicador = new IndicadorReporte();
+        $indicador->id = $item->id;
+        $indicador->nombre = $item->nombre;
+        $indicador->ponderacion = $item->ponderacion;
+        $indicador->promedio = $ponderacion[0]->promedio;
+
+        $indicador->semana1 = $ponderacion[0]->semana_1;
+        $indicador->semana2 = $ponderacion[0]->semana_2;
+        $indicador->semana3 = $ponderacion[0]->semana_3;
+        $indicador->semana4 = $ponderacion[0]->semana_4;
+        switch ($ponderacion[0]->cantidadSemana) {
+            case 5:
+                $indicador->semana5 = $ponderacion[0]->semana_5;
+                break;
+            case 6:
+                $indicador->semana5 = $ponderacion[0]->semana_5;
+                $indicador->semana6 = $ponderacion[0]->semana_6;
+                break;
+        }
+        return $indicador;
     }
 
-    public static function getLimitesEscalas($evaluador)
-    {
-        return DB::select('call pa_ponderaciones_escalaPonderaciones('.$evaluador.');');
-    }
+
 }

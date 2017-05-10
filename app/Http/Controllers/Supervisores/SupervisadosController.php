@@ -16,38 +16,33 @@ use ProyectoKpi\Models\Localizaciones\Departamento;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
-use ProyectoKpi\Cms\Repositories\PrimerIndicadorRepository;
+use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Requests\Indicadores\ErrorFormRequest;
 
 
 class SupervisadosController  extends Controller
 {
-    protected $primerIndicador;
 
-    public function __construct(PrimerIndicadorRepository $primerIndicador)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->primerIndicador = $primerIndicador;
     }
-
     
     public function index()
     {
-        $user = Auth::user();
-        Cache::forever('codigoempleado', $user->empleado->codigo);
-
         // lista de empleados asignados para su supervison de su usuario
-        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.$user->empleado->codigo.');');
+        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('codigo').');');
 
-        
         return view('supervisores\supervisados\index', ['empleadosDisponibles'=>$empleadosDisponibles]);
     }
 
-    public function show($id)
+    public function show($empleado_id)
     {
-        $indicadores = IndicadorRepository::getIndicadoresEmpleado($id);
-        $empleado = Empleado::where('codigo', $id)->first();
+        // Lista de indicadores supervisados a un empleado supervisado
+        $indicadores = IndicadorRepository::cnGetListaInidicadores($empleado_id);
+        // informacion del empleado supervisado
+        $empleado = Empleado::where('codigo', $empleado_id)->first();
 
         return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'empleado'=>$empleado]);
     }
@@ -93,14 +88,12 @@ class SupervisadosController  extends Controller
         
         
         DB::select("call pa_eficiencia_actualizarNroErrores('".$tarea->fechaFinSolucion."', '".$empleado_id."', 1);");
-
-
         return redirect()->back()->with('El numero de Errores se aumento correctamente.');
     }
 
     public function quitarErrorTarea(ErrorFormRequest $Request, $empleado_id)
     {
-         $tarea_id = \Request::input('tarea_id');
+        $tarea_id = \Request::input('tarea_id');
         $descripcion = trim(\Request::input('descripcion'));
 
         // dd($tarea_id, $descripcion);
@@ -118,8 +111,6 @@ class SupervisadosController  extends Controller
         
         
         DB::select("call pa_eficiencia_actualizarNroErrores('".$tarea->fechaFinSolucion."', '".$empleado_id."', 0);");
-
-
         return redirect()->back()->with('El numero de Errores se aumento correctamente.');
     }
     

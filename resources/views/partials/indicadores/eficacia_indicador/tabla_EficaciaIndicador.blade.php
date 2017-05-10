@@ -3,7 +3,7 @@
 <table id="myTable1" class="table table-bordered table-hover table-response">
   <thead>
     <tr>
-      <th>Nro</th>
+      {{--<th>Nro</th>--}}
       <th>Mes</th>
       <th>Semana</th>
       <th>Actividades Programadas</th>
@@ -14,8 +14,8 @@
   <tbody>
     @foreach($listaTablas as $item)
         <tr>
-          <td>{{$contador++ }}</td>
-          <td class="m-{{$item->mes}}"></td>
+{{--          <td>{{$contador++ }}</td>--}}
+          <td class="m-{{$item->mes}}">{{ \Calcana::getNombreMes($item->mes) }}</td>
           <td >Semana {{$item->semana}}</td>
           <td>{{$item->actpro}}</td>
           <td>{{$item->actrea}}</td>

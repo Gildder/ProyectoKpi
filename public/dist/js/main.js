@@ -1,5 +1,8 @@
 
 $(document).ready(function(){
+
+	//****************************************  Data Tables *******************************************************
+	/* Formatos de tablas de Jquery DataTables */
     $('#myTableCargos').DataTable();
     $('#myTableEmpleado').DataTable();
     $('#myTableIndicadores').DataTable();
@@ -10,14 +13,21 @@ $(document).ready(function(){
     	 "responsive": true,
     	 "autoWidth": false
     });
+
+
     $('#myTable').DataTable();
     $('#myTable1').DataTable();
     $('#myTable2').DataTable();
     $('#myTable3').DataTable();
     $('#myTable4').DataTable();
-
-
     
+    // DataTables con el dom editable
+    $('#myTableDom').DataTable({
+    	"dom": 'frtip'
+    });
+    
+
+
     $('#myTableFiltro').DataTable({
         initComplete: function () {
             this.api().columns().every( function () {
@@ -40,12 +50,17 @@ $(document).ready(function(){
                 } );
             } );
         }
-    } );
+    });
 
 	$('#myTableIndicadorEvalaudor').on('hidden.bs.modal', function () {
 	        $('.modal-body').find('textarea,input,checkbox').val('');
 	});
 
+	//**************************************** Fin Data Tables ***************************************************
+
+	
+
+	//****************************************  DatePicker *******************************************************
 
     /*Calendarios */
 	$( ".datepicker" ).datepicker({
@@ -108,6 +123,8 @@ $(document).ready(function(){
 		}
 	});
 
+	//**************************************** Fin DatePicker *******************************************************
+
 		
 	/* Evento para cuando el usuario libera la tecla escrita dentro del input */
 	$('input').blur(function(){
@@ -144,52 +161,7 @@ $(document).ready(function(){
 	    var dias = Math.floor(dif / (1000 * 60 * 60 * 24)); 
 	    return dias;
 	}
-
-    function nombreMes(nro)
-    {
-        $mes = 'mes';
-        switch(nro)
-        {
-
-            case 1:
-                $mes = 'Enero';
-                break;
-            case 2:
-                $mes = 'Febrero';
-                break;
-            case 3:
-                $mes = 'Marzo';
-                break;
-            case 4:
-                $mes = 'Abril';
-                break;
-            case 5:
-                $mes = 'Mayo';
-                break;
-            case 6:
-                $mes = 'Junio';
-                break;
-            case 7:
-                $mes = 'Julio';
-                break;
-            case 8:
-                $mes = 'Agosto';
-                break;
-            case 9:
-                $mes = 'Septiembre';
-                break;
-            case 10:
-                $mes = 'Octubre';
-                break;
-            case 11:
-                $mes = 'Noviembre';
-                break;
-            case 12:
-                $mes = 'Diciembre';
-                break;
-        }
-        return $mes;
-    }
+    
 });
 
 

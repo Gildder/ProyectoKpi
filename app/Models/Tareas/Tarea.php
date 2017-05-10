@@ -62,9 +62,7 @@ class Tarea extends Model
     // Las localizaciones de disponibles para un empleado particular
     public static function getLocalizaciones()
     {
-        $user = Auth::user();//obtenemos el usuario logueado
-        
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
         $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
 
         return $localizaciones;
@@ -73,9 +71,7 @@ class Tarea extends Model
     // lista de ubidadciones Ocupadas para una tarea
     public static function ubicacionesOcupadas($tarea_id)
     {
-        $user = Auth::user();//obtenemos el usuario logueado
-        
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
         // $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
         $ubicacionesOcupadas = DB::table('localizaciones')->join('tarea_realizadas','tarea_realizadas.localizacion_id','=', 'localizaciones.id')
                                 ->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)
@@ -90,9 +86,7 @@ class Tarea extends Model
     // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesDisponibles($tarea_id)
     {
-        $user = Auth::user();//obtenemos el usuario logueado
-        
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
 
         $ubicacionesDisponible  = DB::select('call pa_tareas_ubicaionesDisponibles('.$localizacion->grupoloc_id.','.$tarea_id.');');
 
@@ -102,49 +96,67 @@ class Tarea extends Model
      // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesTodos($tarea_id)
     {
-        $user = Auth::user();//obtenemos el usuario logueado
-        
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', $user->empleado->localizacion_id)->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
         $localizaciones = DB::table('localizaciones')->select('localizaciones.id', 'localizaciones.nombre')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->get();
 
         return $localizaciones;
     }
 
-    public function getEstado($estado)
+    public function getEstado()
     {
-        if ($estado == '1') {
+        if ($this->attributes['estado'] == '1') {
             return 'Programado';
-        }elseif ($estado == '2') {
+        }elseif ($this->attributes['estado'] == '2') {
             return 'En Proceso';
-        }elseif ($estado == '3') {
+        }elseif ($this->attributes['estado'] == '3') {
             return 'Finalizado';
         }
     }
 
-        /*
-     * Metodo para cambiar del formato Y-m-d  a d-m-Y 
-     * 
+    public function getEstadoColor()
+    {
+        if ($this->attributes['estado'] == '1') {
+            return 'red';
+        }elseif ($this->attributes['estado'] == '2') {
+            return 'yellow';
+        }elseif ($this->attributes['estado'] == '3') {
+            return 'green';
+        }
+    }
+
+    public function getObservacion()
+    {
+        if ($this->attributes['observaciones'] == '') {
+            return 'Ninguna';
+        }else{
+            return $this->attributes['observaciones'];
+        }
+    }
+
+    /*
+     * Metodo para cambiar del formato Y-m-d  a d-m-Y
+     *
      * @param string $fecha
      * @return fecha en formato d-m-Y
      */
     public function cambiarFormatoEuropeo($fecha)
-    {     
+    {
         if($fecha == null){
             return '00/00/0000';
         }
         $partes=explode('-',$fecha);//se parte la fecha
         $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
         return trim($fecha);
-    }  
+    }
 
     /*
-     * Metodo para cambiar del formato Y-m-d  a d-m-Y 
-     * 
+     * Metodo para cambiar del formato Y-m-d  a d-m-Y
+     *
      * @param string $fecha
      * @return fecha en formato d-m-Y
      */
     public function cambiarFormatoDB($fecha)
-    {    
+    {
         if($fecha == null){
             return '0000-00-00';
         }
@@ -152,7 +164,7 @@ class Tarea extends Model
         $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
 
         return trim($fecha);
-    }  
+    }
 
     public function obtenerHora($horas, $minutos)
     {

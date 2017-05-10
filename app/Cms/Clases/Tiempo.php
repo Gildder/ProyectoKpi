@@ -2,9 +2,9 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-use ProyectoKpi\Cms\Interfaces\Clases;
+use ProyectoKpi\Cms\Interfaces\IClases;
 
-class Tiempo implements Clases
+class Tiempo implements IClases
 {
     private $hora;
     private $minuto;

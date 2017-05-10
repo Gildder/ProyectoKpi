@@ -9,12 +9,12 @@
 namespace ProyectoKpi\Cms\Clases;
 
 
-use ProyectoKpi\Cms\Interfaces\Clases;
+use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 
-class UsuarioActivo implements Clases {
+class UsuarioActivo implements IClases {
     private $id;
     private $usuario;
     private $correo;
@@ -112,7 +112,7 @@ class UsuarioActivo implements Clases {
         // dd($user->empleado->cargo_id);
 
         if (!$this->isAdmin()) {
-            $result = EvaluadoresRepository::verificarsEvaluador($user->empleado->codigo);
+            $result = EvaluadoresRepository::cnVerificarsEvaluador($user->empleado->codigo);
         }
 
         if (!isset($result)) {

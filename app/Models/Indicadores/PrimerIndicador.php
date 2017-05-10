@@ -15,7 +15,7 @@ class PrimerIndicador extends Model
      * @var array
      */
     protected $fillable = [
-        'gestion', 'mes', 'semana', 'actpro',  'actrea', 'efeser', 'emp_codigo', 'indicador_id'
+        'id','gestion', 'mes', 'semana', 'actpro',  'actrea', 'efeser', 'emp_codigo', 'indicador_id'
     ];
 
     /**
@@ -24,7 +24,7 @@ class PrimerIndicador extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'created_at', 'update_at',
+         'created_at', 'update_at',
     ];
 
 

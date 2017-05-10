@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 use ProyectoKpi\Models\Tareas\Tarea;
-use ProyectoKpi\Cms\Clases\Semana;
+use ProyectoKpi\Cms\Clases\CalcularSemana;
 use ProyectoKpi\Models\Empleados\Empleado;
 
 

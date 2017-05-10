@@ -4,10 +4,10 @@
       <div class="box-header">
       </div>
       <div class="box-body">
-        <table id="example2" class="table table-bordered table-hover table-response">
+        <table id="myTable2" class="table table-bordered table-hover table-response">
           <thead>
             <tr>
-              <th>Nro</th>
+              {{--<th>Nro</th>--}}
               {{-- <th>Gestion</th> --}}
               <th>Meses</th>
               <th>Semanas</th>
@@ -21,9 +21,9 @@
             <?php $contador = 1; ?>
             @foreach($listaTablas as $indicador)
               <tr>
-                <td data-id="{{$indicador->id}}">{{$contador++}}</td>
+                {{--<td data-id="{{$indicador->id}}">{{$contador++}}</td>--}}
                 {{-- <td>{{$indicador->gestion}}</td> --}}
-                <td class="m-{{$indicador->mes}}"></td>
+                <td class="m-{{$indicador->mes}}">{{ \Calcana::getNombreMes($indicador->mes) }}</td>
                 <td >Semana {{$indicador->semana}}</td>
                 <td>{{$indicador->totope}}</td>
                 <td>{{$indicador->numerr}}</td>

@@ -4,10 +4,9 @@ namespace ProyectoKpi\Cms\Repositories;
 
 use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Localizaciones\Departamento;
-use Illuminate\Support\Facades\DB;
 
 
-public class DepartamentoRepository
+class DepartamentoRepository
 {
 	public function getDepartamentos()
 	{	

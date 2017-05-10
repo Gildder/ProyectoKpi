@@ -29,12 +29,13 @@ class TareaProgramadaController extends Controller
     }
     
     public function index()
-	{	
+	{
+        // obtenemos las tareas programadas
 		$tareas = TareaRepository::getTareasProgramadas();
+        // obtenemos la semana de tarea
 		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
-
-	  dd($tareas, $semanas);
+// dd($tareas);
 
 		return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
 	}
@@ -43,7 +44,6 @@ class TareaProgramadaController extends Controller
 	{	
 		$tareas = TareaRepository::getTareasArchivados();
 		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
-
 
 		return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas,  'semanas'=> $semanas]);
 	}

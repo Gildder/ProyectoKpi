@@ -5,21 +5,17 @@ namespace ProyectoKpi\Cms\Clases;
 
 /* Inidicadores asignados a una gerencia con ponderacion y resultado de los indicadores semanalmente */
 
-use ProyectoKpi\Cms\Interfaces\Clases;
+use ProyectoKpi\Cms\Interfaces\IClases;
 
-class dataGrafica implements Clases
+class DataGrafica implements IClases
 {
     /*Atributos*/
-    public $mes = 0;
-    public $cantidad = 0;
-    public $semana1 = 0;
-    public $semana2 = 0;
-    public $semana3 = 0;
-    public $semana4 = 0;
-    public $semana5 = 0;
-    public $semana6 = 0;
+    private $mes;
+    private $cantidad;
+    private $promedio;
+    private $semanas = array();
 
-    /*contructores */
+    /* Contructores */
     public function __construct()
     {
         
@@ -34,4 +30,11 @@ class dataGrafica implements Clases
     public function get($atributo){
         return $this->$atributo;
     }
+
+    public function setSemanas($semana, $valor)
+    {
+        array_push($semas, new SemanaIndicador($semana, $valor) );
+    }
+
+    
 }

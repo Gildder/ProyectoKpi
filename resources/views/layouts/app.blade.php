@@ -38,6 +38,8 @@
   <!-- jQuery UI -->
   <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui.css')}}">
   <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui-12.css')}}">
+  <!-- c3  -->
+  <link rel="stylesheet" href="{{URL::asset('plugins/d3/c3.css')}}">
 
 
 
@@ -86,19 +88,15 @@
     <!-- /.content -->
       
 </div>
-<!-- Bootstrap 3.3.6 -->
+<!-- dataTables -->
 <script src="{{URL::asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('bootstrap/js/bootstrap.min.js')}}"></script>
 
-<!-- Google ChartJS -->
-<script src="{{URL::asset('/plugins/GoogleChart/loader.js')}}"></script>
-
 <script src="{{URL::asset('plugins/descargas/raphael-min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 
-<script src="{{URL::asset('plugins/morris/morris.min.js')}}"></script>
 <!-- Sparkline -->
 <script src="{{URL::asset('plugins/sparkline/jquery.sparkline.min.js')}}"></script>
 <!-- jvectormap -->
@@ -121,16 +119,20 @@
 <script src="{{URL::asset('plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{URL::asset('plugins/fastclick/fastclick.js')}}"></script>
+<!-- C3 JS -->
+<script src="{{URL::asset('plugins/d3/c3.js')}}"></script>
+<script src="{{URL::asset('plugins/d3/d3.v3.min.js')}}"></script>
 
 <!-- ChartJS 1.0.1 -->
 <script src="{{URL::asset('plugins/chartjs/Chart.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{URL::asset('dist/js/app.min.js')}}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{URL::asset('dist/js/pages/dashboard.js')}}"></script>
+
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{URL::asset('dist/js/demo.js')}}"></script>
+<!-- Progrmando Librerias -->
+<script src="{{URL::asset('dist/js/libs.js')}}"></script>
 
 
 </body>

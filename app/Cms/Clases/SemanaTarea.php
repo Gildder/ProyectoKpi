@@ -1,11 +1,11 @@
 <?php
 namespace ProyectoKpi\Cms\Clases;
-use ProyectoKpi\Cms\Interfaces\Clases;
+use ProyectoKpi\Cms\Interfaces\IClases;
 
 /**
 	* Clase SemanaTarea para gestionar los datos de las semana de trabajo de una tarea
 	*/
-	class SemanaTarea implements Clases
+	class SemanaTarea implements IClases
 	{
 		private $anio;
 		private $mes;

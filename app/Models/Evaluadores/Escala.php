@@ -40,4 +40,11 @@ class Escala extends Model
     protected $hidden = [
          'created_at', 'update_at','deleted_at',
     ];
+
+    /* Relaciones */
+    public function ponderaciones()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Ponderacion', 'escala_ponderacion', 'ponderacion_id', 'escala_id', 'id')
+            ->withPivot('maximo', 'minimo');
+    }
 }

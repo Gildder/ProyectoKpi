@@ -4,7 +4,6 @@ namespace ProyectoKpi\Models\Evaluadores;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Models\Empleados\Cargo;
 use Illuminate\Support\Facades\DB;
 
@@ -41,27 +40,34 @@ class Evaluador extends Model
      * @var array
      */
     protected $hidden = [
-         'created_at', 'update_at',
+         'created_at', 'update_at', 
     ];
 
+
+    /* Relaciones */
     public function empleados()
     {
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado','evaluador_empleados', 'evaluador_id', 'empleado_id');
     }
 
-    function cargos(){
+    public function cargos(){
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Cargo','evaluador_cargos', 'evaluador_id', 'cargo_id');
     }
 
-    function ponderaciones(){
+    public function ponderacion(){
         return $this->belongsTo('ProyectoKpi\Models\Evaluadores\Ponderacion','ponderacion_id');
     }
 
+    public function indicadores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicador', 'evaluador_indicadores', 'indicador_id', 'evaluador_id', 'id');
+    }
+
+
+
+
 
 /*Metodos Repositorio */
-
-
-
     public static function getCargos($id)
     {   
         $cargosEvaluados = Cargo::select('cargos.*')

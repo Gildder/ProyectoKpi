@@ -4,12 +4,9 @@ namespace ProyectoKpi\Models\Indicadores;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Empleados\Cargo;
-use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 
 
 class Indicador extends Model
@@ -50,6 +47,7 @@ class Indicador extends Model
 
     protected $guarded = ['id'];
 
+    /* Relaciones */
     public function cargos()
     {
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Cargo','indicadores_cargos', 'indicador_id', 'cargo_id');
@@ -58,6 +56,22 @@ class Indicador extends Model
     public function tipo()
     {
         return $this->belongsTo('ProyectoKpi\Models\Indicadores\TipoIndicador','tipo_indicador_id');
+    }
+
+    public function ponderaciones()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Evaluador', 'indicador_ponderacion', 'ponderacion_id', 'indicador_id', 'id')
+            ->withPivot('ponderacion');
+    }
+
+    public function evaluadores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Evaluador', 'evaluador_indicadores', 'indicador_id', 'evaluador_id', 'id');
+    }
+
+    public function eficaciaIndicadores()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Indicadores\EficaciaIndicador', 'indicador_id', 'id');
     }
 
 

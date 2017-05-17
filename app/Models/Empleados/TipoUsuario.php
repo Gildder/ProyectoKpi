@@ -43,6 +43,7 @@ class TipoUsuario extends Model
         'id', 'created_at', 'update_at','deleted_at',
     ];
 
+    /* Relaciones */
     public function users()
     {
         return $this->hasMany('ProyectoKpi\User');

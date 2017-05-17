@@ -48,6 +48,27 @@ class Ponderacion extends Model
         return $this->hasMany('ProyectoKpi\Models\Evaluadores\Ponderacion', 'ponderacion_id', 'id');
     }
 
+    public function tipoIndicadores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Indicadores\TipoIndicador','tipo_ponderaciones', 'ponderacion_id', 'tipoIndicador_id','id' )->withPivot('ponderacion');
+
+    }
+
+
+    public function escalaCumplimientos()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Escala', 'escala_ponderacion', 'ponderacion_id', 'escala_id', 'id')
+                    ->withPivot('maximo', 'minimo');
+    }
+
+    public function indicadores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicador', 'indicador_ponderacion', 'ponderacion_id', 'indicador_id', 'id')
+                    ->withPivot('ponderacion');
+    }
+
+
+
     /*Metodos Repositorio */
     public function ponderacionIndicador($id)
     {

@@ -31,7 +31,7 @@ class TipoIndicador extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'id', 'nombre', 
     ];
 
     /**
@@ -40,7 +40,7 @@ class TipoIndicador extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
     public function indicadores()
@@ -48,5 +48,10 @@ class TipoIndicador extends Model
         return $this->hasMany('ProyectoKpi\Models\Indicadores\Indicador');
     }
 
+    public function ponderaciones()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Ponderacion','ponderaciones',  'tipoIndicador_id','ponderacion_id','id' );
+
+    }
     
 }

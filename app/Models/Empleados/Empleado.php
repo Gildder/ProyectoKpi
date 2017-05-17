@@ -3,16 +3,8 @@
 namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Database\wrong;
-use ProyectoKpi\Models\Empleados\Empleado;
-use ProyectoKpi\Models\Empleados\Cargo;
-use ProyectoKpi\Models\Indicadores\Indicador;
-use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Auth;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 
 
@@ -53,26 +45,52 @@ class Empleado extends Model
         'created_at', 'update_at','deleted_at',
     ];
 
-    function users(){
-        return $this->belongsTo('ProyectoKpi\User','user_id');
+    /* Relaciones */
+    function user(){
+        return $this->belongsTo('ProyectoKpi\Models\User','user_id');
     }
 
-    function cargos(){
+    function cargo(){
         return $this->belongsTo('ProyectoKpi\Models\Empleados\Cargo');
     }
     
-    function departamentos(){
+    function departamento(){
         return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Departamento');
     }
 
-    function tareas(){
-        return $this->belongsTo('ProyectoKpi\Models\Tareas\Tarea');
-    }
-
-    function localizaciones(){
+    function localizacion(){
         return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Localizacion');
     }
 
+    public function tareas()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Tareas\Tarea', 'empleado_id', 'id');
+    }
+
+    public function supervisores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado', 'supervisores_empleados', 'supervisor_id', 'empleado_id', 'codigo');
+    }
+
+    //    relacion supervisores con Cargos
+    public function cargos()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Cargo', 'supervisor_cargos', 'empleado_id', 'cargo_id', 'id');
+    }
+
+    // relacion de supervisor departamentos
+    public function departamentos()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Localizaciones\Localizacion', 'supervisor_departamentos', 'empleado_id', 'departamento_id', 'id');
+
+    }
+
+    public function eficaciaIndicadores()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Indicadores\EficaciaIndicador', 'empleado_id', 'codigo');
+    }
+
+    /* Metodos Repositorio */
     //Indicadores
     public function primer_indicador()
     {

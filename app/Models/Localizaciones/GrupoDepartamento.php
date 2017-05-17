@@ -31,7 +31,7 @@ class GrupoDepartamento extends Model
      * @var array
      */
     protected $fillable = [
-        'id','nombre', 
+        'id','nombre',
     ];
 
     /**
@@ -46,6 +46,7 @@ class GrupoDepartamento extends Model
 
     protected $guarded = ['id'];
 
+    /* Relaciones */
     public function departamentos()
     {
         return $this->hasMany('ProyectoKpi\Models\Localizaciones\Departamento', 'grupodep_id', 'id');

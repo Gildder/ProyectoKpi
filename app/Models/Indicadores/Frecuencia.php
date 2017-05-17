@@ -44,5 +44,9 @@ class Frecuencia extends Model
 
     protected $guarded = ['id'];
 
-  
+    /* Relaciones */
+    public function indicadorCargos()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Indicadores\IndicadorCargo', 'frecuencia_id', 'id');
+    }
 }

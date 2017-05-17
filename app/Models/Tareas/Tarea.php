@@ -48,6 +48,7 @@ class Tarea extends Model
         'id', 'created_at', 'update_at', 'deleted_at',
     ];
 
+    /* Relaciones */
     public function empleados()
     {
         return $this->hasMany('ProyectoKpi\Models\Empleados\Empleado', 'empleado_id');
@@ -56,6 +57,17 @@ class Tarea extends Model
     function proyectos(){
         return $this->hasMany('ProyectoKpi\Models\Tareas\Proyecto', 'proyecto_id');
     }
+
+    public function  notaErrores()
+    {
+        return $this->hasMany('ProyectiKpi/Models/Tareas/Tarea', 'tarea_id', 'id');
+    }
+
+    public function localizaciones()
+    {
+        return $this->belongsToMany('ProyectoKpi/Models/Localizaciones/Localizacion', 'tarea_realizadas', 'tarea_id', 'localizacion_id', 'id');
+    }
+
 
     /* ;Metodos de repositorio */
 

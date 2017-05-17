@@ -42,8 +42,20 @@ class NotaError extends Model
 
     protected $guarded = ['id'];
 
-    function cargos(){
+    /* Relaciones */
+    public function cargos()
+    {
         return $this->belongsTo('ProyectoKpi\Models\Indicadores\ErrorOperacion');
+    }
+
+    public function tarea()
+    {
+        return $this->belongsTo('ProyectoKpi\Models\Indicadores\NotaError', 'tarea_id', null, 'id');
+    }
+
+    public function supervisor()
+    {
+        return $this->belongsTo('ProyectoKpi/Models/Empleados/Empleado', 'supervisor_id', null, 'codigo');
     }
 
 }

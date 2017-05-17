@@ -5,7 +5,6 @@ namespace ProyectoKpi\Models\Localizaciones;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use ProyectoKpi\Models\Localizaciones\Localizacion;
 
 
 class Localizacion extends Model
@@ -43,12 +42,24 @@ class Localizacion extends Model
         'created_at', 'update_at','deleted_at',
     ];
 
-    public function grupoLocalizaciones()
+    /* Relaciones */
+    public function grupoLocalizacion()
     {
         return $this->belongsTo(grupoLocalizacion::class);
     }
 
+    public function tareas()
+    {
+        return $this->belongsToMany('ProyectoKpi/Models/Tareas/Tarea', 'tarea_realizadas', 'tarea_id', 'localizacion_id', 'id');
+    }
 
+    public function empleados()
+    {
+        return $this->hasMany('ProyectoKpi/Models/Empleados/Empleado', 'localizacion_id', 'id');
+    }
+
+
+    /* Metodos Repositorio */
     public static function getLocalizaciones()
     {
 

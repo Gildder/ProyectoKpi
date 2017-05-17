@@ -1,6 +1,6 @@
 <?php
 
-namespace ProyectoKpi;
+namespace ProyectoKpi\Models;
 
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,7 +26,7 @@ class User extends Authenticatable
           'password', 'remember_token',
     ];
 
-
+    /* Relaciones */
     public function empleado()
     {
         return $this->hasOne('ProyectoKpi\Models\Empleados\Empleado');
@@ -37,11 +37,18 @@ class User extends Authenticatable
         return $this->belongsTo('ProyectoKpi\Models\Empleados\TipoUsuario','type');
     }
 
+    public function user()
+    {
+        return $this->hasOne('ProyectoKpi\Models\Empleados\Empleado', 'user_id');
+    }
 
     public function isAdmin()
     {
         return $this->type == '1';
     }
+
+    /* Relaciones */
+
 
 
 }

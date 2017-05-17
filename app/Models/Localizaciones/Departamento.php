@@ -43,10 +43,19 @@ class Departamento extends Model
         'created_at', 'update_at','deleted_at',
     ];
 
+    /* Relaciones */
     public function grupoDepartamento()
     {
         return $this->belongsTo('ProyectoKpi\Models\Localizaciones\GrupoDepartamento','grupodep_id');
     }
+
+    public function empleados()
+    {
+        return $this->hasMany('ProyectoKpi/Models/Empleados/Empleado', 'departamento_id', 'id');
+    }
+
+
+    /* Metodos Repositorio */
 
     /**
      * Retorna los departamentos perteneciente a un grupo departamento

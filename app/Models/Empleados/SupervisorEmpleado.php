@@ -32,6 +32,5 @@ class SupervisorEmpleado extends Model
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado','empleados_id');
     }
 
-
    
 }

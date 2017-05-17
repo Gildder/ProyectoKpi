@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-use Illuminate\Support\Facades\DB;
-use ProyectoKpi\Models\Indicadores\Indicador;
 
 class IndicadorCargo extends Model
 {
@@ -32,7 +30,7 @@ class IndicadorCargo extends Model
      * @var array
      */
     protected $fillable = [
-        'condicion', 'aclaraciones',  'objetivo',   'indicador_id', 'cargo_id', 'frecuencia_id', 
+        'indicador_id', 'evaluadorIndicador_id', 'cargo_id', 'evaluadorCargo_id', 'evaliador','condicion', 'aclaraciones',  'objetivo',   'indicador_id', 'cargo_id', 'frecuencia_id',
     ];
 
 
@@ -46,15 +44,34 @@ class IndicadorCargo extends Model
     ];
 
 
+    /* Relaciones */
     public function indicadores()
     {
-        return $this->belongsTo('ProyectoKpi\Models\Indicador','indicador_id');
+        return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicadores','evaluador_indicadores', 'indicador_id', 'evaluador_id', 'id');
+
+    }
+
+    public function evaluadorIndicadores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Evaluador','evaluador_indicadores', 'indicador_id', 'evaluador_id', 'id');
 
     }
 
     public function cargos()
     {
-        return $this->belongsTo('ProyectoKpi\Models\Indicadores\Cargo','cargo_id');
+        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Cargo','evaluador_cargos', 'cargo_id', 'evaluador_id', 'id');
+
+    }
+
+    public function evaluadorCargos()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Evaluadores\Evaluador','evaluador_cargos', 'cargo_id', 'evaluador_id', 'id');
+
+    }
+
+    public function frecuencia()
+    {
+        return $this->belongsTo('ProyectoKpi\Models\Indicadores\Frecuencia', 'frecuencia_id', null, 'id');
     }
 
 

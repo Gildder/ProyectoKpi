@@ -5,13 +5,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
-use ProyectoKpi\Models\Tareas\Tarea;
-use ProyectoKpi\Cms\Clases\IndicadorPersonal;
+use ProyectoKpi\Cms\Clases\TablaMes;
+use ProyectoKpi\Cms\Clases\TablaSemana;
+use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Cms\Clases\IndicadorReporte;
 use ProyectoKpi\Models\Empleados\Empleado;
+use ProyectoKpi\Models\Indicadores\TipoIndicador;
 
 
-class EvaluadoresRepository
+class EvaluadoresRepository extends BaseRepository
 {
 
     /*contructores */
@@ -40,15 +42,20 @@ class EvaluadoresRepository
      * Verifica si un empleado es Supervisor.
      * 
      * @param  Codigo Empleado
-     * @return boolean
+     * @return Evaluador
      */
     public static function cnVerificarsEvaluador($param)
     {
         // obtenemos los empelados supoer
-        return Empleado::select('evaluador_empleados.evaluador_id')
+         $evaluador_id = Empleado::select('evaluador_empleados.evaluador_id')
             ->join('evaluador_empleados','evaluador_empleados.empleado_id','=','empleados.codigo')
             ->where('evaluador_empleados.empleado_id', '=', $param)
             ->first();
+
+         $evaluador = Evaluador::select('evaluadores.id','evaluadores.abreviatura','evaluadores.descripcion','evaluadores.ponderacion_id')
+                            ->where('id',$evaluador_id->evaluador_id)->first();
+
+         return $evaluador;
     }
 
 
@@ -77,7 +84,6 @@ class EvaluadoresRepository
     public static function cnGetTotalIndicadores($evaluador)
     {
         return DB::select('call pa_evaluadores_totalIndicadores(' . $evaluador . ');');
-
     }
 
     /**
@@ -94,35 +100,70 @@ class EvaluadoresRepository
         return DB::select('call pa_evaludados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
     }
 
-    public static function getIndicadoresPromediosSemanales($evaluador, $anio, $mes)
+    public static function getIndicadoresPromedios($evaluador)
     {
         $lista = array();
         $cumplimiento = 0;
-        $cantidadSemanaMes = 0;    // cantidad de semanas
-        $semanaActual = 0; // semana Actual
-
         $indicadores = self::cnGetTotalIndicadores($evaluador);
+        $contador = 0; // contador de frecuencia de fechas
 
         foreach ($indicadores as $item) {
-            // obtenemos los promedios de los indicadores
-            $pon = self::cnGetIndicadoresSemana($evaluador, $item->id, $anio, $mes);
-
-
-            $indicador = self::getIndicadorDeMesPorSemana($item, $pon);
-
-            // guardamos las semanas
-            $cantidadSemanaMes = $pon[0]->cantidadSemana;
-            $semanaActual = $pon[0]->semanaActual;
-
+            if(\FiltroTabla::getTipo() == 0) // Si es Mensual
+            {
+                $indicador = new TablaSemana($item->id, $item->nombre, $item->ponderacion, $evaluador, \FiltroTabla::getAnio(), \FiltroTabla::getMesBuscado());
+            }else{
+                $indicador = new TablaMes($item->id, $item->nombre, $item->ponderacion, $evaluador, \FiltroTabla::getAnio(), \FiltroTabla::getPrimerMes());
+            }
             // Calculamos el promedio total
-            $cumplimiento = $cumplimiento + (($indicador->ponderacion * $indicador->promedio)/100);
-
+            $cumplimiento = $cumplimiento + (($indicador->getPonderacion() * $indicador->getPromedio())/100);
             array_push($lista, $indicador);
         }
 
         array_push($lista, $cumplimiento);
-        array_push($lista, $cantidadSemanaMes);
-        array_push($lista, $semanaActual);
+
+        return $lista;
+    }
+
+    /**
+     * Retorna lista de indicadores por Semana
+    */
+    public static function getIndicadoresPromediosSemana($evaluador)
+    {
+        $lista = array();
+        $cumplimiento = 0;
+        $contador = 0; // contador de frecuencia de fechas
+        $indicadores = self::cnGetTotalIndicadores($evaluador);
+
+        foreach ($indicadores as $item) {
+            $indicador = new TablaSemana($item->id, $item->nombre, $item->ponderacion, $evaluador, \FiltroTabla::getAnio(), \FiltroTabla::getMesBuscado());
+
+             // Calculamos el promedio total
+            $cumplimiento = $cumplimiento + (($indicador->getPonderacion() * $indicador->getPromedio())/100);
+            $contador = $indicador->getSemanas();
+            array_push($lista, $indicador);
+        }
+
+        array_push($lista, $contador);
+        array_push($lista, $cumplimiento);
+
+        return $lista;
+    }
+
+    public static function getIndicadoresPromediosMes($evaluador_id)
+    {
+        $lista = array();
+        $cumplimiento = 0;
+        $indicadores = self::cnGetTotalIndicadores($evaluador_id);
+
+        foreach ($indicadores as $item) {
+            $indicador = new TablaMes($item->id, $item->nombre, $item->ponderacion, $evaluador_id);
+
+            // Calculamos porcentaje de cumplimiento
+            $cumplimiento = $cumplimiento + (($indicador->getPonderacion() * $indicador->getPromedio())/100);
+            array_push($lista, $indicador);
+        }
+
+        array_push($lista, $cumplimiento);
 
         return $lista;
     }

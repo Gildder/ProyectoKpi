@@ -12,7 +12,6 @@ $(document).ready(function(){
     localStorage.setItem('activeTab', $(e.target).attr('href'));
   });
 
-  
   var activeTab = localStorage.getItem('activeTab');
   if(activeTab){
     $('#myTab a[href="' + activeTab + '"]').tab('show');
@@ -20,42 +19,24 @@ $(document).ready(function(){
 });
 </script>
 
-
 <div class="panel panel-default">
   <div class="panel-heading">
-  	<p class="titulo-panel">{!! $evaluador->abreviatura  !!} - {!! $evaluador->descripcion !!}</p>
+  	<p class="titulo-panel">{!! \Cache::get('evadores')->abreviatura !!} - {!! \Cache::get('evadores')->descripcion !!}</p>
   </div>
   <div class="panel-body">
-    <!-- Panel de Tipos de Indicadores-->
-    @foreach($tipos as $item)
-    <div class="col-lg-3 col-xs-6">
-      <div class="tipo-{{ $item->id}} small-box">
-        <div class="inner">
-          <h3>{{ $item->ponderacion}}<sup style="font-size: 20px">%</sup></h3>
-
-          <p>{{ $item->nombre}}</p>
-        </div>
-        <div class="icon">
-          <i id="ico" class="fa "></i>
-        </div>
-      {{--   <div class="completo">
-          <p>Esta es una inforamcion de prueba</p>
-        </div> --}}
-        <a href="#" class="text-{{ $item->id }}  small-box-footer">{{-- Mas Informacion <i class="fa fa-arrow-circle-right"></i> --}}</a>
-      </div>
-    </div>
-    @endforeach
-    {{-- Fin Panel Tipo Indicadores --}}
+      {{-- Inicio Panel Tipo Indicadores Ponderacion --}}
+        @include('evaluadores.evaluados.dashboard.partials.ponderacionTipo')
+      {{-- Fin Panel Tipo Indicadores --}}
 
     {{-- Panel de Tipo de Indicadores --}}
     <div class="col-md-12">
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">Tipo de Indicadores </h3>
+          <h3 class="box-title">Tipo de Indicadores</h3>
 
           <!-- Tabs within a box -->
           <ul class="nav nav-tabs pull-right" id="myTab" >
-            @foreach($tipos as $item)
+            @foreach(\Cache::get('evadores')->ponderacion->tipoIndicadores as $item)
               @if($item->id == '1')
                 <li class=" tipos-{!! $item->id !!} active"  ><a href="#tipoPanel-{!! $item->id !!}" style="font-weight: bold;" data-toggle="tab"><i id="ico" class="fa "></i> <strong>{!! $item->nombre !!}</strong>  </a></li>
               @else
@@ -68,8 +49,7 @@ $(document).ready(function(){
         <!-- Tabla de Totales de Tipos Indicadores -->
         <div class="box-body">
           <div class="tab-content no-padding">
-            <!-- Morris chart - Sales -->
-              @foreach($tipos as $item)
+              @foreach(\Cache::get('evadores')->ponderacion->tipoIndicadores as $item)
                 @if($item->id == '1')
                   <div class="chart tab-pane active" id="tipoPanel-{!! $item->id !!}" style="position: relative;">
                     <div class="panel-filtros">
@@ -87,30 +67,13 @@ $(document).ready(function(){
               @endforeach
             </div>
           </div>
-          <!-- /.row -->
         </div>
       </div>
-
       {{-- Fin Panel Tipo Indicadores --}}
 
 
       <!-- Panel de Escalas-->
-      <div class="box-footer">
-        <div class="row">
-        <div class="col-sm-12" style="text-align: center; padding: 10px; background: #e7e6e8;  box-shadow: 1px 1px 0 0 #909090; border-right: 0.3em;"><b>Escala de Colores</b> </div>
-          @foreach($escalas as $escala)
-            <div class="col-sm-3 col-xs-6"  style="background: #{{ $escala->fondo }}; border-right: 0.2em solid white; box-shadow: 0 1px 1px 0 #909090; color: #{{ $escala->color }};">
-              <div class="description-block border-right">
-                <span class="description-percentage" style="font-size: 25px;"><b> {{ $escala->minimo }} - {{ $escala->maximo }} % </b></span>
-                <h5 class="description-header" >{{ $escala->nombre }}</h5>
-                {{-- <span class="description-text">{{ $escala->nombre }}</span> --}}
-              </div>
-              <!-- /.description-block -->
-            </div>
-          @endforeach
-
-        </div>
-      </div>
+      @include('evaluadores.evaluados.dashboard.partials.EscalasEvaluadores')
       {{-- Fin Panel Escalas --}}
 
     </div>

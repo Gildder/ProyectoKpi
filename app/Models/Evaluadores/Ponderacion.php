@@ -51,7 +51,6 @@ class Ponderacion extends Model
     public function tipoIndicadores()
     {
         return $this->belongsToMany('ProyectoKpi\Models\Indicadores\TipoIndicador','tipo_ponderaciones', 'ponderacion_id', 'tipoIndicador_id','id' )->withPivot('ponderacion');
-
     }
 
 

@@ -6,7 +6,9 @@
  * Time: 01:15 PM
  */
 
-namespace ProyectoKpi\Cms\Interfaces;
+namespace ProyectoKpi\Cms\Abstracts;
+
+use Illuminate\Support\Facades\DB;
 
 /**
  * Tabla de Indicadores de Evaluadores
@@ -17,29 +19,11 @@ abstract class  TablaAbstract
     protected $nombre;
     protected $ponderacion;
     protected $promedio;
-    protected $mesActual;
-    protected $arr;
-
-    public function __construct(array $arr)
-    {
-        $this->mesActual = date('n', Now());
-        $this->arr = $arr;
-
-        $this->inicializar();
-    }
-
-    public function inicializar()
-    {
-        $this->id = $this->arr->id;
-        $this->nombre = $this->arr->nombre;
-        $this->ponderacion = $this->arr->ponderacion;
-        $this->promedio = $this->arr->promedio;
-    }
 
     /**
      * Retorna el promedio de un Indicador
     */
-    public abstract function getDatosDeTablaIndicadores($indicador_id, $evaluador_id, $anio, $mes);
+    public abstract function getDatosDeTablaIndicadores($indicador_id, $evaluador_id);
 
 
     /**
@@ -53,15 +37,24 @@ abstract class  TablaAbstract
      */
     public function cnGetIndicadoresSemana( $indicador, $evaluador, $anio, $mes)
     {
-        return DB::select('call pa_evaludados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
+        return \DB::select('call pa_evaludados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
     }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getPromedio()
     {
-        return $this->id;
+        return $this->promedio;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getPonderacion()
+    {
+        return $this->ponderacion;
     }
 
     /**
@@ -75,18 +68,11 @@ abstract class  TablaAbstract
     /**
      * @return mixed
      */
-    public function getPonderacion()
+    public function getId()
     {
-        return $this->ponderacion;
+        return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPromedio()
-    {
-        return $this->promedio;
-    }
 
 
 }

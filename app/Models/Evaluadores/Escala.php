@@ -29,7 +29,7 @@ class Escala extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'nombre', 
+        'id', 'nombre', 'orden', 'color',  'fondo', 
     ];
 
     /**

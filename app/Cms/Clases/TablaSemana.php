@@ -9,7 +9,7 @@
 namespace ProyectoKpi\Cms\Clases;
 
 
-use ProyectoKpi\Cms\Interfaces\TablaAbstract;
+use ProyectoKpi\Cms\Abstracts\TablaAbstract;
 
 class TablaSemana extends TablaAbstract
 {
@@ -20,26 +20,35 @@ class TablaSemana extends TablaAbstract
     private $semana4;
     private $semana5;
     private $semana6;
+    private $semanas;
 
-
-    public function get($atributo)
+    /**
+    */
+    public function __construct($id, $nombre, $ponderacion, $evaluador)
     {
-        return $this->$atributo;
-    }
+        $this->id = $id;
+        $this->nombre = $nombre;
+        $this->ponderacion = $ponderacion;
 
+        $this->getDatosDeTablaIndicadores($id, $evaluador);
+    }
 
     /**
      * Retorna el promedio de un Indicador
      */
-    public function getDatosDeTablaIndicadores($indicador_id, $evaluador_id,  $anio, $mes)
+    public function getDatosDeTablaIndicadores($indicador_id, $evaluador_id)
     {
+        $anio =  \FiltroTabla::getAnio();
+        $mes  =  \FiltroTabla::getMesBuscado();
+
         $datos = $this->cnGetIndicadoresSemana($indicador_id, $evaluador_id, $anio, $mes);
 
         $this->asignarPromedio($datos);
     }
 
     /**
-     * Asignamos el Promedio a los Atributos
+     * Asignamos el Promedio de los indicadores a cada semana y obtenemos el promedio del mes
+     *
      */
     private function asignarPromedio($datos)
     {
@@ -56,5 +65,66 @@ class TablaSemana extends TablaAbstract
                 $this->semana6 = $datos[0]->semana_6;
                 break;
         }
+//        contador de tiempo sera igual a mi cantidad de semanas del mes
+        $this->promedio = $datos[0]->promedio;
+        $this->semanas = $datos[0]->cantidadSemana;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSemana1()
+    {
+        return $this->semana1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSemana2()
+    {
+        return $this->semana2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSemana3()
+    {
+        return $this->semana3;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSemana4()
+    {
+        return $this->semana4;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSemana5()
+    {
+        return $this->semana5;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSemana6()
+    {
+        return $this->semana6;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSemanas()
+    {
+        return $this->semanas;
+    }
+
+
 }

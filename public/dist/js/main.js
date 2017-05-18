@@ -161,6 +161,8 @@ $(document).ready(function(){
 	    var dias = Math.floor(dif / (1000 * 60 * 60 * 24)); 
 	    return dias;
 	}
+
+
     
 });
 

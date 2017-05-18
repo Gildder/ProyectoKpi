@@ -13,6 +13,7 @@ use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
+use ProyectoKpi\Models\Evaluadores\Evaluador;
 
 class UsuarioActivo implements IClases {
     private $id;
@@ -103,7 +104,7 @@ class UsuarioActivo implements IClases {
     /*
      * VErificar si el usuario logueado esata asignado como supervisor de otro emplaedo
      * gaurda en cache si es asi.
-      */
+    */
     public function isEvaluador()
     {
         $result = false;
@@ -119,6 +120,7 @@ class UsuarioActivo implements IClases {
             \Cache::forget('evadores');
             return false;
         }else{
+            \Cache::forget('evadores');
             \Cache::forever('evadores', $result);
 
             return true;

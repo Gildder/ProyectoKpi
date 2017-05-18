@@ -22,7 +22,7 @@ class CreateTipoIndicadorPonderacionTable extends Migration
         Schema::table('tipo_ponderaciones', function ($table) {
             $table->primary(['ponderacion_id','tipoIndicador_id']);
             $table->foreign('ponderacion_id')->references('id')->on('ponderaciones')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('tipoIndicador_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('tipoIndicador_id')->references('id')->on('tipos_indicadores')->onDelete('cascade')->onUpdate('cascade');
 
         });
     }

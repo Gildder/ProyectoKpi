@@ -68,7 +68,7 @@ return [
         'users' => [
             'driver' => 'eloquent',
             // 'driver' => 'adldap', // Changed from 'eloquent'
-            'model' => ProyectoKpi\User::class,
+            'model' => ProyectoKpi\Models\User::class,
         ],
 
         // 'users' => [

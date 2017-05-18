@@ -14,18 +14,18 @@ use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Cms\Clases\CalcularSemana;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
-use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Indicadores\Indicador;
 
+use ProyectoKpi\Cms\Clases\FiltroTabla;
 
 class EvaluadosController extends Controller
 {
-    private $indicador;
-    private $filtroEvaluador;
+    private $evaluador_id;
+
     public function __contruct()
     {
-        $this->filtroEvaluador = new FiltroEvaluadores();
-        $this->middleware('auth', 'evaluadores', 'estandard');
+        $evaluador_id =
+        $this->middleware('auth');
     }
 
     
@@ -38,7 +38,6 @@ class EvaluadosController extends Controller
     {
         // Obtenemos el Id del Evaluador
         $id = json_decode(\Cache::get('evadores'));
-
         $evaluados = EvaluadoresRepository::cnGetEvaluados($id->evaluador_id, \Usuario::get('codigo') );
 
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
@@ -49,116 +48,66 @@ class EvaluadosController extends Controller
     */
     public function dashboard()
     {
-        // obtenemo s de cache los parametro de los filtro de tabla
-       $filtro = \Cache::get('filtroEvaluador');
-       if(empty($filtro))
-       {
-           $filtro = array( 'ver' => 0, 'desde'=> 0);
-           \Cache::forever('filtroEvaluador', json_encode($filtro) );
-       }
+        /* obtenemos las tabla de semanas y meses */
+        $this->obtenerTablaSemana();
+        $this->obtenerTablaMes();
 
-        // convertir en dinamico los prametros de las fechas
-        $anio = 2017;
-        $mes = 5;
+//        dd(\Cache::get('tablaSemana'),\Cache::get('cumplimientoSemana'),\Cache::get('tablaMes'),\Cache::get('cantSemana'));
 
-        // Obtenemos el Id del evaluador
-        $id = json_decode(\Cache::get('evadores'));
-        $evaluador = Evaluador::findOrFail($id->evaluador_id);
-
-        $tipos = EvaluadoresRepository::cnGetPonderacionTipoIndicadores($evaluador->id);
-        $escalas = EvaluadoresRepository::cnGetLimitesEscalas($evaluador->id);
-        // Obtnemos los indicadores de la gerencia evaluadora
-        $indicadores = EvaluadoresRepository::getIndicadoresPromediosSemanales($evaluador->id, $anio, $mes);
-
-        // Semana Actual
-        $semanaHoy = array_pop($indicadores);
-        $semanaCant = array_pop($indicadores);
-        $cumplimiento = array_pop($indicadores);
+        $tipos = EvaluadoresRepository::cnGetPonderacionTipoIndicadores(\Cache::get('evadores')->id);
+        $escalas = EvaluadoresRepository::cnGetLimitesEscalas(\Cache::get('evadores')->id);
 
         return view('evaluadores/evaluados/dashboard/index', [
-            'tipos'=> $tipos, 
-            'evaluador'=> $evaluador, 
-            'escalas'=> $escalas, 
-            'indicadores'=> $indicadores, 
-            'semanaCant'=> $semanaCant,
-            'semanaHoy'=> $semanaHoy,
-            'cumplimiento'=> $cumplimiento,
-            'mes'=> CalcularSemana::getNombreMes($mes)
+            'tipos'=> $tipos,
+            'escalas'=> $escalas
         ]);
     }
 
-    public function tablaTipoIndicadores()
+    public function opcionVista($id, Request $request)
     {
+        \FiltroTabla::setTipo($id);
+
+        $indicadores = EvaluadoresRepository::getIndicadoresPromedios(\Cache::get('evadores')->id);
+        $contadorTiempo = array_pop($indicadores);
+        $cumplimiento = array_pop($indicadores);
+
+        \Cache::forget('tablaIndicadores');
+        \Cache::forever('tablaIndicadores', $indicadores);
+
+        if($request->ajax()){
+            $view = View::make('evaluadores.evaluados.dashboard');
+
+            return response()->json([
+                'contadorTiempo' => $contadorTiempo,
+                'cumplimiento'   => $view->renderSections()['']
+            ]);
+        }
+
+        return redirect()->back();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function filtroMes(Request $request)
     {
-        //
+        $cantidad = \Request::input('selectOpcion');
+
+        // verificamos el paratro de la busqueda enviadas por el formulario
+        if($cantidad != 0){
+            $mes = \FiltroTabla::restarAlUltimoMes($cantidad);
+        }else{ // si es iguala cero el primer mes debe ser enero = 1
+            $mes = 1;
+        }
+
+        \FiltroTabla::setPrimerMes($mes);
+
+        return $this->dashboard();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function filtroSemana(Request $request)
     {
-        //
+        $vista = \Request::input('selectVer');
+
+        dd($vista);
     }
-
-    
-     /* Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $empleado = Empleado::where('codigo', $id)->get();
-
-        return view('evaluadores/evaluados/show',  ['empleado'=> $empleado]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
 
     /**
      * Obtener todos los empleados que se evaluaron .
@@ -180,7 +129,39 @@ class EvaluadosController extends Controller
     {
         $listaTablas = IndicadorRepository::getTablaIndicador($empleado_id, $indicador_id);  
         $listaGraficas = IndicadorRepository::getGraficoIndicador($empleado_id, $indicador_id);  
+    }
 
+    /**
+     * Obtenemos y Salvamos la tabla de Semanas
+     */
+    private function obtenerTablaSemana()
+    {
+        $semana = EvaluadoresRepository::getIndicadoresPromediosSemana(\Cache::get('evadores')->id);
+        $cumplimiento = array_pop($semana);
+        $semanas = array_pop($semana);
 
+        \Cache::forget('tablaSemana');
+        \Cache::forever('tablaSemana', $semana);
+
+        \Cache::forget('cumplimientoSemana');
+        \Cache::forever('cumplimientoSemana', $cumplimiento);
+
+        \Cache::forget('cantSemana');
+        \Cache::forever('cantSemana', $semanas);
+    }
+
+    /**
+     * Obtenemos y Salvamos la tabla de Meses
+    */
+    private function obtenerTablaMes()
+    {
+        $mes = EvaluadoresRepository::getIndicadoresPromediosMes(\Cache::get('evadores')->id);
+        $cumplimiento = array_pop($mes);
+
+        \Cache::forget('tablaMes');
+        \Cache::forever('tablaMes', $mes);
+
+        \Cache::forget('cumplimientoMes');
+        \Cache::forever('cumplimientoMes', $cumplimiento);
     }
 }

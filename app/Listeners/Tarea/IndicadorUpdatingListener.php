@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Tareas\Tarea;
-use ProyectoKpi\Models\Indicadores\PrimerIndicador;
+use ProyectoKpi\Models\Indicadores\EficaciaIndicador;
 use ProyectoKpi\Cms\Clases\CalcularSemana;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +38,7 @@ class IndicadorUpdatingListener
         $infoSemana = $semana->getSemanasProgramadas($event->tarea['fechaFinEstimado']);
 
         //Obtener el registro del indicador
-        $cantidad = PrimerIndicador::where('gestion',  $infoSemana[0]['anio'])
+        $cantidad = EficaciaIndicador::where('gestion',  $infoSemana[0]['anio'])
                         ->where('mes',  $infoSemana[0]['mes'])
                         ->where('semana',  $infoSemana[0]['semana'])
                         ->where('empleado_id', $user->empleado->codigo)
@@ -47,7 +47,7 @@ class IndicadorUpdatingListener
                         ->count();
        
         if ($cantidad > 0) {
-            $indicador = PrimerIndicador::where('gestion',  $infoSemana[0]['anio'])
+            $indicador = EficaciaIndicador::where('gestion',  $infoSemana[0]['anio'])
                         ->where('mes',  $infoSemana[0]['mes'])
                         ->where('semana',  $infoSemana[0]['semana'])
                         ->where('empleado_id' , $user->empleado->codigo)

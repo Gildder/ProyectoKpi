@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use ProyectoKpi\Cms\repositories\UserRepository;
 use ProyectoKpi\Http\Controllers\Tareas\TareaProgramadaController;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
+use ProyectoKpi\Cms\Clases\FiltroTabla;
 
 class HomeController extends Controller
 {
@@ -44,12 +45,16 @@ class HomeController extends Controller
 
                 if(\Usuario::get('isSupervisor')){
                     $rutaPrincipal = 'supervisores.supervisados.index';
+                }else{
+                    $rutaPrincipal = 'empleados.perfil.index';
                 }
 
                 if(\Usuario::get('isEvaluador')){
                     
-                    // $rutaPrincipal = 'evaluadores.evaluados.dashboard';
-                     $rutaPrincipal = 'evaluadores.evaluados.dashboard';
+                    $rutaPrincipal = 'evaluadores.evaluados.dashboard';
+                    // $filtro = new FiltroTabla();
+                    // \Cache::forever('key', $filtro);
+                    // return redirect( 'evaluadores/evaluados/dashboard');
                 }
                
                 return redirect()->route($rutaPrincipal);

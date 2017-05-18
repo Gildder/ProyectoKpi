@@ -11,6 +11,13 @@
 |
 */
 
+//$router->group(['middleware' => ['web']], function ($router){
+//    require __DIR__.'/routes/web.routes.php';
+//});
+//
+//
+//Route::group(['middleware'=>['admin']]);
+
 
 /**************************** LOGIN ******************************************++*/
 
@@ -19,7 +26,7 @@ Route::auth();
 
 Route::get('/', 'HomeController@index');
 
-
+ 
 // **********************  MODULO ADMINISTRADOR  *****************************************
 
 /*  CARGO */
@@ -128,7 +135,6 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 /* EVALUADOR */
 Route::group(['middleware'=>['auth', 'administrador']], function ()
 {
-
 	//Cargo
 	Route::get('evaluadores/evaluador/quitarcargo/{cargo}/{param?}', 
 		array('as' => 'evaluadores.evaluador.quitarcargo', 'uses' => 'Evaluadores\EvaluadorController@quitarcargo') );
@@ -177,8 +183,20 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 Route::group(['middleware'=>['auth', 'estandard']], function ()
 {
 	//dashBoard
-	Route::get('evaluadores/evaluados/dashboard', 
+	Route::get('evaluadores/evaluados/dashboard',
 		array('as' => 'evaluadores.evaluados.dashboard', 'uses' => 'Evaluadores\EvaluadosController@dashboard') );
+
+    Route::post('evaluadores/evaluados/opcionVista/{opcion}',
+        array('as' => 'evaluadores.evaluados.opcionVista', 'uses' => 'Evaluadores\EvaluadosController@opcionVista') );
+
+    Route::post('evaluadores/evaluados/filtroMes',
+        array('as' => 'evaluadores.evaluados.filtroMes', 'uses' => 'Evaluadores\EvaluadosController@filtroMes') );
+
+    Route::post('evaluadores/evaluados/filtroSemana',
+        array('as' => 'evaluadores.evaluados.filtroSemana', 'uses' => 'Evaluadores\EvaluadosController@filtroSemana') );
+
+	Route::post('evaluadores/evaluados/buscarTabla/{tipoFiltro?}', 
+		array('as' => 'evaluadores.evaluados.buscarTabla', 'uses' => 'Evaluadores\EvaluadosController@buscarTabla') );
 
 	Route::get('evaluadores/evaluados/reportesProcesos', 
 		array('as' => 'evaluadores.evaluados.reportesProcesos', 'uses' => 'Evaluadores\EvaluadosController@reportesProcesos') );
@@ -189,12 +207,10 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
 	Route::get('evaluadores/evaluados/showIndicadorEmpleado/{empleado}/{indicador}', 
 			array('as' => 'evaluadores.evaluados.showIndicadorEmpleado', 'uses' => 'Evaluadores\EvaluadosController@showIndicadorEmpleado') );
 
-	Route::resource('evaluadores/evaluados', 'Evaluadores\EvaluadosController', 
-		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+	Route::get('evaluadores/evaluados/index', 
+			array('as' => 'evaluadores.evaluados.index', 'uses' => 'Evaluadores\EvaluadosController@index') );
+
 });
-
-
-
 
 
 // **********************  MODULO LOCALIZACIONES  *****************************************
@@ -274,10 +290,6 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 	// Variables
 	Route::resource('indicadores/variable', 'Indicadores\VariableController', 
 			['only' => ['index', 'create', 'store', 'destroy', 'show']]);
-
-	
-
-
 });
 
 // **********************  MODULO SUPERVISORES *****************************************

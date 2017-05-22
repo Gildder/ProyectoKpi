@@ -7,7 +7,8 @@ use \Illuminate\Support\Facades\Facade;
 use ProyectoKpi\Cms\Clases\SemanaTarea;
 use ProyectoKpi\Cms\Interfaces\IClases;
 
-class CalcularSemana {
+class CalcularSemana
+{
 
     /*contructores */
     public function __construct()
@@ -17,42 +18,40 @@ class CalcularSemana {
     /**
      * retorna un arreglos de fecha de inicio y fin de la semana
      */
-    function inicioFinSemana($fecha){
+    public function inicioFinSemana($fecha)
+    {
         $strFecha = strtotime($fecha);
 
         // Asignamos los dias de inicio y fin de la semana
         $diaInicio ="Monday";
         $diaFin    ="Sunday";
 
-        $fechaInicio = date('Y-m-d',strtotime('last '.$diaInicio, $strFecha));
-        $fechaFin    = date('Y-m-d',strtotime('next '.$diaFin, $strFecha));
+        $fechaInicio = date('Y-m-d', strtotime('last '.$diaInicio, $strFecha));
+        $fechaFin    = date('Y-m-d', strtotime('next '.$diaFin, $strFecha));
 
-        if(date("l",$strFecha)== $diaInicio){
-            $fechaInicio = date("Y-m-d",$strFecha);
+        if (date("l", $strFecha)== $diaInicio) {
+            $fechaInicio = date("Y-m-d", $strFecha);
         }
-        if(date("l",$strFecha)== $diaFin){
-            $fechaFin= date("Y-m-d",$strFecha);
+        if (date("l", $strFecha)== $diaFin) {
+            $fechaFin= date("Y-m-d", $strFecha);
         }
-        return Array("fechaInicio"=>$fechaInicio,"fechaFin"=>$fechaFin);
+        return array("fechaInicio"=>$fechaInicio,"fechaFin"=>$fechaFin);
     }
 
 
     /**
      * obtener el numero de dias de un mes
      */
-    function numeroDiasMes($fecha)
+    public function numeroDiasMes($fecha)
     {
         $Month = date('n', strtotime($fecha));
         $Year = date('Y', strtotime($fecha));
        //Si la extensión que mencioné está instalada, usamos esa.
-       if( is_callable("cal_days_in_month"))
-       {
-          return cal_days_in_month(CAL_GREGORIAN, $Month, $Year);
-       }
-       else
-       {
-          //Lo hacemos a mi manera.
-          return date("d",mktime(0,0,0,$Month+1,0,$Year));
+       if (is_callable("cal_days_in_month")) {
+           return cal_days_in_month(CAL_GREGORIAN, $Month, $Year);
+       } else {
+           //Lo hacemos a mi manera.
+          return date("d", mktime(0, 0, 0, $Month+1, 0, $Year));
        }
     }
 
@@ -61,7 +60,7 @@ class CalcularSemana {
      * Retorna la semana de Tarea una fecha
      * @param fecha: fecha de interes
      */
-    function getSemanaTarea($fecha)
+    public function getSemanaTarea($fecha)
     {
         // Obtenemos las fecha de inicio y fin de semana
         $fechas = $this->inicioFinSemana($fecha);
@@ -70,41 +69,42 @@ class CalcularSemana {
         $diasMes = $this->numeroDiasMes($fechas['fechaInicio']);
 
         // obtenemos el numero del dia mes 1 a 31
-        $diaActual = date("j",strtotime($fechas['fechaInicio']));
+        $diaActual = date("j", strtotime($fechas['fechaInicio']));
 
         // Obtenemos los dias restantes a fin de mes
         $diasRestantes = $diasMes - $diaActual;
 
         //Instancia de la Semana de Tarea
         $semanaTarea = new SemanaTarea();
-        $semanaTarea->set('anio', date("Y", strtotime($fechas['fechaInicio'])) );
-        $semanaTarea->set('mes', date("n", strtotime($fechas['fechaInicio'])) );
-        $semanaTarea->set('semana',$this->numeroSemanaFecha($fechas['fechaInicio']) );
-        $semanaTarea->set('fechaInicio', $fechas['fechaInicio'] );
-        $semanaTarea->set('fechaFin', $fechas['fechaFin'] );
+        $semanaTarea->set('anio', date("Y", strtotime($fechas['fechaInicio'])));
+        $semanaTarea->set('mes', date("n", strtotime($fechas['fechaInicio'])));
+        $semanaTarea->set('semana', $this->numeroSemanaFecha($fechas['fechaInicio']));
+        $semanaTarea->set('fechaInicio', $fechas['fechaInicio']);
+        $semanaTarea->set('fechaFin', $fechas['fechaFin']);
 
         // Si los dias del mes restante el menor
         if ($diasRestantes < 4) {
             // entonces se tomarà el mes siguiente con su semana
-            $semanaTarea->set('mes', date("n", strtotime($fechas['fechaFin'])) );
-            $semanaTarea->set('semana', $this->numeroSemanaFecha($fechas['fechaFin']) );
-        } 
+            $semanaTarea->set('mes', date("n", strtotime($fechas['fechaFin'])));
+            $semanaTarea->set('semana', $this->numeroSemanaFecha($fechas['fechaFin']));
+        }
 
         return $semanaTarea;
     }
 
     /* retorna la semana de una fecha */
-    function numeroSemanaFecha($fecha)
+    public function numeroSemanaFecha($fecha)
     {
         // Calculamos la semana del mes
-        $semanaInicioMes =  date("W",strtotime(date("Y-m-01", strtotime($fecha))));
-        $semanaActualFecha =  date("W",strtotime($fecha)) ;
+        $semanaInicioMes =  date("W", strtotime(date("Y-m-01", strtotime($fecha))));
+        $semanaActualFecha =  date("W", strtotime($fecha)) ;
 
         $result = $semanaActualFecha - $semanaInicioMes;
 
-        if($result == 0) {
-            if(date('j', strtotime($fecha)) > 4)
+        if ($result == 0) {
+            if (date('j', strtotime($fecha)) > 4) {
                 return $result + 1;
+            }
         }
         
         return $result;
@@ -116,9 +116,9 @@ class CalcularSemana {
      * @param $dias: tipo integer
      * @return date
      */
-    function sumarDias($fecha, $dias)
+    public function sumarDias($fecha, $dias)
     {
-        $nuevafecha = strtotime ( '+'.$dias.' day' , strtotime($fecha) ) ;
+        $nuevafecha = strtotime('+'.$dias.' day', strtotime($fecha)) ;
         $nuevafecha = date('Y-m-d', $nuevafecha);
         return $nuevafecha;
     }
@@ -127,23 +127,23 @@ class CalcularSemana {
      * Retorna la semanas habilitadas
      * @param fecha: fecha de interes
      */
-    function getSemanasProgramadas($fecha)
+    public function getSemanasProgramadas($fecha)
     {
         // Semana de Tarea de la fecha Solicitada
         $semanaTarea = $this->getSemanaTarea($fecha);
 
         // date("N") Día de la semana, desde 1 (lunes) hasta 7 (domingo)
         //Si es Viernes = 5 entonces tomamos tambien la semana siguiente
-        if(date("N") >= 5 ){
-           $nuevafecha = $this->sumarDias(date("Y-m-d"), 6);
+        if (date("N") >= 5) {
+            $nuevafecha = $this->sumarDias(date("Y-m-d"), 6);
 
-            $semanaTarea->set('siguiente', $this->getSemanaTarea($nuevafecha) );
+            $semanaTarea->set('siguiente', $this->getSemanaTarea($nuevafecha));
         }
 
         return $semanaTarea;
     }
 
-    static function getNombreMes($num_mes)
+    public static function getNombreMes($num_mes)
     {
         switch ($num_mes) {
             case 1:
@@ -185,7 +185,7 @@ class CalcularSemana {
         }
     }
 
-    static function getNombreSemana($num_semana)
+    public static function getNombreSemana($num_semana)
     {
         switch ($num_semana) {
             case 1:
@@ -208,5 +208,4 @@ class CalcularSemana {
                 break;
         }
     }
-
 }

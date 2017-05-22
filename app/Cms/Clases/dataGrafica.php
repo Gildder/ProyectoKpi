@@ -2,7 +2,6 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 /* Inidicadores asignados a una gerencia con ponderacion y resultado de los indicadores semanalmente */
 
 use ProyectoKpi\Cms\Interfaces\IClases;
@@ -18,7 +17,6 @@ class DataGrafica implements IClases
     /* Contructores */
     public function __construct()
     {
-        
     }
 
     /* Metodos */
@@ -27,14 +25,13 @@ class DataGrafica implements IClases
         $this->$atributo = $valor;
     }
 
-    public function get($atributo){
+    public function get($atributo)
+    {
         return $this->$atributo;
     }
 
     public function setSemanas($semana, $valor)
     {
-        array_push($semas, new SemanaIndicador($semana, $valor) );
+        array_push($semas, new SemanaIndicador($semana, $valor));
     }
-
-    
 }

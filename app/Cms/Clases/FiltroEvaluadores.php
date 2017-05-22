@@ -8,7 +8,6 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 use ProyectoKpi\Cms\Interfaces\IClases;
 
 class FiltroEvaluadores implements IClases

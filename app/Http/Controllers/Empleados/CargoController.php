@@ -17,81 +17,77 @@ use ProyectoKpi\Repositories\CargoRepository;
 
 class CargoController extends Controller
 {
-    
     public function __contruct()
-   	{
-   		$this->middleware('auth');
-   	}
+    {
+        $this->middleware('auth');
+    }
 
 
     public function index()
-	{
-		return view('empleados/cargo/index', ['cargos'=> Cargo::all()]);
-	}
+    {
+        return view('empleados/cargo/index', ['cargos'=> Cargo::all()]);
+    }
 
 
-	public function create()
-	{
+    public function create()
+    {
+        return view('empleados.cargo.create');
+    }
 
-		return view('empleados.cargo.create');
-	}
+    public function eliminados()
+    {
+        $cargos = Cargo::onlyTrashed()->get();
+        
+        return view('empleados/cargo/eliminados', ['cargos'=> $cargos]);
+    }
 
-	public function eliminados()
-	{
-		$cargos = Cargo::onlyTrashed()->get();
-		
-		return view('empleados/cargo/eliminados', ['cargos'=> $cargos]);
-	}
-
-	function restaurar($id)
-	{
-		// $cargo = Tarea::findOrFail('id', $id);
-		$cargo = Cargo::withTrashed()
+    public function restaurar($id)
+    {
+        // $cargo = Tarea::findOrFail('id', $id);
+        $cargo = Cargo::withTrashed()
         ->where('id', $id)
         ->restore();
 
         return redirect()->back()->with('message', 'Se restauro el cargo '.$id.' correctamente.');
-	}
+    }
 
-	public function store(CargoFormRequest $Request)
-	{
-		$cargo = new Cargo;
-		$cargo->nombre = trim(\Request::input('nombre'));
-		$cargo->save();
+    public function store(CargoFormRequest $Request)
+    {
+        $cargo = new Cargo;
+        $cargo->nombre = trim(\Request::input('nombre'));
+        $cargo->save();
 
-		return redirect('empleados/cargo')->with('message', 'El Cargo "'.$cargo->nombre.'" se guardo correctamente.');
-	}
+        return redirect('empleados/cargo')->with('message', 'El Cargo "'.$cargo->nombre.'" se guardo correctamente.');
+    }
 
-	
-	public function edit($id)
-	{
-		$cargo = Cargo::findOrFail($id);
-		
-		return view('empleados/cargo/edit',['cargo'=>$cargo]);
+    
+    public function edit($id)
+    {
+        $cargo = Cargo::findOrFail($id);
+        
+        return view('empleados/cargo/edit', ['cargo'=>$cargo]);
+    }
 
-	}
+    public function update(CargoFormRequest $Request, $id)
+    {
+        $cargo = Cargo::findOrFail($id);
+        $cargo->nombre = trim(\Request::input('nombre'));
+        $cargo->save();
 
-	public function update(CargoFormRequest $Request, $id)
-	{
-		$cargo = Cargo::findOrFail($id);
-		$cargo->nombre = trim(\Request::input('nombre'));
-		$cargo->save();
+        return redirect('empleados/cargo')->with('message', 'El Cargo Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+    }
 
-		return redirect('empleados/cargo')->with('message',  'El Cargo Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
-	}
+    public function show($id)
+    {
+        $cargo = Cargo::findOrFail($id);
+                
+        return view('empleados/cargo/show', ['cargo'=>$cargo]);
+    }
 
-	public function show($id)
-	{
-		$cargo = Cargo::findOrFail($id);
-				
-		return view('empleados/cargo/show',['cargo'=>$cargo]);
-	}
+    public function destroy($id)
+    {
+        Cargo::destroy($id);
 
-	public function destroy($id)
-	{
-		Cargo::destroy($id);
-
-		return redirect('empleados/cargo')->with('message',  'El Cargo de Nro.- '.$id.'  se elimino correctamente.');
-	}
-
+        return redirect('empleados/cargo')->with('message', 'El Cargo de Nro.- '.$id.'  se elimino correctamente.');
+    }
 }

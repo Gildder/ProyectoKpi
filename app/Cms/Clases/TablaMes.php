@@ -8,7 +8,6 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 use ProyectoKpi\Cms\Abstracts\TablaAbstract;
 
 class TablaMes extends TablaAbstract
@@ -27,95 +26,37 @@ class TablaMes extends TablaAbstract
     private $nov;
     private $dic;
 
-
-    public function __construct($id, $nombre, $ponderacion, $evaluador)
+    public function __construct()
     {
-        $this->id = $id;
-        $this->nombre = $nombre;
-        $this->ponderacion = $ponderacion;
+    }
 
-        $this->getDatosDeTablaIndicadores($id, $evaluador);
+    /**
+     * Metodos de Clase
+    */
+    public function toString()
+    {
+        return [
+            'id'=> $this->id,
+            'nombre'=> $this->nombre,
+            'ponderacion'=>$this->ponderacion,
+            'ene'=>$this->ene,
+            'feb'=>$this->feb,
+            'mar'=>$this->mar,
+            'abr'=>$this->abr,
+            'may'=>$this->may,
+            'jun'=>$this->jun,
+            'jul'=>$this->jul,
+            'ago'=>$this->ago,
+            'sep'=>$this->sep,
+            'oct'=>$this->oct,
+            'nov'=>$this->nov,
+            'dic'=>$this->dic
+        ];
     }
 
     public function get($atributo)
     {
-        return $this->$atributo;
-    }
-
-    /**
-     * Retorna el promedio de un Indicador
-     */
-    public function getDatosDeTablaIndicadores($indicador_id, $evaluador_id)
-    {
-        $promedio  = 0;
-        $ultimoMes = \FiltroTabla::getUltimoMes();
-        $anio      = \FiltroTabla::getAnio();
-        $primerMes = \FiltroTabla::getPrimerMes() - 1;
-
-        // recorremos los meses desde una mes de inicio y fin
-        while ($primerMes <= $ultimoMes)
-        {
-            $primerMes++;
-            $datos = $this->cnGetIndicadoresSemana($indicador_id, $evaluador_id, $anio, $primerMes);
-
-            $this->asignarPromedio($primerMes, $datos[0]->promedio);
-            $promedio = $promedio + $datos[0]->promedio;
-
-        }
-
-        // Calculamos el Promedio de de los meses
-        $this->calcularPromedio($promedio, $primerMes);
-    }
-
-    /**
-     * Asignamos el Promedio a cada uno de los meses
-    */
-    private function asignarPromedio($mes, $promedio)
-    {
-        switch ($mes)
-        {
-            case 1:
-                $this->ene = $promedio;
-                break;
-            case 2:
-                $this->feb = $promedio;
-                break;
-            case 3:
-                $this->mar = $promedio;
-                break;
-            case 4:
-                $this->abr = $promedio;
-                break;
-            case 5:
-                $this->may = $promedio;
-                break;
-            case 6:
-                $this->jun = $promedio;
-                break;
-            case 7:
-                $this->jul = $promedio;
-                break;
-            case 8:
-                $this->ago = $promedio;
-                break;
-            case 9:
-                $this->sep = $promedio;
-                break;
-            case 10:
-                $this->oct = $promedio;
-                break;
-            case 11:
-                $this->nov = $promedio;
-                break;
-            default:
-                $this->dic = $promedio;
-                break;
-        }
-    }
-
-    public function getMes($mes)
-    {
-        switch ($mes)
+        switch ($atributo)
         {
             case 1:
                 return $this->ene;
@@ -156,12 +97,86 @@ class TablaMes extends TablaAbstract
         }
     }
 
+
+
+    /**
+     * Retorna el promedio de un Indicador
+     */
+    public function getDatosDeTablaIndicadores($indicador_id, $evaluador_id)
+    {
+        $promedio  = 0;
+        $ultimoMes = \FiltroTabla::getUltimoMes();
+        $anio      = \FiltroTabla::getAnio();
+        $primerMes = \FiltroTabla::getPrimerMes() - 1;
+
+        // recorremos los meses desde una mes de inicio y fin
+        while ($primerMes <= $ultimoMes) {
+            $primerMes++;
+            $datos = $this->cnGetIndicadoresSemana($indicador_id, $evaluador_id, $anio, $primerMes);
+
+            $this->asignarPromedio($primerMes, $datos[0]->promedio);
+            $promedio = $promedio + $datos[0]->promedio;
+        }
+
+        // Calculamos el Promedio de de los meses
+        $this->calcularPromedio($promedio, $primerMes);
+    }
+
+    /**
+     * Asignamos el Promedio al mes
+    */
+    public function set($mes, $promedio)
+    {
+        switch ($mes)
+        {
+            case 1:
+                return $this->ene = $promedio;
+                break;
+            case 2:
+                return $this->feb = $promedio;
+                break;
+            case 3:
+                return $this->mar = $promedio;
+                break;
+            case 4:
+                return $this->abr = $promedio;
+                break;
+            case 5:
+                return $this->may = $promedio;
+                break;
+            case 6:
+                return $this->jun = $promedio;
+                break;
+            case 7:
+                return $this->jul = $promedio;
+                break;
+            case 8:
+                return $this->ago = $promedio;
+                break;
+            case 9:
+                return $this->sep = $promedio;
+                break;
+            case 10:
+                return $this->oct = $promedio;
+                break;
+            case 11:
+                return $this->nov = $promedio;
+                break;
+            default:
+                return $this->dic = $promedio;
+                break;
+        }
+    }
+
     /**
      * @param $promedio
      * @param $primerMes
+     *
      */
-    private function calcularPromedio($promedio, $primerMes)
+    private function calcularPromedio($promedio, $total)
     {
-        $this->promedio = $promedio / $primerMes;
+        $this->promedio = $promedio / $total;
     }
+
+
 }

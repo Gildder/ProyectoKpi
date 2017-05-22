@@ -1,7 +1,7 @@
   <!--Div that will hold the pie chart-->
     <div class="chart">
         <div>
-            Aqui colocamos los filtros
+            {{--Aqui colocamos los filtros--}}
         </div>
         <div id="chart_Eficacia"></div>
     </div>
@@ -10,8 +10,6 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-
- 
   var chart;
   var chartData = [
       @foreach($listaGraficas as $item)

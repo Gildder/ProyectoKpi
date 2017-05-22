@@ -9,9 +9,8 @@ class Tiempo implements IClases
     private $hora;
     private $minuto;
 
-	public function __construct()
+    public function __construct()
     {
-
     }
 
     /* Metodos */
@@ -21,23 +20,22 @@ class Tiempo implements IClases
         $this->$atributo = $valor;
     }
 
-    public function get($atributo){
+    public function get($atributo)
+    {
         return $this->$atributo;
     }
 
-	function obtenerHora($horas, $minutos)
-	{
-		$horaEntera = floor($minutos/60);
+    public function obtenerHora($horas, $minutos)
+    {
+        $horaEntera = floor($minutos/60);
 
-		if(($minutos % 60)!=0)
-		{
-			$horaDecimal = ($minutos/60) - $horaEntera;
-			$this->minuto = floor($horaDecimal * 60);
-		}
+        if (($minutos % 60)!=0) {
+            $horaDecimal = ($minutos/60) - $horaEntera;
+            $this->minuto = floor($horaDecimal * 60);
+        }
 
-		$this->hora = $horas + $horaEntera;
+        $this->hora = $horas + $horaEntera;
 
-		return array($this->hora, $this->minuto);
-	}
-
+        return array($this->hora, $this->minuto);
+    }
 }

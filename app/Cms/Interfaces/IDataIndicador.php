@@ -8,9 +8,8 @@
 
 namespace ProyectoKpi\Cms\Interfaces;
 
-
 interface IDataIndicador
 {
-	public function setValor($data, $valor);
-	public function getValor($data);
+    public function setValor($data, $valor);
+    public function getValor($data);
 }

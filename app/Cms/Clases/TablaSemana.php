@@ -8,12 +8,11 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 use ProyectoKpi\Cms\Abstracts\TablaAbstract;
 
 class TablaSemana extends TablaAbstract
 {
-	/* Atributos */
+    /* Atributos */
     private $semana1;
     private $semana2;
     private $semana3;
@@ -22,53 +21,30 @@ class TablaSemana extends TablaAbstract
     private $semana6;
     private $semanas;
 
-    /**
-    */
-    public function __construct($id, $nombre, $ponderacion, $evaluador)
+    public function toString()
     {
-        $this->id = $id;
-        $this->nombre = $nombre;
-        $this->ponderacion = $ponderacion;
-
-        $this->getDatosDeTablaIndicadores($id, $evaluador);
+        return [
+            'id'=> $this->id,
+            'nombre'=> $this->nombre,
+            'ponderacion'=>$this->ponderacion,
+            'semana1'=>$this->semana1,
+            'semana2'=>$this->semana2,
+            'semana3'=>$this->semana3,
+            'semana4'=>$this->semana4,
+            'semana5'=>$this->semana5,
+            'semana6'=>$this->semana6,
+            'semanas'=>$this->semanas,
+        ];
     }
 
     /**
-     * Retorna el promedio de un Indicador
+     * Metodos
      */
-    public function getDatosDeTablaIndicadores($indicador_id, $evaluador_id)
+    public function __construct()
     {
-        $anio =  \FiltroTabla::getAnio();
-        $mes  =  \FiltroTabla::getMesBuscado();
-
-        $datos = $this->cnGetIndicadoresSemana($indicador_id, $evaluador_id, $anio, $mes);
-
-        $this->asignarPromedio($datos);
     }
 
-    /**
-     * Asignamos el Promedio de los indicadores a cada semana y obtenemos el promedio del mes
-     *
-     */
-    private function asignarPromedio($datos)
-    {
-        $this->semana1 = $datos[0]->semana_1;
-        $this->semana2 = $datos[0]->semana_2;
-        $this->semana3 = $datos[0]->semana_3;
-        $this->semana4 = $datos[0]->semana_4;
-        switch ($datos[0]->cantidadSemana) {
-            case 5:
-                $this->semana5 = $datos[0]->semana_5;
-                break;
-            case 6:
-                $this->semana5 = $datos[0]->semana_5;
-                $this->semana6 = $datos[0]->semana_6;
-                break;
-        }
-//        contador de tiempo sera igual a mi cantidad de semanas del mes
-        $this->promedio = $datos[0]->promedio;
-        $this->semanas = $datos[0]->cantidadSemana;
-    }
+
 
     /**
      * @return mixed
@@ -126,5 +102,60 @@ class TablaSemana extends TablaAbstract
         return $this->semanas;
     }
 
+    /**
+     * @param mixed $semana1
+     */
+    public function setSemana1($semana1)
+    {
+        $this->semana1 = $semana1;
+    }
+
+    /**
+     * @param mixed $semana2
+     */
+    public function setSemana2($semana2)
+    {
+        $this->semana2 = $semana2;
+    }
+
+    /**
+     * @param mixed $semana3
+     */
+    public function setSemana3($semana3)
+    {
+        $this->semana3 = $semana3;
+    }
+
+    /**
+     * @param mixed $semana4
+     */
+    public function setSemana4($semana4)
+    {
+        $this->semana4 = $semana4;
+    }
+
+    /**
+     * @param mixed $semana5
+     */
+    public function setSemana5($semana5)
+    {
+        $this->semana5 = $semana5;
+    }
+
+    /**
+     * @param mixed $semana6
+     */
+    public function setSemana6($semana6)
+    {
+        $this->semana6 = $semana6;
+    }
+
+    /**
+     * @param mixed $semanas
+     */
+    public function setSemanas($semanas)
+    {
+        $this->semanas = $semanas;
+    }
 
 }

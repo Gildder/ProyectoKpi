@@ -10,7 +10,7 @@
         <b>Quitar Escala</b> 
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Evaluadores\PonderacionController@quitarescala', $item->id, $ponderacion->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['_TablaMes', $item->id, $ponderacion->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas Quitar a <b>{{$item->nombre}} ?</b></p>
                

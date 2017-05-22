@@ -98,7 +98,7 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 /* ESCALAS  */
 Route::group(['middleware'=>['auth', 'administrador']], function ()
 {
-	Route::resource('evaluadores/escala', 'Evaluadores\EscalaController', 
+	Route::resource('evaluadores/escala', 'Evaluadores\EscalaController',
 		['only' => ['index','create', 'edit', 'store', 'update', 'destroy', 'show']]);
 });
 
@@ -127,7 +127,7 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 	Route::get('evaluadores/ponderacion/agregarindicador/{item}/{param?}', 
 		array('as' => 'evaluadores.ponderacion.agregarindicador', 'uses' => 'Evaluadores\PonderacionController@agregarindicador') );
 
-	Route::resource('evaluadores/ponderacion', 'Evaluadores\PonderacionController', 
+	Route::resource('evaluadores/ponderacion', 'Evaluadores\PonderacionController',
 		['only' => ['index','create', 'edit', 'store', 'update', 'destroy', 'show']]);
 });
 
@@ -174,7 +174,7 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 	Route::get('evaluadores/evaluador/agregarempleado/{empleado}/{param?}', 
 		array('as' => 'evaluadores.evaluador.agregarempleado', 'uses' => 'Evaluadores\EvaluadorController@agregarempleado') );
 
-	Route::resource('evaluadores/evaluador', 'Evaluadores\EvaluadorController', 
+	Route::resource('evaluadores/evaluador', 'Evaluadores\EvaluadorController',
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 	
 });
@@ -186,10 +186,13 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
 	Route::get('evaluadores/evaluados/dashboard',
 		array('as' => 'evaluadores.evaluados.dashboard', 'uses' => 'Evaluadores\EvaluadosController@dashboard') );
 
+    Route::get('evaluadores/evaluados/obtenerVista',
+        array('as' => 'evaluadores.evaluados.obtenerVista', 'uses' => 'Evaluadores\EvaluadosController@obtenerVista') );
+
     Route::post('evaluadores/evaluados/opcionVista/{opcion}',
         array('as' => 'evaluadores.evaluados.opcionVista', 'uses' => 'Evaluadores\EvaluadosController@opcionVista') );
 
-    Route::post('evaluadores/evaluados/filtroMes',
+    Route::post('evaluadores/evaluados/filtroMes/{opcion}',
         array('as' => 'evaluadores.evaluados.filtroMes', 'uses' => 'Evaluadores\EvaluadosController@filtroMes') );
 
     Route::post('evaluadores/evaluados/filtroSemana',

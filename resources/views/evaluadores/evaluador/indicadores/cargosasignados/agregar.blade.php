@@ -13,7 +13,7 @@
 
       {{-- Body --}}
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Evaluadores\EvaluadorController@agregarcargoasignado', $indicador->id, $evaluador->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['_TablaMes', $indicador->id, $evaluador->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               @include('evaluadores/evaluador/indicadores/cargosasignados/data_create');
             </div>

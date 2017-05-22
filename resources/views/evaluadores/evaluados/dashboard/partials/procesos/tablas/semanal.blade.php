@@ -46,11 +46,11 @@
           <td class="{{ $item->getSemana2() }}">{{ $item->getSemana2() }} %</td>
           <td class="{{ $item->getSemana3() }}">{{ $item->getSemana3() }} %</td>
           <td class="{{ $item->getSemana4() }}">{{ $item->getSemana4() }} % </td>
-          @if(\Cache::get('cantSemana') == 5)
+          @if($item->getSemanas() == 5)
             <td class="{{ $item->getSemana5() }}">{{ $item->getSemana5() }} %</td>
           @endif 
 
-          @if(\Cache::get('cantSemana') == 6)
+          @if($item->getSemanas()  == 6)
             <td class="{{ $item->getSemana6() }}">{{ $item->getSemana6() }} %</td>
             <td class="{{ $item->getSemana7() }}">{{ $item->getSemana7() }} %</td>
           @endif

@@ -22,77 +22,74 @@ use ProyectoKpi\Models\Indicadores\Frecuencia;
 
 class EvaluadorController extends Controller
 {
+    public function __contruct()
+    {
+        $this->middleware('auth');
+    }
 
-	public function __contruct()
-   	{
-   		$this->middleware('auth');
-   	}
-
-   	
+    
     public function index()
-	{
-		$evaluadores = Evaluador::all();
+    {
+        $evaluadores = Evaluador::all();
 
-		return view('evaluadores/evaluador/index', ['evaluadores'=> $evaluadores]);
-	}
+        return view('evaluadores/evaluador/index', ['_TablaMes' => $evaluadores]);
+    }
 
-	public function create()
-	{
-		$ponderaciones = Ponderacion::all();
+    public function create()
+    {
+        $ponderaciones = Ponderacion::all();
 
-		return view('evaluadores.evaluador.create', ['ponderaciones'=> $ponderaciones]);
-		
-	}
+        return view('evaluadores.evaluador.create', ['ponderaciones'=> $ponderaciones]);
+    }
 
-	public function store(EvaluadorFormRequest $Request)
-	{
-		$evaluador = new Evaluador;
-		$evaluador->abreviatura = trim(\Request::input('abreviatura'));
-		$evaluador->descripcion = trim(\Request::input('descripcion'));
-		$evaluador->ponderacion_id = $Request->ponderacion_id;
-		$evaluador->save();
+    public function store(EvaluadorFormRequest $Request)
+    {
+        $evaluador = new Evaluador;
+        $evaluador->abreviatura = trim(\Request::input('abreviatura'));
+        $evaluador->descripcion = trim(\Request::input('descripcion'));
+        $evaluador->ponderacion_id = $Request->ponderacion_id;
+        $evaluador->save();
 
-		return redirect('evaluadores/evaluador')->with('message', 'La Gerencia Evaluadora "'.$evaluador->abreviatura.'" se guardo correctamente.');
-	}
-
-
-	public function edit($id)
-	{
-		$evaluador = Evaluador::findOrFail($id);
-		$ponderaciones = Ponderacion::all();
-
-		return view('evaluadores/evaluador/edit',['evaluador'=>$evaluador, 'ponderaciones'=>$ponderaciones]);
-	}
-
-	public function update(EvaluadorFormRequest $Request, $id)
-	{
-
-		$evaluador = Evaluador::findOrFail($id);
-		$evaluador->abreviatura = trim(\Request::input('abreviatura'));
-		$evaluador->descripcion = trim(\Request::input('descripcion'));
-		$evaluador->save();
-
-		return redirect('evaluadores/evaluador')->with('message',  'La Gerencia Evaluadora Nro. '.$id.' - '.$Request->abreviatura.' se actualizo correctamente.');
-	}
+        return redirect('evaluadores/evaluador')->with('message', 'La Gerencia Evaluadora "'.$evaluador->abreviatura.'" se guardo correctamente.');
+    }
 
 
-	public function show($id)
-	{
-		$evaluador = Evaluador::findOrFail($id);
-		$user = \Auth::user();
-		
-		$empleadosDisponibles = DB::select('call pa_evaluadores_empleadosDisponibles('.$id.');');
+    public function edit($id)
+    {
+        $evaluador = Evaluador::findOrFail($id);
+        $ponderaciones = Ponderacion::all();
+
+        return view('evaluadores/evaluador/edit', ['evaluador'=>$evaluador, 'ponderaciones'=>$ponderaciones]);
+    }
+
+    public function update(EvaluadorFormRequest $Request, $id)
+    {
+        $evaluador = Evaluador::findOrFail($id);
+        $evaluador->abreviatura = trim(\Request::input('abreviatura'));
+        $evaluador->descripcion = trim(\Request::input('descripcion'));
+        $evaluador->save();
+
+        return redirect('evaluadores/evaluador')->with('message', 'La Gerencia Evaluadora Nro. '.$id.' - '.$Request->abreviatura.' se actualizo correctamente.');
+    }
+
+
+    public function show($id)
+    {
+        $evaluador = Evaluador::findOrFail($id);
+        $user = \Auth::user();
+        
+        $empleadosDisponibles = DB::select('call pa_evaluadores_empleadosDisponibles('.$id.');');
         $empleadosAgregados = DB::select('call pa_evaluadores_empleadosEvaluadores('.$id.');');
 
         $indicadoresDisponibles = DB::select('call pa_evaluadores_indicadoresDisponibles('.$id.');');
 
 
-		$indicadores = Indicador::
-	       select('indicadores.id', 'indicadores.nombre','indicadores.descripcion' , 'tipos_indicadores.nombre as tipo')
-			    ->join('evaluador_indicadores','evaluador_indicadores.indicador_id','=','indicadores.id')
-			    ->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
-			    ->where('evaluador_indicadores.evaluador_id', $id)
-			    ->get();
+        $indicadores = Indicador::
+           select('indicadores.id', 'indicadores.nombre', 'indicadores.descripcion', 'tipos_indicadores.nombre as tipo')
+                ->join('evaluador_indicadores', 'evaluador_indicadores.indicador_id', '=', 'indicadores.id')
+                ->join('tipos_indicadores', 'tipos_indicadores.id', '=', 'indicadores.tipo_indicador_id')
+                ->where('evaluador_indicadores.evaluador_id', $id)
+                ->get();
 
 
         $cargosDisponibles = DB::select('call pa_evaluadores_cargosDisponibles('.$id.');');
@@ -100,9 +97,9 @@ class EvaluadorController extends Controller
 
 
 
-		return view('evaluadores/evaluador/show',['evaluador'=>$evaluador,'empleadosDisponibles'=>$empleadosDisponibles,'empleadosAgregados'=>$empleadosAgregados,
+        return view('evaluadores/evaluador/show', ['evaluador'=>$evaluador,'empleadosDisponibles'=>$empleadosDisponibles,'empleadosAgregados'=>$empleadosAgregados,
                 'indicadores'=>$indicadores, 'indicadoresDisponibles'=>$indicadoresDisponibles, 'cargosDisponibles'=>$cargosDisponibles,'cargoAgregados'=>$cargoAgregados ]);
-	}
+    }
 
 
     public function listaCargo($indicador_id, $evaluador_id)
@@ -110,25 +107,25 @@ class EvaluadorController extends Controller
         return DB::select('call pa_evaluadores_indicadorCargos('.$indicador_id.', '.$evaluador_id.');');
     }
 
-	public function destroy($id)
-	{
-		Evaluador::destroy($id);
+    public function destroy($id)
+    {
+        Evaluador::destroy($id);
 
-		return redirect('evaluadores/evaluador')->with('message',  'La Gerencia Evaluadora de Nro.- '.$id.'  se elimino correctamente.');
-	}
+        return redirect('evaluadores/evaluador')->with('message', 'La Gerencia Evaluadora de Nro.- '.$id.'  se elimino correctamente.');
+    }
 
   
-	/* Cargos Evaluados*/
+    /* Cargos Evaluados*/
 
-	public function cargosevaluados()
-	{
-		$evaluadores = Evaluador::all();
+    public function cargosevaluados()
+    {
+        $evaluadores = Evaluador::all();
 
-		return view('evaluadores/evaluador/index', ['evaluadores'=> $evaluadores]);
-	}
+        return view('evaluadores/evaluador/index', ['_TablaMes' => $evaluadores]);
+    }
 
-	/* EMPLEADOS */
-	public function agregarempleado($empleado_id, $evaluador_id)
+    /* EMPLEADOS */
+    public function agregarempleado($empleado_id, $evaluador_id)
     {
         $empleado = Empleado::where('empleados.codigo', $empleado_id)->first();
 
@@ -172,15 +169,13 @@ class EvaluadorController extends Controller
         $isCargoConIndicador = DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('evaluadorCargo_id', $evaluador_id)->count();
 
         // verificamos si cargo tiene indicador asignado
-        if($isCargoConIndicador <= 0){
+        if ($isCargoConIndicador <= 0) {
             DB::table('evaluador_cargos')->where('cargo_id', $cargo_id)->where('evaluador_id', $evaluador_id)->delete();
         
             return redirect()->back()->with('message', 'Se quito el cargo "'.$cargo->nombre.'" correctamente.');
-        }else{
+        } else {
             return redirect()->back()->withErrors('No puede quitar cargo '.$cargo->nombre.' porque esta asignado a un indicador.');
         }
-
-        
     }
 
     /* INDICADORES */
@@ -189,15 +184,14 @@ class EvaluadorController extends Controller
     public function agregarindicador(Request $Request, $evaluador_id)
     {
 
-    	//  salvando tareas por localizacion
-		$indicadores = $Request->input('prov',[]);
+        //  salvando tareas por localizacion
+        $indicadores = $Request->input('prov', []);
 
-		for($i = 0; $i < count($indicadores); $i++)
-		{
-	       DB::table('evaluador_indicadores')->insert(
-	            array('indicador_id' => $indicadores[$i], 'evaluador_id' => $evaluador_id)
-	        );
-		}
+        for ($i = 0; $i < count($indicadores); $i++) {
+            DB::table('evaluador_indicadores')->insert(
+                array('indicador_id' => $indicadores[$i], 'evaluador_id' => $evaluador_id)
+            );
+        }
 
 
         return redirect()->back()->with('message', 'Se agrego el indicador correctamente.');
@@ -205,23 +199,21 @@ class EvaluadorController extends Controller
 
     public function quitarindicador($indicador_id, $evaluador_id)
     {
-    	$existeCargaConIndicador = DB::select('call pa_evaluadores_existeCargoIndicador('.$indicador_id.','.$evaluador_id.');');
+        $existeCargaConIndicador = DB::select('call pa_evaluadores_existeCargoIndicador('.$indicador_id.','.$evaluador_id.');');
 
 
-    	$indicador = Indicador::findOrFail($indicador_id);
+        $indicador = Indicador::findOrFail($indicador_id);
 
-    	// dd($existeCargaConIndicador[0]->cantidad);
+        // dd($existeCargaConIndicador[0]->cantidad);
 
-    	if($existeCargaConIndicador[0]->cantidad > 0)
-    	{
-    		// \Session::flash('No se puede quitar, el indicador '.$indicador->nombre.' tiene cargos agregados.');
-        	 return redirect()->back()->withErrors( 'No se puede quitar, el indicador "'.$indicador->nombre.'" tiene cargos agregados.');
-    	}else{
-        	DB::table('evaluador_indicadores')->where('indicador_id', $indicador_id)->where('evaluador_id', $evaluador_id)->delete();
-        	
-        	return redirect()->back()->with('message', 'Se quito el indicador "'.$indicador->nombre.'" correctamente.');
-    	}
-
+        if ($existeCargaConIndicador[0]->cantidad > 0) {
+            // \Session::flash('No se puede quitar, el indicador '.$indicador->nombre.' tiene cargos agregados.');
+             return redirect()->back()->withErrors('No se puede quitar, el indicador "'.$indicador->nombre.'" tiene cargos agregados.');
+        } else {
+            DB::table('evaluador_indicadores')->where('indicador_id', $indicador_id)->where('evaluador_id', $evaluador_id)->delete();
+            
+            return redirect()->back()->with('message', 'Se quito el indicador "'.$indicador->nombre.'" correctamente.');
+        }
     }
 
     /* Asignar Cargos */
@@ -236,9 +228,9 @@ class EvaluadorController extends Controller
         $indicadorCargos = DB::select('call pa_evaluadores_indicadorCargos('.$indicador_id.','.$evaluador_id.');');
         $cargos = DB::select('call pa_evaluadores_cargosAgregados('.$evaluador->id.');');
 
-        return view('evaluadores/evaluador/indicadores/asignar_cargos', 
+        return view('evaluadores/evaluador/indicadores/asignar_cargos',
             [ 'indicador' => $indicador,'evaluador' => $evaluador,'frecuencia' => $frecuencia,
-    		 'indicadorCargos' => $indicadorCargos, 'cargosEvaluadores'=> $cargosEvaluadores, 'cargos'=>$cargos]);
+             'indicadorCargos' => $indicadorCargos, 'cargosEvaluadores'=> $cargosEvaluadores, 'cargos'=>$cargos]);
     }
 
     public function agregarcargoasignado($indicador_id, $evaluador_id, Request $Request)
@@ -251,9 +243,8 @@ class EvaluadorController extends Controller
             'frecuencia_id'=>'required',
         ]);
 
-        if($validator->fails())
-        {
-           return Redirect::back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
         }
 
         $cargo_id = \Request::input('cargo_id');
@@ -268,8 +259,7 @@ class EvaluadorController extends Controller
             array('indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion)
         );
 
-        return redirect()->back()->with('message', 'Se agrego el cargo "'.$cargo->nombre.'" correctamente.' );
-
+        return redirect()->back()->with('message', 'Se agrego el cargo "'.$cargo->nombre.'" correctamente.');
     }
 
     public function editarcargoasignado($indicador_id, $evaluador_id, Request $Request)
@@ -282,9 +272,8 @@ class EvaluadorController extends Controller
             'frecuencia_id'=>'required',
         ]);
 
-        if($validator->fails())
-        {
-           return Redirect::back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
         }
         $cargo_idOld = \Request::input('cargo_idOld');
         $cargo_id = \Request::input('cargo_id');
@@ -299,9 +288,9 @@ class EvaluadorController extends Controller
         // dd($cargo_id, $cargo_idOld);
         
         DB::table('indicador_cargos')->where(['indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_idOld])
-                                     ->update( array('cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion));
+                                     ->update(array('cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion));
 
-        return redirect()->back()->with('message', 'Se modifico el cargo "'.$cargo->nombre.'" correctamente.' );
+        return redirect()->back()->with('message', 'Se modifico el cargo "'.$cargo->nombre.'" correctamente.');
     }
 
     public function quitarcargoasignado($indicador_id, $evaluador_id, $cargo_id)
@@ -312,7 +301,4 @@ class EvaluadorController extends Controller
 
         return redirect()->back()->with('message', 'Se quito el cargo '.$cargo->nombre.' correctamente.');
     }
-
-   
-
 }

@@ -47,5 +47,4 @@ class IndicadorPersonal implements Iclases, IIndicador
     {
         return $this->indicador->getChart($empleado_id);
     }
-
 }

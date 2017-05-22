@@ -23,8 +23,8 @@
   <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{URL::asset('plugins/iCheck/flat/blue.css')}}">
-  <!-- Morris chart -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/morris/morris.css')}}">
+  {{--<!-- Morris chart -->--}}
+  {{--<link rel="stylesheet" href="{{URL::asset('plugins/morris/morris.css')}}">--}}
   <!-- jvectormap -->
   <link rel="stylesheet" href="{{URL::asset('plugins/jvectormap/jquery-jvectormap-1.2.2.css')}}">
   <!-- Date Picker -->
@@ -44,7 +44,7 @@
 
 
 <!-- jQuery 1.8.23 -->
-<script src="{{URL::asset('plugins/jQuery/jquery-ui-1.8.23.custom.min.js')}}"></script>
+{{--<script src="{{URL::asset('plugins/jQuery/jquery-ui-1.8.23.custom.min.js')}}"></script>--}}
 <script src="{{URL::asset('plugins/jQuery/jquery-1.8.0.min.js')}}"></script>
 
 <!-- jQuery 2.2.3 -->
@@ -57,10 +57,16 @@
 <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.1.12.1.js')}}"></script>
 <!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
 
+<!-- Vue.js v1.0.28 -->
+<script src="{{URL::asset('plugins/VueJs/vue.js')}}"></script>
+<script src="{{URL::asset('plugins/VueJs/vue-resource.min.js')}}"></script>
+
  <!-- Mi Datetables -->
 <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
 
 <script src="{{URL::asset('dist/js/main.js')}}"></script>
+<script src="{{URL::asset('dist/js/app-vuejs.js')}}"></script>
+<script src="{{URL::asset('dist/js/alert.js')}}"></script>
 
 </head>
 <body class="hold-transition skin-yellow sidebar-mini"  style="background: #ECF0F5;" >

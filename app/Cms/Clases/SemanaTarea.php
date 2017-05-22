@@ -1,23 +1,23 @@
 <?php
 namespace ProyectoKpi\Cms\Clases;
+
 use ProyectoKpi\Cms\Interfaces\IClases;
 
 /**
-	* Clase SemanaTarea para gestionar los datos de las semana de trabajo de una tarea
-	*/
-	class SemanaTarea implements IClases
-	{
-		private $anio;
-		private $mes;
-		private $semana;
-		private $fechaInicio;
-		private $fechaFin;
+    * Clase SemanaTarea para gestionar los datos de las semana de trabajo de una tarea
+    */
+    class SemanaTarea implements IClases
+    {
+        private $anio;
+        private $mes;
+        private $semana;
+        private $fechaInicio;
+        private $fechaFin;
         private $siguiente;
-		
-		function __construct()
-		{
-			
-		}
+        
+        public function __construct()
+        {
+        }
 
         public function set($atributo, $valor)
         {
@@ -56,10 +56,10 @@ use ProyectoKpi\Cms\Interfaces\IClases;
          */
         public function cambiarFormatoEuropeo($fecha)
         {
-            if($fecha == null){
+            if ($fecha == null) {
                 return '00/00/0000';
             }
-            $partes=explode('-',$fecha);//se parte la fecha
+            $partes=explode('-', $fecha);//se parte la fecha
             $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
             return trim($fecha);
         }
@@ -72,16 +72,16 @@ use ProyectoKpi\Cms\Interfaces\IClases;
          */
         public function cambiarFormatoDB($fecha)
         {
-            if($fecha == null){
+            if ($fecha == null) {
                 return '0000-00-00';
             }
-            $partes=explode('/',$fecha);//se parte la fecha
+            $partes=explode('/', $fecha);//se parte la fecha
             $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
 
             return trim($fecha);
         }
 
-        static function getNombreMes($num_mes)
+        public static function getNombreMes($num_mes)
         {
             switch ($num_mes) {
                 case "1":
@@ -122,8 +122,4 @@ use ProyectoKpi\Cms\Interfaces\IClases;
                     break;
             }
         }
-
-
-
     }
- ?>

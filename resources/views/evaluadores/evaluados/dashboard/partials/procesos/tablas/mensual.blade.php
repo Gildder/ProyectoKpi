@@ -17,13 +17,13 @@
   </tr>
   </tfoot>
   <tbody>
-  @foreach(\Cache::get('tablaMes') as $item)
+  @foreach(\Cache::get('TablaMes') as $item)
     <tr>
       <td><a href="{{ route('evaluadores.evaluados.empleadosEvaluados', [$item->getId(), \Cache::get('evadores')->id ]) }}" class="btn btn-warning btn-xs"> {{ $item->getId() }} </a></td>
       <td class="m-{{$item->getId()}}">{{ $item->getNombre() }}</td>
       <td style="font-weight: bold;"> {{ $item->getPonderacion() }} %</td>
       <?php for($contador = \FiltroTabla::getPrimerMes(); $contador<= \FiltroTabla::getUltimoMes(); $contador++ ){ ?>
-          <td> {{ $item->getMes($contador) }} %</td>
+          <td> {{ $item->get($contador) }} %</td>
       <?php } ?>
       <td class="{{ $item->getPromedio() }}" style="font-weight: bold;">{{ $item->getPromedio() }} %</td>
     </tr>

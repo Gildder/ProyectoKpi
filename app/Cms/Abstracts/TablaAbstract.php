@@ -11,33 +11,19 @@ namespace ProyectoKpi\Cms\Abstracts;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Tabla de Indicadores de Evaluadores
+ * Tabla de Indicadores de TablaMes
 */
-abstract class  TablaAbstract
+abstract class TablaAbstract
 {
     protected $id;
     protected $nombre;
     protected $ponderacion;
     protected $promedio;
 
-    /**
-     * Retorna el promedio de un Indicador
-    */
-    public abstract function getDatosDeTablaIndicadores($indicador_id, $evaluador_id);
 
-
-    /**
-     * Retorna los datos de un Indicador para un Mes
-     *
-     * @param $evaluador
-     * @param $anio
-     * @param $mes
-     * @param $indicador
-     * @return mixed
-     */
-    public function cnGetIndicadoresSemana( $indicador, $evaluador, $anio, $mes)
+    public function __construct()
     {
-        return \DB::select('call pa_evaludados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
+
     }
 
     /**
@@ -73,6 +59,35 @@ abstract class  TablaAbstract
         return $this->id;
     }
 
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
+    /**
+     * @param mixed $nombre
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+    }
 
+    /**
+     * @param mixed $ponderacion
+     */
+    public function setPonderacion($ponderacion)
+    {
+        $this->ponderacion = $ponderacion;
+    }
+
+    /**
+     * @param mixed $promedio
+     */
+    public function setPromedio($promedio)
+    {
+        $this->promedio = $promedio;
+    }
 }

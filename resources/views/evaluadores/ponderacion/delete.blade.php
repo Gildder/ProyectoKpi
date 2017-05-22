@@ -10,7 +10,7 @@
         Eliminar Ponderacion
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Evaluadores\PonderacionController@destroy', $ponderacion->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['_TablaMes', $ponderacion->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a <b>{{$ponderacion->nombre}}?</b></p>
             </div>

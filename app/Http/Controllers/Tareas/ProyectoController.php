@@ -10,7 +10,6 @@ use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Models\Tareas\Proyecto;
 use ProyectoKpi\Http\Requests\Tareas\ProyectoFormRequest;
 
-
 class ProyectoController extends Controller
 {
     public function __construct()
@@ -20,58 +19,56 @@ class ProyectoController extends Controller
 
 
     public function index()
-	{
-		return view('tareas/proyecto/index', ['proyectos'=> Proyecto::all()]);
-	}
+    {
+        return view('tareas/proyecto/index', ['proyectos'=> Proyecto::all()]);
+    }
 
-	public function create()
-	{
+    public function create()
+    {
+        return view('tareas.proyecto.create');
+    }
 
-		return view('tareas.proyecto.create');
-	}
+    public function store(ProyectoFormRequest $Request)
+    {
+        $proyecto = new Proyecto;
+        $proyecto->nombre = trim(\Request::input('nombre'));
+        $proyecto->fechaInicio = trim(\Request::input('fechaInicio'));
+        $proyecto->fechaFin = trim(\Request::input('fechaFin'));
+        $proyecto->save();
 
-	public function store(ProyectoFormRequest $Request)
-	{
-		$proyecto = new Proyecto;
-		$proyecto->nombre = trim(\Request::input('nombre'));
-		$proyecto->fechaInicio = trim(\Request::input('fechaInicio'));
-		$proyecto->fechaFin = trim(\Request::input('fechaFin'));
-		$proyecto->save();
+        return redirect('tareas/proyecto')->with('message', 'El proyecto "'.$proyecto->nombre.'" se guardo correctamente.');
+    }
 
-		return redirect('tareas/proyecto')->with('message', 'El proyecto "'.$proyecto->nombre.'" se guardo correctamente.');
-	}
+    
+    public function edit($id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+        
+        return view('tareas/proyecto/edit', ['proyecto'=>$proyecto]);
+    }
 
-	
-	public function edit($id)
-	{
-		$proyecto = Proyecto::findOrFail($id);
-		
-		return view('tareas/proyecto/edit',['proyecto'=>$proyecto]);
+    public function update(ProyectoFormRequest $Request, $id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+        $proyecto->nombre = trim(\Request::input('nombre'));
+        $proyecto->fechaInicio = trim(\Request::input('fechaInicio'));
+        $proyecto->fechaFin = trim(\Request::input('fechaFin'));
+        $proyecto->save();
 
-	}
+        return redirect('tareas/proyecto')->with('message', 'El Proyecto Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+    }
 
-	public function update(ProyectoFormRequest $Request, $id)
-	{
-		$proyecto = Proyecto::findOrFail($id);
-		$proyecto->nombre = trim(\Request::input('nombre'));
-		$proyecto->fechaInicio = trim(\Request::input('fechaInicio'));
-		$proyecto->fechaFin = trim(\Request::input('fechaFin'));
-		$proyecto->save();
+    public function show($id)
+    {
+        $proyecto = Proyecto::findOrFail($id);
+                
+        return view('tareas/proyecto/show', ['proyecto'=>$proyecto]);
+    }
 
-		return redirect('tareas/proyecto')->with('message',  'El Proyecto Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
-	}
+    public function destroy($id)
+    {
+        Cargo::destroy($id);
 
-	public function show($id)
-	{
-		$proyecto = Proyecto::findOrFail($id);
-				
-		return view('tareas/proyecto/show',['proyecto'=>$proyecto]);
-	}
-
-	public function destroy($id)
-	{
-		Cargo::destroy($id);
-
-		return redirect('tareas/proyecto')->with('message',  'El Proyecto de Nro.- '.$id.'  se elimino correctamente.');
-	}
+        return redirect('tareas/proyecto')->with('message', 'El Proyecto de Nro.- '.$id.'  se elimino correctamente.');
+    }
 }

@@ -3,32 +3,34 @@
 namespace ProyectoKpi\Http\Controllers\Evaluadores;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use ProyectoKpi\Cms\Clases\FiltroEvaluadores;
-use ProyectoKpi\Http\Requests;
+use ProyectoKpi\Cms\Clases\FiltroTabla;
+use ProyectoKpi\Cms\Negocios\nDashboard;
+use ProyectoKpi\Cms\Negocios\nTablaMes;
 use ProyectoKpi\Http\Controllers\Controller;
 
 
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
-use ProyectoKpi\Cms\Clases\CalcularSemana;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Models\Indicadores\Indicador;
 
-use ProyectoKpi\Cms\Clases\FiltroTabla;
-
 class EvaluadosController extends Controller
 {
-    private $evaluador_id;
+    private $dashboard;
+    private $tiposIndicadores;
+    private $ponderacionEscala;
+    private $indicadoresSemana;
+    private $indicadoresMes;
+    private $filtro;
 
     public function __contruct()
     {
-        $evaluador_id =
         $this->middleware('auth');
+        $this->dashboard = new nDashboard();
+        $this->filtro = new FiltroTabla();
+
     }
 
-    
     /**
      * Display a listing of the resource.
      *
@@ -36,10 +38,12 @@ class EvaluadosController extends Controller
      */
     public function index()
     {
-        // Obtenemos el Id del Evaluador
-        $id = json_decode(\Cache::get('evadores'));
-        $evaluados = EvaluadoresRepository::cnGetEvaluados($id->evaluador_id, \Usuario::get('codigo') );
+        $this->tablaMes = new nTablaMes();
 
+        // Obtenemos el Id del Evaluador
+        $id = \Cache::get('evadores');
+        //dd(json_encode($id));
+        $evaluados = EvaluadoresRepository::cnGetEvaluados($id->evaluador_id, \Usuario::get('codigo'));
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
     }
 
@@ -48,65 +52,59 @@ class EvaluadosController extends Controller
     */
     public function dashboard()
     {
-        /* obtenemos las tabla de semanas y meses */
+
+        $this->dashboard = new nDashboard();
+        $this->tiposIndicadores   = $this->dashboard->obtenerPondTiposIndicadores();
+        $this->ponderacionEscala  = $this->dashboard->obtenerPondEscalas();
+
         $this->obtenerTablaSemana();
         $this->obtenerTablaMes();
 
-//        dd(\Cache::get('tablaSemana'),\Cache::get('cumplimientoSemana'),\Cache::get('tablaMes'),\Cache::get('cantSemana'));
-
-        $tipos = EvaluadoresRepository::cnGetPonderacionTipoIndicadores(\Cache::get('evadores')->id);
-        $escalas = EvaluadoresRepository::cnGetLimitesEscalas(\Cache::get('evadores')->id);
+//        dd($this->indicadoresMes,  \Cache::get('_TablaMes') );
 
         return view('evaluadores/evaluados/dashboard/index', [
-            'tipos'=> $tipos,
-            'escalas'=> $escalas
+            'tipos'  => $this->tiposIndicadores,
+            'escalas'=> $this->ponderacionEscala
         ]);
     }
 
-    public function opcionVista($id, Request $request)
+    public function opcionVista($id)
     {
         \FiltroTabla::setTipo($id);
-
-        $indicadores = EvaluadoresRepository::getIndicadoresPromedios(\Cache::get('evadores')->id);
-        $contadorTiempo = array_pop($indicadores);
-        $cumplimiento = array_pop($indicadores);
-
-        \Cache::forget('tablaIndicadores');
-        \Cache::forever('tablaIndicadores', $indicadores);
-
-        if($request->ajax()){
-            $view = View::make('evaluadores.evaluados.dashboard');
-
-            return response()->json([
-                'contadorTiempo' => $contadorTiempo,
-                'cumplimiento'   => $view->renderSections()['']
-            ]);
+        if($id == 0){
+            $this->obtenerTablaSemana();
+        }else{
+            $this->obtenerTablaMes();
         }
 
-        return redirect()->back();
+        return [
+            'tipoVista' => \FiltroTabla::getTipo()
+        ];
     }
 
-    public function filtroMes(Request $request)
+    public function obtenerVista()
     {
-        $cantidad = \Request::input('selectOpcion');
+        return \FiltroTabla::getTipo();
+    }
 
+    public function filtroMes($cantidad)
+    {
         // verificamos el paratro de la busqueda enviadas por el formulario
-        if($cantidad != 0){
+        if ($cantidad != 0) {
             $mes = \FiltroTabla::restarAlUltimoMes($cantidad);
-        }else{ // si es iguala cero el primer mes debe ser enero = 1
+        } else { // si es iguala cero el primer mes debe ser enero = 1
             $mes = 1;
         }
 
         \FiltroTabla::setPrimerMes($mes);
+        $this->obtenerTablaMes();
 
-        return $this->dashboard();
+        return ['primerMes'=>\FiltroTabla::getPrimerMes()];
     }
 
     public function filtroSemana(Request $request)
     {
         $vista = \Request::input('selectVer');
-
-        dd($vista);
     }
 
     /**
@@ -118,17 +116,17 @@ class EvaluadosController extends Controller
      */
     public function empleadosEvaluados($indicador_id, $evaluador_id)
     {
-       $empleados = EvaluadoresRepository::cnGetEmpleadosEvaluados($indicador_id, $evaluador_id);
-       $indicador = Indicador::findOrFail($indicador_id);
-       $evaluador = Evaluador::findOrFail($evaluador_id);
+        $empleados = EvaluadoresRepository::cnGetEmpleadosEvaluados($indicador_id, $evaluador_id);
+        $indicador = Indicador::findOrFail($indicador_id);
+        $evaluador = Evaluador::findOrFail($evaluador_id);
 
-       return view('evaluadores/evaluados/empleados/index', ['empleados'=>$empleados, 'indicador'=>$indicador, 'evaluador'=>$evaluador]);
+        return view('evaluadores/evaluados/empleados/index', ['empleados'=>$empleados, 'indicador'=>$indicador, 'evaluador'=>$evaluador]);
     }
 
     public function showIndicadorEmpleado($empleado_id, $indicador_id)
     {
-        $listaTablas = IndicadorRepository::getTablaIndicador($empleado_id, $indicador_id);  
-        $listaGraficas = IndicadorRepository::getGraficoIndicador($empleado_id, $indicador_id);  
+        $listaTablas = IndicadorRepository::getTablaIndicador($empleado_id, $indicador_id);
+        $listaGraficas = IndicadorRepository::getGraficoIndicador($empleado_id, $indicador_id);
     }
 
     /**
@@ -136,18 +134,18 @@ class EvaluadosController extends Controller
      */
     private function obtenerTablaSemana()
     {
-        $semana = EvaluadoresRepository::getIndicadoresPromediosSemana(\Cache::get('evadores')->id);
-        $cumplimiento = array_pop($semana);
-        $semanas = array_pop($semana);
+        $this->dashboard = new nDashboard();
+
+        $this->indicadoresSemana    = $this->dashboard->obtenerListaTablaSemana();
+
+        $cumplimiento = array_pop($this->indicadoresSemana);
 
         \Cache::forget('tablaSemana');
-        \Cache::forever('tablaSemana', $semana);
+        \Cache::forever('tablaSemana', $this->indicadoresSemana);
 
         \Cache::forget('cumplimientoSemana');
         \Cache::forever('cumplimientoSemana', $cumplimiento);
 
-        \Cache::forget('cantSemana');
-        \Cache::forever('cantSemana', $semanas);
     }
 
     /**
@@ -155,13 +153,31 @@ class EvaluadosController extends Controller
     */
     private function obtenerTablaMes()
     {
-        $mes = EvaluadoresRepository::getIndicadoresPromediosMes(\Cache::get('evadores')->id);
-        $cumplimiento = array_pop($mes);
+        $this->dashboard = new nDashboard();
+        $this->indicadoresMes       = $this->dashboard->obtenerListaTablaMes();
 
-        \Cache::forget('tablaMes');
-        \Cache::forever('tablaMes', $mes);
+        $cumplimiento = array_pop($this->indicadoresMes);
+
+        \Cache::forget('TablaMes');
+        \Cache::forever('TablaMes', $this->indicadoresMes);
 
         \Cache::forget('cumplimientoMes');
         \Cache::forever('cumplimientoMes', $cumplimiento);
     }
+
+
+    public function colocarTipo($tipo, $mes, $opcion)
+    {
+        \FiltroTabla::setTipo($tipo);
+
+        if($opcion == 0){
+            \FiltroTabla::setMesBuscado($mes);
+        }else{
+            \FiltroTabla::setPrimerMes($mes);
+        }
+    }
+
+
+
+
 }

@@ -8,8 +8,8 @@
 
 namespace ProyectoKpi\Cms\Interfaces;
 
-
-interface IClases {
+interface IClases
+{
     public function set($atributo, $valor);
     public function get($atributo);
 }

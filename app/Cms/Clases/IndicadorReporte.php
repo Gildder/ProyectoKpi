@@ -26,8 +26,5 @@ class IndicadorReporte
     /*contructores */
     public function __construct()
     {
-        
     }
-
-
 }

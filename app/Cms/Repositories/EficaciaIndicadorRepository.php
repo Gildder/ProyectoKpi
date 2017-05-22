@@ -11,7 +11,6 @@ use ProyectoKpi\Cms\Clases\CalcularSemana;
 use ProyectoKpi\Cms\Clases\SemanaData;
 use ProyectoKpi\Cms\Clases\DatoGraficaPorEmpleado;
 
-
 class EficaciaIndicadorRepository extends IndicadorAbstract implements IIndicador
 {
     private $datos;

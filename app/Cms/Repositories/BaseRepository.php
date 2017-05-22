@@ -8,7 +8,6 @@
 
 namespace ProyectoKpi\Cms\Repositories;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository
@@ -17,5 +16,4 @@ abstract class BaseRepository
     {
         return json_encode($modelo);
     }
-
 }

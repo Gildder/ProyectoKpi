@@ -19,7 +19,7 @@
 
       {{-- Body --}}
       <div class="modal-body modal-delete-body">
-         {!!Form::open(['action'=>['Evaluadores\EvaluadorController@editarcargoasignado', $indicador->id, $evaluador->id, $item->id], 'method'=>'GET'])!!}
+         {!!Form::open(['action'=>['_TablaMes', $indicador->id, $evaluador->id, $item->id], 'method'=>'GET'])!!}
           <div class="modal-body">
             @include('evaluadores/evaluador/indicadores/cargosasignados/data_edit');
           </div>

@@ -11,20 +11,17 @@ class PdfController extends Controller
 {
     public function index()
     {
-    	
     }
 
     public function crearPdf($datos, $vistaUrl)
     {
-    	$data = $datos;
-    	$date = date('Y-m-d');
-    	$view = \View::make($vistaUrl, compact('data', 'date'))->render();
-    	$pdf = \App::make('dompdf', '');
-
+        $data = $datos;
+        $date = date('Y-m-d');
+        $view = \View::make($vistaUrl, compact('data', 'date'))->render();
+        $pdf = \App::make('dompdf', '');
     }
 
     public function crear_reportes_evaluador($evaluador, $mes)
     {
-    	
     }
 }

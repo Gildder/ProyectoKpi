@@ -8,7 +8,6 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 class FiltroTabla
 {
     // Semanal = 0 ; Mensual = 1;
@@ -95,18 +94,16 @@ class FiltroTabla
      */
     public function setMesBuscado($mesBuscado)
     {
-        if($mesBuscado <0 && $this->mesBuscado > 1)
-        {
+        if ($mesBuscado <0 && $this->mesBuscado > 1) {
             $this->mesBuscado = $this->mesBuscado -1;
-        }else{
+        } else {
             new \Exception('El mes No puede ser menor a 1');
         }
 
-        if($mesBuscado >= 0 && $this->mesBuscado < 11){
+        if ($mesBuscado >= 0 && $this->mesBuscado < 11) {
             $this->mesBuscado = $this->mesBuscado + 1;
-        }else{
+        } else {
             new \Exception('El mes No puede ser mayor a 12');
-
         }
         $this->mesBuscado = $mesBuscado;
     }
@@ -142,6 +139,4 @@ class FiltroTabla
     {
         return $this->inicio;
     }
-
-
 }

@@ -20,10 +20,8 @@ use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Requests\Indicadores\ErrorFormRequest;
 
-
-class SupervisadosController  extends Controller
+class SupervisadosController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -44,6 +42,8 @@ class SupervisadosController  extends Controller
         // informacion del empleado supervisado
         $empleado = Empleado::where('codigo', $empleado_id)->first();
 
+//        dd($indicadores, $empleado);
+
         return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'empleado'=>$empleado]);
     }
 
@@ -51,25 +51,24 @@ class SupervisadosController  extends Controller
     public function obtenerTareasFinalizadas($anio, $mes, $semana, $empleado_id)
     {
         // obtener las tareas finalizadas con los parametros enviados, mas los tareas que estan marcadas con errores de manera desabilitada
-        // pero espeficicando que ya esta agregada con error 
+        // pero espeficicando que ya esta agregada con error
         $tareas = DB::select("call pa_eficiencia_tareasTerminadas(".$anio.", ".$mes.", ".$semana.", '".$empleado_id."',0);");
 
-        return view('supervisores\numeroErrores\create',['tareas'=> $tareas, 'empleado_id'=>$empleado_id]);
+        return view('supervisores\numeroErrores\create', ['tareas'=> $tareas, 'empleado_id'=>$empleado_id]);
     }
 
     // tareas finalizadas estado  = 3 isError = 1
     public function obtenerTareasErrores($anio, $mes, $semana, $empleado_id)
     {
         // obtener las tareas finalizadas con los parametros enviados, mas los tareas que estan marcadas con errores de manera desabilitada
-        // pero espeficicando que ya esta agregada con error 
+        // pero espeficicando que ya esta agregada con error
         $tareas = DB::select("call pa_eficiencia_tareasTerminadas(".$anio.", ".$mes.", ".$semana.", '".$empleado_id."', 1);");
 
-        return view('supervisores\numeroErrores\delete',['tareas'=> $tareas, 'empleado_id'=>$empleado_id]);
+        return view('supervisores\numeroErrores\delete', ['tareas'=> $tareas, 'empleado_id'=>$empleado_id]);
     }
 
     public function agregarErrorTarea(ErrorFormRequest $Request, $empleado_id)
     {
-
         $tarea_id = \Request::input('tarea_id');
         $descripcion = trim(\Request::input('descripcion'));
 
@@ -113,8 +112,4 @@ class SupervisadosController  extends Controller
         DB::select("call pa_eficiencia_actualizarNroErrores('".$tarea->fechaFinSolucion."', '".$empleado_id."', 0);");
         return redirect()->back()->with('El numero de Errores se aumento correctamente.');
     }
-    
 }
-
-
-

@@ -10,7 +10,7 @@
         <b>Quitar Cargo</b>
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Evaluadores\EvaluadorController@quitarcargo', $item->id, $evaluador->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['_TablaMes', $item->id, $evaluador->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas quitar a <b>{{$item->nombre}}</b>?</p>
             </div>

@@ -15,7 +15,6 @@ use ProyectoKpi\Models\Localizaciones\Localizacion;
 use ProyectoKpi\Http\Requests\Tareas\TareaDiariaFormRequest;
 use ProyectoKpi\Http\Requests\Tareas\TareaDiariasResolverRequest;
 
-
 class TareaDiariaController extends Controller
 {
     public function __construct()
@@ -25,94 +24,89 @@ class TareaDiariaController extends Controller
 
 
     public function index()
-	{	
+    {
+        $user = Auth::user();  //obtenemos el usuario logueado
 
-		$user = Auth::user();  //obtenemos el usuario logueado
+        $tareas = Tarea::where('tipo', '=', '2')->where('empleado_id', $user->empleado->codigo)->get();
 
-		$tareas = Tarea::where('tipo','=', '2')->where('empleado_id', $user->empleado->codigo )->get();
+        return view('tareas/tareaDiaria/index', ['tareas'=> $tareas]);
+    }
 
-		return view('tareas/tareaDiaria/index', ['tareas'=> $tareas]);
-	}
+    public function create()
+    {
+        return view('tareas.tareaDiaria.create');
+    }
 
-	public function create()
-	{
+    public function store(TareaDiariaFormRequest $Request)
+    {
+        $user = Auth::user();  //obtenemos el usuario logueado
+        $tarea = new Tarea;
+        $tarea->descripcion = trim(\Request::input('descripcion'));
+        $tarea->tipo = '2';
+        $tarea->empleado_id = $user->empleado->codigo;
+        $tarea->save();
 
-		return view('tareas.tareaDiaria.create');
-	}
+        return redirect('tareas.tareaDiaria.index')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');
+    }
 
-	public function store(TareaDiariaFormRequest $Request)
-	{
-		$user = Auth::user();  //obtenemos el usuario logueado
-		$tarea = new Tarea;
-		$tarea->descripcion = trim(\Request::input('descripcion'));
-		$tarea->tipo = '2';
-		$tarea->empleado_id = $user->empleado->codigo;
-		$tarea->save();
+    
+    public function edit($id)
+    {
+        $tarea = Tarea::findOrFail($id);
+        
+        return view('tareas/tareaDiaria/edit', ['tarea'=>$tarea]);
+    }
 
-		return redirect('tareas.tareaDiaria.index')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');
-	}
+    public function update(TareaProgramasFormRequest $Request, $id)
+    {
+        $tarea = Tarea::findOrFail($id);
+        $tarea->descripcion = trim(\Request::input('descripcion'));
+        $tarea->save();
 
-	
-	public function edit($id)
-	{
-		$tarea = Tarea::findOrFail($id);
-		
-		return view('tareas/tareaDiaria/edit',['tarea'=>$tarea]);
+        return redirect('tareas/tareaDiaria')->with('message', 'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+    }
 
-	}
+    public function show($id)
+    {
+        $tareaDiaria = Tarea::findOrFail($id);
 
-	public function update(TareaProgramasFormRequest $Request, $id)
-	{
-		$tarea = Tarea::findOrFail($id);
-		$tarea->descripcion = trim(\Request::input('descripcion'));
-		$tarea->save();
-
-		return redirect('tareas/tareaDiaria')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
-	}
-
-	public function show($id)
-	{
-		$tareaDiaria = Tarea::findOrFail($id);
-
-		return view('tareas/tareaDiaria/show', ['tarea'=>$tareaDiaria]);
-	}
+        return view('tareas/tareaDiaria/show', ['tarea'=>$tareaDiaria]);
+    }
 
 
-	public function resolver($id)
-	{
+    public function resolver($id)
+    {
+        $tareaDiaria = Tarea::findOrFail($id);
 
-		$tareaDiaria = Tarea::findOrFail($id);
+        $ubicacionesDis = Tarea::ubicacionesDisponibles($id);
+        $ubicacionesOcu = Tarea::ubicacionesOcupadas($id);
 
-		$ubicacionesDis = Tarea::ubicacionesDisponibles($id);
-		$ubicacionesOcu = Tarea::ubicacionesOcupadas($id);
+                
+        return view('tareas/tareaDiaria/resolver', ['tarea'=>$tareaDiaria,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
+    }
 
-				
-		return view('tareas/tareaDiaria/resolver', ['tarea'=>$tareaDiaria,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
-	}	
+    public function storeResolver(TareaDiariasResolverRequest $Request, $id)
+    {
+        $tarea = Tarea::findOrFail($id);
+        $tarea->fechaInicioSolucion = trim(\Request::input('fechaInicioSolucion'));
+        $tarea->fechaFinSolucion = trim(\Request::input('fechaFinSolucion'));
+        $tarea->estado = trim(\Request::input('estado'));
+        $tarea->tiempoSolucion = trim(\Request::input('tiempoSolucion'));
+        $tarea->observaciones = trim(\Request::input('observaciones'));
+        $tarea->save();
 
-	public function storeResolver(TareaDiariasResolverRequest $Request,$id)
-	{
+        return redirect('tareas/tareaDiaria')->with('message', 'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
+    }
 
-		$tarea = Tarea::findOrFail($id);
-		$tarea->fechaInicioSolucion = trim(\Request::input('fechaInicioSolucion'));
-		$tarea->fechaFinSolucion = trim(\Request::input('fechaFinSolucion'));
-		$tarea->estado = trim(\Request::input('estado'));
-		$tarea->tiempoSolucion = trim(\Request::input('tiempoSolucion'));
-		$tarea->observaciones = trim(\Request::input('observaciones'));
-		$tarea->save();
+    public function destroy($id)
+    {
+        Tarea::destroy($id);
 
-		return redirect('tareas/tareaDiaria')->with('message',  'El tarea Nro. '.$id.' - '.$Request->nombre.' se actualizo correctamente.');
-	}
-
-	public function destroy($id)
-	{
-		Tarea::destroy($id);
-
-		return redirect('tareas/tareaDiaria')->with('message',  'El tarea de Nro.- '.$id.'  se elimino correctamente.');
-	}
+        return redirect('tareas/tareaDiaria')->with('message', 'El tarea de Nro.- '.$id.'  se elimino correctamente.');
+    }
 
 
-	public function agregarubicacion($tarea_id, $ubi_id)
+    public function agregarubicacion($tarea_id, $ubi_id)
     {
         DB::table('tarea_realizadas')->insert(
             array('tarea_id' => $tarea_id, 'localizacion_id' => $ubi_id)

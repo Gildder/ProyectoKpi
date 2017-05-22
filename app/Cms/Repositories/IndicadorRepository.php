@@ -1,6 +1,7 @@
 <?php
 
 namespace ProyectoKpi\Cms\Repositories;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -14,32 +15,34 @@ use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\EficienciaIndicadorRepository;
 
-    
 class IndicadorRepository
 {
     /*contructores */
     public function __construct()
     {
-
     }
 
 
     /* Metodos */
 
     /**
-	 * Retorn la lista de indicadores para un Empleado
-	 */
-	public static function cnGetListaInidicadores($codigo)
-	{
-	    return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion','tipos_indicadores.nombre as tipo',
+     * Retorn la lista de indicadores para un Empleado
+     * @param $codigo
+     * @return
+     */
+    public static function cnGetListaInidicadores($codigo)
+    {
+        return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion', 'tipos_indicadores.nombre as tipo',
             'indicador_cargos.objetivo', 'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
-	            ->join('indicador_cargos','indicador_cargos.cargo_id','=','empleados.cargo_id')
-	            ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
-	            ->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
-	            ->join('frecuencias','frecuencias.id','=','indicador_cargos.frecuencia_id')
-	            ->where('empleados.codigo',$codigo)
-	            ->get();
-	}
+                ->join('indicador_cargos', 'indicador_cargos.cargo_id', '=', 'empleados.cargo_id')
+                ->join('indicadores', 'indicadores.id', '=', 'indicador_cargos.indicador_id')
+                ->join('tipos_indicadores', 'tipos_indicadores.id', '=', 'indicadores.tipo_indicador_id')
+                ->join('frecuencias', 'frecuencias.id', '=', 'indicador_cargos.frecuencia_id')
+                ->where('empleados.codigo', $codigo)
+                ->get();
+
+//        return Indicador::all('')
+    }
 
 
     /**
@@ -47,17 +50,17 @@ class IndicadorRepository
      *
      * @param  id de Indicador
      */
-	public static function cnGetIndicadoresDeEvaluadores($evaluador_id)
-	{
-		$result = DB::table('indicadores i')
-            ->join('evalaudor_indicadores ei','ei.indicador_id', '=', 'i.id')
-            ->join('tipos_indicadores ti','ti.id', '=', 'i.tipo_indicador_id')
+    public static function cnGetIndicadoresDeEvaluadores($evaluador_id)
+    {
+        $result = DB::table('indicadores i')
+            ->join('evalaudor_indicadores ei', 'ei.indicador_id', '=', 'i.id')
+            ->join('tipos_indicadores ti', 'ti.id', '=', 'i.tipo_indicador_id')
             ->where('ei.evaluador_id', $evaluador_id)
             ->select('i.id', 'i.nombre', 'i.descripcion', 'ti.nombre as tipo')
             ->get();
 
         return json_encode($result);
-	}
+    }
 
     /**
      * @param $cargo_id
@@ -68,7 +71,6 @@ class IndicadorRepository
         return \DB::table('indicador_cargos')->select('indicador_cargos.cargo_id')
             ->where('indicador_cargos.cargo_id', $cargo_id)
             ->count();
-
     }
 
 
@@ -78,7 +80,6 @@ class IndicadorRepository
     public static function cnNroOrdenOcupadas()
     {
         return DB::table('indicadores')->select('indicadores.orden')->get();
-
     }
     /**
      * Verifica si un indicador esta asignado a cargo
@@ -87,8 +88,8 @@ class IndicadorRepository
      * @param  id de Cargo
      * @return boolean
      */
-	public static function isUserIndicador($cargo_id)
-	{
+    public static function isUserIndicador($cargo_id)
+    {
         $result = self::cnCamtidadEmpleados($cargo_id);
 
         if ($result > 0) {
@@ -96,9 +97,9 @@ class IndicadorRepository
         } else {
             return false;
         }
-	}
+    }
 
-	public static function getTablaIndicador($empleado_id, $indicador_id)
+    public static function getTablaIndicador($empleado_id, $indicador_id)
     {
         $indicador = self::getIndicador($empleado_id, $indicador_id);
 
@@ -109,7 +110,7 @@ class IndicadorRepository
     {
         $indicador = self::getIndicador($empleado_id, $indicador_id);
 
-         return $indicador->getChart($empleado_id);
+        return $indicador->getChart($empleado_id);
     }
 
     /**
@@ -128,8 +129,4 @@ class IndicadorRepository
         }
         return $indicador;
     }
-
-
-
-
 }

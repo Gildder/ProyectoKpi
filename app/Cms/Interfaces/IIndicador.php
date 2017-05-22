@@ -8,7 +8,6 @@
 
 namespace ProyectoKpi\Cms\Interfaces;
 
-
 interface IIndicador
 {
     public function getTablas($empleado);

@@ -13,6 +13,8 @@
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('login') }}">
                         {{ csrf_field() }}
 
+                        @include('partials/alert/error')
+
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Usuario</label>
 

@@ -30,8 +30,7 @@ abstract class IndicadorAbstract
     */
     public function setSemana($semana, $posicion, $valor)
     {
-        if ($posicion != 0)
-        {
+        if ($posicion != 0) {
             switch ($semana) {
                 case 1:
                     $this->semana1[$posicion] = $valor;

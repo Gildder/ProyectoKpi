@@ -10,7 +10,7 @@
         <b>Quitar Empleado</b>
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Evaluadores\EvaluadorController@quitarempleado', $item->codigo, $evaluador->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['_TablaMes', $item->codigo, $evaluador->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas quitar a <b>{{$item->nombres}} {{$item->apellidos}}</b>?</p>
             </div>

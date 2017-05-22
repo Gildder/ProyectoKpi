@@ -23,7 +23,6 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-
     }
 
     /**
@@ -34,23 +33,22 @@ class HomeController extends Controller
     public function index()
     {
         $rutaPrincipal = 'empleados.perfil.index';
-        if(! Auth::guest()){
+        if (! Auth::guest()) {
             if (\Usuario::get('isAdmin')) {
                 return redirect()->route('administrador.index');
-            }else{
+            } else {
                 // tiene indicadores asignado
-                if(\Usuario::get('isIndicadores')){
+                if (\Usuario::get('isIndicadores')) {
                     $rutaPrincipal = 'tareas.tareaProgramadas.index';
-                }   
+                }
 
-                if(\Usuario::get('isSupervisor')){
+                if (\Usuario::get('isSupervisor')) {
                     $rutaPrincipal = 'supervisores.supervisados.index';
-                }else{
+                } else {
                     $rutaPrincipal = 'empleados.perfil.index';
                 }
 
-                if(\Usuario::get('isEvaluador')){
-                    
+                if (\Usuario::get('isEvaluador')) {
                     $rutaPrincipal = 'evaluadores.evaluados.dashboard';
                     // $filtro = new FiltroTabla();
                     // \Cache::forever('key', $filtro);
@@ -58,10 +56,7 @@ class HomeController extends Controller
                 }
                
                 return redirect()->route($rutaPrincipal);
-
             }
         }
-
     }
-
 }

@@ -13,20 +13,19 @@ use ProyectoKpi\Cms\repositories\SupervisoresRepository;
 use ProyectoKpi\Cms\repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\repositories\IndicadorRepository;
 
-
-class UserRepository 
+class UserRepository
 {
 
-	 /*contructores */
+     /*contructores */
     public function __construct()
     {
     }
 
     public static function isAdmin()
     {
-    	$user = Auth::user(); //obtenemos el usuario logueado
+        $user = Auth::user(); //obtenemos el usuario logueado
 
-    	if (($user['original']['name'] == 'admin') && ($user['original']['type'] == '1')) {
+        if (($user['original']['name'] == 'admin') && ($user['original']['type'] == '1')) {
             return true;
         }
 
@@ -34,27 +33,26 @@ class UserRepository
     }
 
     /*
-	 * Verificamos si tiene asignado el Indicador de Eficacia
-	*/
-	public static function isIndicadores()
-	{
-    	$user = Auth::user(); 
+     * Verificamos si tiene asignado el Indicador de Eficacia
+    */
+    public static function isIndicadores()
+    {
+        $user = Auth::user();
         $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-        	$result = IndicadorRepository::isUserIndicador($user->empleado->cargo_id);
+            $result = IndicadorRepository::isUserIndicador($user->empleado->cargo_id);
         }
 
         if (!$result) {
             Cache::forget('iseficacia');
             return false;
-        }else{
+        } else {
             Cache::forever('iseficacia', $result);
 
             return true;
         }
-
-	}
+    }
 
     /* 
      * VErificar si el usuario logueado esata asignado como supervisor de otro emplaedo
@@ -63,11 +61,11 @@ class UserRepository
     public static function isEvaluador()
     {
         $result = false;
-    	$user = Auth::user(); 
-          $admin = UserRepository::isAdmin();
+        $user = Auth::user();
+        $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-        	$result = EvaluadoresRepository::cnVerificarsEvaluador($user->empleado->codigo);
+            $result = EvaluadoresRepository::cnVerificarsEvaluador($user->empleado->codigo);
         }
 
         // dd(isset($result), $result);
@@ -75,13 +73,11 @@ class UserRepository
         if (!isset($result)) {
             Cache::forget('evadores');
             return false;
-        }else{
+        } else {
             Cache::forever('evadores', $result);
 
             return true;
         }
-            
-
     }
 
 
@@ -91,22 +87,19 @@ class UserRepository
      */
     public static function isSupervisor()
     {
-    	$user = Auth::user(); 
+        $user = Auth::user();
         $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-        	$result = SupervisoresRepository::verificarSupervisor($user->empleado->codigo);
+            $result = SupervisoresRepository::verificarSupervisor($user->empleado->codigo);
         }
 
         if (!$result) {
             Cache::forget('depasores');
             return false;
-        }else{
+        } else {
             Cache::forever('depasores', $result);
             return true;
         }
-            
-
     }
-
 }

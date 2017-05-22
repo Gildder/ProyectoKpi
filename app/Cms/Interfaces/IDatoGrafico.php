@@ -8,8 +8,6 @@
 
 namespace ProyectoKpi\Cms\Interfaces;
 
-
 interface IDatoGrafico
 {
-
 }

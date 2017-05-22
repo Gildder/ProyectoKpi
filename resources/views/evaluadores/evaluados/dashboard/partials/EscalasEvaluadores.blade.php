@@ -1,7 +1,6 @@
 <div class="box-footer">
     <div class="row">
-        <div class="col-sm-12"
-             style="text-align: center; background: #d2d6de; padding: 10px;  box-shadow: 1px 1px 0 0 #909090; border-right: 0.2em;">
+        <div class="col-sm-12" style="text-align: center; background: #d2d6de; padding: 10px;  box-shadow: 1px 1px 0 0 #909090; border-right: 0.2em;">
             <b>Escala de Colores</b></div>
         @foreach($escalas as $escala)
             <div class="col-sm-3 col-xs-6"

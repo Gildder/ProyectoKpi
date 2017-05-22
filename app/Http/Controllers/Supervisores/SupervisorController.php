@@ -23,22 +23,21 @@ class SupervisorController extends Controller
     public function index()
     {
         $departamentos = Departamento::select('departamentos.*')->get();
-    	$cargos = Cargo::select('cargos.*')->get();
+        $cargos = Cargo::select('cargos.*')->get();
 
         return view('supervisores\supervisor\index', ['departamentos'=>$departamentos, 'cargos'=>$cargos]);
     }
 
     public function show($id, $tipo)
     {
-        if ($tipo == 0) // 0 = cargos, otros = departamentos
-        {
+        if ($tipo == 0) { // 0 = cargos, otros = departamentos
             $empleadosDisponibles = DB::select('call pa_supervisores_empleadosDisponiblesCargo('.$id.');');
             $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresCargo('.$id.');');
-            $lista = Cargo::where('id','=',$id)->first();
-        }else{
+            $lista = Cargo::where('id', '=', $id)->first();
+        } else {
             $empleadosDisponibles = DB::select('call pa_supervisores_empleadosDisponiblesDepartamento('.$id.');');
             $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresDepartamento('.$id.');');
-            $lista = Departamento::where('id','=',$id)->first();
+            $lista = Departamento::where('id', '=', $id)->first();
         }
 
 
@@ -89,5 +88,4 @@ class SupervisorController extends Controller
 
         return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
     }
-
 }

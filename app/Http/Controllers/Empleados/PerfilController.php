@@ -10,7 +10,6 @@ use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Cms\Repositories\EmpleadoRepository;
 
-
 class PerfilController extends Controller
 {
     /**
@@ -20,7 +19,7 @@ class PerfilController extends Controller
      */
     public function index()
     {
-        $user = Auth::user(); 
+        $user = Auth::user();
 
         $empleados = EmpleadoRepository::obtenerEmpleado($user->empleado->codigo);
 

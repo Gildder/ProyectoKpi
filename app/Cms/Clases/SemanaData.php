@@ -8,18 +8,19 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Interfaces\IDataIndicador;
 
 /**
  * Clase para obtener el nombre dy valor de la semana
 */
-class SemanaData implements  IDataIndicador {
+class SemanaData implements IDataIndicador
+{
     private $semana;
     private $valor;
 
-    public function __construct($semana, $valor){
+    public function __construct($semana, $valor)
+    {
         $this->setValor($semana, $valor);
     }
 

@@ -2,13 +2,12 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 /* Inidicadores asignados a una gerencia con ponderacion y resultado de los indicadores semanalmente */
 
 use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Interfaces\IDataIndicador;
 
-class DatoGraficaPorEmpleado implements IClases,  IDataIndicador
+class DatoGraficaPorEmpleado implements IClases, IDataIndicador
 {
     /*Atributos*/
     private $gestion;
@@ -32,7 +31,8 @@ class DatoGraficaPorEmpleado implements IClases,  IDataIndicador
         $this->$atributo = $valor;
     }
 
-    public function get($atributo){
+    public function get($atributo)
+    {
         return $this->$atributo;
     }
 

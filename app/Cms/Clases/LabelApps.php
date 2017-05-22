@@ -8,10 +8,9 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 class LabelApps
 {
-//    *************************************************************************
+    //    *************************************************************************
     /* Label para la Grafica de Supervisores utilizando D3 */
     // Meses para el atributos Category de la GRafica D3JS de los Meses
     public static $lbsD3Enero = 'Enero';
@@ -48,5 +47,4 @@ class LabelApps
         );
     }
 //    *************************************************************************
-
 }

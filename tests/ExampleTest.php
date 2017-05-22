@@ -16,4 +16,13 @@ class ExampleTest extends TestCase
         $this->visit('/')
              ->see('Laravel 5');
     }
+
+//    public function testAccountLink()
+//    {
+//        $this->visit('/')->dontSee('dashboard');
+//
+//        $user = factory(ProyectoKpi\Models\User::class)->create([
+//
+//        ]);
+//    }
 }

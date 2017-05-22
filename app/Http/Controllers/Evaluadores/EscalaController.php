@@ -10,8 +10,6 @@ use ProyectoKpi\Http\Requests\Evaluadores\EscalaFormRequest;
 
 use ProyectoKpi\Models\Evaluadores\Escala;
 
-
-
 class EscalaController extends Controller
 {
     /**
@@ -59,7 +57,7 @@ class EscalaController extends Controller
     {
         $escala = Escala::findOrFail($id);
                 
-        return view('evaluadores.escala.show',['escala'=>$escala]);
+        return view('evaluadores.escala.show', ['escala'=>$escala]);
     }
 
     /**
@@ -72,7 +70,7 @@ class EscalaController extends Controller
     {
         $escala = Escala::findOrFail($id);
         
-        return view('evaluadores.escala.edit',['escala'=>$escala]);
+        return view('evaluadores.escala.edit', ['escala'=>$escala]);
     }
 
     /**
@@ -88,7 +86,7 @@ class EscalaController extends Controller
         $escala->nombre = trim(\Request::input('nombre'));
         $escala->save();
 
-        return redirect('evaluadores/escala')->with('message',  'La escala Nro. '.$id.' - '.$request->nombre.' se actualizo correctamente.');
+        return redirect('evaluadores/escala')->with('message', 'La escala Nro. '.$id.' - '.$request->nombre.' se actualizo correctamente.');
     }
 
     /**
@@ -101,6 +99,6 @@ class EscalaController extends Controller
     {
         Escala::destroy($id);
 
-        return redirect('evaluadores/escala')->with('message',  'La escala de Nro.- '.$id.'  se elimino correctamente.');
+        return redirect('evaluadores/escala')->with('message', 'La escala de Nro.- '.$id.'  se elimino correctamente.');
     }
 }

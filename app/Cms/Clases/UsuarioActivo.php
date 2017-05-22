@@ -8,14 +8,14 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
-
 use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 
-class UsuarioActivo implements IClases {
+class UsuarioActivo implements IClases
+{
     private $id;
     private $usuario;
     private $correo;
@@ -42,7 +42,8 @@ class UsuarioActivo implements IClases {
         $this->$atributo = $valor;
     }
 
-    public function get($atributo){
+    public function get($atributo)
+    {
         return $this->$atributo;
     }
 
@@ -76,15 +77,15 @@ class UsuarioActivo implements IClases {
 
         if (($user['original']['name'] == 'admin') && ($user['original']['type'] == '1')) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     /*
-	 * Verificamos si tiene asignado el Indicador de Eficacia
-	*/
-	public function isIndicadores()
+     * Verificamos si tiene asignado el Indicador de Eficacia
+    */
+    public function isIndicadores()
     {
         $user = \Auth::user();
 
@@ -95,10 +96,10 @@ class UsuarioActivo implements IClases {
         // dd($result, $user->empleado->cargo_id, isset($result));
 
          if (isset($result)) {
-            return true;
-        }else{
-            return false;
-        }
+             return true;
+         } else {
+             return false;
+         }
     }
 
     /*
@@ -119,14 +120,12 @@ class UsuarioActivo implements IClases {
         if (!isset($result)) {
             \Cache::forget('evadores');
             return false;
-        }else{
+        } else {
             \Cache::forget('evadores');
             \Cache::forever('evadores', $result);
 
             return true;
         }
-
-
     }
 
 
@@ -144,10 +143,8 @@ class UsuarioActivo implements IClases {
 
         if (!$result) {
             return false;
-        }else{
+        } else {
             return true;
         }
-
-
     }
 }

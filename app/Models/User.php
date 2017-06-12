@@ -6,6 +6,7 @@ namespace ProyectoKpi\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use ProyectoKpi\Cms\repositories\UserRepository;
 
+
 class User extends Authenticatable
 {
     /**
@@ -14,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id','name', 'email', 'password','state',  'active',  'type',
+        'id','name', 'email', 'state',  'active',  'type', 'hasRelation','codigo','nombres', 'apellidos', 'departamento_id', 'localizacion_id','cargo_id',
     ];
 
     /**
@@ -26,29 +27,98 @@ class User extends Authenticatable
           'password', 'remember_token',
     ];
 
-    /* Relaciones */
-    public function empleado()
+    public function isAdmin()
     {
-        return $this->hasOne('ProyectoKpi\Models\Empleados\Empleado');
+        if (isset($this->type)) {
+            if ($this->type == '1')
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
+    public function get($atributo)
+    {
+        if(isset($atributo))
+        {
+            return $this->$atributo;
+        }else{
+            return '-';
+        }
+    }
+    /* Relaciones */
     public function tipo()
     {
         return $this->belongsTo('ProyectoKpi\Models\Empleados\TipoUsuario','type');
     }
 
-    public function user()
-    {
-        return $this->hasOne('ProyectoKpi\Models\Empleados\Empleado', 'user_id');
-    }
 
-    public function isAdmin()
-    {
-        return $this->type == '1';
-    }
 
     /* Relaciones */
+    function cargo(){
+        return $this->belongsTo('ProyectoKpi\Models\Empleados\Cargo');
+    }
+    
+    function departamento(){
+        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Departamento');
+    }
 
+    function localizacion(){
+        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Localizacion');
+    }
+
+    public function tareas()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Tareas\Tarea', 'user_id', 'id');
+    }
+
+    public function supervisores()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado', 'supervisores_empleados', 'supervisor_id', 'user_id', 'codigo');
+    }
+
+    //    relacion supervisores con Cargos
+    public function cargos()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Cargo', 'supervisor_cargos', 'user_id', 'cargo_id', 'id');
+    }
+
+    // relacion de supervisor departamentos
+    public function departamentos()
+    {
+        return $this->belongsToMany('ProyectoKpi\Models\Localizaciones\Localizacion', 'supervisor_departamentos', 'user_id', 'departamento_id', 'id');
+
+    }
+
+    public function eficaciaIndicadores()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Indicadores\EficaciaIndicador', 'user_id', 'codigo');
+    }
+
+    /* Metodos Repositorio */
+    //Indicadores
+    public function primer_indicador()
+    {
+        return $this->hasMany('ProyectoKpi\Models\Indicadores\IndicadorPrimer');
+    }
+
+    public function getCargo($id)
+    {
+        $cargo =  DB::table('cargos')->select('cargos.nombre')->where('cargos.id',$id)->first();
+
+        return $cargo->nombre;
+    }
+
+    public static function getTablaIndicador($emp_id, $ind_id)
+    {
+        return IndicadorRepository::getTablaIndicador($emp_id, $ind_id);
+    }
+
+    public static function getGraficoIndicador($emp_id, $ind_id)
+    {
+        return IndicadorRepository::getGraficoIndicador($emp_id, $ind_id);
+    }
 
 
 }

@@ -22,7 +22,7 @@ class CreateEvaluadorIndicadoresTable extends Migration
          Schema::table('evaluador_indicadores', function ($table) {
             $table->primary(['indicador_id','evaluador_id']);
             $table->foreign('indicador_id')->references('id')->on('indicadores')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('evaluador_id')->references('id')->on('_TablaMes')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('evaluador_id')->references('id')->on('evaluadores')->onDelete('cascade')->onUpdate('cascade');
 
         });
     }

@@ -65,14 +65,11 @@ class Evaluador extends Model
 
 
 
-
-
-/*Metodos Repositorio */
     public static function getCargos($id)
     {   
         $cargosEvaluados = Cargo::select('cargos.*')
                 ->join('evaluador_cargos','evaluador_cargos.cargo_id','=', 'cargos.id')
-                ->join('_TablaMes','evaluadores.id','=','evaluador_cargos.evaluador_id')
+                ->join('evaluadores','evaluadores.id','=','evaluador_cargos.evaluador_id')
                 ->whereNull('evaluador_cargos.deleted_at')
                 ->where('evaluadores.id',$id)
                 ->get();
@@ -85,7 +82,7 @@ class Evaluador extends Model
     {   
         $Evaluadores = Empleado::select('empleados.*')
                 ->join('evaluador_empleados','evaluador_empleados.empleado_id','=', 'empleados.codigo')
-                ->join('_TablaMes','evaluadores.id','=','evaluador_empleados.evaluador_id')
+                ->join('evaluadores','evaluadores.id','=','evaluador_empleados.evaluador_id')
                 ->whereNull('evaluador_empleados.deleted_at')
                 ->where('evaluadores.id',$id)
                 ->get();

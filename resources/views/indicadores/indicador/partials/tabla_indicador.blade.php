@@ -1,4 +1,4 @@
-<div class="table-response">
+<div class="table-responsive">
 	<table id="myTable" class="table  table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<th>Nro</th>

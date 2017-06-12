@@ -9,13 +9,13 @@ use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 
-use ProyectoKpi\Cms\Repositories\PonderacionRepository;
 use ProyectoKpi\Models\Empleados\Evaluador;
 use ProyectoKpi\Models\Evaluadores\Escala;
 use ProyectoKpi\Models\Evaluadores\Ponderacion;
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Models\Indicadores\TipoIndicador;
 use ProyectoKpi\Http\Requests\Evaluadores\PonderacionFormRequest;
+
 
 class PonderacionController extends Controller
 {
@@ -65,12 +65,13 @@ class PonderacionController extends Controller
      */
     public function show($id)
     {
+
         $ponderacion = Ponderacion::FindOrFail($id);
 
         $indicadoresAgregados = DB::select('call pa_ponderaciones_indicadoresAgregados('.$id.');');
         $indicadoresDisponibles = DB::select('call pa_ponderaciones_indicadoresDisponibles('.$id.');');
 
-        // dd(json_encode($indicadoresDisponibles));
+        // dd(json_encode($indicadoresDisponibles)); 
 
         $tiposAgregados = DB::select('call pa_ponderaciones_tiposAgregados('.$id.');');
         $tiposDisponibles = DB::select('call pa_ponderaciones_tiposDisponibles('.$id.');');
@@ -78,7 +79,7 @@ class PonderacionController extends Controller
         $escalasAgregados = DB::select('call pa_ponderaciones_escalasAgregados('.$id.');');
         $escalasDisponibles = DB::select('call pa_ponderaciones_escalasDisponibles('.$id.');');
 
-        return view('evaluadores/ponderacion/show', ['ponderacion'=>$ponderacion,'indicadoresAgregados'=>$indicadoresAgregados,'indicadoresDisponibles'=>$indicadoresDisponibles,'tiposAgregados'=>$tiposAgregados, 'tiposDisponibles'=>$tiposDisponibles,'escalasAgregados'=>$escalasAgregados, 'escalasDisponibles'=>$escalasDisponibles]);
+        return view('evaluadores/ponderacion/show',['ponderacion'=>$ponderacion,'indicadoresAgregados'=>$indicadoresAgregados,'indicadoresDisponibles'=>$indicadoresDisponibles,'tiposAgregados'=>$tiposAgregados, 'tiposDisponibles'=>$tiposDisponibles,'escalasAgregados'=>$escalasAgregados, 'escalasDisponibles'=>$escalasDisponibles]);
     }
 
     /**
@@ -91,7 +92,7 @@ class PonderacionController extends Controller
     {
         $ponderacion = Ponderacion::findOrFail($id);
         
-        return view('evaluadores/ponderacion/edit', ['ponderacion'=>$ponderacion]);
+        return view('evaluadores/ponderacion/edit',['ponderacion'=>$ponderacion]);
     }
 
     /**
@@ -108,7 +109,7 @@ class PonderacionController extends Controller
         $ponderacion->descripcion = trim(\Request::input('descripcion'));
         $ponderacion->save();
 
-        return redirect('evaluadores/ponderacion')->with('message', 'La Ponderacion '.$request->nombre.' se actualizo correctamente.');
+        return redirect('evaluadores/ponderacion')->with('message',  'La Ponderacion '.$request->nombre.' se actualizo correctamente.');
     }
 
     /**
@@ -121,7 +122,7 @@ class PonderacionController extends Controller
     {
         Ponderacion::destroy($id);
 
-        return redirect('evaluadores/ponderacion')->with('message', 'La Ponderacion Nro.- '.$id.'  se elimino correctamente.');
+        return redirect('evaluadores/ponderacion')->with('message',  'La Ponderacion Nro.- '.$id.'  se elimino correctamente.');
     }
 
 
@@ -141,13 +142,14 @@ class PonderacionController extends Controller
         return redirect()->back()->with('message', 'Se agrego el indicador "'.$indicador->nombre.'" correctamente.');
     }
 
-    public function quitarindicador($indicador_id, $ponderacion_id)
+    public function quitarindicador( $indicador_id,  $ponderacion_id)
     {
         $indicador = Indicador::FindOrFail($indicador_id);
 
         DB::table('indicador_ponderacion')->where('ponderacion_id', $ponderacion_id)->where('indicador_id', $indicador_id)->delete();
 
         return redirect()->back()->with('message', 'Se quito el indicador  "'.$indicador->nombre.'" correctamente.');
+        
     }
 
     public function agregartipo(Request $request, $ponderacion_id, $tipoIndicador_id)
@@ -193,4 +195,5 @@ class PonderacionController extends Controller
 
         return redirect()->back()->with('message', 'Se quito la escala de cumplimiento "'.$escala->nombre.'" correctamente.');
     }
+
 }

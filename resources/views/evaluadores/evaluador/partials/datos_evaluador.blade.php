@@ -16,6 +16,6 @@
 
        <tr>
          <td class="text-right"><b>Ponderacion:</b></td>
-         <td>{{$evaluador->ponderaciones->nombre}}</td>
+         <td>{{$evaluador->ponderacion->nombre}}</td>
       </tr>
 </table>

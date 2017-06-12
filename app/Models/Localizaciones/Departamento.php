@@ -49,9 +49,9 @@ class Departamento extends Model
         return $this->belongsTo('ProyectoKpi\Models\Localizaciones\GrupoDepartamento','grupodep_id');
     }
 
-    public function empleados()
+    public function users()
     {
-        return $this->hasMany('ProyectoKpi/Models/Empleados/Empleado', 'departamento_id', 'id');
+        return $this->hasMany('ProyectoKpi\Models\User', 'departamento_id');
     }
 
 

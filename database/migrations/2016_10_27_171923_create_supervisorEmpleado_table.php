@@ -14,16 +14,17 @@ class CreateSupervisorEmpleadoTable extends Migration
     {
         //
         Schema::create('supervisor_empleados', function (Blueprint $table) {
-            $table->string('supervisor_id',10);
-            $table->string('empleado_id',10);
+            $table->integer('empleado_id')->unsigned();
+            $table->integer('supervisor_id')->unsigned();
+
             $table->engine = 'InnoDB';
 
         });
 
          Schema::table('supervisor_empleados', function ($table) {
             $table->primary(['supervisor_id','empleado_id']);
-            $table->foreign('supervisor_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('empleado_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('supervisor_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('empleado_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

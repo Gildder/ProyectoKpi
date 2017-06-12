@@ -1,4 +1,4 @@
-{!!Form::open(['action'=>['_TablaMes', $indicador->id, $evaluador->id], 'method'=>'GET'])!!}
+{!!Form::open(['action'=>['Evaluadores\EvaluadorController@editarcargoasignado', $indicador->id, $evaluador->id], 'method'=>'GET'])!!}
             
 <div class="modal-body">
 

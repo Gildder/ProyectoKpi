@@ -14,7 +14,6 @@
 		</div>
 		<div class="panel-body">
 			<div id="datos" class="tab-pane fade in active">
-				
 				<p>Los empleados que tienen asignados el indicador <span class="fa fa-line-chart"></span> <b>{!! $indicador->nombre !!}</b>. Haga clic en el boton <span class="label label-pill label-info"><span class="fa fa-bar-chart" ></span></span> para ver la informacion de los indicadores.</p><br>
 				<div class="row">
 					<div class="col-lg-12">

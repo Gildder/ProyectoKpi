@@ -10,7 +10,7 @@
         <b>Agregar Nuevo Indicador</b>
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['_TablaMes', $evaluador->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['Evaluadores\EvaluadorController@agregarindicador', $evaluador->id], 'method'=>'GET'])!!}
             <div class="modal-body">
               <p>Seleccionar indicadores que desea agregar a <b>{{$evaluador->abreviatura}}</b></p>
 

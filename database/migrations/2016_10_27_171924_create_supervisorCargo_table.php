@@ -14,15 +14,15 @@ class CreateSupervisorCargoTable extends Migration
     {
         //
         Schema::create('supervisor_cargos', function (Blueprint $table) {
-            $table->string('empleado_id', 10);
+            $table->integer('users')->unsigned();
             $table->integer('cargo_id')->unsigned();
             $table->engine = 'InnoDB';
 
         });
 
          Schema::table('supervisor_cargos', function ($table) {
-            $table->primary(['empleado_id','cargo_id']);
-            $table->foreign('empleado_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->primary(['users','cargo_id']);
+            $table->foreign('users')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('cargo_id')->references('id')->on('cargos')->onDelete('cascade')->onUpdate('cascade');
         });
     }

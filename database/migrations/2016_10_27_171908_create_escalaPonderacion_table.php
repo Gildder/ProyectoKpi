@@ -15,6 +15,9 @@ class CreateEscalaPonderacionTable extends Migration
         Schema::create('escala_ponderacion', function (Blueprint $table) {
             $table->integer('minimo')->unsigned();
             $table->integer('maximo')->unsigned();
+            $table->string('color_texto');
+            $table->string('color_fondo');
+            $table->string('color_fondo_tabla');
             $table->integer('ponderacion_id')->unsigned();
             $table->integer('escala_id')->unsigned();
             $table->engine = 'InnoDB';

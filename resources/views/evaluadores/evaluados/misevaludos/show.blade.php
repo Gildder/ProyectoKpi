@@ -7,7 +7,7 @@
 @section('content')
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="{{route('supervisores.supervisados.index')}}" class="btn btn-primary btn-xs  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
+    <a href="{{route('supervisores.supervisados.misevaluados.index')}}" class="btn btn-primary btn-xs  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
     <p class="titulo-panel">{!! $empleado->codigo !!} - {!! $empleado->nombres !!} {!! $empleado->apellidos !!}</p>
   </div>
 

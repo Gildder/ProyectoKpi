@@ -25,7 +25,7 @@ class EmpleadoFormRequest extends Request
     {
      return [
             'codigo'=>'required|max:10',
-            'usuario'=>'required|max:20',
+            'name'=>'required|max:20',
             'email'=>'required|max:30',
             'nombres'=>'required|max:50',
             'apellidos'=>'required|max:50',
@@ -34,7 +34,7 @@ class EmpleadoFormRequest extends Request
             'grlocalizacion_id'=>'required',
             'localizacion_id'=>'required',
             'cargo_id'=>'required',
-            'type_id'=>'required',
+            'type'=>'required',
             'password'=>'required|AlphaNum|min:8|Confirmed',
             'password_confirmation'=>'Required|AlphaNum|min:8'
         ];

@@ -14,6 +14,7 @@ class CreateTareasTable extends Migration
     {
         Schema::create('tareas', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('numero');
             $table->string('descripcion',60);
             $table->date('fechaInicioEstimado');
             $table->date('fechaFinEstimado');
@@ -22,11 +23,11 @@ class CreateTareasTable extends Migration
             $table->date('fechaFinSolucion');
             $table->time('tiempoSolucion');
             $table->text('observaciones',120);
-            $table->char('estado',1)->default('1');
+            $table->integer('estadoTarea_id')->unsigned();
             $table->integer('isError')->default(null);
-            $table->integer('tipo'); //tareas programadas 1 , tareas diarias 0
-            $table->string('empleado_id',10);
-            $table->integer('proyecto_id')->unsigned();
+            $table->integer('tipoTarea_id')->unsigned();; //tareas programadas 1 , tareas diarias 0
+            $table->integer('user_id')->unsigned();
+            $table->integer('proyecto_id')->unsigned()->default(0);
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->softDeletes();
@@ -34,8 +35,10 @@ class CreateTareasTable extends Migration
         });
 
         Schema::table('tareas', function ($table) {
-            $table->foreign('empleado_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('estadoTarea_id')->references('id')->on('estado_tareas')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('tipoTarea_id')->references('id')->on('tarea_tipos')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

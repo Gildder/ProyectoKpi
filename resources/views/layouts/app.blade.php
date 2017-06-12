@@ -64,23 +64,26 @@
  <!-- Mi Datetables -->
 <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
 
-<script src="{{URL::asset('dist/js/main.js')}}"></script>
-<script src="{{URL::asset('dist/js/app-vuejs.js')}}"></script>
+<script src="{{URL::asset('dist/js/libs.js')}}"></script>
+
 <script src="{{URL::asset('dist/js/alert.js')}}"></script>
 
 </head>
-<body class="hold-transition skin-yellow sidebar-mini"  style="background: #ECF0F5;" >
+<body class="hold-transition skin-yellow sidebar-mini"  style="background: #ECF0F5; z-index: 0" >
 
 
-@if(! Auth::guest())
-  <div class="wrapper">
+<div class="wrapper">
+    @if(! Auth::guest())
       @if (Auth::user()->isAdmin())
         @include("partials/menus/menu_bar_admin")
       @else
         @include("partials/menus/menu_bar_standard")
       @endif
-@endif
-  
+    @else
+      @include("partials/menus/menu_bar_guess")
+    @endif
+    <div id="notificacion">
+    </div>
     <!-- Main content -->
     <section class="content">
           @if(session('success'))
@@ -137,8 +140,6 @@
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{URL::asset('dist/js/demo.js')}}"></script>
-<!-- Progrmando Librerias -->
-<script src="{{URL::asset('dist/js/libs.js')}}"></script>
 
 
 </body>

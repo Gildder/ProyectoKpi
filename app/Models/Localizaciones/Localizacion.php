@@ -53,9 +53,9 @@ class Localizacion extends Model
         return $this->belongsToMany('ProyectoKpi/Models/Tareas/Tarea', 'tarea_realizadas', 'tarea_id', 'localizacion_id', 'id');
     }
 
-    public function empleados()
+    public function users()
     {
-        return $this->hasMany('ProyectoKpi/Models/Empleados/Empleado', 'localizacion_id', 'id');
+        return $this->hasMany('ProyectoKpi\Models\User', 'localizacion_id');
     }
 
 

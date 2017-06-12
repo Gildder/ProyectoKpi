@@ -14,25 +14,25 @@ class CargoSeeder extends Seeder
     {
 		$faker = Faker::create();
         
-        DB::table('cargos')->insert(['nombre' => 'gerente de administracion']);
-        DB::table('cargos')->insert(['nombre' => 'encargado de seguridad']);
-        DB::table('cargos')->insert(['nombre' => 'guardias']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de administracion']);
-        DB::table('cargos')->insert(['nombre' => 'mantenimiento']);
-        DB::table('cargos')->insert(['nombre' => 'auxiliar de oficina']);
-        DB::table('cargos')->insert(['nombre' => 'recepcionista secretaria']);
-        DB::table('cargos')->insert(['nombre' => 'subgerente de sistemas']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de soporte tecnico']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de infraestructura.']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de infraestructura junior']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de aplicaciones']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de aplicaciones junior']);
-        DB::table('cargos')->insert(['nombre' => 'jefe de taller']);
-        DB::table('cargos')->insert(['nombre' => 'asistente de taller']);
-        DB::table('cargos')->insert(['nombre' => 'armador de taller']);
-        DB::table('cargos')->insert(['nombre' => 'auxiliar de armado']);
-        DB::table('cargos')->insert(['nombre' => 'auxiliar de taller']);
-        DB::table('cargos')->insert(['nombre' => 'instalador']);
-        DB::table('cargos')->insert(['nombre' => 'operador de máquina']);
+        DB::table('cargos')->insert(['nombre' => 'Gerente de Administracion']);
+        DB::table('cargos')->insert(['nombre' => 'Encargado de Seguridad']);
+        DB::table('cargos')->insert(['nombre' => 'Guardias']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Administracion']);
+        DB::table('cargos')->insert(['nombre' => 'Mantenimiento']);
+        DB::table('cargos')->insert(['nombre' => 'Auxiliar de Oficina']);
+        DB::table('cargos')->insert(['nombre' => 'Recepcionista Secretaria']);
+        DB::table('cargos')->insert(['nombre' => 'Subgerente de Sistemas']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Soporte Tecnico']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Infraestructura.']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Infraestructura junior']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Aplicaciones']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Aplicaciones junior']);
+        DB::table('cargos')->insert(['nombre' => 'Jefe de Taller']);
+        DB::table('cargos')->insert(['nombre' => 'Asistente de Taller']);
+        DB::table('cargos')->insert(['nombre' => 'Armador de Taller']);
+        DB::table('cargos')->insert(['nombre' => 'Auxiliar de Armado']);
+        DB::table('cargos')->insert(['nombre' => 'Auxiliar de Taller']);
+        DB::table('cargos')->insert(['nombre' => 'Instalador']);
+        DB::table('cargos')->insert(['nombre' => 'Operador de Máquina']);
     }
 }

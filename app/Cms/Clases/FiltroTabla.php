@@ -28,6 +28,19 @@ class FiltroTabla
         $this->anio = date('Y');
     }
 
+    public function toString()
+    {
+        return [
+          'tipo' => $this->tipo,
+          'ultimoMes' => $this->ultimoMes,
+          'primerMes' => $this->primerMes,
+          'mesBuscado' => $this->mesBuscado,
+          'anio' => $this->anio,
+          'inicio' => $this->inicio,
+          'fin' => $this->fin
+        ];
+    }
+
     public function restarAlUltimoMes($cantidad)
     {
         return $this->ultimoMes - $cantidad;

@@ -13,7 +13,7 @@
 				<td><a href="{{route('evaluadores.evaluador.show', $item->id)}}" class="btn btn-warning btn-xs" title="Ver">{{$item->id}}</a></td>
 				<td>{{$item->abreviatura}}</td>
 				<td>{{$item->descripcion}}</td>
-				<td>{{$item->ponderaciones->nombre}}</td>
+				<td>{{$item->ponderacion->nombre}}</td>
 			</tr>
 		@endforeach
 		</tbody>

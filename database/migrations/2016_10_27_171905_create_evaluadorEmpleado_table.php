@@ -14,16 +14,16 @@ class CreateEvaluadorEmpleadoTable extends Migration
     {
          //
         Schema::create('evaluador_empleados', function (Blueprint $table) {
-            $table->string('empleado_id',10);
+            $table->integer('user_id')->unsigned();
             $table->integer('evaluador_id')->unsigned();
             $table->engine = 'InnoDB';
 
         });
 
          Schema::table('evaluador_empleados', function ($table) {
-            $table->primary(['empleado_id','evaluador_id']);
-            $table->foreign('empleado_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('evaluador_id')->references('id')->on('_TablaMes')->onDelete('cascade')->onUpdate('cascade');
+            $table->primary(['user_id','evaluador_id']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('evaluador_id')->references('id')->on('evaluadores')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

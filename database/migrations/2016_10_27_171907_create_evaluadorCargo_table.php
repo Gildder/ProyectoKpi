@@ -23,7 +23,7 @@ class CreateEvaluadorCargoTable extends Migration
          Schema::table('evaluador_cargos', function ($table) {
             $table->primary(['cargo_id','evaluador_id']);
             $table->foreign('cargo_id')->references('id')->on('cargos')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('evaluador_id')->references('id')->on('_TablaMes')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('evaluador_id')->references('id')->on('evaluadores')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

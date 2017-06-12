@@ -1,6 +1,6 @@
 <?php
 
-namespace ProyectoKpi\Models\Indicadores;
+namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
 use ProyectoKpi\Models\Empleados\Cargo;
@@ -31,7 +31,7 @@ class TipoUsuario extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'id', 'nombre', 
     ];
 
     /**
@@ -40,7 +40,7 @@ class TipoUsuario extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
     /* Relaciones */

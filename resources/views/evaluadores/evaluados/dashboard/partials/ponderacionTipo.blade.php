@@ -1,14 +1,14 @@
 <!-- Panel de Tipos de Indicadores-->
-@foreach(\Cache::get('evadores')->ponderacion->tipoIndicadores as $item)
-    <div class="col-lg-3 col-xs-6">
-        <div class="{{ $item->getFondo($item->id) }} small-box">
+@foreach($tipos as $tipo)
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="{{ $tipo->color_fondo }} small-box">
             <div class="inner">
-                <h3>{{ $item->pivot->ponderacion}}<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{ $tipo->ponderacion}}<sup style="font-size: 20px">%</sup></h3>
 
-                <p>{{ $item->nombre}}</p>
+                <p>{{ $tipo->nombre}}</p>
             </div>
             <div class="icon">
-                <i id="ico" class="{{ $item->getIcon($item->id) }}"></i>
+                <i id="ico" class="{{ $tipo->icono }}"></i>
             </div>
             {{--   <div class="completo">
                 <p>Esta es una inforamcion de prueba</p>

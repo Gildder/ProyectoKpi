@@ -1,4 +1,4 @@
-<div id="contenedorEv" class="row col-sm-12">
+<div id="Content-Evaluador" class="row col-sm-12">
     {{-- Inicio de Formualrio --}}
     <form>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb"  tabindex="2">
@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div class="text-right col-sm-4" hidden>
+            <div class="text-right col-sm-4">
                 <a  href="#" @click.prevent="anteriorMes" class="btn btn-warning btn-xs" title="Ver Graficos"><span class="fa fa-area-chart">  </span> </a>
                 <a  href="#" class="btn btn-danger btn-xs" title="Exportar PDF"><span class="fa  fa-file-pdf-o"> Pdf </span> </a>
                 <a  href="#" @click.prevent="siguienteMes" class="btn btn-success btn-xs" title="Exportar XLS"><span class="fa fa-file-excel-o"> Excel </span> </a>
@@ -34,7 +34,7 @@
         {{-- Opciones de Menu --}}
         <div class="row col-sm-12 table-responsive">
             <template v-if="tipoVista == 0">
-                @include('evaluadores/evaluados/dashboard/partials/procesos/tablas/semanal')
+                @include('evaluadores.evaluados.dashboard.partials.procesos.tablas.tablaTotal')
             </template>
             <template v-else>
                 @include('evaluadores/evaluados/dashboard/partials/procesos/tablas/mensual')

@@ -17,7 +17,6 @@ class AdministradorMiddleware
      */
     public function handle($request, Closure $next)
     {
-
         if(! \Auth::user()->isAdmin())
         {
             abort(404);

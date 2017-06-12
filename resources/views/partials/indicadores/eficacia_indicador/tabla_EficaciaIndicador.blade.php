@@ -1,5 +1,5 @@
 
-
+<div class="table-responsive row col-sm-12 ">
 <table id="myTable1" class="table table-bordered table-hover table-response">
   <thead>
     <tr>
@@ -24,5 +24,6 @@
     @endforeach
   </tbody>
 </table>
+</div>
 
 

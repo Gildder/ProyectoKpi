@@ -17,10 +17,6 @@ use ProyectoKpi\Models\Indicadores\Indicador;
 class EvaluadosController extends Controller
 {
     private $dashboard;
-    private $tiposIndicadores;
-    private $ponderacionEscala;
-    private $indicadoresSemana;
-    private $indicadoresMes;
     private $filtro;
 
     public function __contruct()
@@ -28,7 +24,6 @@ class EvaluadosController extends Controller
         $this->middleware('auth');
         $this->dashboard = new nDashboard();
         $this->filtro = new FiltroTabla();
-
     }
 
     /**
@@ -41,10 +36,14 @@ class EvaluadosController extends Controller
         $this->tablaMes = new nTablaMes();
 
         // Obtenemos el Id del Evaluador
-        $id = \Cache::get('evadores');
-        //dd(json_encode($id));
-        $evaluados = EvaluadoresRepository::cnGetEvaluados($id->evaluador_id, \Usuario::get('codigo'));
+        $evaluados = EvaluadoresRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Usuario::get('codigo'));
+
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
+    }
+
+    public function show($id)
+    {
+        return 'Lista de Evaluados';
     }
 
     /**
@@ -52,19 +51,15 @@ class EvaluadosController extends Controller
     */
     public function dashboard()
     {
-
         $this->dashboard = new nDashboard();
-        $this->tiposIndicadores   = $this->dashboard->obtenerPondTiposIndicadores();
-        $this->ponderacionEscala  = $this->dashboard->obtenerPondEscalas();
 
-        $this->obtenerTablaSemana();
-        $this->obtenerTablaMes();
-
-//        dd($this->indicadoresMes,  \Cache::get('_TablaMes') );
+        // Ca
+        $this->cachearFiltro(new FiltroTabla());
 
         return view('evaluadores/evaluados/dashboard/index', [
-            'tipos'  => $this->tiposIndicadores,
-            'escalas'=> $this->ponderacionEscala
+            'tipos'  => $this->dashboard->obtenerPondTiposIndicadores(),
+            'escalas'=> $this->dashboard->obtenerPondEscalas(),
+            'widgets'=> $this->dashboard->obtenerListaItemWidget()
         ]);
     }
 
@@ -78,13 +73,70 @@ class EvaluadosController extends Controller
         }
 
         return [
-            'tipoVista' => \FiltroTabla::getTipo()
+            'filtroVista' => \FiltroTabla::getTipo()
         ];
     }
 
+
+
     public function obtenerVista()
     {
-        return \FiltroTabla::getTipo();
+        return \FiltroTabla::toString();
+    }
+
+    /**
+     * Obtenemos la tabla total de los indicadores de Gia. Evaluadora
+     *
+     * @param $tipo
+     * @return array
+     */
+    public function obtenerTablaTotal($tipo, $mesBuscado)
+    {
+        $this->dashboard = new nDashboard();
+
+        if($tipo == 0){
+            \FiltroTabla::setMesBuscado($mesBuscado);
+            $datos = $this->dashboard->obtenerListaTablaSemana();
+        }else{
+            \FiltroTabla::setPrimerMes($mesBuscado);
+            $datos = $this->dashboard->obtenerListaTablaMes();
+        }
+
+        $cumplimiento = array_pop($datos);
+        $descripciones = array_pop($datos);
+
+        return [
+            'indicadores' => json_encode($datos),
+            'cumplimiento'=> $cumplimiento,
+            'descripciones'=> json_encode($descripciones)
+        ];
+    }
+
+    /**
+     * Obtenemos la tabla total de los indicadores de Gia. Evaluadora
+     *
+     * @param $tipo
+     * @return array
+     */
+    public function obtenerChartTotal($tipo, $mesBuscado)
+    {
+        $this->dashboard = new nDashboard();
+
+        if($tipo == 0){
+            \FiltroTabla::setMesBuscado($mesBuscado);
+            $datos = $this->dashboard->obtenerListaChartSemana();
+        }else{
+            \FiltroTabla::setPrimerMes($mesBuscado);
+            $datos = $this->dashboard->obtenerListaChartMes();
+        }
+
+        $categorias = array_pop($datos);
+        $indicadores = array_pop($datos);
+
+        return [
+            'indicadores' => json_encode($indicadores),
+            'categorias'=> json_encode($categorias)
+        ];
     }
 
     public function filtroMes($cantidad)
@@ -129,55 +181,23 @@ class EvaluadosController extends Controller
         $listaGraficas = IndicadorRepository::getGraficoIndicador($empleado_id, $indicador_id);
     }
 
-    /**
-     * Obtenemos y Salvamos la tabla de Semanas
-     */
-    private function obtenerTablaSemana()
+    public function actualizarFiltroTabla($filtro)
     {
-        $this->dashboard = new nDashboard();
+        \FiltroTabla::setTipo($filtro->tipo);
+        \FiltroTabla::setAnio($filtro->anio);
+        \FiltroTabla::setMesBuscado($filtro->mesBuscado);
+        \FiltroTabla::setPrimerMes($filtro->primerMes);
 
-        $this->indicadoresSemana    = $this->dashboard->obtenerListaTablaSemana();
-
-        $cumplimiento = array_pop($this->indicadoresSemana);
-
-        \Cache::forget('tablaSemana');
-        \Cache::forever('tablaSemana', $this->indicadoresSemana);
-
-        \Cache::forget('cumplimientoSemana');
-        \Cache::forever('cumplimientoSemana', $cumplimiento);
-
+        return [
+            'filtroVista' => \FiltroTabla::toString()
+        ];
     }
 
-    /**
-     * Obtenemos y Salvamos la tabla de Meses
-    */
-    private function obtenerTablaMes()
+    public function cachearFiltro($filtro)
     {
-        $this->dashboard = new nDashboard();
-        $this->indicadoresMes       = $this->dashboard->obtenerListaTablaMes();
-
-        $cumplimiento = array_pop($this->indicadoresMes);
-
-        \Cache::forget('TablaMes');
-        \Cache::forever('TablaMes', $this->indicadoresMes);
-
-        \Cache::forget('cumplimientoMes');
-        \Cache::forever('cumplimientoMes', $cumplimiento);
+        \Cache::forget('filtroTabla');
+        \Cache::forever('filtroTabla', $filtro);
     }
-
-
-    public function colocarTipo($tipo, $mes, $opcion)
-    {
-        \FiltroTabla::setTipo($tipo);
-
-        if($opcion == 0){
-            \FiltroTabla::setMesBuscado($mes);
-        }else{
-            \FiltroTabla::setPrimerMes($mes);
-        }
-    }
-
-
 
 
 }

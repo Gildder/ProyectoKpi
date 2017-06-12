@@ -20,9 +20,9 @@ class DepartamentoSeeder extends BaseSeeder
 
     public function getDummyData(Generator $faker, array $customValues = array())
     {
-        return [
-            'nombre' => $faker->name,
-            'grupodep_id' => $this->getRandom('GrupoDepartamento')->id
-        ];
+//        return [
+//            'nombre' => $faker->name,
+//            'grupodep_id' => $this->getRandom('GrupoDepartamento')->id
+//        ];
     }
 }

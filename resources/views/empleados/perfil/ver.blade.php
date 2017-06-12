@@ -2,42 +2,42 @@
    <tbody>
       <tr>
          <td class="text-right"><b>Codigo:</b></td>
-         <td>{{$empleados->codigo}}</td>
+         <td>{{ \Usuario::get('codigo') }}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Nombre Completo:</b></td>
-         <td>{{$empleados->nombres}}</td>
+         <td>{{  \Usuario::get('nombre')}}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Apellidos:</b></td>
-         <td>{{$empleados->apellidos}}</td>
+         <td>{{ \Usuario::get('apellido') }}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Nombre Usuario:</b></td>
-         <td>{{$empleados->usuario}}</td>
+         <td>{{ \Usuario::get('usuario') }}</td>
       </tr>
      
       <tr>
          <td class="text-right"><b>Cargo:</b></td>
-         <td>{{$empleados->cargo}}</td>
+         <td>{{ \Usuario::get('cargo') }}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Correo Electronico:</b></td>
-         <td>{{$empleados->email}}</td>
+         <td>{{ \Usuario::get('correo') }}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Localizacion:</b></td>
-         <td>{{$empleados->localizacion}}</td>
+         <td>{{ \Usuario::get('localizacion') }}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Departamento:</b></td>
-         <td>{{$empleados->departamento}}</td>
+         <td>{{ \Usuario::get('departamento')}}</td>
       </tr>
 
    </tbody>

@@ -43,7 +43,7 @@ Route::group(['middleware'=> ['auth', 'administrador'] ], function ()
 
 
 /*  PERFIL */
-Route::group(['middleware'=> ['auth', 'estandard'] ], function ()
+Route::group(['middleware'=> ['auth'] ], function ()
 {
 	Route::resource('empleados/perfil', 'Empleados\PerfilController', 
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
@@ -192,13 +192,22 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
     Route::post('evaluadores/evaluados/opcionVista/{opcion}',
         array('as' => 'evaluadores.evaluados.opcionVista', 'uses' => 'Evaluadores\EvaluadosController@opcionVista') );
 
+    Route::post('evaluadores/evaluados/obtenerTablaTotal/{param}/{opcion}',
+        array('as' => 'evaluadores.evaluados.obtenerTablaTotal', 'uses' => 'Evaluadores\EvaluadosController@obtenerTablaTotal') );
+
+    Route::post('evaluadores/evaluados/obtenerChartTotal/{param}/{opcion}',
+        array('as' => 'evaluadores.evaluados.obtenerChartTotal', 'uses' => 'Evaluadores\EvaluadosController@obtenerChartTotal') );
+
+    Route::post('evaluadores/evaluados/actualizarFiltroTabla/{filtro}',
+        array('as' => 'evaluadores.evaluados.actualizarFiltroTabla', 'uses' => 'Evaluadores\EvaluadosController@actualizarFiltroTabla') );
+
     Route::post('evaluadores/evaluados/filtroMes/{opcion}',
         array('as' => 'evaluadores.evaluados.filtroMes', 'uses' => 'Evaluadores\EvaluadosController@filtroMes') );
 
     Route::post('evaluadores/evaluados/filtroSemana',
         array('as' => 'evaluadores.evaluados.filtroSemana', 'uses' => 'Evaluadores\EvaluadosController@filtroSemana') );
 
-	Route::post('evaluadores/evaluados/buscarTabla/{tipoFiltro?}', 
+    Route::post('evaluadores/evaluados/buscarTabla/{tipoFiltro?}',
 		array('as' => 'evaluadores.evaluados.buscarTabla', 'uses' => 'Evaluadores\EvaluadosController@buscarTabla') );
 
 	Route::get('evaluadores/evaluados/reportesProcesos', 
@@ -210,8 +219,12 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
 	Route::get('evaluadores/evaluados/showIndicadorEmpleado/{empleado}/{indicador}', 
 			array('as' => 'evaluadores.evaluados.showIndicadorEmpleado', 'uses' => 'Evaluadores\EvaluadosController@showIndicadorEmpleado') );
 
-	Route::get('evaluadores/evaluados/index', 
-			array('as' => 'evaluadores.evaluados.index', 'uses' => 'Evaluadores\EvaluadosController@index') );
+	// Mis Evaluados
+	Route::get('evaluadores/evaluados/misevaluados/index',
+			array('as' => 'evaluadores.evaluados.misevaluados.index', 'uses' => 'Evaluadores\EvaluadosController@index') );
+
+	Route::get('evaluadores/evaluados/misevaluados/show/{id}',
+			array('as' => 'evaluadores.evaluados.misevaluados.show', 'uses' => 'Evaluadores\EvaluadosController@show') );
 
 });
 

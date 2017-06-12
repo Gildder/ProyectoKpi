@@ -22,7 +22,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth' );
     }
 
     /**
@@ -50,9 +50,6 @@ class HomeController extends Controller
 
                 if (\Usuario::get('isEvaluador')) {
                     $rutaPrincipal = 'evaluadores.evaluados.dashboard';
-                    // $filtro = new FiltroTabla();
-                    // \Cache::forever('key', $filtro);
-                    // return redirect( 'evaluadores/evaluados/dashboard');
                 }
                
                 return redirect()->route($rutaPrincipal);

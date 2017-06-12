@@ -8,6 +8,8 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
+use Mockery\Exception;
+use Predis\Transaction\AbortedMultiExecException;
 use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
@@ -23,9 +25,9 @@ class UsuarioActivo implements IClases
     private $codigo;
     private $nombre;
     private $apellido;
-    private $departamento_id;
-    private $localizacion_id;
-    private $cargo_id;
+    private $departamento;
+    private $localizacion;
+    private $cargo;
     private $isEvaluador;
     private $isSupervisor;
     private $isIndicadores;
@@ -44,7 +46,11 @@ class UsuarioActivo implements IClases
 
     public function get($atributo)
     {
-        return $this->$atributo;
+        if(isset($this->$atributo)){
+            return $this->$atributo;
+        }else{
+            return 'Ninguno';
+        }
     }
 
     public function inicializar()
@@ -58,24 +64,29 @@ class UsuarioActivo implements IClases
         $this->tipo    = $user->type;
         $this->isAdmin = $this->isAdmin();
 
-        if (!$this->isAdmin) {
-            $this->codigo = $user->empleado->codigo;
-            $this->nombre = $user->empleado->nombres;
-            $this->apellido = $user->empleado->apellidos;
-            $this->departamento_id = $user->empleado->departamento_id;
-            $this->localizacion_id = $user->empleado->localizacion_id;
-            $this->cargo_id = $user->empleado->cargo;
-            $this->isEvaluador = $this->isEvaluador();
-            $this->isSupervisor = $this->isSupervisor();
-            $this->isIndicadores = $this->isIndicadores();
-        }
+            if (!$this->isAdmin() && $this->isEmpleado()) {
+                $this->codigo = $user->codigo;
+                $this->nombre = $user->nombres;
+                $this->apellido = $user->apellidos;
+                $this->departamento_id = $user->departamento->nombre;
+                $this->localizacion_id = $user->localizacion->nombre;
+                $this->cargo_id = $user->cargo->nombre;
+                $this->isEvaluador = $this->isEvaluador();
+                $this->isSupervisor = $this->isSupervisor();
+                $this->isIndicadores = $this->isIndicadores();
+            }else{
+                $this->isEvaluador = false;
+                $this->isSupervisor = false;
+                $this->isIndicadores = false;
+            }
+
     }
 
     public function isAdmin()
     {
-        $user = \Auth::user();
+        $user = json_decode(json_encode(\Auth::user()));
 
-        if (($user['original']['name'] == 'admin') && ($user['original']['type'] == '1')) {
+        if (($user->name == 'admin') && ($user->type == 1)) {
             return true;
         } else {
             return false;
@@ -89,11 +100,11 @@ class UsuarioActivo implements IClases
     {
         $user = \Auth::user();
 
-        if (!$this->isAdmin()) {
-            $result = IndicadorRepository::isUserIndicador($user->empleado->cargo_id);
+        if (!$this->isAdmin() && $this->isEmpleado()) {
+            $result = IndicadorRepository::isUserIndicador($user->cargo_id);
         }
 
-        // dd($result, $user->empleado->cargo_id, isset($result));
+        // dd($result, $user->cargo_id, isset($result));
 
          if (isset($result)) {
              return true;
@@ -111,10 +122,10 @@ class UsuarioActivo implements IClases
         $result = false;
         $user = \Auth::user();
 
-        // dd($user->empleado->cargo_id);
+        // dd($user->cargo_id);
 
-        if (!$this->isAdmin()) {
-            $result = EvaluadoresRepository::cnVerificarsEvaluador($user->empleado->codigo);
+        if (!$this->isAdmin()&& $this->isEmpleado()) {
+            $result = EvaluadoresRepository::cnVerificarsEvaluador($user->codigo);
         }
 
         if (!isset($result)) {
@@ -137,14 +148,31 @@ class UsuarioActivo implements IClases
     {
         $user = \Auth::user();
 
-        if (!$this->isAdmin()) {
-            $result = SupervisoresRepository::verificarSupervisor($user->empleado->codigo);
+        if (!$this->isAdmin() && $this->isEmpleado()) {
+            $result = SupervisoresRepository::verificarSupervisor($user->codigo);
         }
 
-        if (!$result) {
+        if (!isset($result)) {
             return false;
         } else {
             return true;
+        }
+    }
+
+    public function isEmpleado()
+    {
+        $user = \Auth::user();
+
+        try{
+            if($user->hasRelation == 0){
+                return false;
+            }else{
+                return true;
+            }
+
+            return true;
+        }catch (Exception $exception){
+            return false;
         }
     }
 }

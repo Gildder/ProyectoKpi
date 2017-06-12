@@ -32,16 +32,14 @@ class IndicadorRepository
      */
     public static function cnGetListaInidicadores($codigo)
     {
-        return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion', 'tipos_indicadores.nombre as tipo',
-            'indicador_cargos.objetivo', 'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
-                ->join('indicador_cargos', 'indicador_cargos.cargo_id', '=', 'empleados.cargo_id')
-                ->join('indicadores', 'indicadores.id', '=', 'indicador_cargos.indicador_id')
-                ->join('tipos_indicadores', 'tipos_indicadores.id', '=', 'indicadores.tipo_indicador_id')
-                ->join('frecuencias', 'frecuencias.id', '=', 'indicador_cargos.frecuencia_id')
-                ->where('empleados.codigo', $codigo)
+        return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion', 'tipos_indicadores.nombre as tipo','indicador_cargos.objetivo', 'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
+            ->where('empleados.codigo', $codigo)
+            ->join('indicador_cargos', 'indicador_cargos.cargo_id', '=', 'empleados.cargo_id')
+            ->join('indicadores', 'indicadores.id', '=', 'indicador_cargos.indicador_id')
+            ->join('tipos_indicadores', 'tipos_indicadores.id', '=', 'indicadores.tipo_indicador_id')
+            ->join('frecuencias', 'frecuencias.id', '=', 'indicador_cargos.frecuencia_id')
+                ->orderby('indicadores.id')
                 ->get();
-
-//        return Indicador::all('')
     }
 
 

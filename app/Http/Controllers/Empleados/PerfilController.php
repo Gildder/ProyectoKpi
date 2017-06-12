@@ -19,11 +19,9 @@ class PerfilController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
 
-        $empleados = EmpleadoRepository::obtenerEmpleado($user->empleado->codigo);
+        return view('empleados.perfil.index');
 
-        return view('empleados.perfil.index', ['empleados' => $empleados]);
     }
 
     /**

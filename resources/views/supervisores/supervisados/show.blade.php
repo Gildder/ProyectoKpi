@@ -16,7 +16,7 @@
 
   </div>
 
-  <div class="panel-body">
+  <div id="emplados-supervisados"  class="panel-body">
     @if($indicadores->count()<= 0)
         <p>Este empleado, No tiene asignado ningun indicador KPI.</p>
     @else
@@ -42,9 +42,10 @@
               <div class="box-body" style="display: block; "><div class="row">
                 
               {{-- Inicio de Datos de los Indicadores --}}
-              <?php  
-                $listaTablas   = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);  
-                $listaGraficas = $indicador::getGraficoIndicador($empleado->codigo, $indicador->id);
+              <?php
+                      $listaTablas   = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);
+                      dd($listaTablas);
+                      $listaGraficas = $indicador::getGraficoIndicador($empleado->codigo, $indicador->id);
               ?>
 
               @if($indicador->id == '1')

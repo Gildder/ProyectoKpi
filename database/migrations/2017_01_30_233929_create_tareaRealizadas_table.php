@@ -12,13 +12,13 @@ class CreateTareaRealizadasTable extends Migration
      */
     public function up()
     {
-        Schema::create('tarea_realizadas', function (Blueprint $table) {
+        Schema::create('tarea_localizacion', function (Blueprint $table) {
             $table->integer('tarea_id')->unsigned();
             $table->integer('localizacion_id')->unsigned();
             $table->engine = 'InnoDB';
         });
 
-        Schema::table('tarea_realizadas', function ($table) {
+        Schema::table('tarea_localizacion', function ($table) {
             $table->primary(['tarea_id','localizacion_id']);
             $table->foreign('tarea_id')->references('id')->on('tareas')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('localizacion_id')->references('id')->on('localizaciones')->onDelete('cascade')->onUpdate('cascade');
@@ -33,6 +33,6 @@ class CreateTareaRealizadasTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tarea_realizadas');
+        Schema::drop('tarea_localizacion');
     }
 }

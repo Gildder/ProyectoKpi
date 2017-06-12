@@ -1,6 +1,5 @@
-
    <!-- Modal -->
-<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-delete-{{$empleados->codigo}}">
+<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-delete-{{$empleado->id}}">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -10,9 +9,9 @@
         <b>Eliminar Empleado</b>
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Empleados\EmpleadoController@destroy', $empleados->codigo], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Empleados\EmpleadoController@destroy', $empleado->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
-              <p>¿Estas seguro que deseas eliminar a <b>{{$empleados->nombres}}  {{$empleados->apellidos}}</b>?</p>
+              <p>¿Estas seguro que deseas eliminar a <b>{{$empleado->usuario}} </b>?</p>
             </div>
             <div class="modal-footer modal-delete-footer">
                      <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>

@@ -20,7 +20,7 @@ class CreateEficaciaIndicadorTable extends Migration
             $table->integer('actpro')->default(0); //actividades programadas
             $table->integer('actrea')->default(0);  //actividades realizadas
             $table->double('efeser')->default(0); //Eficacia del serivicio
-            $table->string('empleado_id',10); 
+            $table->integer('user_id')->unsigned();
             $table->integer('indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -29,7 +29,7 @@ class CreateEficaciaIndicadorTable extends Migration
         });
 
         Schema::table('eficacia_indicador', function($table) {
-            $table->foreign('empleado_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('indicador_id')->references('id')->on('indicadores')->onDelete('cascade')->onUpdate('cascade');
 
         });

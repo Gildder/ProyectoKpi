@@ -17,7 +17,7 @@ class CreateNotaErroresTable extends Migration
             $table->integer('tarea_id')->unsigned();
             $table->integer('razonNota');
             $table->string('descripcion',120);
-            $table->string('supervisor_id',10);
+            $table->integer('user_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->softDeletes();
@@ -26,7 +26,7 @@ class CreateNotaErroresTable extends Migration
 
         Schema::table('nota_errores', function ($table) {
             $table->foreign('tarea_id')->references('id')->on('tareas')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('supervisor_id')->references('codigo')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

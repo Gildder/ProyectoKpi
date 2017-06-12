@@ -10,7 +10,7 @@
         <b> Agregar Ponderacion</b>
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['_TablaMes', $ponderacion->id,   $item->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['Evaluadores\PonderacionController@agregarindicador', $ponderacion->id,   $item->id], 'method'=>'GET'])!!}
 
             <div class="modal-body">
               <p>Agregar la Ponderacion para el Indicador <b>{{$item->nombre}}?</b></p>

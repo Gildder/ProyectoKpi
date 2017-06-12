@@ -29,7 +29,7 @@ class Cargo extends Model
      * @var array
      */
     protected $fillable = [
-        'nombre', 
+        'id', 'nombre',
     ];
 
     /**
@@ -38,13 +38,13 @@ class Cargo extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'created_at', 'update_at','deleted_at',
+        'created_at', 'update_at','deleted_at',
     ];
 
     /* Relaciones */
-    public function empleados()
+    public function users()
     {
-        return $this->hasMany('ProyectoKpi\Models\Empleados\Empleado', 'cargo_id', 'id');
+        return $this->hasMany('ProyectoKpi\Models\User', 'cargo_id');
     }
 
 
@@ -55,7 +55,7 @@ class Cargo extends Model
 
     public function supervisores()
     {
-        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado', 'supervisor_cargos', 'supervisor_id', 'cargo_id', 'id');
+        return $this->belongsToMany('ProyectoKpi\Models\User', 'supervisor_cargos', 'supervisor_id', 'cargo_id', 'id');
     }
 
 

@@ -14,8 +14,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // $this->createAdmin();
-        // $this->createUsers(30);
+         $this->createAdmin();
+         $this->createUsers(10);
     }
 
     public function createAdmin()
@@ -26,7 +26,6 @@ class UserSeeder extends Seeder
             'password' => \Hash::make('123456'),
             'remember_token' => \Hash::make('123456'),
             'type' => '1', //1 admin, 2 normal
-            'active' => true
         ]);
     }
 
@@ -42,7 +41,6 @@ class UserSeeder extends Seeder
                 'password' => \Hash::make('12345678'),
                 'remember_token' => \Hash::make('123456'),
                 'type' => $faker->numberBetween($min = 1, $max = 2),
-                'active' => true,
             ]);
 
         }

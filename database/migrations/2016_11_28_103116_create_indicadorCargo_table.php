@@ -13,6 +13,7 @@ class CreateIndicadorCargoTable extends Migration
     public function up()
     {
         Schema::create('indicador_cargos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('indicador_id')->unsigned();
             $table->integer('cargo_id')->unsigned();
             $table->integer('evaluadorIndicador_id')->unsigned();
@@ -26,8 +27,6 @@ class CreateIndicadorCargoTable extends Migration
         });
 
          Schema::table('indicador_cargos', function ($table) {
-            $table->primary(['indicador_id','evaluadorIndicador_id','cargo_id','evaluadorCargo_id']);
-
             // evaluador indicador
             $table->foreign('indicador_id')
                     ->references('indicador_id')->on('evaluador_indicadores')

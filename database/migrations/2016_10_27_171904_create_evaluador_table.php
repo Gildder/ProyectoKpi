@@ -12,7 +12,7 @@ class CreateEvaluadorTable extends Migration
      */
       public function up()
     {
-        Schema::create('_TablaMes', function (Blueprint $table) {
+        Schema::create('evaluadores', function (Blueprint $table) {
             $table->increments('id');
             $table->string('abreviatura',10)->unique();
             $table->string('descripcion',40)->unique();
@@ -23,7 +23,7 @@ class CreateEvaluadorTable extends Migration
             $table->engine = 'InnoDB';
         });
 
-        Schema::table('_TablaMes', function ($table) {
+        Schema::table('evaluadores', function ($table) {
             $table->foreign('ponderacion_id')->references('id')
                   ->on('ponderaciones')->onDelete('cascade')->onUpdate('cascade');
         });
@@ -38,6 +38,6 @@ class CreateEvaluadorTable extends Migration
     public function down()
     {
         //
-        Schema::drop('_TablaMes');
+        Schema::drop('evaluadores');
     }
 }

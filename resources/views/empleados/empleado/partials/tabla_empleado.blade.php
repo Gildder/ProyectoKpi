@@ -1,26 +1,31 @@
 <div class="table-response">
-	<table id="myTable" class="table table-striped table-bordered table-condensed table-hover">
+	<table id="myTable" class="table table-striped table-responsive table-bordered table-condensed table-hover">
 		<thead>
-			<th>Codigo</th>
-			<th>Nombre Completo</th>	
+			<th>id</th>
 			<th>Usuario</th>	
 			<th>Correo</th>	
+			<th>Codigo</th>
+			<th>Nombre Completo</th>
 			<th>Cargo</th>	
 			<th>Localizaciones</th>	
 			<th>Departamentos</th>	
 		</thead>
 
 		<tbody>
-		@foreach($empleados as $item)
+		@foreach($empleados as $empleado)
 			<tr>
-				<td><a href="{{route('empleados.empleado.show', $item->codigo)}}" class="btn btn-warning btn-xs" title="Ver">{{$item->codigo}}</a></td>
-				<td>{{$item->nombres}} {{$item->apellidos}}</td>
-				<td>{{$item->usuario}}</td>
-				<td>{{$item->correo}}</td>
-				<td>{{$item->cargo}}</td>
-				<td>{{$item->localizacion}}</td>
-				<td>{{$item->departamento}}</td>
+				<td><a href="{{route('empleados.empleado.show', $empleado->id)}}" 
+					class="btn btn-warning btn-xs" title="Ver">{{$empleado->id }}</a>
+				</td>
+				<td>{{ $empleado->usuario }}</td>
+				<td>{{ $empleado->correo }}</td>
+				<td>{{ $empleado->codigo }}</td>
+				<td>{{ $empleado->nombres }} {{ $empleado->apellidos }}</td>
+				<td>@if(isset($empleado->cargo_id)) {{ $empleado->cargo  }} @else  {{ $empleado->get('cargo_id') }} @endif</td>
+				<td>@if(isset($empleado->localizacion_id)) {{  $empleado->localizacion  }} @else   @endif</td>
+				<td>@if(isset($empleado->departamento_id)) {{ $empleado->departamento }} @else   @endif</td>
 			</tr>
+
 		@endforeach
 		</tbody>
 

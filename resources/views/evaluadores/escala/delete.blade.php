@@ -10,7 +10,7 @@
         Eliminar Escala
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['_TablaMes', $escala->id], 'method'=>'DELETE'])!!}
+           {!!Form::open(['action'=>['Evaluadores\EscalaController@destroy', $escala->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a <b>{{$escala->nombre}}?</b></p>
                   <div class="form-group col-sm-5 ">

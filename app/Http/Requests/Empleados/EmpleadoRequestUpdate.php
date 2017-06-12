@@ -25,14 +25,16 @@ class EmpleadoRequestUpdate extends Request
     {
      return [
             'codigo'=>'required|max:10',
-            'usuario'=>'required|max:20',
+            'name'=>'required|max:20',
             'email'=>'required|max:30',
             'nombres'=>'required|max:50',
             'apellidos'=>'required|max:50',
             'departamento_id'=>'required',
             'localizacion_id'=>'required',
             'cargo_id'=>'required',
-            'type_id'=>'required',
+            'type'=>'required',
+            'grdepartamento_id'=>'required',
+            'grlocalizacion_id'=>'required',
         ];
     }
 
@@ -41,8 +43,8 @@ class EmpleadoRequestUpdate extends Request
         return [
             'nombre.required' => 'El nombre del empleado es requerido!',
             'nombre.max' => 'El nombre completo no puede tener más de 50 carácteres',
-            'usuario.required' => 'El nombre usuario es requerido!',
-            'usuario.max' => 'El nombre usuario no puede tener más de 20 carácteres',
+            'name.required' => 'El nombre usuario es requerido!',
+            'name.max' => 'El nombre usuario no puede tener más de 20 carácteres',
             'email.required' => 'El correo es requerido!',
             'email.max' => 'El correo no puede tener más de 30 carácteres',
             'apellidos.required' => 'Los apellidos del empleado son requeridos!',
@@ -52,7 +54,9 @@ class EmpleadoRequestUpdate extends Request
             'departamento_id.required' => 'Seleccione el departamento',
             'localizacion_id.required' => 'Seleccione la localizacion',
             'cargo_id.required' => 'Seleccione el cargo del empleado',
-            'type_id.required' => 'Seleccione tipo usuario!',
+            'type.required' => 'Seleccione tipo usuario!',
+            'grdepartamento_id.required' => 'Seleccione el grupo departamento',
+            'grlocalizacion_id.required' => 'Seleccione el grupo localizacion',
         ];
     }
 }

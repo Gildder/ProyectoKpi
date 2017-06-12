@@ -42,7 +42,7 @@ class SupervisadosController extends Controller
         // informacion del empleado supervisado
         $empleado = Empleado::where('codigo', $empleado_id)->first();
 
-//        dd($indicadores, $empleado);
+//        dd(json_encode( $indicadores), $empleado);
 
         return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'empleado'=>$empleado]);
     }
@@ -111,5 +111,11 @@ class SupervisadosController extends Controller
         
         DB::select("call pa_eficiencia_actualizarNroErrores('".$tarea->fechaFinSolucion."', '".$empleado_id."', 0);");
         return redirect()->back()->with('El numero de Errores se aumento correctamente.');
+    }
+
+    public function obtenerListaDeIndicadoresDelSupervisado($empleado_id)
+    {
+        $indicadores = IndicadorRepository::cnGetListaInidicadores($empleado_id);
+
     }
 }

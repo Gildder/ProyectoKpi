@@ -1,14 +1,18 @@
-<div class="table-response">
+<div class="table-responsive">
 	<table class="table table-striped table-bordered table-condensed table-hover">
 		<thead>
+			<th>id</th>
+			<th>Usuario</th>
 			<th>Codigo</th>
-			<th>Nombre Completo</th>	
-			<th></th>	
+			<th>Nombre Completo</th>
+			<th></th>
 		</thead>
 
 		<tbody>
 			@foreach($empleadosAgregados as $item)
 			<tr>
+				<td>{{$item->id}}</td>
+				<td>{{$item->usuario}}</td>
 				<td>{{$item->codigo}}</td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
 				<td>

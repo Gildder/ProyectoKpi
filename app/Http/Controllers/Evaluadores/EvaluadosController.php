@@ -36,8 +36,7 @@ class EvaluadosController extends Controller
         $this->tablaMes = new nTablaMes();
 
         // Obtenemos el Id del Evaluador
-        $evaluados = EvaluadoresRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Usuario::get('codigo'));
-
+        $evaluados = EvaluadoresRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Usuario::get('id'));
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
     }
 
@@ -76,9 +75,6 @@ class EvaluadosController extends Controller
             'filtroVista' => \FiltroTabla::getTipo()
         ];
     }
-
-
-
     public function obtenerVista()
     {
         return \FiltroTabla::toString();
@@ -92,12 +88,13 @@ class EvaluadosController extends Controller
      */
     public function obtenerTablaTotal($tipo, $mesBuscado)
     {
+        // objeto de negocio Dashboard
         $this->dashboard = new nDashboard();
 
-        if($tipo == 0){
+        if($tipo == 0){//obtener los datos por semanas de un mes particular
             \FiltroTabla::setMesBuscado($mesBuscado);
             $datos = $this->dashboard->obtenerListaTablaSemana();
-        }else{
+        }else{ // obtener los datos desde un mes inicial
             \FiltroTabla::setPrimerMes($mesBuscado);
             $datos = $this->dashboard->obtenerListaTablaMes();
         }

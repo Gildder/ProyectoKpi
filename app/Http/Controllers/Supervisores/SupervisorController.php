@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use ProyectoKpi\Models\Localizaciones\Departamento;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Empleados\Cargo;
+use ProyectoKpi\Models\User;
 
 class SupervisorController extends Controller
 {
@@ -46,46 +47,59 @@ class SupervisorController extends Controller
 
     public function agregardepartamento($empleado_id, $departamento_id)
     {
-        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
+        $empleado = User::where('users.id', $empleado_id)->first();
 
         DB::table('supervisor_departamentos')->insert(
-            array('empleado_id' => $empleado_id, 'departamento_id' => $departamento_id)
+            array('user_id' => $empleado_id, 'departamento_id' => $departamento_id)
         );
 
-        return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $departamento_id])
+            ->update( array('is_supervisor' => 1));
+
+        return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');
     }
 
     public function quitardepartamento($empleado_id, $departamento_id)
     {
-        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
+        $empleado =User::where('users.id', $empleado_id)->first();
 
         
-        DB::table('supervisor_departamentos')->where('empleado_id', $empleado_id)->where('departamento_id', $departamento_id)->delete();
+        DB::table('supervisor_departamentos')->where('user_id', $empleado_id)->where('departamento_id', $departamento_id)->delete();
 
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $departamento_id])
+            ->update( array('is_supervisor' => null));
 
-        return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
+        return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');
     }
 
     public function agregarcargo($empleado_id, $cargo_id)
     {
-        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
-
+        $empleado =User::where('users.id', $empleado_id)->first();
 
         DB::table('supervisor_cargos')->insert(
-            array('empleado_id' => $empleado_id, 'cargo_id' => $cargo_id)
+            array('user_id' => $empleado_id, 'cargo_id' => $cargo_id)
         );
 
-        return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $cargo_id])
+            ->update( array('is_supervisor' => 1));
+
+        return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');
     }
 
     public function quitarcargo($empleado_id, $cargo_id)
     {
-        $empleado =Empleado::where('empleados.codigo', $empleado_id)->first();
+        $empleado =User::where('users.id', $empleado_id)->first();
 
 
-        DB::table('supervisor_cargos')->where('empleado_id', $empleado_id)->where('cargo_id', $cargo_id)->delete();
+        DB::table('supervisor_cargos')->where('user_id', $empleado_id)->where('cargo_id', $cargo_id)->delete();
 
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $cargo_id])
+            ->update( array('is_supervisor' => null));
 
-        return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->codigo.' - '.$empleado->nombres.' '.$empleado->apellidos.'" correctamente.');
+        return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');
     }
 }

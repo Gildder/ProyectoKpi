@@ -54,8 +54,6 @@ $(document).ready(function(){
     legend: {
       position: 'right'
     }
-
-
   });
 
 

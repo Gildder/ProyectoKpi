@@ -58,12 +58,12 @@ class TareaController extends Controller
     {
         $tarea = tarea::findOrFail($id);
                 
-        return view('tareas/tarea/show', ['tarea'=>$proyecto]);
+        return view('tareas/tarea/show', ['tarea'=>$tarea]);
     }
 
     public function destroy($id)
     {
-        Cargo::destroy($id);
+        Tarea::destroy($id);
 
         return redirect('tareas/tarea')->with('message', 'El tarea de Nro.- '.$id.'  se elimino correctamente.');
     }

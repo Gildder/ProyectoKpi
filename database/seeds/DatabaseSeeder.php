@@ -11,12 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(FrecuenciaSeeder::class);
-        $this->call(TipoIndicadorSeeder::class);
-        $this->call(CargoSeeder::class);
-        $this->call(LocalizacionSeeder::class);
-        $this->call(TipoUsuarioSeeder::class);
-        $this->call(UserSeeder::class);
+        $this->call(EstadoTareaSeeder::class);
+//        $this->call(FrecuenciaSeeder::class);
+//        $this->call(TipoIndicadorSeeder::class);
+//        $this->call(CargoSeeder::class);
+//        $this->call(LocalizacionSeeder::class);
+//        $this->call(TipoUsuarioSeeder::class);
+//        $this->call(UserSeeder::class);
 //        $this->call(DepartamentoSeeder::class);2016_10_27_171831_
     }
 }

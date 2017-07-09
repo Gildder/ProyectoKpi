@@ -23,12 +23,12 @@ class SupervisoresRepository
        // obtenemos los empelados supoer
       $deparCount = DB::
           table('supervisor_departamentos')
-          ->where('supervisor_departamentos.empleado_id', '=', $param)
+          ->where('supervisor_departamentos.user_id', '=', $param)
           ->count();
 
        $cargoCount = DB::
           table('supervisor_cargos')
-          ->where('supervisor_cargos.empleado_id', '=', $param)
+          ->where('supervisor_cargos.user_id', '=', $param)
           ->count();
 
        if ($deparCount > 0  || $cargoCount > 0) {

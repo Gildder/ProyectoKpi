@@ -8,25 +8,101 @@ namespace ProyectoKpi\Cms\Negocios;
  * Time: 9:12
  */
 
-use ProyectoKpi\Cms\Clases\FiltroTabla;
-use ProyectoKpi\Cms\Clases\Indicador;
 use ProyectoKpi\Cms\Clases\TablaSemana;
+use ProyectoKpi\Cms\Clases\Tabla;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Models\Evaluadores\Widget;
 
-class nTablaSemana
+class nTablaSemana  extends Tabla
 {
     private $semanas;
-
-    public function __construct()
+    public $widget;
+    public function __construct(Widget $widget)
     {
         $this->semanas = 0;
+        $this->widget = Widget::findOrFail($widget->id);
     }
+
+    /**
+     * retorna los datos de la tabla Widget por Tipo de Widget
+     *
+     */
+    public function obtenerDatosTabla ()
+    {
+
+        $datos= null;
+        switch ($this->widget->tipo_id){
+            case 1: // por Tipo Indicadores
+                $datos = $this->datosTipoIndicadorTabla();
+                break;
+            case 2: // por Empleados
+                $datos = $this->datosEmpleadoTabla();
+
+                break;
+            case 3: // por Tareas
+                $datos = $this->datosTareasTabla();
+                break;
+        }
+        return $datos;
+    }
+
+    /**
+     * retorna los datos de la tabla Widget por Tipo de Widget
+     *
+     */
+    public function obtenerDatosChart ()
+    {
+        switch ($this->widget->tipo_id){
+            case 1: // por Tipo Indicadores
+                return $this->datosTipoIndicadorChart();
+                break;
+            case 2: // por Empleados
+                return $this->datosEmpleadoChart();
+                break;
+            case 3: // por Tareas
+                return $this->datosTareaChart();
+                break;
+            default:
+        }
+    }
+
+    //************************************************
+
+    public function datosTareasTabla()
+    {
+        // obtenemos la lista de empleados para la gerencia evaluadora deñ widget
+        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+
+        $lista = array();
+
+        $cumplimiento = 0;
+        $contador = 0;
+
+        foreach ($usuarios as $usuario)
+        {
+            $objeto = new \stdClass();
+
+            $objeto->id = $usuario->id;
+            $objeto->nombre = $usuario->nombres.' '. $usuario->apellidos;
+
+
+
+            $objeto = $this->cargarFilaTablaTareas($objeto);
+            array_push($lista, $objeto);
+
+        }
+        return $lista;
+    }
+
 
     /**
      * Obtener Lista de indicadores de un mes por semanas
      */
-    public function obtenerListaIndicadoresDeMes($indicadores, $evaluador_id)
+    public function datosTipoIndicadorTabla()
     {
+        // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
+        $indicadores = EvaluadoresRepository::cnGetTotalIndicadores($this->widget->evaluador_id);
+
         $lista = array();
 
         $cumplimiento = 0;
@@ -40,14 +116,47 @@ class nTablaSemana
             $objeto->nombre      = $indicador->nombre;
             $objeto->ponderacion = $indicador->ponderacion;
 
-            $objeto =  $this->obtenerIndicadorDeMes($objeto, $evaluador_id) ;
+            $objeto =  $this->obtenerIndicadorDeMes($objeto, $this->widget->evaluador_id) ;
 
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
 
             array_push($lista, $objeto);
         }
-        array_push($lista, $this->obtenerDescripcion());
+        array_push($lista, $this->descripcionPorSemanas());
+        array_push($lista, ($cumplimiento/$contador));
+
+        return $lista;
+    }
+
+    /**
+     * Obtener Lista de indicadores de un mes por semanas
+     */
+    public function datosEmpleadoTabla()
+    {
+        // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
+        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+
+        $lista = array();
+
+        $cumplimiento = 0;
+        $contador = 0;
+
+        foreach ($usuarios as $usuario)
+        {
+            $objeto = new \stdClass();
+
+            $objeto->id          = $usuario->id;
+            $objeto->nombre      = $usuario->nombres.' '. $usuario->apellidos ;
+
+            $objeto =  $this->obtenerIndicadorDeMes($objeto, $this->widget->evaluador_id) ;
+
+            $cumplimiento = $cumplimiento + $objeto->promedio;
+            $contador++;
+
+            array_push($lista, $objeto);
+        }
+        array_push($lista, $this->descripcionPorSemanas());
         array_push($lista, ($cumplimiento/$contador));
 
         return $lista;
@@ -59,31 +168,122 @@ class nTablaSemana
      * @param $indicadores
      * @param $evaluador_id
      */
-    public function obtenerChartMes($indicadores, $evaluador_id)
+    public function datosTipoIndicadorChart()
     {
+        // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
+        $indicadores = EvaluadoresRepository::cnGetTotalIndicadores($this->widget->evaluador_id);
+
         $lista = array();
         $datos = array();
-        $objeto = new \stdClass();
 
         foreach ($indicadores as $indicador)
         {
-             array_push( $datos, $this->obtenerArrayColumns($indicador, $evaluador_id) );
+             array_push( $datos, $this->obtenerArrayColumns($indicador, $this->widget->evaluador_id) );
         }
-        $objeto->columns = $datos;
-        $objeto->type = 'bar';
-        array_push($lista, $objeto);
-        array_push($lista, $this->obtenerCategoria());
+
+        array_push($lista, $datos);
+        array_push($lista, $this->categoriasPorSemana());
 
         return $lista;
     }
 
-    private function obtenerArrayColumns($indicador, $evaluador_id)
+
+    /**
+     * Obtener los datos totales de la grafica
+     *
+     */
+    public function datosEmpleadoChart()
+    {
+        // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
+        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+
+        $lista = array();
+        $datos = array();
+
+        foreach ($usuarios as $usuario)
+        {
+            array_push( $datos, $this->obtenerArrayColumnsEmpleado($usuario) );
+        }
+        array_push($lista, $datos);
+        array_push($lista, $this->categoriasPorSemana());
+
+        return $lista;
+    }
+
+    /**
+     * Obtener los datos totales de la grafica
+     *
+     */
+    public function datosTareaChart()
+    {
+        // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
+        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+
+        $lista = array();
+        $resultado = array();
+        $tareas = array();
+        $tickets = array();
+        $totales = array();
+
+        foreach ($usuarios as $usuario)
+        {
+            // obtenemos los datos de la tabla
+            // los sigueintes datos: semana, fecha Inicio y fin , actipro, actrea, efeser, ticketabiertos, ticketcerrados, eferser, efetotal, istecnico
+            $datos = $this->ValoresIndicadoresPorTareaWidget($usuario->id);
+
+            if(sizeof($datos)>0){
+                array_push($tareas, $datos[0]->eficacia_tarea);
+                array_push($tickets, $datos[0]->eficacia_ticket);
+                array_push($totales, $datos[0]->eficacia_total);
+            }else{
+                array_push($tareas, 0);
+                array_push($tickets, 0);
+                array_push($totales, 0);
+            }
+        }
+
+        $datos = array();
+        array_push($datos, 'Eficacia Tareas');
+        foreach ($tareas as $tarea)
+        {
+            array_push($datos, $tarea);
+        }
+
+        array_push($lista, $datos);
+
+        $datos = array();
+        array_push($datos, 'Eficacia Tickets');
+        foreach ($tickets as $ticket)
+        {
+            array_push($datos, $ticket);
+        }
+
+        array_push($lista, $datos);
+
+        $datos = array();
+        array_push($datos, 'Eficacia Total');
+        foreach ($totales as $total)
+        {
+            array_push($datos, $total);
+        }
+
+        array_push($lista, $datos);
+
+        // agregarmos al resultado
+        array_push($resultado, $lista);
+        array_push($resultado, $this->categoriasPorEmpleado());
+
+        return $resultado;
+    }
+
+    private function obtenerArrayColumns($indicador)
     {
         $lista = array();
 
         array_push($lista, $indicador->nombre);
 
-        $datos = $this->obtenerDatosMes($indicador->id, $evaluador_id);
+        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
+
 
         array_push($lista, $datos[0]->semana_1);
         array_push($lista, $datos[0]->semana_2);
@@ -106,6 +306,63 @@ class nTablaSemana
         return $lista;
     }
 
+    private function obtenerArrayColumnsEmpleado($usuario)
+    {
+        $lista = array();
+
+        array_push($lista, $usuario->nombres.' '.$usuario->apellidos);
+
+        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
+
+
+        array_push($lista, $datos[0]->semana_1);
+        array_push($lista, $datos[0]->semana_2);
+        array_push($lista, $datos[0]->semana_3);
+        array_push($lista, $datos[0]->semana_4);
+        switch ($datos[0]->cantidadSemana) {
+            case 5:
+                array_push($lista, $datos[0]->semana_5);
+                break;
+            case 6:
+                array_push($lista, $datos[0]->semana_5);
+                array_push($lista, $datos[0]->semana_6);
+                break;
+        }
+
+        $this->semanas = $datos[0]->cantidadSemana;
+
+
+
+        return $lista;
+    }
+
+    private function obtenerArrayColumnsTarea($usuario)
+    {
+        $lista = array();
+        $datos = array();
+
+
+        array_push($datos, 'Eficacia Tareas');
+        array_push($datos, $datos[0]->eficacia_tarea);
+
+        // obtenemos los datos de la tabla
+        // los sigueintes datos: semana, fecha Inicio y fin , actipro, actrea, efeser, ticketabiertos, ticketcerrados, eferser, efetotal, istecnico
+        $datos = $this->ValoresIndicadoresPorTareaWidget($usuario->id);
+
+        if(sizeof($datos)>0){
+            array_push($lista, $datos[0]->eficacia_tarea);
+            array_push($lista, $datos[0]->eficacia_ticket);
+            array_push($lista, $datos[0]->eficacia_total);
+        }else{
+            // 3 por los campos vacios buscados arriba
+            for ($index=1; $index<=3 ; $index++ ){
+                array_push($lista, 0);
+            }
+        }
+
+        return $lista;
+    }
+
 
     /**
      * Obtener los indicadores de un mes por semana
@@ -113,9 +370,9 @@ class nTablaSemana
     public function obtenerIndicadorDeMes($objeto, $evaluador_id)
     {
 
-        $datos = $this->obtenerDatosMes($objeto->id, $evaluador_id);
+        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
 
-        $objeto->mes = \Calcana::getNombreMes(\FiltroTabla::getMesBuscado());
+        $objeto->mes = \Calcana::getNombreMes($this->widget->mesBuscado);
 
         $objeto->semanas  = $datos[0]->cantidadSemana;
         $objeto->promedio = $datos[0]->promedio;
@@ -127,6 +384,15 @@ class nTablaSemana
         return $objeto;
     }
 
+
+
+    /**
+     * Permite crear una obtejo semana
+     *
+     * @param $dato
+     * @param $nro
+     * @return \stdClass
+     */
     private function crearObjetoSemana($dato, $nro)
     {
         $semana = new \stdClass();
@@ -142,6 +408,7 @@ class nTablaSemana
 
 
     /**
+     *
      * @param $datos
      * @return array
      */
@@ -173,18 +440,53 @@ class nTablaSemana
      * @param $evaluador_id
      * @return mixed
      */
-    private function obtenerDatosMes($indicador_id, $evaluador_id)
+    private function ValoresIndicadoresPorSemanaSegunTipoWidget()
     {
-        return EvaluadoresRepository::cnGetIndicadoresSemana(
-            $indicador_id,
-            $evaluador_id,
-            \FiltroTabla::getAnio(),
-            \FiltroTabla::getMesBuscado()
+        switch ($this->widget->tipo_id) {
+
+            case 1: // tipo de Indicadores
+                return EvaluadoresRepository::cnGetIndicadoresSemana(
+                    $this->widget->evaluador_id,
+                    $this->widget->indicador_id,
+                    $this->widget->anio,
+                    $this->widget->mesBuscado
+                );
+
+                break;
+            case 2: // Por empleados
+                return EvaluadoresRepository::cnGetIndicadoresEmpeladosSemana(
+                    $this->widget->indicador_id,
+                    $this->widget->user_id,
+                    $this->widget->anio,
+                    $this->widget->mesBuscado
+                );
+
+                break;
+        }
+    }
+
+    private function ValoresIndicadoresPorTareaWidget($usuario_id)
+    {
+
+        return EvaluadoresRepository::cnGetIndicadoresTareasSemana(
+            $usuario_id,
+            $this->widget->anio,
+            $this->widget->mesTarea,
+            $this->widget->semanaTarea
         );
+
+
     }
 
 
-    private function obtenerDescripcion()
+
+
+    /**
+     * Obtenemos la descripcion de las semanas
+     *
+     * @return array
+     */
+    private function descripcionPorSemanas()
     {
         $lista = array();
         for($i = 1; $i <= $this->semanas; $i++)
@@ -199,7 +501,13 @@ class nTablaSemana
         return $lista;
     }
 
-    private function obtenerCategoria()
+
+    /**
+     * Obtenemos la descripcion de las semanas
+     *
+     * @return array
+     */
+    private function categoriasPorSemana()
     {
         $lista = array();
         for($i = 1; $i <= $this->semanas; $i++)
@@ -208,6 +516,67 @@ class nTablaSemana
         }
 
         return $lista;
+    }
+
+
+
+    /**
+     * Obtenemos la descripcion de las categorias por empleado
+     *
+     * @return array
+     */
+    private function categoriasPorEmpleado()
+    {
+        // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
+        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+
+
+        $lista = array();
+        foreach ($usuarios as $usuario)
+        {
+            array_push( $lista, $usuario->nombres.' '.$usuario->apellidos );
+        }
+
+        return $lista;
+    }
+
+    /**
+     * @param $result
+     * @param $objeto
+     */
+    private function cargarFilaTablaTareas($objeto)
+    {
+        $result = $this->ValoresIndicadoresPorTareaWidget($objeto->id);
+        if (sizeof($result) > 0) {
+
+            $objeto->semana = $result[0]->semana;
+            $objeto->fechaInicio = $result[0]->fechaInicio;
+            $objeto->fechaFin = $result[0]->fechaFin;
+            $objeto->actividad_programada = $result[0]->actividad_programada;
+            $objeto->actividad_realizada = $result[0]->actividad_realizada;
+            $objeto->eficacia_tarea = $result[0]->eficacia_tarea;
+            $objeto->ticket_abierto = $result[0]->ticket_abierto;
+            $objeto->ticket_cerrado = $result[0]->ticket_cerrado;
+            $objeto->eficacia_ticket = $result[0]->eficacia_ticket;
+            $objeto->eficacia_total = $result[0]->eficacia_total;
+            $objeto->isTecnico = $result[0]->isTecnico;
+
+
+        } else {
+            $objeto->semana = 0;
+            $objeto->fechaInicio = 0;
+            $objeto->fechaFin = 0;
+            $objeto->actividad_programada = 0;
+            $objeto->actividad_realizada = 0;
+            $objeto->eficacia_tarea = 0;
+            $objeto->ticket_abierto = 0;
+            $objeto->ticket_cerrado = 0;
+            $objeto->eficacia_ticket = 0;
+            $objeto->eficacia_total = 0;
+            $objeto->isTecnico = 0;
+        }
+
+        return $objeto;
     }
 
 

@@ -2,9 +2,8 @@
 
 namespace ProyectoKpi\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
-use ProyectoKpi\Http\Requests;
+use \Httpful\Request;
+use Mockery\Exception;
 use ProyectoKpi\Http\Controllers\Controller;
 
 class AdminController extends Controller
@@ -19,69 +18,29 @@ class AdminController extends Controller
         return view('administrador/dashboard');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function importarldap()
     {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        try{
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+            $uri = "http://localhost:2000/api/ClientesLdap";
+            $response = Request::get($uri)
+                ->expectsType('json')
+                ->send();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+//            foreach ($response->body->ticket as $item)
+//            {
+//            }
+//            dd(json_encode($response->body));
+            return [
+                'success' => true
+            ];
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        }catch (Exception $e){
+            return [
+                'success' => false
+            ];
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

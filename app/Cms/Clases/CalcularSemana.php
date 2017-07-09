@@ -185,6 +185,21 @@ class CalcularSemana
         }
     }
 
+    /**
+     * Obtener las abriatura para la descripciones los meses
+     *
+     * @param $nro
+     * @return string
+     */
+    public static function abreviaturaMes($nro)
+    {
+        $mes = str_split(self::getNombreMes($nro));
+
+        $abr =  array_slice($mes, 0, 3);
+
+        return $abr[0].$abr[1].$abr[2];
+    }
+
     public static function getNombreSemana($num_semana)
     {
         switch ($num_semana) {

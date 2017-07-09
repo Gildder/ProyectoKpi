@@ -27,7 +27,7 @@ class CreateTareasTable extends Migration
             $table->integer('isError')->default(null);
             $table->integer('tipoTarea_id')->unsigned();; //tareas programadas 1 , tareas diarias 0
             $table->integer('user_id')->unsigned();
-            $table->integer('proyecto_id')->unsigned()->default(0);
+            $table->integer('proyecto_id')->unsigned()->nullable();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->softDeletes();

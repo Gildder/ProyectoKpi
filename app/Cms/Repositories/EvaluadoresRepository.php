@@ -12,6 +12,8 @@ use ProyectoKpi\Cms\Clases\TablaSemana;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Cms\Clases\IndicadorReporte;
 use ProyectoKpi\Models\Empleados\Empleado;
+use ProyectoKpi\Models\Evaluadores\Widget;
+use ProyectoKpi\Models\User;
 use stdClass;
 
 class EvaluadoresRepository extends BaseRepository
@@ -31,14 +33,14 @@ class EvaluadoresRepository extends BaseRepository
     public static function cnGetEvaluados($evaluador_id, $empleado_id)
     {
         return  DB::table('evaluador_cargos')
-            ->select('empleados.codigo', 'empleados.nombres', 'empleados.apellidos', 'departamentos.nombre as departamento', 'users.name as usuario', 'users.email as correo', 'cargos.nombre as cargo', 'evaluadores.descripcion as gerencia')
-            ->join('cargos', 'cargos.id', '=', 'evaluador_cargos.cargo_id')
-            ->join('empleados', 'empleados.cargo_id', '=', 'evaluador_cargos.cargo_id')
-            ->join('departamentos', 'departamentos.id', '=', 'empleados.departamento_id')
-            ->join('users', 'users.id', '=', 'empleados.user_id')
-            ->join('evaluadores', 'evaluadores.id', '=', 'evaluador_cargos.evaluador_id')
-            ->join('evaluador_empleados', 'evaluador_empleados.evaluador_id', '=', 'evaluador_cargos.evaluador_id')
-            ->where('empleados.codigo', '<>', $empleado_id)
+            ->select('users.codigo', 'users.nombres', 'users.apellidos', 'departamentos.nombre as departamento', 'users.name as usuario', 'users.email as correo', 'cargos.nombre as cargo', 'evaluadores.descripcion as gerencia')
+            ->leftjoin('cargos', 'cargos.id', '=', 'evaluador_cargos.cargo_id')
+            ->leftjoin('users', 'users.cargo_id', '=', 'evaluador_cargos.cargo_id')
+            ->leftjoin('departamentos', 'departamentos.id', '=', 'users.departamento_id')
+            ->leftjoin('users', 'users.id', '=', 'users.user_id')
+            ->leftjoin('evaluadores', 'evaluadores.id', '=', 'evaluador_cargos.evaluador_id')
+            ->leftjoin('evaluador_empleados', 'evaluador_empleados.evaluador_id', '=', 'evaluador_cargos.evaluador_id')
+            ->where('users.id', '<>', $empleado_id)
             ->where('evaluador_empleados.evaluador_id', $evaluador_id)
             ->get();
     }
@@ -53,9 +55,88 @@ class EvaluadoresRepository extends BaseRepository
      * @param $indicador
      * @return mixed
      */
-    public static function cnGetIndicadoresSemana($indicador, $evaluador, $anio, $mes)
+    public static function cnGetIndicadoresSemana($evaluador, $indicador, $anio, $mes)
     {
-        return \DB::select('call pa_evaludados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
+        return \DB::select('call pa_evaluados_procesosSemana(' . $evaluador . ', ' . $indicador . ', ' . $anio . ', ' . $mes . ');');
+    }
+
+
+    /**
+     * Retorna las los totales primer indicador 'Eficacia de idicador' para los empleados
+     * 
+     * @param $indicador
+     * @param $usuario
+     * @param $anio
+     * @param $mes
+     * @return mixed
+     */
+    public static function cnGetIndicadoresEmpeladosSemana($indicador, $usuario, $anio, $mes)
+    {
+        return \DB::select('call pa_evaluados_empleadosSemana(' . $indicador . ', ' . $usuario . ', ' . $anio . ', ' . $mes . ');');
+    }
+
+
+    /**
+     * Retorna los datos de la eficacia por empleados, tareas y ticket
+     *
+     * @param $usuario
+     * @param $anio
+     * @param $mes
+     * @param $semana
+     * @return mixed
+     */
+    public static function cnGetIndicadoresTareasSemana($usuario, $anio, $mes, $semana)
+    {
+        return \DB::select('call pa_evaluados_tareasSemana(' . $usuario . ', ' . $anio . ', ' . $mes . ', ' . $semana . ');');
+    }
+
+    /**
+     * cantidad de semanas por un mes
+     * @param $mes
+     */
+    public static function getObtenerCantidadSemanas($mes)
+    {
+        return \DB::select('call pa_cantidadSemanasMes('.$mes.');');
+    }
+
+
+    //// NO ESTA IMPLEMENTADO EL PROCEDIMEINTO ALMACENDO
+    public static function getObtenerFechasemanas($semana)
+    {
+        return \DB::select('call pa_fechasSemanasTareas('.$semana.');');
+    }
+
+    /**
+     * Devuelve los empleados evaluados con sus evaluacion para un indicador particular.
+     *
+     * @param $indicador
+     * @param $evaluador
+     * @param $anio
+     * @param $mes
+     * @return array
+     */
+    public function cnGetEmpleadosSemana($indicador, $evaluador, $anio, $mes)
+    {
+        $lista = array();
+
+        $user_evaluados = \DB::select('call pa_evaluadores_empleadosEvaluados('.$indicador.','.$evaluador.');');
+
+        foreach ($user_evaluados as $user_evaluado) {
+            $usuario_con_evaluaciones = new \stdClass();
+
+            $usuario_con_evaluaciones->id = $user_evaluado->id;
+            $usuario_con_evaluaciones->nombre = $user_evaluado->nombres.' '.$user_evaluado->apellidos;
+
+            // obtenemos las evaluaciones por semanas del empleados actual para el mes indicador
+            $evaluaciones = \DB::select('call pa_evaludados_empleadosSemana(' . $indicador . ', '.$user_evaluado->id.', ' . $anio . ', ' . $mes . ');');
+
+            // agregar las evaluaciones a un atributo del empleado
+            $usuario_con_evaluaciones->evaluaciones = $evaluaciones;
+
+            array_push($lista, $usuario_con_evaluaciones);
+        }
+
+        return $lista;
     }
 
     /**
@@ -67,9 +148,9 @@ class EvaluadoresRepository extends BaseRepository
     public static function cnVerificarsEvaluador($param)
     {
         // obtenemos los empelados supoer
-         $evaluador_id = Empleado::select('evaluador_empleados.evaluador_id')
-            ->join('evaluador_empleados', 'evaluador_empleados.empleado_id', '=', 'empleados.codigo')
-            ->where('evaluador_empleados.empleado_id', '=', $param)
+         $evaluador_id = User::select('evaluador_empleados.evaluador_id')
+            ->leftjoin('evaluador_empleados', 'evaluador_empleados.user_id', '=', 'users.id')
+            ->where('evaluador_empleados.user_id', '=', $param)
             ->first();
 
         $evaluador = Evaluador::select('evaluadores.id', 'evaluadores.abreviatura', 'evaluadores.descripcion', 'evaluadores.ponderacion_id')
@@ -96,6 +177,10 @@ class EvaluadoresRepository extends BaseRepository
     }
 
     /**
+     * Obtener los indicadores asiganados a la gerencia buscada
+     *
+     * datos retorna: id indicador, nombre indicador, ponderacion indicador, id tipo indicador, nombre de tipo indicador
+     *
      * @param $evaluador
      * @return mixed
      */
@@ -105,6 +190,7 @@ class EvaluadoresRepository extends BaseRepository
 
         return   \DB::select('call pa_evaluadores_totalIndicadores(' . self::$evaluador . ');');
     }
+
 
     public static function cnListaDeIndicadorEficaciaPorEmpleado($indicador, $mes)
     {
@@ -169,58 +255,56 @@ class EvaluadoresRepository extends BaseRepository
         }
 
         $objeto->eficacia = $lista;
-//dd($objeto);
+
         return $objeto;
     }
 
+    /**
+     *      * Devuelve la lista de Tipo de indicadores para un evaluador
+     *
+     */
+    public static function getListaTiposIndicadores($evaluador)
+    {
+        return \DB::select('call pa_evaluador_tipoIndicador('.$evaluador.');');
+    }
 
-//
-//    public static function getIndicadoresPromediosMes($evaluador_id)
-//    {
-//        $lista = array();
-//        $cumplimiento = 0;
-//        $indicadores = self::cnGetTotalIndicadores($evaluador_id);
-//
-//        foreach ($indicadores as $item) {
-//            $indicador = new TablaMes($item->id, $item->nombre, $item->ponderacion, $evaluador_id);
-//
-//            // Calculamos porcentaje de cumplimiento
-//            $cumplimiento = $cumplimiento + (($indicador->getPonderacion() * $indicador->getPromedio())/100);
-//            array_push($lista, $indicador) ;
-//        }
-//
-//        array_push($lista, ['cumplimiento'=> $cumplimiento]);
-//
-//        return $lista;
-//    }
-//
-//    /**
-//     * @param $item
-//     * @param $ponderacion
-//     * @return IndicadorReporte
-//     */
-//    private static function getIndicadorDeMesPorSemana($item, $ponderacion)
-//    {
-//        // indicador el nuevo indicador
-//        $indicador = new IndicadorReporte();
-//        $indicador->id = $item->id;
-//        $indicador->nombre = $item->nombre;
-//        $indicador->ponderacion = $item->ponderacion;
-//        $indicador->promedio = $ponderacion[0]->promedio;
-//
-//        $indicador->semana1 = $ponderacion[0]->semana_1;
-//        $indicador->semana2 = $ponderacion[0]->semana_2;
-//        $indicador->semana3 = $ponderacion[0]->semana_3;
-//        $indicador->semana4 = $ponderacion[0]->semana_4;
-//        switch ($ponderacion[0]->cantidadSemana) {
-//            case 5:
-//                $indicador->semana5 = $ponderacion[0]->semana_5;
-//                break;
-//            case 6:
-//                $indicador->semana5 = $ponderacion[0]->semana_5;
-//                $indicador->semana6 = $ponderacion[0]->semana_6;
-//                break;
-//        }
-//        return $indicador;
-//    }
+    /**
+     *      * Devuelve la lista de indicadores para un evaluador
+     *
+     */
+    public static function getListaIndicadores($evaluador)
+    {
+        return \DB::select('call pa_evaluador_indicador('.$evaluador.');');
+    }
+
+
+    public static function getEvaluadorWidget($evaluador, $usuario)
+    {
+        return Widget::where('evaluador_widget.evaluador_id', '=', $evaluador)
+            ->where('evaluador_widget.user_id', '=', $usuario)
+            ->select(
+                'evaluador_widget.id',
+                'evaluador_widget.tipo_id',
+                'evaluador_widget.titulo',
+                'evaluador_widget.isSemanal',
+                'evaluador_widget.anio',
+                'evaluador_widget.mesInicio',
+                'evaluador_widget.mesBuscado',
+                'evaluador_widget.tipo_id',
+                'evaluador_widget.tipoIndicador_id',
+                'evaluador_widget.indicador_id',
+                'evaluador_widget.mesTarea',
+                'evaluador_widget.semanaTarea'
+            )
+            ->get();
+    }
+
+    public static function deleteEvaluadorWidget($id)
+    {
+        Widget::destroy($id);
+
+        return true;
+    }
+
+
 }

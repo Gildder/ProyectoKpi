@@ -36,7 +36,7 @@ class Tarea extends Model
      * @var array
      */
     protected $fillable = [
-        'descripcion', 'fechaInicioEstimado', 'fechaFinEstimado', 'tiempoEstimado', 'fechaInicioSolucion', ' fechaFinSolucion', 'tiempoSolucion', 'estado', ' tipo', 'proyecto_id', 'empleado_id','localizacion_id', 'hora', 'minuto'
+        'id','descripcion', 'fechaInicioEstimado', 'fechaFinEstimado', 'tiempoEstimado', 'fechaInicioSolucion', ' fechaFinSolucion', 'tiempoSolucion', 'estadoTarea_id', ' tipoTarea_id', 'proyecto_id', 'user_id','localizacion_id', 'hora', 'minuto'
     ];
 
     /**
@@ -45,13 +45,13 @@ class Tarea extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'created_at', 'update_at', 'deleted_at',
+        'created_at', 'update_at', 'deleted_at',
     ];
 
     /* Relaciones */
-    public function empleados()
+    public function users()
     {
-        return $this->hasMany('ProyectoKpi\Models\Empleados\Empleado', 'empleado_id');
+        return $this->hasMany('ProyectoKpi\Models\User', 'user_id');
     }
 
     function proyectos(){
@@ -98,7 +98,7 @@ class Tarea extends Model
     // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesDisponibles($tarea_id)
     {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id','=', \Usuario::get('localizacion_id'))->first();
 
         $ubicacionesDisponible  = DB::select('call pa_tareas_ubicaionesDisponibles('.$localizacion->grupoloc_id.','.$tarea_id.');');
 
@@ -108,7 +108,7 @@ class Tarea extends Model
      // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesTodos($tarea_id)
     {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id','=', \Usuario::get('localizacion_id'))->first();
         $localizaciones = DB::table('localizaciones')->select('localizaciones.id', 'localizaciones.nombre')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->get();
 
         return $localizaciones;

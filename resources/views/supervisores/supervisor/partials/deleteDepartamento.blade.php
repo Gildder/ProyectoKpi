@@ -1,6 +1,6 @@
 
    <!-- Modal -->
-<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-deleteDepartamentoSupervisor-{{ $item->codigo }}">
+<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-deleteDepartamentoSupervisor-{{ $item->id }}">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -10,9 +10,9 @@
         <b>Quitar Empleado</b>
       </div>
       <div class="modal-body modal-delete-body">
-           {!!Form::open(['action'=>['Supervisores\SupervisorController@quitardepartamento', $item->codigo, $lista->id], 'method'=>'GET'])!!}
+           {!!Form::open(['action'=>['Supervisores\SupervisorController@quitardepartamento', $item->id, $lista->id], 'method'=>'GET'])!!}
             <div class="modal-body">
-              <p>¿Estas seguro que deseas quitar a <b>{{$item->nombres}} {{$item->apellidos}}</b>?</p>
+              <p>¿Estas seguro que deseas quitar a <b>{{$item->id}} {{$item->usuario}}</b>?</p>
             </div>
             <div class="modal-footer modal-delete-footer">
               <a href="javascript:void(0)" data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>

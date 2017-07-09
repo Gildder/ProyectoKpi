@@ -19,9 +19,13 @@ class CreateEficaciaIndicadorTable extends Migration
             $table->integer('semana');
             $table->integer('actpro')->default(0); //actividades programadas
             $table->integer('actrea')->default(0);  //actividades realizadas
-            $table->double('efeser')->default(0); //Eficacia del serivicio
+            $table->double('efeser', 3,2)->default(0); //Eficacia del serivicio
             $table->integer('user_id')->unsigned();
             $table->integer('indicador_id')->unsigned();
+            $table->integer('ticket_abiertos')->default(0);
+            $table->integer('ticket_cerrados')->default(0);
+            $table->double('efeser_ticket', 3,2)->default(0);
+            $table->double('efeser_total', 3,2)->default(0);
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->softDeletes();

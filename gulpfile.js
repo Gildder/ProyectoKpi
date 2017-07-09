@@ -1,5 +1,9 @@
 var elixir = require('laravel-elixir');
 
+require('laravel-elixir-vueify');
+require('laravel-elixir-livereload');
+require("laravel-elixir-babel");
+
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -12,5 +16,13 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.browserify('app-vue.js', 'public/dist/js/app-vue.js');
+    mix.livereload();
+    mix.babel("app-vue.js", {
+        srcDir: "resources/assets/js",
+        output: "public/dist/js/app-babel.js",
+        sourceMaps: true
+    });
+
+
 });

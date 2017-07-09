@@ -22,7 +22,7 @@
         </div>
 
         {{-- Contenedor  de Widget --}}
-        <div class="row">
+        <div class="">
             {{-- Inicio Panel Tipo Indicadores Ponderacion --}}
             @include('evaluadores.evaluados.dashboard.partials.nuevosWidget')
             {{-- Fin Panel Tipo Indicadores --}}
@@ -30,15 +30,12 @@
 
         {{--capa de tipos de indicadores--}}
         <div class="tab-content no-padding">
-            @foreach($tipos as $tipo)
-            @if($tipo->id == 1) {{-- Solamente cargamos los de tipo procesos --}}
-                @include('evaluadores/evaluados/dashboard/partials/total_tipoIndicadores')
-                @endif
-            @endforeach
+                <panel-widget :widget="widget" v-for="widget in panelWidgets"></panel-widget>
+                {{--<nuevo-modal tipo_id="{{ widget.id }}" titulo="{{ widget.titulo }}"></nuevo-modal>--}}
         </div>
         {{-- Fin de Tipo de Indicadores --}}
 
-    <div >
+    <div>
         <!-- Panel de Escalas-->
         @include('evaluadores.evaluados.dashboard.partials.EscalasEvaluadores')
         {{-- Fin Panel Escalas --}}
@@ -46,5 +43,7 @@
 
     </section>
 </div>
-<script src="{{URL::asset('dist/js/app-vuejs.js')}}"></script>
+
+
 @endsection
+

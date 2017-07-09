@@ -2,6 +2,7 @@
 
 namespace ProyectoKpi\Http\Controllers;
 
+use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
 use ProyectoKpi\Http\Requests;
 use Illuminate\Http\Request;
 use ProyectoKpi\Models\Empleados\Empleado;
@@ -32,6 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+//        dd(\Usuario::get('isIndicadores'), \Usuario::get('isEvaluador'), \Usuario::get('isSupervisor'));
         $rutaPrincipal = 'empleados.perfil.index';
         if (! Auth::guest()) {
             if (\Usuario::get('isAdmin')) {
@@ -51,7 +53,7 @@ class HomeController extends Controller
                 if (\Usuario::get('isEvaluador')) {
                     $rutaPrincipal = 'evaluadores.evaluados.dashboard';
                 }
-               
+//
                 return redirect()->route($rutaPrincipal);
             }
         }

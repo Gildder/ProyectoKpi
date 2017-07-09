@@ -69,7 +69,8 @@
           <ul class="treeview-menu">
             <li><a href="#"><i class="fa fa-circle-o"></i>Opciones</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Permisos</a></li>
-            <li><a href="#"><i class="fa fa-circle-o"></i> Importar AD</a></li>
+            <li><a @click.prevent="importarLdap" ><i class="fa fa-circle-o"></i> Importar AD</a></li>
+            {{--<li><a href="{{url('administrador/importarldap')}}" ><i class="fa fa-circle-o"></i> Importar AD</a></li>--}}
             <li><a href="{{url('empleados/empleado')}}"><i class="fa fa-circle-o"></i>Empleado</a></li>
             <li><a href="{{url('empleados/cargo')}}"><i class="fa fa-circle-o"></i>Cargo</a></li>
           </ul>
@@ -105,20 +106,20 @@
             <li><a href="{{url('evaluadores/escala')}}"><i class="fa fa-circle-o"></i>Escalas</a></li>
           </ul>
         </li>
-        {{-- <li class="treeview">
+         <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
-            <span>Indicadores</span>
+            <span>Configuracion</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Indicador</a></li>
-            <li><a href="{{url('indicadores/indicadorcargos')}}"><i class="fa fa-circle-o"></i> Indicador Cargos</a></li>
-            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Graficos</a></li>
+            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i>Importar Tickets</a></li>
+            <li><a href="{{url('indicadores/indicadorcargos')}}"><i class="fa fa-circle-o"></i> config 1 Cargos</a></li>
+            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Config 2</a></li>
           </ul>
-        </li> --}}
+        </li>
         
       </ul>
     </section>

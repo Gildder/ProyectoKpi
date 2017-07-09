@@ -232,7 +232,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
         /**
-         * Mis Alies
+         * Mis Alias
          */
         'Calcana' => ProyectoKpi\Facades\CalcularSemana::class,
         'Usuario' => ProyectoKpi\Facades\UsuarioActivo::class,

@@ -61,6 +61,7 @@ class TareaProgramadaController extends Controller
     public function store(TareaProgramasFormRequest $Request)
     {
         $user = Auth::user();  //obtenemos el usuario logueado
+        
         $tarea = new Tarea;
         $tarea->descripcion = trim(\Request::input('descripcion'));
         $fechaInicio = trim(\Request::input('fechaInicioEstimado'));
@@ -75,10 +76,10 @@ class TareaProgramadaController extends Controller
 
         $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
 
-
         $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
-        $tarea->tipo = '1';
-        $tarea->empleado_id = $user->empleado->codigo;
+        $tarea->tipoTarea_id = '1';
+        $tarea->estadoTarea_id = '1';
+        $tarea->user_id = $user->id;
 
         if ($tarea->save()) {
             // $eventSaved = \Event::fire(new TareaSaved($tarea));

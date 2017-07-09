@@ -27,7 +27,7 @@ class TareaDiariaController extends Controller
     {
         $user = Auth::user();  //obtenemos el usuario logueado
 
-        $tareas = Tarea::where('tipo', '=', '2')->where('empleado_id', $user->empleado->codigo)->get();
+        $tareas = Tarea::where('tipo', '=', '2')->where('user_id', $user->id)->get();
 
         return view('tareas/tareaDiaria/index', ['tareas'=> $tareas]);
     }
@@ -43,7 +43,7 @@ class TareaDiariaController extends Controller
         $tarea = new Tarea;
         $tarea->descripcion = trim(\Request::input('descripcion'));
         $tarea->tipo = '2';
-        $tarea->empleado_id = $user->empleado->codigo;
+        $tarea->user_id = $user->id;
         $tarea->save();
 
         return redirect('tareas.tareaDiaria.index')->with('message', 'El tarea "'.$tarea->descripcion.'" se guardo correctamente.');

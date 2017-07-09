@@ -24,15 +24,15 @@
           @endif
 
 
-          @if( \Usuario::get('isEvaluador'))
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-          <a href="{{url('evaluadores/evaluados/index') }}" >
-              <i class="fa fa-users"></i>
-              <label for="Tareas" class="hidden-xs">Mis Evaluados</label>
-            </a>
-          </li>
-          @endif
+          {{--@if( \Usuario::get('isEvaluador'))--}}
+          {{--<!-- Messages: style can be found in dropdown.less-->--}}
+          {{--<li class="dropdown messages-menu">--}}
+          {{--<a href="{{url('evaluadores/evaluados/index') }}" >--}}
+              {{--<i class="fa fa-users"></i>--}}
+              {{--<label for="Tareas" class="hidden-xs">Mis Evaluados</label>--}}
+            {{--</a>--}}
+          {{--</li>--}}
+          {{--@endif--}}
 
           @if( \Usuario::get('isSupervisor'))
           <!-- Messages: style can be found in dropdown.less-->

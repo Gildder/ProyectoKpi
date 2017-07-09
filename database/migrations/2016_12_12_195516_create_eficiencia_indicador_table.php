@@ -19,7 +19,7 @@ class CreateEficienciaIndicadorTable extends Migration
             $table->integer('semana');
             $table->integer('totope')->default(0); //Total operaciones
             $table->integer('numerr')->default(0);  //numero de errores
-            $table->double('efeact')->default(0); //Eficiencia en la actividad
+            $table->double('efeact', 3,2)->default(0); //Eficiencia en la actividad
             $table->integer('user_id')->unsigned();
             $table->integer('indicador_id')->unsigned();
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));

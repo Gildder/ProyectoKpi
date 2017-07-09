@@ -33,9 +33,19 @@ Route::get('/', 'HomeController@index');
 Route::group(['middleware'=> ['auth', 'administrador'] ], function ()
 {
 	
-	Route::resource('administrador', 'Admin\AdminController', 
-		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+    Route::get('administrador',
+        array(
+            'as' => 'administrador.index',
+            'uses' => 'Admin\AdminController@index'
+        )
+    );
 
+    Route::get('administrador/importarldap',
+        array(
+            'as' => 'administrador.importarldap',
+            'uses' => 'Admin\AdminController@importarldap'
+        )
+    );
 });
 
 // **********************  MODULO EMPLEADOS  *****************************************
@@ -219,9 +229,49 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
 	Route::get('evaluadores/evaluados/showIndicadorEmpleado/{empleado}/{indicador}', 
 			array('as' => 'evaluadores.evaluados.showIndicadorEmpleado', 'uses' => 'Evaluadores\EvaluadosController@showIndicadorEmpleado') );
 
-	// Mis Evaluados
-	Route::get('evaluadores/evaluados/misevaluados/index',
-			array('as' => 'evaluadores.evaluados.misevaluados.index', 'uses' => 'Evaluadores\EvaluadosController@index') );
+	// Devuelve la lista de los tipo}s de indicator's
+    Route::get('evaluadores/evaluados/obtenerTiposIndicadores',
+        array('as' => 'evaluadores.evaluados.obtenerTiposIndicadores', 'uses' => 'Evaluadores\EvaluadosController@obtenerTiposIndicadores') );
+
+    Route::get('evaluadores/evaluados/obtenerEvaluadorWidget',
+        array('as' => 'evaluadores.evaluados.obtenerEvaluadorWidget', 'uses' => 'Evaluadores\EvaluadosController@obtenerEvaluadorWidget') );
+
+
+    Route::delete('evaluadores/evaluados/obtenerEvaluadorWidget/{id}',
+        array('as' => 'evaluadores.evaluados.obtenerEvaluadorWidget', 'uses' => 'Evaluadores\EvaluadosController@eliminarEvaluadorWidget') );
+
+    Route::get('evaluadores/evaluados/obtenerMesActual',
+        array('as' => 'evaluadores.evaluados.obtenerMesActual', 'uses' => 'Evaluadores\EvaluadosController@obtenerMesActual') );
+
+    Route::post('evaluadores/evaluados/obtenerCantidadSemanasMes/{mes}',
+        array('as' => 'evaluadores.evaluados.obtenerCantidadSemanasMes', 'uses' => 'Evaluadores\EvaluadosController@obtenerCantidadSemanasMes') );
+
+
+    Route::post('evaluadores/evaluados/obtenerFechasSemanas/{semana}',
+        array('as' => 'evaluadores.evaluados.obtenerFechasSemanas', 'uses' => 'Evaluadores\EvaluadosController@obtenerFechasSemanas') );
+
+    Route::post('evaluadores/evaluados/guardarWidget',
+        array('as' => 'evaluadores.evaluados.guardarWidget',
+            'uses' => 'Evaluadores\EvaluadosController@guardarWidget') );
+
+    // OBTENER TABLAS DE LOS WIDGET
+    Route::post('evaluadores/evaluados/obtenerDatosTablaWidget',
+        array('as' => 'evaluadores.evaluados.obtenerDatosTablaWidget',
+            'uses' => 'Evaluadores\EvaluadosController@obtenerDatosTablaWidget') );
+
+    Route::post('evaluadores/evaluados/obtenerDatosChartWidget',
+        array('as' => 'evaluadores.evaluados.obtenerDatosChartWidget',
+            'uses' => 'Evaluadores\EvaluadosController@obtenerDatosChartWidget') );
+
+    Route::post('evaluadores/evaluados/actualizarWidget',
+        array('as' => 'evaluadores.evaluados.actualizarWidget',
+            'uses' => 'Evaluadores\EvaluadosController@actualizarWidget') );
+
+
+    // Mis Evaluados
+	Route::post('evaluadores/evaluados/misevaluados/index',
+			array('as' => 'evaluadores.evaluados.misevaluados.index',
+                'uses' => 'Evaluadores\EvaluadosController@index') );
 
 	Route::get('evaluadores/evaluados/misevaluados/show/{id}',
 			array('as' => 'evaluadores.evaluados.misevaluados.show', 'uses' => 'Evaluadores\EvaluadosController@show') );

@@ -45,3 +45,4 @@ function Alert(wrapper) {
         return show(message, 'warning', duration);
     };
 }
+

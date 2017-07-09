@@ -88,8 +88,8 @@ class EvaluadorController extends Controller
 
 		$indicadores = Indicador::
 	       select('indicadores.id', 'indicadores.nombre','indicadores.descripcion' , 'tipos_indicadores.nombre as tipo')
-			    ->join('evaluador_indicadores','evaluador_indicadores.indicador_id','=','indicadores.id')
-			    ->join('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
+			    ->leftjoin('evaluador_indicadores','evaluador_indicadores.indicador_id','=','indicadores.id')
+			    ->leftjoin('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
 			    ->where('evaluador_indicadores.evaluador_id', $id)
 			    ->get();
 
@@ -135,6 +135,9 @@ class EvaluadorController extends Controller
             array('user_id' => $user_id, 'evaluador_id' => $evaluador_id)
         );
 
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $user_id])
+            ->update( array('is_evaluador' => 1));
 
 
         return redirect()->back()->with('message', 'Se agrego el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
@@ -145,6 +148,10 @@ class EvaluadorController extends Controller
         $empleado = User::where('users.id', $user_id)->first();
 
         DB::table('evaluador_empleados')->where('user_id', $user_id)->where('evaluador_id', $evaluador_id)->delete();
+
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $user_id])
+            ->update( array('is_evaluador' => null));
 
         return redirect()->back()->with('message', 'Se quito el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
     }

@@ -64,7 +64,7 @@ class IndicadorRepository
      * @param $cargo_id
      * @return mixed
      */
-    public static function cnCamtidadEmpleados($cargo_id)
+    public static function cnCantidadEmpleados($cargo_id)
     {
         return \DB::table('indicador_cargos')->select('indicador_cargos.cargo_id')
             ->where('indicador_cargos.cargo_id', $cargo_id)
@@ -88,7 +88,7 @@ class IndicadorRepository
      */
     public static function isUserIndicador($cargo_id)
     {
-        $result = self::cnCamtidadEmpleados($cargo_id);
+        $result = self::cnCantidadEmpleados($cargo_id);
 
         if ($result > 0) {
             return true;
@@ -127,4 +127,6 @@ class IndicadorRepository
         }
         return $indicador;
     }
+
+
 }

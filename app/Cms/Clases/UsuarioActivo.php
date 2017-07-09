@@ -38,7 +38,7 @@ class UsuarioActivo implements IClases
         $this->inicializar();
     }
 
-    /* Metodos */
+    /** Metodos */
     public function set($atributo, $valor)
     {
         $this->$atributo = $valor;
@@ -68,18 +68,14 @@ class UsuarioActivo implements IClases
                 $this->codigo = $user->codigo;
                 $this->nombre = $user->nombres;
                 $this->apellido = $user->apellidos;
-                $this->departamento_id = $user->departamento->nombre;
-                $this->localizacion_id = $user->localizacion->nombre;
-                $this->cargo_id = $user->cargo->nombre;
-                $this->isEvaluador = $this->isEvaluador();
-                $this->isSupervisor = $this->isSupervisor();
-                $this->isIndicadores = $this->isIndicadores();
-            }else{
-                $this->isEvaluador = false;
-                $this->isSupervisor = false;
-                $this->isIndicadores = false;
-            }
+                $this->departamento_id = $user->departamento_id;
+                $this->localizacion_id = $user->localizacion_id;
+                $this->cargo_id = $user->cargo_id;
 
+            }
+            $this->isEvaluador = $this->isEvaluador();
+            $this->isSupervisor = $this->isSupervisor();
+            $this->isIndicadores = $this->isIndicadores();
     }
 
     public function isAdmin()
@@ -93,18 +89,17 @@ class UsuarioActivo implements IClases
         }
     }
 
-    /*
+    /**
      * Verificamos si tiene asignado el Indicador de Eficacia
     */
     public function isIndicadores()
     {
         $user = \Auth::user();
-
-        if (!$this->isAdmin() && $this->isEmpleado()) {
+        if (!$this->isAdmin()) {
             $result = IndicadorRepository::isUserIndicador($user->cargo_id);
         }
 
-        // dd($result, $user->cargo_id, isset($result));
+//         dd( $user->cargo_id, isset($result));
 
          if (isset($result)) {
              return true;
@@ -113,30 +108,31 @@ class UsuarioActivo implements IClases
          }
     }
 
-    /*
+    /**
      * VErificar si el usuario logueado esata asignado como supervisor de otro emplaedo
      * gaurda en cache si es asi.
     */
     public function isEvaluador()
     {
-        $result = false;
-        $user = \Auth::user();
+        try{
+            $user = \Auth::user();
 
-        // dd($user->cargo_id);
+            if (!$this->isAdmin()) {
+                if (isset($user->is_evaluador)) {
+                    $result = EvaluadoresRepository::cnVerificarsEvaluador($user->id);
+                    \Cache::forget('evadores');
+                    \Cache::forever('evadores', $result);
 
-        if (!$this->isAdmin()&& $this->isEmpleado()) {
-            $result = EvaluadoresRepository::cnVerificarsEvaluador($user->codigo);
+                    return true;
+                } else {
+                    \Cache::forget('evadores');
+                    return false;
+                }
+            }
+        }catch (Exception $e){
+            Debugbar::error('Error: '.$e.', UsuarioActivo->isEvaluador!');
         }
 
-        if (!isset($result)) {
-            \Cache::forget('evadores');
-            return false;
-        } else {
-            \Cache::forget('evadores');
-            \Cache::forever('evadores', $result);
-
-            return true;
-        }
     }
 
 
@@ -146,33 +142,34 @@ class UsuarioActivo implements IClases
      */
     public function isSupervisor()
     {
-        $user = \Auth::user();
+        try{
 
-        if (!$this->isAdmin() && $this->isEmpleado()) {
-            $result = SupervisoresRepository::verificarSupervisor($user->codigo);
-        }
+            $user = \Auth::user();
 
-        if (!isset($result)) {
-            return false;
-        } else {
-            return true;
+            if (!$this->isAdmin()) {
+                if (isset($user->is_supervisor)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        }catch (Exception $e){
+            Debugbar::error('Error: '.$e.', UsuarioActivo->isSupervisor!');
+
         }
     }
 
-    public function isEmpleado()
+    private function isEmpleado()
     {
         $user = \Auth::user();
 
-        try{
-            if($user->hasRelation == 0){
-                return false;
-            }else{
-                return true;
-            }
-
+        if(isset($user->codigo) || isset($user->nombres) || isset($user->apellidos) || isset($user->departamento->nombre) ||
+            isset($user->localizacion->nombre)|| isset($user->cargo->nombre)){
             return true;
-        }catch (Exception $exception){
+        }else{
             return false;
         }
     }
+
 }

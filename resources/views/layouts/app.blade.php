@@ -17,6 +17,8 @@
   
   <!-- My style -->
   <link rel="stylesheet" href="{{URL::asset('dist/css/estilo.css')}}">
+  {{-- Loading --}}
+  <link rel="stylesheet" href="{{URL::asset('dist/css/loading.css')}}">
 
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
@@ -57,9 +59,7 @@
 <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.1.12.1.js')}}"></script>
 <!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
 
-<!-- Vue.js v1.0.28 -->
-<script src="{{URL::asset('plugins/VueJs/vue.js')}}"></script>
-<script src="{{URL::asset('plugins/VueJs/vue-resource.min.js')}}"></script>
+
 
  <!-- Mi Datetables -->
 <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
@@ -67,6 +67,9 @@
 <script src="{{URL::asset('dist/js/libs.js')}}"></script>
 
 <script src="{{URL::asset('dist/js/alert.js')}}"></script>
+
+{{-- JS de gulp de resource->asseet->js --}}
+<script src="{{URL::asset('dist/js/app-vue.js')}}"></script>
 
 </head>
 <body class="hold-transition skin-yellow sidebar-mini"  style="background: #ECF0F5; z-index: 0" >

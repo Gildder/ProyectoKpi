@@ -2,7 +2,7 @@ var elixir = require('laravel-elixir');
 
 require('laravel-elixir-vueify');
 require('laravel-elixir-livereload');
-require("laravel-elixir-babel");
+// require("laravel-elixir-babel");
 
 /*
  |--------------------------------------------------------------------------
@@ -18,11 +18,11 @@ require("laravel-elixir-babel");
 elixir(function(mix) {
     mix.browserify('app-vue.js', 'public/dist/js/app-vue.js');
     mix.livereload();
-    mix.babel("app-vue.js", {
-        srcDir: "resources/assets/js",
-        output: "public/dist/js/app-babel.js",
-        sourceMaps: true
-    });
+    // mix.babel("app-vue.js", {
+    //     srcDir: "resources/assets/js",
+    //     output: "public/dist/js/app-babel.js",
+    //     sourceMaps: true
+    // });
 
 
 });

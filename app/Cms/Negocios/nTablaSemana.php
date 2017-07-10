@@ -116,7 +116,7 @@ class nTablaSemana  extends Tabla
             $objeto->nombre      = $indicador->nombre;
             $objeto->ponderacion = $indicador->ponderacion;
 
-            $objeto =  $this->obtenerIndicadorDeMes($objeto, $this->widget->evaluador_id) ;
+            $objeto =  $this->obtenerIndicadorDeMes($objeto,$indicador->id, $this->widget->evaluador_id) ;
 
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
@@ -282,7 +282,7 @@ class nTablaSemana  extends Tabla
 
         array_push($lista, $indicador->nombre);
 
-        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
+        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicadores($indicador->id);
 
 
         array_push($lista, $datos[0]->semana_1);
@@ -367,10 +367,10 @@ class nTablaSemana  extends Tabla
     /**
      * Obtener los indicadores de un mes por semana
     */
-    public function obtenerIndicadorDeMes($objeto, $evaluador_id)
+    public function obtenerIndicadorDeMes($objeto, $indicador_id, $evaluador_id)
     {
 
-        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
+        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicadores($indicador_id);
 
         $objeto->mes = \Calcana::getNombreMes($this->widget->mesBuscado);
 
@@ -463,6 +463,18 @@ class nTablaSemana  extends Tabla
 
                 break;
         }
+    }
+
+    private function ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicadores($indicador_id)
+    {
+
+        return EvaluadoresRepository::cnGetIndicadoresSemana(
+            $this->widget->evaluador_id,
+            $indicador_id,
+            $this->widget->anio,
+            $this->widget->mesBuscado
+        );
+
     }
 
     private function ValoresIndicadoresPorTareaWidget($usuario_id)

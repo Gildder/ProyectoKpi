@@ -30,8 +30,8 @@
 
         {{--capa de tipos de indicadores--}}
         <div class="tab-content no-padding">
-                <panel-widget :widget="widget" v-for="widget in panelWidgets"></panel-widget>
-                {{--<nuevo-modal tipo_id="{{ widget.id }}" titulo="{{ widget.titulo }}"></nuevo-modal>--}}
+            <panel-widget :widget="widget" v-for="widget in panelWidgets"></panel-widget>
+            {{--<nuevo-modal tipo_id="{{ widget.id }}" titulo="{{ widget.titulo }}"></nuevo-modal>--}}
         </div>
         {{-- Fin de Tipo de Indicadores --}}
 

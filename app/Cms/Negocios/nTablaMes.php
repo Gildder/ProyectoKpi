@@ -93,7 +93,7 @@ class nTablaMes extends Tabla
             $objeto->ponderacion = $indicador->ponderacion;
 
             // obtenemos los datos de los indicadores
-            $objeto =  $this->obtenerIndicadoresDeMeses($objeto);
+            $objeto =  $this->obtenerIndicadoresDeMeses($objeto,  $indicador);
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
 
@@ -153,7 +153,7 @@ class nTablaMes extends Tabla
     /**
      * Obtener indicador por Meses para los tipo de widget por Tipo de Indicadores y Empleados
      */
-    private function obtenerIndicadoresDeMeses($objeto)
+    private function obtenerIndicadoresDeMeses($objeto , $indicador)
     {
         $lista = array();
         $promedio = 0;
@@ -162,7 +162,7 @@ class nTablaMes extends Tabla
         for ($inicio = $this->widget->mesInicio; $inicio < $this->widget->ultimoMes(); $inicio++)
         {
             // obtenemos los datos promedio de los indciadores por tipo de widget
-            $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
+            $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicador($indicador->id);
 
             // agregamos a la lista el valor y el objeto mes
             array_push($lista, $this->crearObjetoMes($datos[0]->promedio, $inicio));
@@ -304,14 +304,14 @@ class nTablaMes extends Tabla
      * Obtener datos de la base de datos del indicadores por tipo de widget
      *
      */
-    private function ValoresIndicadoresPorSemanaSegunTipoWidget()
+    private function ValoresIndicadoresPorSemanaSegunTipoWidget($indicador_id, $evaluador_id)
     {
         switch ($this->widget->tipo_id) {
 
             case 1: // tipo de Indicadores
                 return EvaluadoresRepository::cnGetIndicadoresSemana(
-                        $this->widget->evaluador_id,
-                        $this->widget->indicador_id,
+                        $evaluador_id,
+                        $indicador_id,
                         $this->widget->anio,
                         $this->widget->mesInicio
                     );
@@ -338,6 +338,16 @@ class nTablaMes extends Tabla
                 break;
 
         }
+    }
+
+    private function ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicador($indicador_id)
+    {
+        return EvaluadoresRepository::cnGetIndicadoresSemana(
+            $this->widget->evaluador_id,
+            $indicador_id,
+            $this->widget->anio,
+            $this->widget->mesInicio
+        );
     }
 
 

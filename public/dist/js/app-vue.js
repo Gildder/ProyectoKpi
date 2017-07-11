@@ -12378,13 +12378,15 @@ $(document).ready(function () {
                 this.panelWidgets = lista;
             },
             'eliminar-widget': function eliminarWidget(id) {
+                resourceWidget = this.$resource('/evaluadores/evaluados/eliminarEvaluadorWidget{/id}');
+
                 resourceWidget.delete({ id: id }).then(function (response) {
                     this.panelWidgets.$remove(id);
                     this.panelWidgets = response.data;
 
                     Notificion.success('El Widget se elimino correctamente!');
                 }, function (response) {
-                    Notificion.success('El Widget No elimino correctamente!');
+                    Notificion.warning('El Widget No elimino, por favor verificar con su administrador!');
                 });
             }
 
@@ -12585,7 +12587,8 @@ exports.default = {
                     this.tipos_indicadores = data.tipos;
                     this.indicadores = data.indicadores;
                 }.bind(this), error: function (data) {
-                    Console.log('Error: ObtenerUltimoMes' + response.err);
+                    //                        Console.log('Error: ObtenerUltimoMes' + response.err);
+
                 }.bind(this)
             });
         },
@@ -12612,7 +12615,8 @@ exports.default = {
                 success: function (data) {
                     this.nuevo_widget.ultimoMes = data;
                 }.bind(this), error: function (data) {
-                    Console.log('Error: ObtenerUltimoMes' + response.err);
+                    //                        Console.log('Error: ObtenerUltimoMes' + response.err);
+
                 }.bind(this)
             });
         },
@@ -12872,26 +12876,30 @@ exports.default = {
             $event.preventDefault();
 
             // lanzamos el evento al metos de elimanr del js app-vue
-            this.$dispatch('eliminar-widget', this.id);
+            this.$dispatch('eliminar-widget', this.widget.id);
         },
         anteriorMes: function anteriorMes($event) {
             $event.preventDefault();
             if (this.widget.mesBuscado > 1) {
                 this.widget.mesBuscado--;
+                this.widget.mesInicio--;
+
+                this.obtenerDatosSgteAntSemana();
             } else {
                 return;
             }
-            this.obtenerDatosSgteAntSemana();
         },
         siguienteMes: function siguienteMes($event) {
             $event.preventDefault();
 
-            if (this.widget.mesBuscado <= this.ultimoMes) {
+            if (this.widget.mesBuscado < this.ultimoMes) {
                 this.widget.mesBuscado++;
+                this.widget.mesInicio++;
+
+                this.obtenerDatosSgteAntSemana();
             } else {
                 return;
             }
-            this.obtenerDatosSgteAntSemana();
         },
         obtenerDatosSgteAntSemana: function obtenerDatosSgteAntSemana() {
             $.ajax({
@@ -12942,10 +12950,7 @@ exports.default = {
             $event.preventDefault();
 
             this.widget.isSemanal = vista;
-
-            if (this.widget.mesInicio === 0) {
-                this.widget.mesInicio = this.widget.mesBuscado;
-            }
+            this.widget.mesInicio = this.widget.mesBuscado;
 
             $.ajax({
                 url: 'actualizarWidget',
@@ -12953,9 +12958,7 @@ exports.default = {
                 data: this.widget,
                 dataType: 'json',
                 success: function (data) {
-
                     this.obtenerTablaWidget();
-
                     this.obtenerChartWidget();
 
                     Notificion.success('Se realizo el actualizaciòn de los datos..');
@@ -12985,6 +12988,9 @@ function MostrarChart(datosChart, categoriachart) {
                 format: function format(v, id, i, j) {
                     return v + " %";
                 }
+            },
+            selection: {
+                enabled: false
             }
         },
         bar: {
@@ -13012,7 +13018,7 @@ function MostrarChart(datosChart, categoriachart) {
     });
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\">\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo  }}</h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget($event)\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <template v-if=\"this.widget.tipo_id !=3\">\n                                <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                                <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                            </template>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart_tabla\"></div>\n                        </div>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div v-if=\"this.widget.tipo_id !==3\" class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\">Seleccionar Mes:</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\">\n                                <thead class=\"headerTable\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <th></th>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\">\n                                <thead class=\"headerTable\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\">\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo  }}</h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget($event)\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <template v-if=\"this.widget.tipo_id !=3\">\n                                <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                                <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                            </template>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart_tabla\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\">Seleccionar Mes:</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <th></th>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

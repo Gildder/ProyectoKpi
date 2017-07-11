@@ -20,15 +20,11 @@
   {{-- Loading --}}
   <link rel="stylesheet" href="{{URL::asset('dist/css/loading.css')}}">
 
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+  <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">
+
   <!-- iCheck -->
   <link rel="stylesheet" href="{{URL::asset('plugins/iCheck/flat/blue.css')}}">
-  {{--<!-- Morris chart -->--}}
-  {{--<link rel="stylesheet" href="{{URL::asset('plugins/morris/morris.css')}}">--}}
-  <!-- jvectormap -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/jvectormap/jquery-jvectormap-1.2.2.css')}}">
   <!-- Date Picker -->
   <link rel="stylesheet" href="{{URL::asset('plugins/datepicker/datepicker3.css')}}"> 
   <!-- Time Picker -->
@@ -37,6 +33,7 @@
   <link rel="stylesheet" href="{{URL::asset('plugins/daterangepicker/daterangepicker.css')}}">  
   <!-- Datetables -->
   <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
+  <link rel="stylesheet" href="{{URL::asset('plugins/datatables/dataTables.bootstrap.css')}}">
   <!-- jQuery UI -->
   <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui.css')}}">
   <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui-12.css')}}">
@@ -45,7 +42,7 @@
 
 
 
-<!-- jQuery 1.8.23 -->
+    <!-- jQuery 1.8.23 -->
 {{--<script src="{{URL::asset('plugins/jQuery/jquery-ui-1.8.23.custom.min.js')}}"></script>--}}
 <script src="{{URL::asset('plugins/jQuery/jquery-1.8.0.min.js')}}"></script>
 
@@ -102,6 +99,7 @@
 </div>
 <!-- dataTables -->
 <script src="{{URL::asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{URL::asset('plugins/datatables/dataTables.bootstrap.js')}}"></script>
 
 <!-- Bootstrap 3.3.6 -->
 <script src="{{URL::asset('bootstrap/js/bootstrap.min.js')}}"></script>
@@ -140,6 +138,11 @@
 <!-- AdminLTE App -->
 <script src="{{URL::asset('dist/js/app.min.js')}}"></script>
 
+<!-- datepicker -->
+{{-- <script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker-es.js')}}"></script> --}}
+<script src="{{URL::asset('plugins/datepicker/datepicker-es.js')}}"></script>
+<!-- timepicker -->
+<script src="{{URL::asset('plugins/timepicker/bootstrap-timepicker.min.js')}}"></script>
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{URL::asset('dist/js/demo.js')}}"></script>

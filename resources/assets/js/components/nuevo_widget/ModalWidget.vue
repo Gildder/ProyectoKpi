@@ -197,7 +197,7 @@
                         this.tipos_indicadores = data.tipos;
                         this.indicadores = data.indicadores;
                     }.bind(this), error: function (data) {
-                        Console.log('Error: ObtenerUltimoMes' + response.err);
+//                        Console.log('Error: ObtenerUltimoMes' + response.err);
 
                     }.bind(this)
                 });
@@ -225,7 +225,7 @@
                     success: function (data) {
                         this.nuevo_widget.ultimoMes = data;
                     }.bind(this), error: function (data) {
-                        Console.log('Error: ObtenerUltimoMes' + response.err);
+//                        Console.log('Error: ObtenerUltimoMes' + response.err);
 
                     }.bind(this)
                 });
@@ -283,7 +283,7 @@
                         Notificion.warning('No se guardo correctamente!');
 
                     }.bind(this)
-                })
+                });
 
                 this.guardando = false;
                 this.agregarAtributoModal(false);

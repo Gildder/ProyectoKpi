@@ -85,9 +85,9 @@ class Tarea extends Model
     {
         $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
         // $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
-        $ubicacionesOcupadas = DB::table('localizaciones')->join('tarea_realizadas','tarea_realizadas.localizacion_id','=', 'localizaciones.id')
+        $ubicacionesOcupadas = DB::table('localizaciones')->join('tarea_localizacion','tarea_localizacion.localizacion_id','=', 'localizaciones.id')
                                 ->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)
-                                ->where('tarea_realizadas.tarea_id',$tarea_id)
+                                ->where('tarea_localizacion.tarea_id',$tarea_id)
                                 ->select('localizaciones.id','localizaciones.nombre')->get();
 
 

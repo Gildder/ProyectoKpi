@@ -44,7 +44,7 @@
          <td class="text-right"><b>Estado:</b></td>
         <td>
           <span >
-            {{$tarea->getEstado($tarea->id)}}
+            {{$tarea->estadoTarea_id}}
           </span>
         </td>
       </tr>

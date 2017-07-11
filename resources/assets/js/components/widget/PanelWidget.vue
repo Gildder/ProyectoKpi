@@ -38,13 +38,14 @@
                             <div class="chart">
                                 <div id="chart_tabla"></div>
                             </div>
+                            <hr>
                         </div>
                         <!-- /.col -->
                         <!--Tabla y Grafico del indicador -->
                         <div class="col-md-12">
                             <div class="table">
                                  <!--Filtro guiente Mes -->
-                                <div v-if="this.widget.tipo_id !==3" class="pull-right" data-toggle="buttons-checkbox" v-if=" widget.isSemanal == 0">
+                                <div class="pull-right" data-toggle="buttons-checkbox">
                                     <label style="border-right: 20px;">Seleccionar Mes:</label>
                                     <div class="btn-group">
                                         <a class="btn btn-default btn-sm left" title="Anterior"
@@ -61,8 +62,8 @@
                                 </div>
 
                                 <!-- Tabla -->
-                                <table v-if="this.widget.tipo_id!=3" class="table table-bordered table-hover table-responsive">
-                                    <thead class="headerTable" >
+                                <table v-if="this.widget.tipo_id!=3" class="table table-bordered table-hover table-responsive" cellspacing="0" width="100%">
+                                    <thead class="headerTable" style="background-color: #0f74a8;  color: white;"  >
                                     <tr style="font-weight: bold;" >
                                         <th>Nro</th>
                                         <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>
@@ -95,7 +96,7 @@
 
                                 <!-- Tabla Tareas -->
                                 <table class="table table-bordered table-hover table-responsive" v-if="this.widget.tipo_id==3">
-                                    <thead class="headerTable" >
+                                    <thead class="headerTable" style="background-color: #0f74a8;  color: white;"  >
                                     <tr style="font-weight: bold;" >
                                         <th>Nro</th>
                                         <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>
@@ -243,27 +244,32 @@
                 $event.preventDefault();
 
                 // lanzamos el evento al metos de elimanr del js app-vue
-                this.$dispatch('eliminar-widget', this.id)
+                this.$dispatch('eliminar-widget', this.widget.id)
             },
             anteriorMes: function ($event) {
                 $event.preventDefault();
                 if (this.widget.mesBuscado > 1)
                 {
                     this.widget.mesBuscado--;
+                    this.widget.mesInicio--;
+
+                    this.obtenerDatosSgteAntSemana();
+
                 }else{
                     return;
                 }
-                this.obtenerDatosSgteAntSemana();
             },
             siguienteMes: function ($event) {
                 $event.preventDefault();
 
-                if (this.widget.mesBuscado <= this.ultimoMes) {
+                if (this.widget.mesBuscado < this.ultimoMes) {
                     this.widget.mesBuscado++;
+                    this.widget.mesInicio++;
+
+                    this.obtenerDatosSgteAntSemana();
                 }else{
                     return;
                 }
-                this.obtenerDatosSgteAntSemana();
             },
             obtenerDatosSgteAntSemana: function () {
                 $.ajax({
@@ -313,11 +319,7 @@
                 $event.preventDefault();
 
                 this.widget.isSemanal = vista;
-
-                if(this.widget.mesInicio === 0)
-                {
-                    this.widget.mesInicio = this.widget.mesBuscado;
-                }
+                this.widget.mesInicio = this.widget.mesBuscado;
 
                 $.ajax({
                     url: 'actualizarWidget',
@@ -325,9 +327,7 @@
                     data: this.widget,
                     dataType: 'json',
                     success: function (data) {
-
                         this.obtenerTablaWidget();
-
                         this.obtenerChartWidget();
 
                         Notificion.success('Se realizo el actualizaciòn de los datos..')
@@ -356,6 +356,9 @@
                 columns:  dato,
                 labels: {
                     format: function (v, id, i, j) { return v +" %" ; },
+                },
+                selection: {
+                    enabled: false
                 },
             },
             bar: {

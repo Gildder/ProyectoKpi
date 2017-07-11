@@ -5,7 +5,7 @@
         <h3 class="box-title"> Nuevo Widget</h3>
 
         <div class="box-tools pull-right">
-            <button type="button" @click="abrirWidget" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            <button type="button" @click="abrirWidget" class="btn btn-box-tool" data-widget="toggle"><i class="fa fa-times"></i></button>
         </div>
     </div>
     <div class="box-body " style="border: 1px dashed grey" >

@@ -356,11 +356,11 @@ class EvaluadosController extends Controller
         return Response()->json($widgets);
     }
 
-    public function eliminarEvaluadorWidget($id)
+    public function eliminarEvaluadorWidget(Request $request)
     {
         $this->dashboard = new nDashboard();
 
-        $widgets = $this->dashboard->eliminarEvaluadorWidget($id);
+        $widgets = $this->dashboard->eliminarEvaluadorWidget($request->id);
 
         return Response()->json($widgets);
     }

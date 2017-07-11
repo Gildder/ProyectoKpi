@@ -237,8 +237,8 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
         array('as' => 'evaluadores.evaluados.obtenerEvaluadorWidget', 'uses' => 'Evaluadores\EvaluadosController@obtenerEvaluadorWidget') );
 
 
-    Route::delete('evaluadores/evaluados/obtenerEvaluadorWidget/{id}',
-        array('as' => 'evaluadores.evaluados.obtenerEvaluadorWidget', 'uses' => 'Evaluadores\EvaluadosController@eliminarEvaluadorWidget') );
+    Route::delete('evaluadores/evaluados/eliminarEvaluadorWidget/{id}',
+        array('as' => 'evaluadores.evaluados.eliminarEvaluadorWidget', 'uses' => 'Evaluadores\EvaluadosController@eliminarEvaluadorWidget') );
 
     Route::get('evaluadores/evaluados/obtenerMesActual',
         array('as' => 'evaluadores.evaluados.obtenerMesActual', 'uses' => 'Evaluadores\EvaluadosController@obtenerMesActual') );

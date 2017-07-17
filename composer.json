@@ -21,7 +21,8 @@
         "barryvdh/laravel-debugbar": "^2.3",
         "vinkla/hashids": "^2.3",
         "guzzle/guzzle": "~3.0",
-        "nategood/httpful": "*"
+        "nategood/httpful": "*",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

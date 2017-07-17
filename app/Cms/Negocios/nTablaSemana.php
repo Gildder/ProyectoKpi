@@ -116,7 +116,7 @@ class nTablaSemana  extends Tabla
             $objeto->nombre      = $indicador->nombre;
             $objeto->ponderacion = $indicador->ponderacion;
 
-            $objeto =  $this->obtenerIndicadorDeMes($objeto,$indicador->id, $this->widget->evaluador_id) ;
+            $objeto =  $this->obtenerIndicadorDeMes($objeto, $indicador->id) ;
 
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
@@ -149,7 +149,7 @@ class nTablaSemana  extends Tabla
             $objeto->id          = $usuario->id;
             $objeto->nombre      = $usuario->nombres.' '. $usuario->apellidos ;
 
-            $objeto =  $this->obtenerIndicadorDeMes($objeto, $this->widget->evaluador_id) ;
+            $objeto =  $this->obtenerEmpleadoDeMes($objeto, $usuario->id) ;
 
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
@@ -229,7 +229,7 @@ class nTablaSemana  extends Tabla
         {
             // obtenemos los datos de la tabla
             // los sigueintes datos: semana, fecha Inicio y fin , actipro, actrea, efeser, ticketabiertos, ticketcerrados, eferser, efetotal, istecnico
-            $datos = $this->ValoresIndicadoresPorTareaWidget($usuario->id);
+            $datos = $this->ValoresIndicadoresPorTarea($usuario->id);
 
             if(sizeof($datos)>0){
                 array_push($tareas, $datos[0]->eficacia_tarea);
@@ -282,7 +282,7 @@ class nTablaSemana  extends Tabla
 
         array_push($lista, $indicador->nombre);
 
-        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicadores($indicador->id);
+        $datos = $this->ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador->id);
 
 
         array_push($lista, $datos[0]->semana_1);
@@ -312,7 +312,7 @@ class nTablaSemana  extends Tabla
 
         array_push($lista, $usuario->nombres.' '.$usuario->apellidos);
 
-        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget();
+        $datos = $this->ValoresIndicadoresPorSemanaPorEmpleados($usuario->id);
 
 
         array_push($lista, $datos[0]->semana_1);
@@ -347,7 +347,7 @@ class nTablaSemana  extends Tabla
 
         // obtenemos los datos de la tabla
         // los sigueintes datos: semana, fecha Inicio y fin , actipro, actrea, efeser, ticketabiertos, ticketcerrados, eferser, efetotal, istecnico
-        $datos = $this->ValoresIndicadoresPorTareaWidget($usuario->id);
+        $datos = $this->ValoresIndicadoresPorTarea($usuario->id);
 
         if(sizeof($datos)>0){
             array_push($lista, $datos[0]->eficacia_tarea);
@@ -367,10 +367,30 @@ class nTablaSemana  extends Tabla
     /**
      * Obtener los indicadores de un mes por semana
     */
-    public function obtenerIndicadorDeMes($objeto, $indicador_id, $evaluador_id)
+    public function obtenerIndicadorDeMes($objeto, $indicador_id)
     {
 
-        $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicadores($indicador_id);
+        $datos = $this->ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador_id);
+
+        $objeto->mes = \Calcana::getNombreMes($this->widget->mesBuscado);
+
+        $objeto->semanas  = $datos[0]->cantidadSemana;
+        $objeto->promedio = $datos[0]->promedio;
+        $objeto->datos = $this->obtenerSemanas($datos);
+
+        //rescatamos los descripcion de las semanas
+        $this->semanas = $datos[0]->cantidadSemana;
+
+        return $objeto;
+    }
+
+    /**
+     * Obtener los indicadores de un mes por semana
+     */
+    public function obtenerEmpleadoDeMes($objeto, $usuario_id)
+    {
+
+        $datos = $this->ValoresIndicadoresPorSemanaPorEmpleados($usuario_id);
 
         $objeto->mes = \Calcana::getNombreMes($this->widget->mesBuscado);
 
@@ -435,37 +455,17 @@ class nTablaSemana  extends Tabla
         return $lista;
     }
 
-    /**
-     * @param $objeto
-     * @param $evaluador_id
-     * @return mixed
-     */
-    private function ValoresIndicadoresPorSemanaSegunTipoWidget()
+    private function ValoresIndicadoresPorSemanaPorEmpleados($usuario_id)
     {
-        switch ($this->widget->tipo_id) {
-
-            case 1: // tipo de Indicadores
-                return EvaluadoresRepository::cnGetIndicadoresSemana(
-                    $this->widget->evaluador_id,
-                    $this->widget->indicador_id,
-                    $this->widget->anio,
-                    $this->widget->mesBuscado
-                );
-
-                break;
-            case 2: // Por empleados
-                return EvaluadoresRepository::cnGetIndicadoresEmpeladosSemana(
-                    $this->widget->indicador_id,
-                    $this->widget->user_id,
-                    $this->widget->anio,
-                    $this->widget->mesBuscado
-                );
-
-                break;
-        }
+        return EvaluadoresRepository::cnGetIndicadoresEmpeladosSemana(
+            $this->widget->indicador_id,
+            $usuario_id,
+            $this->widget->anio,
+            $this->widget->mesBuscado
+        );
     }
 
-    private function ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicadores($indicador_id)
+    private function ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador_id)
     {
 
         return EvaluadoresRepository::cnGetIndicadoresSemana(
@@ -477,7 +477,7 @@ class nTablaSemana  extends Tabla
 
     }
 
-    private function ValoresIndicadoresPorTareaWidget($usuario_id)
+    private function ValoresIndicadoresPorTarea($usuario_id)
     {
 
         return EvaluadoresRepository::cnGetIndicadoresTareasSemana(
@@ -489,9 +489,6 @@ class nTablaSemana  extends Tabla
 
 
     }
-
-
-
 
     /**
      * Obtenemos la descripcion de las semanas
@@ -558,7 +555,7 @@ class nTablaSemana  extends Tabla
      */
     private function cargarFilaTablaTareas($objeto)
     {
-        $result = $this->ValoresIndicadoresPorTareaWidget($objeto->id);
+        $result = $this->ValoresIndicadoresPorTarea($objeto->id);
         if (sizeof($result) > 0) {
 
             $objeto->semana = $result[0]->semana;

@@ -108,7 +108,7 @@ class TareaDiariaController extends Controller
 
     public function agregarubicacion($tarea_id, $ubi_id)
     {
-        DB::table('tarea_realizadas')->insert(
+        DB::table('tarea_localizacion')->insert(
             array('tarea_id' => $tarea_id, 'localizacion_id' => $ubi_id)
         );
 
@@ -117,7 +117,7 @@ class TareaDiariaController extends Controller
 
     public function quitarubicacion($tarea_id, $ubi_id)
     {
-        DB::table('tarea_realizadas')->where('tarea_id', $tarea_id)->where('localizacion_id', $ubi_id)->delete();
+        DB::table('tarea_localizacion')->where('tarea_id', $tarea_id)->where('localizacion_id', $ubi_id)->delete();
 
         return $this->resolver($tarea_id);
     }

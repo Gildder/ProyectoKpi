@@ -15,7 +15,6 @@
                 <form class="form-horizontal" role="form" @submit.prevent="guardarWidget">
 
                     <div class="modal-body modal-delete-body" :disabled="guardando">
-
                         <!-- Tipos de Indicadores-->
                         <div class="col-sm-12 form-group">
                             <div class="col-sm-12">
@@ -60,25 +59,20 @@
 
 
 
-                            <div class="col-sm-12" style="margin-top: 20px;" v-if="nuevo_widget.isSemanal == 0">
+                            <div class="col-sm-12" style="margin-top: 20px;" >
                                 <div class="col-sm-6">
-                                    <p>Seleccionar el mes para ver:</p>
+                                    <p v-if="nuevo_widget.isSemanal == 0">Seleccionar el mes para ver:</p>
+                                    <p v-if="nuevo_widget.isSemanal == 1">Seleccionar el mes de inicio:</p>
                                 </div>
                                 <div class="col-sm-4">
-                                    <select v-model="nuevo_widget.mesBuscado" :disabled="guardando" class="form-control" required>
+                                    <select v-model="nuevo_widget.mesBuscado" v-if="nuevo_widget.isSemanal == 0" :disabled="guardando" class="form-control" required>
                                         <option value="">Seleccionar..</option>
                                         <option v-for="n in nuevo_widget.ultimoMes" value="{{ numeroDeMes(n) }}">
                                             {{ numeroDeMes(n) | nombreMes }}
                                         </option>
                                     </select>
-                                </div>
-                            </div>
-                            <div class="col-sm-12" style="margin-top: 20px;" v-if="nuevo_widget.isSemanal == 1">
-                                <div class="col-sm-6">
-                                    <p>Seleccionar el mes de inicio: </p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <select v-model="nuevo_widget.mesInicio" class="form-control" :disabled="guardando" required>
+
+                                    <select v-model="nuevo_widget.mesInicio" v-if="nuevo_widget.isSemanal == 1" class="form-control" :disabled="guardando" required>
                                         <option value="">Seleccionar..</option>
                                         <option v-for="n in nuevo_widget.ultimoMes" value="{{ numeroDeMes(n) }}">
                                             {{ numeroDeMes(n) | nombreMes }}
@@ -138,9 +132,7 @@
                             <button  data-dismiss="modal" class="btn btn-danger" :disabled="guardando"> Cancelar</button>
                         </div>
 
-                        <div id="loading" v-if="guardando" >
-                            <loading-comp opcion="Gen"></loading-comp>
-                        </div>
+
 
                     </div>
                 </form>
@@ -181,9 +173,6 @@
             },
         },
         methods: {
-            cargarWidget: function (widget) {
-                alert('Hola Modal   ');
-            },
             numeroDeMes: function (nro) {
                 return nro + 1;
             },
@@ -226,39 +215,22 @@
                         this.nuevo_widget.ultimoMes = data;
                     }.bind(this), error: function (data) {
 //                        Console.log('Error: ObtenerUltimoMes' + response.err);
-
                     }.bind(this)
                 });
             },
             guardarWidget: function ($event) {
                 $event.preventDefault();
 
+                utils.mostrarCargando(true);
 
                 this.guardando = true;
-                this.agregarAtributoModal(true);
 
-                var tipoIndicador = jQuery.grep(this.tipos_indicadores, function (value, index) {
-                    if (value.id === this.nuevo_widget.tipoIndicador_id) {
-                        return value;
-                    }
-                }.bind(this));
+                var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
 
-                var indicador = jQuery.grep(this.indicadores, function (value, index) {
-                    if (value.id === this.nuevo_widget.indicador_id) {
-                        return value;
-                    }
-                }.bind(this));
-
-                var nombreIndicador = '' ;
-                if(indicador[0] === undefined)
-                {
-                    nombreIndicador = '';
-                }else {
-                    nombreIndicador = indicador[0].nombre;
-                }
+                var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
 
                 this.nuevo_widget.tipo_id = this.tipo_id;
-                this.nuevo_widget.titulo = this.getTitulo(tipoIndicador[0].nombre, nombreIndicador);
+                this.nuevo_widget.titulo = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
 
                 $.ajax({
                     url: 'guardarWidget',
@@ -267,27 +239,50 @@
                     dataType: 'json',
                     success: function (data) {
 
-
                         this.instacionWidget();
 
 
                         // pasamos el nuevo widget a la lista de PanelWidget de vm
                         this.$dispatch('agregarWidgetPanel', data);
 
-
+                        utils.mostrarCargando(false);
                         Notificion.success('Se guardo correctamente!');
-
-
-
                     }.bind(this), error: function (data) {
+                        utils.mostrarCargando(false);
+
                         Notificion.warning('No se guardo correctamente!');
 
                     }.bind(this)
                 });
 
                 this.guardando = false;
-                this.agregarAtributoModal(false);
                 $('#modal-nuevo-widget-' + this.nuevo_widget.tipo_id).modal('hide');
+            },
+            getTipoIndicadorSelecionado: function (tipo) {
+                if(tipo === ''){
+                    return '';
+                }
+
+                var tipoIndicador = jQuery.grep(this.tipos_indicadores, function (value, index) {
+                    if (value.id === tipo ) {
+                        return value;
+                    }
+                }.bind(this));
+
+                return tipoIndicador[0];
+            },
+            getIndicadorSelecionado: function (indicador) {
+                if(indicador === ''){
+                    return '';
+                }
+
+                var indicador = jQuery.grep(this.indicadores, function (value, index) {
+                    if (value.id === indicador) {
+                        return value;
+                    }
+                }.bind(this));
+
+                return indicador[0];
             },
             getTitulo: function (tipo, indicador) {
                 if (this.tipo_id === 1) {
@@ -302,33 +297,22 @@
                     return 'Sin Nombre';
                 }
             },
-            agregarAtributoModal: function (agregar) {
-                let modelo =  $('#modal-nuevo-widget-' + this.nuevo_widget.tipo_id);
-                if (agregar) {
-                    modelo.attr('data-backdrop', 'static');
-                    modelo.attr('data-keyboard', 'false');
-                } else {
-                    modelo.prop('data-backdrop', 'true');
-                    modelo.prop('data-keyboard', 'true');
-                }
-            },
             obtenerCantidadSemana: function () {
-                let mes = this.nuevo_widget.mesTarea;
-                if(mes == "")
+                if(this.nuevo_widget.mesTarea !== "")
                 {
-                    return;
-                }
-                $.ajax({
-                    url: 'obtenerCantidadSemanasMes/'+mes,
-                    method: 'POST',
-                    dataType: 'json',
-                    success: function (data) {
-                        this.semanas = data.semanas;
-                    }.bind(this), error: function (data) {
-                        console.log('Error: No se obtuvo las cantidad de semanas');
+                    $.ajax({
+                        url: 'obtenerCantidadSemanasMes',
+                        method: 'POST',
+                        data: this.nuevo_widget,
+                        dataType: 'json',
+                        success: function (data) {
+                            this.semanas = data;
+                        }.bind(this), error: function (data) {
+                            console.log('Error: No se obtuvo las cantidad de semanas');
 
-                    }.bind(this)
-                })
+                        }.bind(this)
+                    })
+                }
             },
             obtenerFechasSemanas: function () {
                 // imcompleto en el repsositorio
@@ -350,11 +334,7 @@
                     }.bind(this)
                 })
             },
-            mostrarModalNuevo: function() {
 
-
-                alert('Hola desde componente Modal');
-            },
         },
     }
 </script>

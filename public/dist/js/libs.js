@@ -68,6 +68,7 @@ $(document).ready(function(){
 		format: 'dd/mm/yyyy',
 		autoclose:true,
 		firstDay: 1,
+        showWeek: true,
 		changeMonth: true,
 		yearRange:1,
 	});
@@ -104,12 +105,16 @@ $(document).ready(function(){
 	// 	yearRange:1,
 	// });
 
+
 	$(".fechaInicio").datepicker({
 		format: 'dd/mm/yyyy',
 		//defaultDate: "+1w",
 		changeMonth: true,
-		numberOfMonths: 1,
-		onSelect: function(selectedDate) {
+        showWeek: true,
+        numberOfMonths: 1,
+        showButtonPanel: true,
+        beforeShowDay: $.datepicker.noWeekends,
+        onSelect: function(selectedDate) {
 			$(".fechaFin").datepicker("option", "minDate", selectedDate);
 		}
 	});
@@ -118,11 +123,14 @@ $(document).ready(function(){
 		format: 'dd/mm/yyyy',
 		//defaultDate: "+1w",
 		changeMonth: true,
-		numberOfMonths: 1,
-		onSelect: function(selectedDate) {
+        numberOfMonths: 1,
+        showButtonPanel: true,
+        beforeShowDay: $.datepicker.noWeekends,
+        onSelect: function(selectedDate) {
 			$(".fechaInicio").datepicker( "option", "maxDate", selectedDate);
 		}
 	});
+
 
 	//**************************************** Fin DatePicker *******************************************************
 
@@ -144,7 +152,7 @@ $(document).ready(function(){
 	});
 	
 
-	function agregarFormala(id)
+	function agregarFormula(id)
 	{
 		var url = 'partials/formula_'+id;
 		$("#formulario").html(url);

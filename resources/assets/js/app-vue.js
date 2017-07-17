@@ -28,6 +28,10 @@ $(document).ready(function() {
         require('./components/nuevo_widget/selector_modal.vue')
     );
 
+    Vue.component('input-date',
+        require('./components/date/inputDate.vue')
+    );
+
     Vue.component('panel-widget',
         require('./components/widget/PanelWidget.vue')
     );
@@ -38,6 +42,10 @@ $(document).ready(function() {
 
     Vue.component('loading-comp',
         require('./components/loading/loading.vue')
+    );
+
+    Vue.component('estado-tarea',
+        require('./components/tareas/estados.vue')
     );
 
     //noinspection JSAnnotator
@@ -71,6 +79,9 @@ $(document).ready(function() {
 
             // Login
             type_pass: true,
+
+            //Tarea
+            btnEliminar: 1,
         },
         ready: function () {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -111,9 +122,13 @@ $(document).ready(function() {
             // },
         },
         methods: {
+            saludar: function () {
+                alert('Hola Mundo');
+            },
             obtenerListaWidget: function () {
                 resourceWidget.get().then( function (response) {
                     this.panelWidgets = response.data;
+
                 }, function (reponse) {
 
                 });
@@ -189,6 +204,8 @@ $(document).ready(function() {
                 }
 
             },
+
+
 
         }
     });

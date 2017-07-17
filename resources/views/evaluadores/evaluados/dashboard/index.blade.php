@@ -10,7 +10,7 @@
         <a href="#" @click="abrirWidget" id="btnOpenWidget" class="btn btn-bitbucket btn-xs pull-right" ><span class="fa fa-list-alt"></span>  @{{ textOpenWidget }}</a>
         <h1>Dashboard
             <small>{{ \Cache::get('evadores')->descripcion }}</small>
-        </h1>
+        </h1>p
     </section>
 
 
@@ -40,6 +40,7 @@
         @include('evaluadores.evaluados.dashboard.partials.EscalasEvaluadores')
         {{-- Fin Panel Escalas --}}
     </div>
+
 
     </section>
 </div>

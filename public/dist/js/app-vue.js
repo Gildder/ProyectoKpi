@@ -12324,11 +12324,15 @@ $(document).ready(function () {
 
     Vue.component('selector-modal', require('./components/nuevo_widget/selector_modal.vue'));
 
+    Vue.component('input-date', require('./components/date/inputDate.vue'));
+
     Vue.component('panel-widget', require('./components/widget/PanelWidget.vue'));
 
     Vue.component('chart-widget', require('./components/widget/grafica.vue'));
 
     Vue.component('loading-comp', require('./components/loading/loading.vue'));
+
+    Vue.component('estado-tarea', require('./components/tareas/estados.vue'));
 
     //noinspection JSAnnotator
     /**
@@ -12359,7 +12363,10 @@ $(document).ready(function () {
             panelWidgets: [],
 
             // Login
-            type_pass: true
+            type_pass: true,
+
+            //Tarea
+            btnEliminar: 1
         },
         ready: function ready() {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -12395,6 +12402,9 @@ $(document).ready(function () {
             // },
         },
         methods: {
+            saludar: function saludar() {
+                alert('Hola Mundo');
+            },
             obtenerListaWidget: function obtenerListaWidget() {
                 resourceWidget.get().then(function (response) {
                     this.panelWidgets = response.data;
@@ -12474,7 +12484,51 @@ $(document).ready(function () {
     });
 });
 
-},{"./components/loading/loading.vue":7,"./components/nuevo_widget/Fila_Widget.vue":8,"./components/nuevo_widget/ModalWidget.vue":9,"./components/nuevo_widget/selector_modal.vue":10,"./components/widget/PanelWidget.vue":11,"./components/widget/grafica.vue":12,"./utils.js":13,"vue":5,"vue-resource":4}],7:[function(require,module,exports){
+},{"./components/date/inputDate.vue":7,"./components/loading/loading.vue":8,"./components/nuevo_widget/Fila_Widget.vue":9,"./components/nuevo_widget/ModalWidget.vue":10,"./components/nuevo_widget/selector_modal.vue":11,"./components/tareas/estados.vue":12,"./components/widget/PanelWidget.vue":13,"./components/widget/grafica.vue":14,"./utils.js":15,"vue":5,"vue-resource":4}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+
+var Vue = require('vue');
+exports.default = {
+    props: {
+        tipo: { type: String, required: true },
+        nombre: { type: String, required: true },
+        fechainicio: { type: String, required: true },
+        fechafin: { type: String, required: true },
+        placeholder: { type: String, required: true },
+        valor: { type: String, required: true }
+    },
+    ready: function ready() {
+        $("#inputdate-" + this.nombre).datepicker({
+            format: 'dd/mm/yyyy',
+            changeMonth: true,
+            showWeek: true,
+            numberOfMonths: 1,
+            showButtonPanel: true,
+            beforeShowDay: $.datepicker.noWeekends,
+            minDate: this.fechainicio,
+            maxDate: this.fechafin
+        });
+    },
+    methods: {}
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" placeholder=\"{{ placeholder }}\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-4fabd7ff", module.exports)
+  } else {
+    hotAPI.update("_v-4fabd7ff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":5,"vue-hot-reload-api":3}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12482,13 +12536,36 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
     props: {
+        mostrar: {
+            type: Boolean, required: true
+        },
         opcion: {
+            // Gen, facebook, circle, outer, circular
             type: String, required: true
         }
+    },
+    methods: {
+        toggle: function toggle() {
+            if (this.mostrar === true) {
+                this.mostrar = false;
+            } else {
+                this.mostrar = true;
+            }
+        },
+        ocultar: function ocultar() {
+            this.mostrar = false;
+        },
+        mostrar: function mostrar() {
+            this.mostrar = true;
+        },
+        cambiarOpcion: function cambiarOpcion(opcion) {
+            this.opcion = opcion;
+        }
     }
+
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div id=\"Gen\" class=\"marginLeft\" v-if=\"opcion == 'Gen'\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" v-if=\"opcion == 'facebook'\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" v-if=\"opcion == 'circle'\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" v-if=\"opcion == 'outer'\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" v-if=\"opcion == 'circular'\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"static\" data-keyboard=\"false\" role=\"dialog\" id=\"modal-loading\" v-if=\"mostrar\">\n\n<div id=\"Gen\" class=\"marginLeft\" v-if=\"opcion == 'Gen'\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" v-if=\"opcion == 'facebook'\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" v-if=\"opcion == 'circle'\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" v-if=\"opcion == 'outer'\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" v-if=\"opcion == 'circular'\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12499,7 +12576,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c552a752", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],8:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12533,7 +12610,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cd0711a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12571,9 +12648,6 @@ exports.default = {
         }
     },
     methods: {
-        cargarWidget: function cargarWidget(widget) {
-            alert('Hola Modal   ');
-        },
         numeroDeMes: function numeroDeMes(nro) {
             return nro + 1;
         },
@@ -12616,37 +12690,22 @@ exports.default = {
                     this.nuevo_widget.ultimoMes = data;
                 }.bind(this), error: function (data) {
                     //                        Console.log('Error: ObtenerUltimoMes' + response.err);
-
                 }.bind(this)
             });
         },
         guardarWidget: function guardarWidget($event) {
             $event.preventDefault();
 
+            utils.mostrarCargando(true);
+
             this.guardando = true;
-            this.agregarAtributoModal(true);
 
-            var tipoIndicador = jQuery.grep(this.tipos_indicadores, function (value, index) {
-                if (value.id === this.nuevo_widget.tipoIndicador_id) {
-                    return value;
-                }
-            }.bind(this));
+            var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
 
-            var indicador = jQuery.grep(this.indicadores, function (value, index) {
-                if (value.id === this.nuevo_widget.indicador_id) {
-                    return value;
-                }
-            }.bind(this));
-
-            var nombreIndicador = '';
-            if (indicador[0] === undefined) {
-                nombreIndicador = '';
-            } else {
-                nombreIndicador = indicador[0].nombre;
-            }
+            var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
 
             this.nuevo_widget.tipo_id = this.tipo_id;
-            this.nuevo_widget.titulo = this.getTitulo(tipoIndicador[0].nombre, nombreIndicador);
+            this.nuevo_widget.titulo = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
 
             $.ajax({
                 url: 'guardarWidget',
@@ -12660,15 +12719,43 @@ exports.default = {
                     // pasamos el nuevo widget a la lista de PanelWidget de vm
                     this.$dispatch('agregarWidgetPanel', data);
 
+                    utils.mostrarCargando(false);
                     Notificion.success('Se guardo correctamente!');
                 }.bind(this), error: function (data) {
+                    utils.mostrarCargando(false);
+
                     Notificion.warning('No se guardo correctamente!');
                 }.bind(this)
             });
 
             this.guardando = false;
-            this.agregarAtributoModal(false);
             $('#modal-nuevo-widget-' + this.nuevo_widget.tipo_id).modal('hide');
+        },
+        getTipoIndicadorSelecionado: function getTipoIndicadorSelecionado(tipo) {
+            if (tipo === '') {
+                return '';
+            }
+
+            var tipoIndicador = jQuery.grep(this.tipos_indicadores, function (value, index) {
+                if (value.id === tipo) {
+                    return value;
+                }
+            }.bind(this));
+
+            return tipoIndicador[0];
+        },
+        getIndicadorSelecionado: function getIndicadorSelecionado(indicador) {
+            if (indicador === '') {
+                return '';
+            }
+
+            var indicador = jQuery.grep(this.indicadores, function (value, index) {
+                if (value.id === indicador) {
+                    return value;
+                }
+            }.bind(this));
+
+            return indicador[0];
         },
         getTitulo: function getTitulo(tipo, indicador) {
             if (this.tipo_id === 1) {
@@ -12681,31 +12768,20 @@ exports.default = {
                 return 'Sin Nombre';
             }
         },
-        agregarAtributoModal: function agregarAtributoModal(agregar) {
-            var modelo = $('#modal-nuevo-widget-' + this.nuevo_widget.tipo_id);
-            if (agregar) {
-                modelo.attr('data-backdrop', 'static');
-                modelo.attr('data-keyboard', 'false');
-            } else {
-                modelo.prop('data-backdrop', 'true');
-                modelo.prop('data-keyboard', 'true');
-            }
-        },
         obtenerCantidadSemana: function obtenerCantidadSemana() {
-            var mes = this.nuevo_widget.mesTarea;
-            if (mes == "") {
-                return;
+            if (this.nuevo_widget.mesTarea !== "") {
+                $.ajax({
+                    url: 'obtenerCantidadSemanasMes',
+                    method: 'POST',
+                    data: this.nuevo_widget,
+                    dataType: 'json',
+                    success: function (data) {
+                        this.semanas = data;
+                    }.bind(this), error: function (data) {
+                        console.log('Error: No se obtuvo las cantidad de semanas');
+                    }.bind(this)
+                });
             }
-            $.ajax({
-                url: 'obtenerCantidadSemanasMes/' + mes,
-                method: 'POST',
-                dataType: 'json',
-                success: function (data) {
-                    this.semanas = data.semanas;
-                }.bind(this), error: function (data) {
-                    console.log('Error: No se obtuvo las cantidad de semanas');
-                }.bind(this)
-            });
         },
         obtenerFechasSemanas: function obtenerFechasSemanas() {
             // imcompleto en el repsositorio
@@ -12724,15 +12800,12 @@ exports.default = {
                     console.log('Error: No se obtuvo las cantidad de semanas');
                 }.bind(this)
             });
-        },
-        mostrarModalNuevo: function mostrarModalNuevo() {
-
-            alert('Hola desde componente Modal');
         }
+
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"true\" data-keyboard=\"true\" role=\"dialog\" id=\"modal-nuevo-widget-{{ tipo_id }}\">\n    <div class=\"modal-dialog\">\n        <!-- Modal content-->\n        <div class=\"modal-content modal-delete-content\">\n            <!-- Modal Header -->\n            <div class=\"modal-header modal-delete-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" :disabled=\"guardando\">\n                    <span class=\"sr-only\">Cerrar</span>\n                    <span aria-hidden=\"true\">×</span>\n                </button>\n                <strong class=\"model-title\">Nuevo Widget - {{ titulo }}</strong>\n            </div>\n            <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"guardarWidget\">\n\n                <div class=\"modal-body modal-delete-body\" :disabled=\"guardando\">\n\n                    <!-- Tipos de Indicadores-->\n                    <div class=\"col-sm-12 form-group\">\n                        <div class=\"col-sm-12\">\n                            <strong>Tipos Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.tipoIndicador_id\" :items=\"tipos_indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- Indicadores -->\n                    <div class=\"col-sm-12  form-group\" v-if=\"tipo_id !== 1\">\n                        <div class=\"col-sm-12\">\n                            <strong>Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.indicador_id\" :items=\"indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- tipos de vista para empleado tipo empleado -->\n                    <div class=\"col-sm-12  form-group\" style=\"margin: 0;\" v-if=\"tipo_id !== 3\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"col-sm-12\">\n                                <hr>\n                                <strong>Tipos de Vista:</strong>\n                            </div>\n                            <div class=\"col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-10 \">\n                                <div class=\"radio\">\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"0\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Semanal\n                                    </label>\n\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"1\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Mensual\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n\n\n\n                        <div class=\"col-sm-12\" style=\"margin-top: 20px;\" v-if=\"nuevo_widget.isSemanal == 0\">\n                            <div class=\"col-sm-6\">\n                                <p>Seleccionar el mes para ver:</p>\n                            </div>\n                            <div class=\"col-sm-4\">\n                                <select v-model=\"nuevo_widget.mesBuscado\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n                            </div>\n                        </div>\n                        <div class=\"col-sm-12\" style=\"margin-top: 20px;\" v-if=\"nuevo_widget.isSemanal == 1\">\n                            <div class=\"col-sm-6\">\n                                <p>Seleccionar el mes de inicio: </p>\n                            </div>\n                            <div class=\"col-sm-4\">\n                                <select v-model=\"nuevo_widget.mesInicio\" class=\"form-control\" :disabled=\"guardando\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n                            </div>\n                        </div>\n\n                    </div>\n                    <!--Vista para las tareas -->\n                    <!--meses-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\">\n                        <br>\n                        <div class=\"col-sm-12\">\n                            <hr>\n                            <p>Selecciona el mes que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.mesTarea\" :disabled=\"guardando\" @change=\"obtenerCantidadSemana\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                    {{ numeroDeMes(n) | nombreMes }}\n                                </option>\n                            </select>\n                        </div>\n                    </div>\n                    <!--semanas-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\"><br>\n                        <div class=\"col-sm-12\">\n                            <p>Selecciona la semana que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.semanaTarea\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option value=\"1\">Semana 1</option>\n                                <option value=\"2\">Semana 2</option>\n                                <option value=\"3\">Semana 3</option>\n                                <option v-if=\"semanas >3\" value=\"4\">Semana 4</option>\n                                <option v-if=\"semanas >4\" value=\"5\">Semana 5</option>\n                                <option v-if=\"semanas >5\" value=\"6\">Semana 6</option>\n\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <!--footer de modal-->\n                <div class=\"modal-footer modal-delete-footer\">\n                    <div class=\"form-group\" style=\"margin-bottom: 0px; margin-right: 10px;\">\n                        <div class=\"col-sm-12\">\n                            <hr>\n                        </div>\n                        <!--<a  @click=\"guardarWidget($event)\"  class=\"btn btn-success\" >Guardar</a>-->\n                        <button class=\"btn btn-success\" type=\"submit\" :disabled=\"guardando\">Guardar\n                        </button>\n                        <button data-dismiss=\"modal\" class=\"btn btn-danger\" :disabled=\"guardando\"> Cancelar</button>\n                    </div>\n\n                    <div id=\"loading\" v-if=\"guardando\">\n                        <loading-comp opcion=\"Gen\"></loading-comp>\n                    </div>\n\n                </div>\n            </form>\n\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"true\" data-keyboard=\"true\" role=\"dialog\" id=\"modal-nuevo-widget-{{ tipo_id }}\">\n    <div class=\"modal-dialog\">\n        <!-- Modal content-->\n        <div class=\"modal-content modal-delete-content\">\n            <!-- Modal Header -->\n            <div class=\"modal-header modal-delete-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" :disabled=\"guardando\">\n                    <span class=\"sr-only\">Cerrar</span>\n                    <span aria-hidden=\"true\">×</span>\n                </button>\n                <strong class=\"model-title\">Nuevo Widget - {{ titulo }}</strong>\n            </div>\n            <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"guardarWidget\">\n\n                <div class=\"modal-body modal-delete-body\" :disabled=\"guardando\">\n                    <!-- Tipos de Indicadores-->\n                    <div class=\"col-sm-12 form-group\">\n                        <div class=\"col-sm-12\">\n                            <strong>Tipos Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.tipoIndicador_id\" :items=\"tipos_indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- Indicadores -->\n                    <div class=\"col-sm-12  form-group\" v-if=\"tipo_id !== 1\">\n                        <div class=\"col-sm-12\">\n                            <strong>Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.indicador_id\" :items=\"indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- tipos de vista para empleado tipo empleado -->\n                    <div class=\"col-sm-12  form-group\" style=\"margin: 0;\" v-if=\"tipo_id !== 3\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"col-sm-12\">\n                                <hr>\n                                <strong>Tipos de Vista:</strong>\n                            </div>\n                            <div class=\"col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-10 \">\n                                <div class=\"radio\">\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"0\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Semanal\n                                    </label>\n\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"1\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Mensual\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n\n\n\n                        <div class=\"col-sm-12\" style=\"margin-top: 20px;\">\n                            <div class=\"col-sm-6\">\n                                <p v-if=\"nuevo_widget.isSemanal == 0\">Seleccionar el mes para ver:</p>\n                                <p v-if=\"nuevo_widget.isSemanal == 1\">Seleccionar el mes de inicio:</p>\n                            </div>\n                            <div class=\"col-sm-4\">\n                                <select v-model=\"nuevo_widget.mesBuscado\" v-if=\"nuevo_widget.isSemanal == 0\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n\n                                <select v-model=\"nuevo_widget.mesInicio\" v-if=\"nuevo_widget.isSemanal == 1\" class=\"form-control\" :disabled=\"guardando\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n                            </div>\n                        </div>\n\n                    </div>\n                    <!--Vista para las tareas -->\n                    <!--meses-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\">\n                        <br>\n                        <div class=\"col-sm-12\">\n                            <hr>\n                            <p>Selecciona el mes que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.mesTarea\" :disabled=\"guardando\" @change=\"obtenerCantidadSemana\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                    {{ numeroDeMes(n) | nombreMes }}\n                                </option>\n                            </select>\n                        </div>\n                    </div>\n                    <!--semanas-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\"><br>\n                        <div class=\"col-sm-12\">\n                            <p>Selecciona la semana que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.semanaTarea\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option value=\"1\">Semana 1</option>\n                                <option value=\"2\">Semana 2</option>\n                                <option value=\"3\">Semana 3</option>\n                                <option v-if=\"semanas >3\" value=\"4\">Semana 4</option>\n                                <option v-if=\"semanas >4\" value=\"5\">Semana 5</option>\n                                <option v-if=\"semanas >5\" value=\"6\">Semana 6</option>\n\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <!--footer de modal-->\n                <div class=\"modal-footer modal-delete-footer\">\n                    <div class=\"form-group\" style=\"margin-bottom: 0px; margin-right: 10px;\">\n                        <div class=\"col-sm-12\">\n                            <hr>\n                        </div>\n                        <!--<a  @click=\"guardarWidget($event)\"  class=\"btn btn-success\" >Guardar</a>-->\n                        <button class=\"btn btn-success\" type=\"submit\" :disabled=\"guardando\">Guardar\n                        </button>\n                        <button data-dismiss=\"modal\" class=\"btn btn-danger\" :disabled=\"guardando\"> Cancelar</button>\n                    </div>\n\n\n\n                </div>\n            </form>\n\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12743,7 +12816,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7533f876", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":13,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],10:[function(require,module,exports){
+},{"./../../utils.js":15,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12767,7 +12840,53 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2da397d0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],11:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+
+    data: function data() {
+        return {
+            //                //Tarea
+            //                btnEliminar: 1,
+        };
+    },
+    ready: function ready() {
+        this.obtenerEstadoBtnEliminarTarea();
+    },
+    methods: {
+        obtenerEstadoBtnEliminarTarea: function obtenerEstadoBtnEliminarTarea() {
+            // verificar si se puede eliminar una tarea
+            $.ajax({
+                url: window.location.pathname + '/obtenerEstadoBtnEliminarTarea',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    this.$parent.btnEliminar = data;
+                }.bind(this), error: function (data) {
+                    console.log('Error: Al intentar obtener opcion de boton elimnar.');
+                }.bind(this)
+            });
+        }
+    }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-12a71318", module.exports)
+  } else {
+    hotAPI.update("_v-12a71318", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":5,"vue-hot-reload-api":3}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12789,7 +12908,7 @@ exports.default = {
     data: function data() {
         return {
             ultimoMes: this.calcularUltimosMes(),
-            mesActual: '',
+            mesActual: this.obtenerMesActual(),
             tituloChart: '',
             tabla: [],
             dataChart: [],
@@ -12807,10 +12926,26 @@ exports.default = {
     },
     computed: {
         bloquearSiguienteMes: function bloquearSiguienteMes() {
-            return this.widget.mesBuscado >= this.ultimoMes;
+            var resultado = false;
+
+            if (this.widget.isSemanal === 0) {
+                resultado = this.widget.mesBuscado >= this.ultimoMes;
+            } else {
+                resultado = this.widget.mesInicio >= this.ultimoMes;
+            }
+
+            return resultado;
         },
         bloquearAnteriorMes: function bloquearAnteriorMes() {
-            return this.widget.mesBuscado <= 1;
+            var resultado = false;
+
+            if (this.widget.isSemanal === 0) {
+                resultado = this.widget.mesBuscado <= 1;
+            } else {
+                resultado = this.widget.mesInicio <= 1;
+            }
+
+            return resultado;
         }
 
     },
@@ -12867,11 +13002,6 @@ exports.default = {
                 }.bind(this)
             });
         },
-        obtenerDatosWidget: function obtenerDatosWidget() {
-            this.$http.get('/evaluadores/evaluados/obtenerVista').then(function (response) {}, function (response) {
-                // mensaje de Error
-            });
-        },
         eliminarWidget: function eliminarWidget($event) {
             $event.preventDefault();
 
@@ -12880,28 +13010,41 @@ exports.default = {
         },
         anteriorMes: function anteriorMes($event) {
             $event.preventDefault();
-            if (this.widget.mesBuscado > 1) {
-                this.widget.mesBuscado--;
-                this.widget.mesInicio--;
 
-                this.obtenerDatosSgteAntSemana();
+            if (this.widget.isSemanal === 0) {
+                if (this.widget.mesBuscado > 1) {
+                    this.widget.mesBuscado--;
+
+                    this.obtenerDatosSgteAntSemana();
+                }
             } else {
-                return;
+                if (this.widget.mesInicio > 1) {
+                    this.widget.mesInicio--;
+
+                    this.obtenerDatosSgteAntSemana();
+                }
             }
         },
         siguienteMes: function siguienteMes($event) {
             $event.preventDefault();
 
-            if (this.widget.mesBuscado < this.ultimoMes) {
-                this.widget.mesBuscado++;
-                this.widget.mesInicio++;
+            if (this.widget.isSemanal === 0) {
+                if (this.widget.mesBuscado < this.ultimoMes) {
+                    this.widget.mesBuscado++;
 
-                this.obtenerDatosSgteAntSemana();
+                    this.obtenerDatosSgteAntSemana();
+                }
             } else {
-                return;
+                if (this.widget.mesInicio < this.ultimoMes) {
+                    this.widget.mesInicio++;
+
+                    this.obtenerDatosSgteAntSemana();
+                }
             }
         },
         obtenerDatosSgteAntSemana: function obtenerDatosSgteAntSemana() {
+            utils.mostrarCargando(true);
+
             $.ajax({
                 url: 'actualizarWidget',
                 method: 'POST',
@@ -12913,9 +13056,12 @@ exports.default = {
                     this.obtenerTablaWidget();
 
                     this.obtenerChartWidget();
+                    utils.mostrarCargando(false);
 
                     Notificion.success('Se realizo el actualizaciòn de los datos..');
                 }.bind(this), error: function (data) {
+                    utils.mostrarCargando(false);
+
                     Notificion.warning('NO se realizo el actualizaciòn de los datos..');
                 }.bind(this)
             });
@@ -12938,19 +13084,30 @@ exports.default = {
                     this.tituloChart = 'Grafica de ' + tipografica + ' de ' + this.mesActual;
                 }
             } else {
-                this.tituloChart = 'Grafica de ' + tipografica + 'desde ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(this.calcularUltimosMes());
+                this.tituloChart = 'Grafica de ' + tipografica + ' - ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(this.calcularUltimosMes());
             }
 
             return 'mes';
         },
         obtenerMesActual: function obtenerMesActual() {
-            this.mesActual = utils.nombreMes(this.widget.mesBuscado);
+            if (this.widget.isSemanal === 0) {
+                if (this.widget.mesBuscado === 0) {
+                    this.widget.mesBuscado = this.widget.mesInicio;
+                }
+                this.mesActual = utils.nombreMes(this.widget.mesBuscado);
+            } else {
+                if (this.widget.mesInicio === 0) {
+                    this.widget.mesInicio = this.widget.mesBuscado;
+                }
+                this.mesActual = utils.nombreMes(this.widget.mesInicio);
+            }
         },
         cambiarVista: function cambiarVista($event, vista) {
             $event.preventDefault();
 
             this.widget.isSemanal = vista;
-            this.widget.mesInicio = this.widget.mesBuscado;
+
+            utils.mostrarCargando(true);
 
             $.ajax({
                 url: 'actualizarWidget',
@@ -12960,9 +13117,13 @@ exports.default = {
                 success: function (data) {
                     this.obtenerTablaWidget();
                     this.obtenerChartWidget();
+                    this.obtenerMesActual();
+                    utils.mostrarCargando(false);
 
                     Notificion.success('Se realizo el actualizaciòn de los datos..');
                 }.bind(this), error: function (data) {
+                    utils.mostrarCargando(false);
+
                     Notificion.warning('NO se realizo el actualizaciòn de los datos..');
                 }.bind(this)
             });
@@ -13018,7 +13179,7 @@ function MostrarChart(datosChart, categoriachart) {
     });
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\">\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo  }}</h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget($event)\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <template v-if=\"this.widget.tipo_id !=3\">\n                                <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                                <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                            </template>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart_tabla\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\">Seleccionar Mes:</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <th></th>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\">\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo  }}</h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget($event)\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <template>\n                                <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                                <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                            </template>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart_tabla\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label v-if=\"widget.isSemanal === 0\" style=\"border-right: 20px;\">Mes actual:</label>\n                                <label v-if=\"widget.isSemanal === 1\" style=\"border-right: 20px;\">Mes de inicio:</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -13029,7 +13190,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9b626b76", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":13,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],12:[function(require,module,exports){
+},{"./../../utils.js":15,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13117,7 +13278,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2f890b98", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],13:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13205,6 +13366,13 @@ module.exports = {
                 return 'Diciembre';
                 break;
 
+        }
+    },
+    mostrarCargando: function mostrarCargando(opcion) {
+        if (opcion) {
+            $('#modal-loading').modal('show');
+        } else {
+            $('#modal-loading').modal('hide');
         }
     }
 

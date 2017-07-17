@@ -37,7 +37,7 @@ class CreateTareasTable extends Migration
         Schema::table('tareas', function ($table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('estadoTarea_id')->references('id')->on('estado_tareas')->onDelete('cascade')->onUpdate('cascade');
+//            $table->foreign('estadoTarea_id')->references('id')->on('estado_tareas')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('tipoTarea_id')->references('id')->on('tarea_tipos')->onDelete('cascade')->onUpdate('cascade');
         });
     }

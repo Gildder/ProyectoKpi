@@ -69,7 +69,7 @@
 <script src="{{URL::asset('dist/js/app-vue.js')}}"></script>
 
 </head>
-<body class="hold-transition skin-yellow sidebar-mini"  style="background: #ECF0F5; z-index: 0" >
+<body class="hold-transition skin-yellow sidebar-mini"  >
 
 
 <div class="wrapper">
@@ -92,11 +92,19 @@
             </div>
           @endif
 
-          @yield('content')     
+          @yield('content')
+
+          <div class="row">
+              @include('partials/loading/loading')
+          </div>
     </section>
     <!-- /.content -->
-      
+
 </div>
+
+<script type="text/javascript">
+    @yield('script');
+</script>
 <!-- dataTables -->
 <script src="{{URL::asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
 <script src="{{URL::asset('plugins/datatables/dataTables.bootstrap.js')}}"></script>

@@ -15,6 +15,12 @@ class TareaProgramasFormRequest extends Request
     {
         return true;
     }
+    public function response(array $errors)
+    {
+        return $this->redirector->to($this->getRedirectUrl())
+            ->withErrors($errors, $this->errorBag)
+            ->withInput($this->all());
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -25,8 +31,8 @@ class TareaProgramasFormRequest extends Request
     {
         return [
                 'descripcion'=>'required|min:5|max:60',
-                'fechaInicioEstimado' => 'required|date_format:d/m/Y',
-                'fechaFinEstimado' => 'required|date_format:d/m/Y',
+                'fechaInicioEstimado' => 'required|date_format:d/m/Y|before_equal:fechaFinEstimado',
+                'fechaFinEstimado' => 'required|date_format:d/m/Y|after_equal:fechaInicioEstimado',
                 'hora'=> 'required',
                 'minuto'=> 'required'
         ];
@@ -40,8 +46,10 @@ class TareaProgramasFormRequest extends Request
             'descripcion.max' => 'Este campo no puede tener más de 60 carácteres',
             'fechaInicioEstimado.required' => 'Este campo es requerido!',
             'fechaInicioEstimado.date_format' => 'El formato es dd/mm/aaaa',
+            'fechaInicioEstimado.before_equal' => 'La fecha inicio debe ser menor o igual a la fecha fin',
             'fechaFinEstimado.required' => 'Este campo es requerido!',
             'fechaFinEstimado.date_format' => 'El formato es dd/mm/aaaa',
+            'fechaFinEstimado.after_equal' => 'La fecha fin debe ser mayor o igual a la fecha comienzo',
             'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El minuto es requerido',
         ];

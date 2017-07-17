@@ -304,21 +304,24 @@ class EvaluadosController extends Controller
      * @return Request
      *
      */
-    public function obtenerCantidadSemanasMes($request)
+    public function obtenerCantidadSemanasMes(Request $request)
     {
-        $mes = $request;
+        $mes = $request->mesTarea;
+
+
         $this->dashboard = new nDashboard();
 
         $semanas = $this->dashboard->obtenerCantidadSemana($mes);
 
-        return Response()->json($semanas[0]);
+        return Response()->json($semanas[0]->semanas);
     }
 
     public function obtenerFechasSemanas($request)
     {
         $semana = $request;
         $this->dashboard = new nDashboard();
-// incompleto en el repositrio
+
+        // incompleto en el repositrio
         $semanas = $this->dashboard->obtenerfechasSemana($semana);
 
         return Response()->json($semanas[0]);
@@ -328,16 +331,17 @@ class EvaluadosController extends Controller
     {
         \DB::table('evaluador_widget')->truncate();
 
+
         $widget = Widget::create([
             'evaluador_id' =>  \Cache::get('evadores')->id,
             'user_id' => \Usuario::get('id'),
             'tipo_id' => $request->tipo_id,
             'titulo' => $request->titulo,
-            'isSemana' => $request->isSemanal,
+            'isSemanal' => $request->isSemanal,
             'anio' => date("Y"),
             'tipoIndicador_id' => $request->tipoIndicador_id,
             'indicador_id' => $request->indicador_id,
-            'mesInicio ' => $request->mesInicio,
+            'mesInicio' => $request->mesInicio,
             'mesBuscado' => $request->mesBuscado,
             'mesTarea' => $request->mesTarea,
             'semanaTarea' => $request->semanaTarea,

@@ -8,15 +8,14 @@ $(document).ready(function(){
 });
 
 </script>
-<div class="table-response">
 	<table id="myTable2" class="table  table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<th>Nro</th>
 			<th>Descripcion</th>	
-			<th>Fecha Inicio </th>	
-			<th>Fecha Fin  </th>	
-			<th>Tiempo Estimado</th>	
-			<th>Fecha Inicio Ejecucion </th>	
+			<th>Fecha Inicio </th>
+			<th>Tiempo Estimado</th>
+            <th>Fecha Fin  </th>
+            <th>Fecha Inicio Ejecucion </th>
 			<th>Fecha Fin Ejecucion </th>	
 			<th>Tiempo Ejecucion</th>	
 			<th>Estado</th>	
@@ -35,7 +34,7 @@ $(document).ready(function(){
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}</td>
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}</td>
 	<td> {{$tarea->tiempoSolucion}}</td>
-	<td> <span class="badge bg-{{ $tarea->estadoTarea_id }}"> {{$tarea->estadoTarea_id }} </span> </td>
+	<td> <span class="badge bg-{{ $tarea->getEstadoColor() }}"> {{$tarea->getEstado()}} </span> </td>
 	<td>{{$tarea->getObservacion() }}</td>
 	<td>
 		<ul>
@@ -49,4 +48,3 @@ $(document).ready(function(){
 		</tbody>
 
 	</table>
-</div>

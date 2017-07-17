@@ -14,6 +14,7 @@ use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
+use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 
 class UsuarioActivo implements IClases
@@ -81,6 +82,7 @@ class UsuarioActivo implements IClases
     public function isAdmin()
     {
         $user = json_decode(json_encode(\Auth::user()));
+        $eliminarTarea = TareaRepository::getDiaLimiteEliminar();
 
         if (($user->name == 'admin') && ($user->type == 1)) {
             return true;

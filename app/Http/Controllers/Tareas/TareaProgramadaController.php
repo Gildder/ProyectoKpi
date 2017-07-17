@@ -2,7 +2,9 @@
 
 namespace ProyectoKpi\Http\Controllers\Tareas;
 
+use function array_push;
 use Illuminate\Http\Request;
+use function json_encode;
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,9 @@ use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Events\Tarea\TareaSaved;
 use ProyectoKpi\Events\Tarea\TareaUpdating;
 use ProyectoKpi\Events\Tarea\TareaUpdated;
+use function redirect;
+use function sizeof;
+use function strtotime;
 
 class TareaProgramadaController extends Controller
 {
@@ -33,7 +38,7 @@ class TareaProgramadaController extends Controller
         // obtenemos la semana de tarea
         $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
-// dd($tareas);
+// dd($semanas);
 
         return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
     }
@@ -42,6 +47,8 @@ class TareaProgramadaController extends Controller
     {
         $tareas = TareaRepository::getTareasArchivados();
         $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        TareaRepository::cachear('semanas', $semanas);
+
 
         return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas,  'semanas'=> $semanas]);
     }
@@ -60,18 +67,31 @@ class TareaProgramadaController extends Controller
 
     public function store(TareaProgramasFormRequest $Request)
     {
+        $fechaInicio = trim(\Request::input('fechaInicioEstimado'));
+        // convertimos a fecha
+        $fechaInicio = \Calcana::cambiarFormatoDB($fechaInicio);
+
+        $fechaFin = trim(\Request::input('fechaFinEstimado'));
+        // convertimos a fecha
+        $fechaFin = \Calcana::cambiarFormatoDB($fechaFin);
+        $error = $this->validarLimiteFechas($fechaInicio, $fechaFin);
+//        dd(\Cache::get('semanas'), $fechaInicio,$fechaFin, $error);
+        if(sizeof($error)> 0 ){
+//            \Session::flash('message', 'Mensaje de prueba');
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors('Las fechas ingresadas son incorrectas..')
+            ->withInput();
+        }
+
         $user = Auth::user();  //obtenemos el usuario logueado
         
         $tarea = new Tarea;
         $tarea->descripcion = trim(\Request::input('descripcion'));
-        $fechaInicio = trim(\Request::input('fechaInicioEstimado'));
-        $fechaFin = trim(\Request::input('fechaFinEstimado'));
-        // convertimos a fecha
-        $fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
+
+
         $tarea->fechaInicioEstimado = $fechaInicio;
 
-        // convertimos a fecha
-        $fechaFin = $tarea->cambiarFormatoDB($fechaFin);
+
         $tarea->fechaFinEstimado = $fechaFin;
 
         $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
@@ -94,29 +114,43 @@ class TareaProgramadaController extends Controller
     public function edit($id)
     {
         $tarea = Tarea::findOrFail($id);
-        $semanas = TareaRepository::getSemanasTareas($tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado));
-        
+//        dd($tarea->fechaInicioEstimado);
+        $semanas = TareaRepository::getSemanasTareas($tarea->fechaInicioEstimado);
+//        dd($semanas);
         return view('tareas/tareaProgramadas/edit', ['tarea'=>$tarea, 'semanas'=>$semanas]);
     }
 
     public function update(TareaProgramasFormRequest $Request, $id)
     {
+
+        $fechaInicio = trim(\Request::input('fechaInicioEstimado'));
+        $fechaFin = trim(\Request::input('fechaFinEstimado'));
+
+        // convertimos a fecha
+        $fechaInicio = \Calcana::cambiarFormatoDB($fechaInicio);
+        // convertimos a fecha
+        $fechaFin = \Calcana::cambiarFormatoDB($fechaFin);
+
+        $error = $this->validarLimiteFechas($fechaInicio, $fechaFin);
+//        dd(\Cache::get('semanas'), $fechaInicio,$fechaFin, $error);
+        if(sizeof($error)> 0 ){
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors('Las fechas ingresadas son incorrectas..')
+                ->withInput();
+        }
+
+
         $tarea = Tarea::findOrFail($id);
         // Evento para actualizar indicador
         // $eventUpdating = \Event::fire(new TareaUpdating($tarea));
 
 
         $tarea->descripcion = trim(\Request::input('descripcion'));
-        $tarea->estado = 1;
-        $fechaInicio = trim(\Request::input('fechaInicioEstimado'));
-        $fechaFin = trim(\Request::input('fechaFinEstimado'));
-        
-        // convertimos a fecha
-        $fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
+        $tarea->estadoTarea_id = trim(\Request::input('estado'));
+
         $tarea->fechaInicioEstimado = $fechaInicio;
 
-        // convertimos a fecha
-        $fechaFin = $tarea->cambiarFormatoDB($fechaFin);
+
         $tarea->fechaFinEstimado = $fechaFin;
 
         $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
@@ -151,35 +185,47 @@ class TareaProgramadaController extends Controller
 
     public function storeResolver(TareaProgramasResolverRequest $Request, $id)
     {
+        $fechaInicio = trim(\Request::input('fechaInicioSolucion'));
+        $fechaFin = trim(\Request::input('fechaFinSolucion'));
+
+        // convertimos a fecha
+        $fechaInicio = \Calcana::cambiarFormatoDB($fechaInicio);
+        // convertimos a fecha
+        $fechaFin = \Calcana::cambiarFormatoDB($fechaFin);
+
+        $error = $this->validarLimiteFechas($fechaInicio, $fechaFin);
+        if(sizeof($error)> 0 ){
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors('Las fechas ingresadas son incorrectas..')
+                ->withInput();
+        }
+
+
+
         $tarea = Tarea::findOrFail($id);
         // DB::select("call pa_eficacia_actualizarTarea(".$tarea->fechaFinSolucion.", ".$tarea->empleado_id.", 0 );");
 
 
-        $fechaInicio = trim(\Request::input('fechaInicioSolucion'));
-        $fechaFin = trim(\Request::input('fechaFinSolucion'));
-        
-        // convertimos a fecha
-        $fechaInicio = $tarea->cambiarFormatoDB($fechaInicio);
+
         $tarea->fechaInicioSolucion = $fechaInicio;
 
-        // convertimos a fecha
-        $fechaFin = $tarea->cambiarFormatoDB($fechaFin);
+
         $tarea->fechaFinSolucion = $fechaFin;
 
         $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
 
 
         $tarea->tiempoSolucion = $horaReal[0].':'.$horaReal[1];
-        $tarea->estado = trim(\Request::input('estado'));
+        $tarea->estadoTarea_id = 3;
         $tarea->observaciones = trim(\Request::input('observaciones'));
         $tarea->save();
 
         //  salvando tareas por localizacion
         $localizaciones = $Request->input('prov', []);
-        DB::table('tarea_realizadas')->where('tarea_id', '=', $id)->delete();
+        DB::table('tarea_localizacion')->where('tarea_id', '=', $id)->delete();
 
         for ($i = 0; $i < count($localizaciones); $i++) {
-            DB::table('tarea_realizadas')->insert(
+            DB::table('tarea_localizacion')->insert(
                         ['tarea_id' => $id, 'localizacion_id' => $localizaciones[$i] ]
             );
         }
@@ -208,5 +254,31 @@ class TareaProgramadaController extends Controller
         // DB::select("call pa_eficacia_cancelarSolucionTarea(".$tarea->fechaFinSolucion.", '".$tarea->empleado_id."');");
 
         return redirect()->back()->with('message', 'Se cancelo la tarea '.$id.' correctamente.');
+    }
+
+    private function validarLimiteFechas($fechaInicio, $fechaFin)
+    {
+        $semanas =  \Cache::get('semanas');
+        $errors = array();
+
+        if((strtotime($fechaInicio) < strtotime($semanas->fechaInicio)) || (strtotime($fechaInicio) > strtotime($semanas->fechaFin)))
+        {
+            array_push($errors, ['fechaInicioEstimado' => 'La fecha de inicio esta fuera del rango de la semana']);
+        }
+
+        if((strtotime($fechaFin) < strtotime($semanas->fechaInicio)) || (strtotime($fechaFin) > strtotime($semanas->fechaFin)))
+        {
+            array_push($errors, ['fechaFinEstimado' => 'La fecha de fin esta fuera del rango de la semana']);
+        }
+
+        return $errors;
+    }
+
+
+    //verificar el estado de las tareas
+    public function obtenerEstadoBtnEliminarTarea()
+    {
+        $estado = TareaRepository::getDiaLimiteEliminar();
+        return $estado;
     }
 }

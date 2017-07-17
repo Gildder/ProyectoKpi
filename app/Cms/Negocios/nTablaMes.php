@@ -93,7 +93,7 @@ class nTablaMes extends Tabla
             $objeto->ponderacion = $indicador->ponderacion;
 
             // obtenemos los datos de los indicadores
-            $objeto =  $this->obtenerIndicadoresDeMeses($objeto,  $indicador);
+            $objeto =  $this->obtenerIndicadoresDeMeses($objeto,  $indicador->id);
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
 
@@ -135,7 +135,7 @@ class nTablaMes extends Tabla
             $objeto->nombre      = $usuario->nombres.' '. $usuario->apellidos ;
 
             // obtenemos los datos de los indicadores
-            $objeto =  $this->obtenerIndicadoresDeMeses($objeto);
+            $objeto =  $this->obtenerempleadosDeMeses($objeto, $usuario->id);
             $cumplimiento = $cumplimiento + $objeto->promedio;
             $contador++;
 
@@ -153,7 +153,7 @@ class nTablaMes extends Tabla
     /**
      * Obtener indicador por Meses para los tipo de widget por Tipo de Indicadores y Empleados
      */
-    private function obtenerIndicadoresDeMeses($objeto , $indicador)
+    private function obtenerIndicadoresDeMeses($objeto , $indicador_id)
     {
         $lista = array();
         $promedio = 0;
@@ -162,7 +162,37 @@ class nTablaMes extends Tabla
         for ($inicio = $this->widget->mesInicio; $inicio < $this->widget->ultimoMes(); $inicio++)
         {
             // obtenemos los datos promedio de los indciadores por tipo de widget
-            $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicador($indicador->id);
+            $datos = $this->ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador_id);
+
+            // agregamos a la lista el valor y el objeto mes
+            array_push($lista, $this->crearObjetoMes($datos[0]->promedio, $inicio));
+
+            // sumatoria de los promedios de los meses
+            $promedio = $promedio + $datos[0]->promedio;
+        }
+
+        // agregamos el promedio total
+        $objeto->promedio = $promedio;
+
+        // agregamos los lista de los valores del indicadores de los meses recorridos
+        $objeto->datos = $lista;
+
+        return $objeto;
+    }
+
+    /**
+     * Obtener indicador por Meses para los tipo de widget por Tipo de Indicadores y Empleados
+     */
+    private function obtenerempleadosDeMeses($objeto , $usuario_id)
+    {
+        $lista = array();
+        $promedio = 0;
+
+        // recorremos los meses desde el inicio hasta el mes actual -1
+        for ($inicio = $this->widget->mesInicio; $inicio < $this->widget->ultimoMes(); $inicio++)
+        {
+            // obtenemos los datos promedio de los indciadores por tipo de widget
+            $datos = $this->ValoresIndicadoresPorSemanaPorEmpleados($usuario_id);
 
             // agregamos a la lista el valor y el objeto mes
             array_push($lista, $this->crearObjetoMes($datos[0]->promedio, $inicio));
@@ -211,15 +241,12 @@ class nTablaMes extends Tabla
 
         $lista = array();
         $datos = array();
-        $objeto = new \stdClass();
 
         foreach ($usuarios as $usuario)
         {
-            array_push( $datos, $this->obtenerArrayColumns($usuario, $this->widget->evaluador_id) );
+            array_push( $datos, $this->obtenerArrayColumnsEmpleado($usuario, $this->widget->evaluador_id) );
         }
-        $objeto->columns = $datos;
-        $objeto->type = 'bar';
-        array_push($lista, $objeto);
+        array_push($lista, $datos);
         array_push($lista, $this->obtenerCategoria());
 
         return $lista;
@@ -236,7 +263,26 @@ class nTablaMes extends Tabla
         // recorremos los meses desde el primer mes del diltro hasta el ultimo
         for ($inicio = $this->widget->mesInicio; $inicio < $this->widget->ultimoMes(); $inicio++)
         {
-            $datos = $this->ValoresIndicadoresPorSemanaSegunTipoWidget($indicador->id, $evaluador_id);
+            $datos = $this->ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador->id, $evaluador_id);
+            // agregamos el datos para un mes
+
+            array_push($lista, $datos[0]->promedio);
+        }
+
+        return $lista;
+    }
+
+    private function obtenerArrayColumnsEmpleado($usuario, $evaluador_id)
+    {
+        $lista = array();
+
+        // colocamos el nombre del indicador
+        array_push($lista, $usuario->nombres. ' '.$usuario->apellidos);
+
+        // recorremos los meses desde el primer mes del diltro hasta el ultimo
+        for ($inicio = $this->widget->mesInicio; $inicio < $this->widget->ultimoMes(); $inicio++)
+        {
+            $datos = $this->ValoresIndicadoresPorSemanaPorEmpleados($usuario->id, $evaluador_id);
             // agregamos el datos para un mes
 
             array_push($lista, $datos[0]->promedio);
@@ -304,43 +350,28 @@ class nTablaMes extends Tabla
      * Obtener datos de la base de datos del indicadores por tipo de widget
      *
      */
-    private function ValoresIndicadoresPorSemanaSegunTipoWidget($indicador_id, $evaluador_id)
+    private function ValoresIndicadoresPorSemanaPorTarea($indicador_id, $evaluador_id)
     {
-        switch ($this->widget->tipo_id) {
+        return EvaluadoresRepository::cnGetIndicadoresTareasSemana(
+            $this->widget->user_id,
+            $this->widget->anio,
+            $this->widget->mesTarea,
+            $this->widget->semanaTarea
+        );
 
-            case 1: // tipo de Indicadores
-                return EvaluadoresRepository::cnGetIndicadoresSemana(
-                        $evaluador_id,
-                        $indicador_id,
-                        $this->widget->anio,
-                        $this->widget->mesInicio
-                    );
-
-                break;
-            case 2: // Por empleados
-                return EvaluadoresRepository::cnGetIndicadoresEmpeladosSemana(
-                    $this->widget->indicador_id,
-                    $this->widget->user_id,
-                    $this->widget->anio,
-                    $this->widget->mesInicio
-                );
-
-                break;
-
-            case 3: // por tareas
-                return EvaluadoresRepository::cnGetIndicadoresTareasSemana(
-                    $this->widget->user_id,
-                    $this->widget->anio,
-                    $this->widget->mesTarea,
-                    $this->widget->semanaTarea
-                );
-
-                break;
-
-        }
     }
 
-    private function ValoresIndicadoresPorSemanaSegunTipoWidgetTipoIndicador($indicador_id)
+    private function ValoresIndicadoresPorSemanaPorEmpleados($usuario_id)
+    {
+        return EvaluadoresRepository::cnGetIndicadoresEmpeladosSemana(
+            $this->widget->indicador_id,
+            $usuario_id,
+            $this->widget->anio,
+            $this->widget->mesInicio
+        );
+    }
+
+    private function ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador_id)
     {
         return EvaluadoresRepository::cnGetIndicadoresSemana(
             $this->widget->evaluador_id,

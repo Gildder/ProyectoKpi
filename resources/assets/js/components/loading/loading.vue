@@ -1,4 +1,8 @@
 <template>
+    <div class="modal fade" aria-hidden="true"
+         tabindex="-1" data-backdrop="static" data-keyboard="false"
+         role="dialog" id="modal-loading" v-if="mostrar">
+
     <div id="Gen" class="marginLeft" v-if="opcion == 'Gen'">
         <div class="block" id="rotate_01"></div>
         <div class="block" id="rotate_02"></div>
@@ -41,15 +45,38 @@
         <div id="circular_8" class="circular"></div>
         <div class="clearfix"></div>
     </div>
+    </div>
 </template>
 
 <script>
     export default {
         props: {
+            mostrar: {
+                type: Boolean, required: true
+            },
             opcion: {
+                // Gen, facebook, circle, outer, circular
                 type: String, required: true
             }
         },
+        methods: {
+            toggle: function () {
+                if(this.mostrar === true){
+                    this.mostrar = false;
+                }else{
+                    this.mostrar = true;
+                }
+            },
+            ocultar: function () {
+                this.mostrar = false;
+            },
+            mostrar: function () {
+                this.mostrar = true;
+            },
+            cambiarOpcion: function (opcion) {
+                this.opcion = opcion;
+            }
+        },
+
     }
 </script>
-  

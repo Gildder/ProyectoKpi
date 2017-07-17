@@ -24,8 +24,8 @@ class TareaRepository
         $semanaActual = \Calcana::getSemanasProgramadas(date('Y-m-d'));
 
         $tareas = Tarea::select('tareas.id', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
-                        'tareas.observaciones', 'estado_tareas.nombre as estado', 'tareas.isError', 'tarea_tipos.nombre as tipo', 'tareas.proyecto_id')
-                    ->leftjoin('estado_tareas', 'estado_tareas.id','=', 'tareas.estadoTarea_id')
+                        'tareas.observaciones', 'tareas.estadoTarea_id', 'tareas.isError', 'tarea_tipos.nombre as tipo', 'tareas.proyecto_id')
+//                    ->leftjoin('estado_tareas', 'estado_tareas.id','=', 'tareas.estadoTarea_id')
                     ->leftjoin('tarea_tipos', 'tarea_tipos.id','=', 'tareas.tipoTarea_id')
                     ->where('user_id', '=', \Usuario::get('id'))
                     ->where('fechaInicioEstimado', '>=', $semanaActual->getDateDB('fechaInicio'))
@@ -54,6 +54,25 @@ class TareaRepository
         }
     }
 
+    public static function getDiaLimiteEliminar()
+    {
+        $dia = \DB::table('preferencias')->where('preferencias.id','=', 1)->select('preferencias.diaLimiteBorrarTarea')->first();
+        $resultado = 0;
+
+        if($dia->diaLimiteBorrarTarea >= date("N")){
+            $resultado = 1;
+        }else{
+            $resultado = 0;
+        }
+
+        // actualizamos opciones de borones
+        DB::table('opcion_botones')
+            ->where('id', 1)
+            ->update(['estado' => $resultado]);
+
+        return $resultado;
+    }
+
 
     public function getTareasEliminados()
     {
@@ -66,6 +85,58 @@ class TareaRepository
 
     public static function getSemanasTareas($fecha)
     {
-        return  \Calcana::getSemanasProgramadas($fecha);
+        $fechas =   \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+
+        return $fechas[0];
+
+    }
+
+    public static  function importarTicketAbiertos($fechaInicio, $fechaFin)
+    {
+        try {
+
+            $client = new GuzzleHttpClient();
+
+            $apiRequest = $client->request('GET', "http://172.17.0.32:8081/api-whd/public/api/ticketAbiertos/'".$fechaInicio."'/'".$fechaFin."'");
+
+            $content = json_decode($apiRequest->getBody()->getContents());
+
+        } catch (RequestException $re) {
+            //For handling exception
+        }
+    }
+
+    public static function importarTicketCerrados($fechaInicio, $fechaFin)
+    {
+        try {
+
+            $client = new GuzzleHttpClient();
+
+            $apiRequest = $client->request('GET', "http://172.17.0.32:8081/api-whd/public/api/ticketCerrados/'".$fechaInicio."'/'".$fechaFin."'");
+
+            $content = json_decode($apiRequest->getBody()->getContents());
+
+        } catch (RequestException $re) {
+            //For handling exception
+        }
+    }
+
+    public static function insetarTicketsEficacia($ticketsAbiertos, $ticketsCerrados, $anio, $mes, $semana, $user_id)
+    {
+        try
+        {
+            \DB::select("call pa_eficacia_insertarTicket(".$ticketsAbiertos.", ".$ticketsCerrados.", ".$anio.", ".$mes.", ".$semana.", ".$user_id." );");
+
+            return 'true';
+        }catch (\Exception $errr){
+            return 'false';
+        }
+
+    }
+
+    public static function cachear($clave, $valor)
+    {
+            \Cache::forget($clave);
+            \Cache::forever($clave, $valor);
     }
 }

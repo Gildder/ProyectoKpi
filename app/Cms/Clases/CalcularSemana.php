@@ -185,6 +185,39 @@ class CalcularSemana
         }
     }
 
+    /*
+     * Metodo para cambiar del formato Y-m-d  a d/m/Y
+     *
+     * @param string $fecha
+     * @return fecha en formato d/m/Y
+     */
+    public static function cambiarFormatoEuropeo($fecha)
+    {
+        if($fecha == null){
+            return '00/00/0000';
+        }
+        $partes=explode('-',$fecha);//se parte la fecha
+        $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
+        return trim($fecha);
+    }
+
+    /*
+     * Metodo para cambiar del formato Y-m-d  a d-m-Y
+     *
+     * @param string $fecha
+     * @return fecha en formato d-m-Y
+     */
+    public static function cambiarFormatoDB($fecha)
+    {
+        if($fecha == null){
+            return '0000-00-00';
+        }
+        $partes=explode('/',$fecha);//se parte la fecha
+        $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
+
+        return trim($fecha);
+    }
+
     /**
      * Obtener las abriatura para la descripciones los meses
      *

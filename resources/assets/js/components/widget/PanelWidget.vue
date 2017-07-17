@@ -17,7 +17,7 @@
                                 <!--<li><a @click="opcionWidget($event)">Opciones</a></li>-->
                                 <!--<li><a href="#">Graficas</a></li>-->
                                 <li class="divider"></li>
-                                <template  v-if="this.widget.tipo_id !=3">
+                                <template>
                                     <li><a @click="cambiarVista($event, 0)">Vista Semanas</a></li>
                                     <li><a @click="cambiarVista($event, 1)">Vista Meses</a></li>
                                 </template>
@@ -46,7 +46,8 @@
                             <div class="table">
                                  <!--Filtro guiente Mes -->
                                 <div class="pull-right" data-toggle="buttons-checkbox">
-                                    <label style="border-right: 20px;">Seleccionar Mes:</label>
+                                    <label v-if="widget.isSemanal === 0" style="border-right: 20px;">Mes actual:</label>
+                                    <label v-if="widget.isSemanal === 1" style="border-right: 20px;">Mes de inicio:</label>
                                     <div class="btn-group">
                                         <a class="btn btn-default btn-sm left" title="Anterior"
                                            @click="anteriorMes($event)"
@@ -77,7 +78,7 @@
                                         <td colspan="2" align="right">El % de Cumplimiento de los Indicadores</td>
                                         <td><b>{{ cumplimiento }} %</b></td>
                                         <th v-for="descripcion in nombreTabla"></th>
-                                        <th></th>
+                                        <td v-if="this.widget.tipo_id==1"></td>
                                     </tr>
                                     </tfoot>
                                     <tbody>
@@ -89,13 +90,14 @@
                                                 <td>{{ dato.valor }}</td>
                                             </template>
                                             <td>{{ item.promedio }} %</td>
+
                                         </tr>
                                     </tbody>
                                 </table>
                                 <!-- Fin de Tabla -->
 
                                 <!-- Tabla Tareas -->
-                                <table class="table table-bordered table-hover table-responsive" v-if="this.widget.tipo_id==3">
+                                <table class="table table-bordered table-hover table-responsive" v-if="this.widget.tipo_id==3"  cellspacing="0" width="100%">
                                     <thead class="headerTable" style="background-color: #0f74a8;  color: white;"  >
                                     <tr style="font-weight: bold;" >
                                         <th>Nro</th>
@@ -152,7 +154,7 @@
         data: function () {
             return {
                 ultimoMes: this.calcularUltimosMes(),
-                mesActual:'',
+                mesActual: this.obtenerMesActual(),
                 tituloChart: '',
                 tabla:[],
                 dataChart: [],
@@ -167,13 +169,30 @@
             this.obtenerTablaWidget();
 
             this.obtenerChartWidget();
+
         },
         computed: {
             bloquearSiguienteMes: function () {
-                return (this.widget.mesBuscado >= this.ultimoMes);
+                var resultado = false;
+
+                if(this.widget.isSemanal === 0){
+                    resultado = this.widget.mesBuscado >= this.ultimoMes;
+                }else{
+                    resultado = this.widget.mesInicio >= this.ultimoMes;
+                }
+
+                return resultado;
             },
             bloquearAnteriorMes: function () {
-                return (this.widget.mesBuscado <= 1);
+                var resultado = false;
+
+                if(this.widget.isSemanal === 0){
+                    resultado = this.widget.mesBuscado <= 1;
+                }else{
+                    resultado = this.widget.mesInicio <= 1;
+                }
+
+                return resultado;
             },
 
         },
@@ -234,12 +253,6 @@
                     }.bind(this)
                 })
             },
-            obtenerDatosWidget: function () {
-                this.$http.get('/evaluadores/evaluados/obtenerVista').then(function (response) {
-                }, function (response) {
-                    // mensaje de Error
-                });
-            },
             eliminarWidget: function ($event) {
                 $event.preventDefault();
 
@@ -248,30 +261,41 @@
             },
             anteriorMes: function ($event) {
                 $event.preventDefault();
-                if (this.widget.mesBuscado > 1)
-                {
-                    this.widget.mesBuscado--;
-                    this.widget.mesInicio--;
 
-                    this.obtenerDatosSgteAntSemana();
+                if (this.widget.isSemanal === 0) {
+                    if (this.widget.mesBuscado > 1) {
+                        this.widget.mesBuscado--;
 
+                        this.obtenerDatosSgteAntSemana();
+                    }
                 }else{
-                    return;
+                    if (this.widget.mesInicio > 1) {
+                        this.widget.mesInicio--;
+
+                        this.obtenerDatosSgteAntSemana();
+                    }
                 }
             },
             siguienteMes: function ($event) {
                 $event.preventDefault();
 
-                if (this.widget.mesBuscado < this.ultimoMes) {
-                    this.widget.mesBuscado++;
-                    this.widget.mesInicio++;
+                if (this.widget.isSemanal === 0) {
+                    if (this.widget.mesBuscado < this.ultimoMes) {
+                        this.widget.mesBuscado++;
 
-                    this.obtenerDatosSgteAntSemana();
+                        this.obtenerDatosSgteAntSemana();
+                    }
                 }else{
-                    return;
+                    if (this.widget.mesInicio < this.ultimoMes) {
+                        this.widget.mesInicio++;
+
+                        this.obtenerDatosSgteAntSemana();
+                    }
                 }
             },
             obtenerDatosSgteAntSemana: function () {
+                utils.mostrarCargando(true);
+
                 $.ajax({
                     url: 'actualizarWidget',
                     method: 'POST',
@@ -283,9 +307,12 @@
                         this.obtenerTablaWidget();
 
                         this.obtenerChartWidget();
+                        utils.mostrarCargando(false);
 
                         Notificion.success('Se realizo el actualizaciòn de los datos..')
                     }.bind(this), error: function (data) {
+                        utils.mostrarCargando(false);
+
                         Notificion.warning('NO se realizo el actualizaciòn de los datos..')
                     }.bind(this)
                 })
@@ -307,19 +334,31 @@
                         this.tituloChart =  'Grafica de '+ tipografica +' de ' + this.mesActual;
                     }
                 }else{
-                    this.tituloChart = 'Grafica de '+ tipografica +'desde '+  utils.nombreMes(this.widget.mesInicio) + ' a '+ utils.nombreMes(this.calcularUltimosMes());
+                    this.tituloChart = 'Grafica de '+ tipografica +' - '+  utils.nombreMes(this.widget.mesInicio) + ' a '+ utils.nombreMes(this.calcularUltimosMes());
                 }
 
                 return 'mes';
             },
             obtenerMesActual: function () {
-                this.mesActual  = utils.nombreMes(this.widget.mesBuscado);
+                if(this.widget.isSemanal === 0) {
+                    if (this.widget.mesBuscado === 0){
+                        this.widget.mesBuscado = this.widget.mesInicio;
+                    }
+                    this.mesActual = utils.nombreMes(this.widget.mesBuscado);
+                }else{
+                    if (this.widget.mesInicio === 0){
+                        this.widget.mesInicio = this.widget.mesBuscado;
+                    }
+                    this.mesActual  = utils.nombreMes(this.widget.mesInicio);
+                }
+
             },
             cambiarVista: function ($event, vista) {
                 $event.preventDefault();
 
                 this.widget.isSemanal = vista;
-                this.widget.mesInicio = this.widget.mesBuscado;
+
+                utils.mostrarCargando(true);
 
                 $.ajax({
                     url: 'actualizarWidget',
@@ -329,9 +368,13 @@
                     success: function (data) {
                         this.obtenerTablaWidget();
                         this.obtenerChartWidget();
+                        this.obtenerMesActual();
+                        utils.mostrarCargando(false);
 
                         Notificion.success('Se realizo el actualizaciòn de los datos..')
                     }.bind(this), error: function (data) {
+                        utils.mostrarCargando(false);
+
                         Notificion.warning('NO se realizo el actualizaciòn de los datos..')
                     }.bind(this)
                 });

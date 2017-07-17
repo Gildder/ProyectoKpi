@@ -243,12 +243,13 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
     Route::get('evaluadores/evaluados/obtenerMesActual',
         array('as' => 'evaluadores.evaluados.obtenerMesActual', 'uses' => 'Evaluadores\EvaluadosController@obtenerMesActual') );
 
-    Route::post('evaluadores/evaluados/obtenerCantidadSemanasMes/{mes}',
+    Route::post('evaluadores/evaluados/obtenerCantidadSemanasMes',
         array('as' => 'evaluadores.evaluados.obtenerCantidadSemanasMes', 'uses' => 'Evaluadores\EvaluadosController@obtenerCantidadSemanasMes') );
 
 
     Route::post('evaluadores/evaluados/obtenerFechasSemanas/{semana}',
         array('as' => 'evaluadores.evaluados.obtenerFechasSemanas', 'uses' => 'Evaluadores\EvaluadosController@obtenerFechasSemanas') );
+
 
     Route::post('evaluadores/evaluados/guardarWidget',
         array('as' => 'evaluadores.evaluados.guardarWidget',
@@ -425,23 +426,30 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 {
 	// Proyectos
 	Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
-	
+
 	// tareas cancelar programadas
-	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}', 
+	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
 
 	// tareas programadas
-	Route::get('tareas/tareaProgramadas/archivados', 
+	Route::get('tareas/tareaProgramadas/archivados',
 		array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );
 
-	Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController', 
+	Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController',
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
-	Route::get('tareas/tareaProgramadas/resolver/{tarea}', 
+	Route::get('tareas/tareaProgramadas/resolver/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.resolver', 'uses' => 'Tareas\TareaProgramadaController@resolver') );
 
-	Route::put('tareas/tareaProgramadas/storeResolver/{tarea}', 
-		array('as' => 'tareas.tareaProgramadas.storeResolver', 
+	Route::put('tareas/tareaProgramadas/storeResolver/{tarea}',
+		array('as' => 'tareas.tareaProgramadas.storeResolver',
 			'uses'=> 'Tareas\TareaProgramadaController@storeResolver'));
+
+    Route::get('tareas/tareaProgramadas/{id}/obtenerEstadoBtnEliminarTarea',
+        array('as' => 'tareas.tareaProgramadas.obtenerEstadoBtnEliminarTarea',
+            'uses'=> 'Tareas\TareaProgramadaController@obtenerEstadoBtnEliminarTarea'));
 });
+
+
+
 

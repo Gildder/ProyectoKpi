@@ -86,6 +86,13 @@ module.exports = {
 
         }
     },
+    mostrarCargando: function (opcion) {
+        if(opcion){
+            $('#modal-loading').modal('show');
+        }else{
+            $('#modal-loading').modal('hide');
+        }
+    },
 
 
 }

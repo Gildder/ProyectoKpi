@@ -1,23 +1,42 @@
-#notificacion {
-  z-index: 99999;
-  position: fixed;
-  top: 54px;
-  left: 50%;
-  width: 500px;
-  margin-left: -250px;
-/* Elemento Notificacion */
+* {
+  padding: 0px;
 }
-#notificacion #notificacion div {
+body {
+  padding: 0px;
+}
+.fechaTareas {
+  font-size: 14px;
+  color: #b22222;
+  padding: 0.2em;
+  background: #fafad2;
+  font-family: "verdana", "sans-serif";
+}
+#notificacion,
+z-index 99999,
+position fixed,
+top 54px,
+left 50%,
+width 500px,
+margin-left -250px {
+div
   position: relative;
   margin: 5px 0px;
   opacity: 0.7;
 }
-#loading,
-z-index 999999,
-position absolute,
-bottom 50px,
+.notificacion,
+z-index 99999,
+position fixed,
+top 54px,
 left 50%,
-width 10px,
+width 500px,
+margin-left -250px,
+#loading {
+  z-index: 999999;
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  width: 10px;
+}
 .headerTable {
   background: #4f81bd;
   color: #fff;

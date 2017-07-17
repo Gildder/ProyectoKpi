@@ -41,15 +41,17 @@
       </tr>
 
       <tr>
-         <td class="text-right"><b>Estado:</b></td>
-        <td>
-          <span >
-            {{$tarea->estadoTarea_id}}
+          <td class="text-right"><b>Estado:</b></td>
+          <td>
+          <span class="badge bg-{{ $tarea->getEstadoColor() }}">
+            {{$tarea->getEstado()}}
           </span>
-        </td>
+          </td>
       </tr>
 
-       <tr>
+
+
+      <tr>
          <td class="text-right"><b>Observaciones:</b></td>
           <td>@if($tarea->observaciones == '') Ninguna @else  {{$tarea->observaciones}}  @endif</td>
 

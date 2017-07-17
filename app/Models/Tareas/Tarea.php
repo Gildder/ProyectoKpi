@@ -65,7 +65,7 @@ class Tarea extends Model
 
     public function localizaciones()
     {
-        return $this->belongsToMany('ProyectoKpi/Models/Localizaciones/Localizacion', 'tarea_realizadas', 'tarea_id', 'localizacion_id', 'id');
+        return $this->belongsToMany('ProyectoKpi/Models/Localizaciones/Localizacion', 'tarea_localizacion', 'tarea_id', 'localizacion_id', 'id');
     }
 
 
@@ -116,22 +116,22 @@ class Tarea extends Model
 
     public function getEstado()
     {
-        if ($this->attributes['estado'] == '1') {
+        if ($this->attributes['estadoTarea_id'] == '1') {
             return 'Programado';
-        }elseif ($this->attributes['estado'] == '2') {
+        }elseif ($this->attributes['estadoTarea_id'] == '2') {
             return 'En Proceso';
-        }elseif ($this->attributes['estado'] == '3') {
+        }elseif ($this->attributes['estadoTarea_id'] == '3') {
             return 'Finalizado';
         }
     }
 
     public function getEstadoColor()
     {
-        if ($this->attributes['estado'] == '1') {
+        if ($this->attributes['estadoTarea_id'] == '1') {
             return 'red';
-        }elseif ($this->attributes['estado'] == '2') {
+        }elseif ($this->attributes['estadoTarea_id'] == '2') {
             return 'yellow';
-        }elseif ($this->attributes['estado'] == '3') {
+        }elseif ($this->attributes['estadoTarea_id'] == '3') {
             return 'green';
         }
     }
@@ -146,10 +146,10 @@ class Tarea extends Model
     }
 
     /*
-     * Metodo para cambiar del formato Y-m-d  a d-m-Y
+     * Metodo para cambiar del formato Y-m-d  a d/m/Y
      *
      * @param string $fecha
-     * @return fecha en formato d-m-Y
+     * @return fecha en formato d/m/Y
      */
     public function cambiarFormatoEuropeo($fecha)
     {
@@ -189,7 +189,7 @@ class Tarea extends Model
     public function sacarHoras($hora)
     {   
         if($hora == null){
-            return '';
+            return 0;
         } 
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[0];
@@ -198,7 +198,7 @@ class Tarea extends Model
     public function sacarMinutos($hora)
     {     
         if($hora == null){
-            return '';
+            return 0;
         }
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[1];

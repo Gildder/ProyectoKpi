@@ -1,6 +1,5 @@
 
 $(document).ready(function(){
-
 	//****************************************  Data Tables *******************************************************
 	/* Formatos de tablas de Jquery DataTables */
     $('#myTableCargos').DataTable();

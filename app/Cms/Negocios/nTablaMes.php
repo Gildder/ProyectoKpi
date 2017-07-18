@@ -12,6 +12,7 @@ use function print_r;
 use ProyectoKpi\Cms\Clases\TablaMes;
 use ProyectoKpi\Cms\Clases\Tabla;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Models\Evaluadores\Widget;
 
 class nTablaMes extends Tabla
@@ -75,33 +76,35 @@ class nTablaMes extends Tabla
     public function datosTipoIndicadorTabla()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $indicadores = EvaluadoresRepository::cnGetTotalIndicadores($this->widget->evaluador_id);
-
+        $indicadores = IndicadorRepository::getIndicadoresDeEvaluador($this->widget->evaluador_id);
         $lista = array();
         $cumplimiento = 0;
         $contador = 0;
 
-        foreach ($indicadores as $indicador)
-        {
-            // creamos el objeto a devolver a la vista
-            $objeto = new \stdClass();
+        if(sizeof($indicadores) > 0){
 
-            // guardamos los datos de los indicadores recorridos
+            foreach ($indicadores as $indicador)
+            {
+                // creamos el objeto a devolver a la vista
+                $objeto = new \stdClass();
 
-            $objeto->id          = $indicador->id;
-            $objeto->nombre      = $indicador->nombre;
-            $objeto->ponderacion = $indicador->ponderacion;
+                // guardamos los datos de los indicadores recorridos
 
-            // obtenemos los datos de los indicadores
-            $objeto =  $this->obtenerIndicadoresDeMeses($objeto,  $indicador->id);
-            $cumplimiento = $cumplimiento + $objeto->promedio;
-            $contador++;
+                $objeto->id          = $indicador->id;
+                $objeto->nombre      = $indicador->nombre;
+                $objeto->ponderacion = $indicador->ponderacion;
 
-            array_push($lista, $objeto);
+                // obtenemos los datos de los indicadores
+                $objeto =  $this->obtenerIndicadoresDeMeses($objeto,  $indicador->id);
+                $cumplimiento = $cumplimiento + $objeto->promedio;
+                $contador++;
+
+                array_push($lista, $objeto);
+            }
+
+            array_push($lista, $this->obtenerDescripcion());
+            array_push($lista, ($cumplimiento/$contador));
         }
-
-        array_push($lista, $this->obtenerDescripcion());
-        array_push($lista, ($cumplimiento/$contador));
 
         return $lista;
     }
@@ -124,27 +127,28 @@ class nTablaMes extends Tabla
         $cumplimiento = 0;
         $contador = 0;
 
-        foreach ($usuarios as $usuario)
-        {
-            // creamos el objeto a devolver a la vista
-            $objeto = new \stdClass();
+        if(sizeof($usuarios)>0) {
 
-            // guardamos los datos de los indicadores recorridos
+            foreach ($usuarios as $usuario) {
+                // creamos el objeto a devolver a la vista
+                $objeto = new \stdClass();
 
-            $objeto->id          = $usuario->id;
-            $objeto->nombre      = $usuario->nombres.' '. $usuario->apellidos ;
+                // guardamos los datos de los indicadores recorridos
 
-            // obtenemos los datos de los indicadores
-            $objeto =  $this->obtenerempleadosDeMeses($objeto, $usuario->id);
-            $cumplimiento = $cumplimiento + $objeto->promedio;
-            $contador++;
+                $objeto->id = $usuario->id;
+                $objeto->nombre = $usuario->nombres . ' ' . $usuario->apellidos;
 
-            array_push($lista, $objeto);
+                // obtenemos los datos de los indicadores
+                $objeto = $this->obtenerempleadosDeMeses($objeto, $usuario->id);
+                $cumplimiento = $cumplimiento + $objeto->promedio;
+                $contador++;
+
+                array_push($lista, $objeto);
+            }
+
+            array_push($lista, $this->obtenerDescripcion());
+            array_push($lista, ($cumplimiento / $contador));
         }
-
-        array_push($lista, $this->obtenerDescripcion());
-        array_push($lista, ($cumplimiento/$contador));
-
         return $lista;
     }
 
@@ -218,7 +222,7 @@ class nTablaMes extends Tabla
     public function datosTipoIndicadorChart()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $indicadores = EvaluadoresRepository::cnGetTotalIndicadores($this->widget->evaluador_id);
+        $indicadores = IndicadorRepository::getIndicadoresDeEvaluador($this->widget->evaluador_id);
 
         $lista = array();
         $datos = array();

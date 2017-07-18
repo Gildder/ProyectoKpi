@@ -83,7 +83,6 @@ $(document).ready(function(){
 			<div id="indicadores" class="tab-pane">
 				@include('evaluadores/evaluador/indicadores/tabla_indicadores')
 			</div>
-
 			{{-- Fin Indicadores --}}
 
 			{{-- Cargos --}}

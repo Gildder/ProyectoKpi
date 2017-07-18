@@ -11,6 +11,7 @@ namespace ProyectoKpi\Cms\Negocios;
 use ProyectoKpi\Cms\Clases\TablaSemana;
 use ProyectoKpi\Cms\Clases\Tabla;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Models\Evaluadores\Widget;
 
 class nTablaSemana  extends Tabla
@@ -101,31 +102,31 @@ class nTablaSemana  extends Tabla
     public function datosTipoIndicadorTabla()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $indicadores = EvaluadoresRepository::cnGetTotalIndicadores($this->widget->evaluador_id);
+        $indicadores = IndicadorRepository::getIndicadoresDeEvaluador($this->widget->evaluador_id);
 
         $lista = array();
 
         $cumplimiento = 0;
         $contador = 0;
+        if(sizeof($indicadores)>0) {
 
-        foreach ($indicadores as $indicador)
-        {
-            $objeto = new \stdClass();
+            foreach ($indicadores as $indicador) {
+                $objeto = new \stdClass();
 
-            $objeto->id          = $indicador->id;
-            $objeto->nombre      = $indicador->nombre;
-            $objeto->ponderacion = $indicador->ponderacion;
+                $objeto->id = $indicador->id;
+                $objeto->nombre = $indicador->nombre;
+                $objeto->ponderacion = $indicador->ponderacion;
 
-            $objeto =  $this->obtenerIndicadorDeMes($objeto, $indicador->id) ;
+                $objeto = $this->obtenerIndicadorDeMes($objeto, $indicador->id);
 
-            $cumplimiento = $cumplimiento + $objeto->promedio;
-            $contador++;
+                $cumplimiento = $cumplimiento + $objeto->promedio;
+                $contador++;
 
-            array_push($lista, $objeto);
+                array_push($lista, $objeto);
+            }
+            array_push($lista, $this->descripcionPorSemanas());
+            array_push($lista, ($cumplimiento / $contador));
         }
-        array_push($lista, $this->descripcionPorSemanas());
-        array_push($lista, ($cumplimiento/$contador));
-
         return $lista;
     }
 
@@ -141,24 +142,23 @@ class nTablaSemana  extends Tabla
 
         $cumplimiento = 0;
         $contador = 0;
+        if(sizeof($usuarios)>0) {
+            foreach ($usuarios as $usuario) {
+                $objeto = new \stdClass();
 
-        foreach ($usuarios as $usuario)
-        {
-            $objeto = new \stdClass();
+                $objeto->id = $usuario->id;
+                $objeto->nombre = $usuario->nombres . ' ' . $usuario->apellidos;
 
-            $objeto->id          = $usuario->id;
-            $objeto->nombre      = $usuario->nombres.' '. $usuario->apellidos ;
+                $objeto = $this->obtenerEmpleadoDeMes($objeto, $usuario->id);
 
-            $objeto =  $this->obtenerEmpleadoDeMes($objeto, $usuario->id) ;
+                $cumplimiento = $cumplimiento + $objeto->promedio;
+                $contador++;
 
-            $cumplimiento = $cumplimiento + $objeto->promedio;
-            $contador++;
-
-            array_push($lista, $objeto);
+                array_push($lista, $objeto);
+            }
+            array_push($lista, $this->descripcionPorSemanas());
+            array_push($lista, ($cumplimiento / $contador));
         }
-        array_push($lista, $this->descripcionPorSemanas());
-        array_push($lista, ($cumplimiento/$contador));
-
         return $lista;
     }
 
@@ -171,14 +171,13 @@ class nTablaSemana  extends Tabla
     public function datosTipoIndicadorChart()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $indicadores = EvaluadoresRepository::cnGetTotalIndicadores($this->widget->evaluador_id);
+        $indicadores = IndicadorRepository::getIndicadoresDeEvaluador($this->widget->evaluador_id);
 
         $lista = array();
         $datos = array();
 
-        foreach ($indicadores as $indicador)
-        {
-             array_push( $datos, $this->obtenerArrayColumns($indicador, $this->widget->evaluador_id) );
+        foreach ($indicadores as $indicador) {
+            array_push($datos, $this->obtenerArrayColumns($indicador, $this->widget->evaluador_id));
         }
 
         array_push($lista, $datos);

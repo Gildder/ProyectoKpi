@@ -5,12 +5,13 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0 0 10px 0">
 	<p class="pull-left">Lista de indicadores asignadas a la Gerencia evaluadora  <b>{{$evaluador->abreviatura}}</b>.</p>
 </div>
-<div class="table-response">
-	<table id="myTableMultiple" class="table table-striped table-bordered table-condensed table-hover display">
+<div class="table table-responsive">
+	<table id="myTableIndicadores" class="table table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<tr>
 				<th>Nro</th>
 				<th>Nombre</th>	
+				<th>Ponderacion</th>
 				<th>Tipos</th>
 				<th>Cagos Asignados</th>
 				<th></th>	
@@ -21,6 +22,7 @@
 			<tr>
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>
+				<td>{{$item->ponderacion}} <b>%</b>	 </td>
 				<td>{{$item->tipo}}</td>
 				<td> 
 					@foreach($item->getCargos($item->id) as $cargo)

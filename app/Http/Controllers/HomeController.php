@@ -2,6 +2,7 @@
 
 namespace ProyectoKpi\Http\Controllers;
 
+use ProyectoKpi\Cms\Clases\Conexion_LDAP;
 use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
 use ProyectoKpi\Http\Requests;
 use Illuminate\Http\Request;
@@ -34,6 +35,7 @@ class HomeController extends Controller
     public function index()
     {
 //        dd(\Usuario::get('isIndicadores'), \Usuario::get('isEvaluador'), \Usuario::get('isSupervisor'));
+
         $rutaPrincipal = 'empleados.perfil.index';
         if (! Auth::guest()) {
             if (\Usuario::get('isAdmin')) {

@@ -17,10 +17,8 @@
                                 <!--<li><a @click="opcionWidget($event)">Opciones</a></li>-->
                                 <!--<li><a href="#">Graficas</a></li>-->
                                 <li class="divider"></li>
-                                <template>
                                     <li><a @click="cambiarVista($event, 0)">Vista Semanas</a></li>
                                     <li><a @click="cambiarVista($event, 1)">Vista Meses</a></li>
-                                </template>
 
                             </ul>
                         </div>
@@ -29,6 +27,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="">
+
                         <!-- /.col -->
                         <div class="col-md-12">
                             <p class="text-center">

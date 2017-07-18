@@ -42,6 +42,16 @@ class IndicadorRepository
                 ->get();
     }
 
+    public static function getIndicadoresDeEvaluador($evaluador_id)
+    {
+        return Indicador::
+        select('indicadores.id', 'indicadores.nombre','indicadores.descripcion', 'indicador_ponderacion.ponderacion' , 'tipos_indicadores.nombre as tipo')
+            ->leftjoin('evaluador_indicadores','evaluador_indicadores.indicador_id','=','indicadores.id')
+            ->leftjoin('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
+            ->leftjoin('indicador_ponderacion','indicador_ponderacion.indicador_id','=','indicadores.id')
+            ->where('evaluador_indicadores.evaluador_id', $evaluador_id)
+            ->get();
+    }
 
     /**
      * Lista d eindicadores asignado a Gerencia evaluadora

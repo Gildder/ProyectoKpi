@@ -11,25 +11,31 @@ body {
   background: #fafad2;
   font-family: "verdana", "sans-serif";
 }
-#notificacion,
-z-index 99999,
-position fixed,
-top 54px,
-left 50%,
-width 500px,
-margin-left -250px {
-div
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  padding: 0;
+}
+#notificacion {
+  z-index: 99999;
+  position: fixed;
+  top: 54px;
+  left: 50%;
+  width: 500px;
+  margin-left: -250px;
+}
+/* Elemento Notificacion */
+#notificacion div {
   position: relative;
   margin: 5px 0px;
   opacity: 0.7;
 }
-.notificacion,
-z-index 99999,
-position fixed,
-top 54px,
-left 50%,
-width 500px,
-margin-left -250px,
+.notificacion {
+  z-index: 99999;
+  position: fixed;
+  top: 54px;
+  left: 50%;
+  width: 500px;
+  margin-left: -250px;
+}
 #loading {
   z-index: 999999;
   position: absolute;

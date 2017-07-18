@@ -4,6 +4,7 @@ namespace ProyectoKpi\Http\Controllers\Evaluadores;
 
 use Httpful\Response;
 use Illuminate\Http\Request;
+use ProyectoKpi\Cms\Clases\Conexion_LDAP;
 use ProyectoKpi\Cms\Clases\FiltroTabla;
 use ProyectoKpi\Cms\Clases\UsuarioActivo;
 use ProyectoKpi\Cms\Negocios\nDashboard;
@@ -52,6 +53,11 @@ class EvaluadosController extends Controller
     */
     public function dashboard()
     {
+//        $ldap = new Conexion_LDAP();
+////        $ldap->conectar();
+//        $resulta = $ldap->mailboxpowerloginrd('gguerreros', 'multicenter2');
+//
+//        dd($resulta);
 //        dd(ConfiguracionRepositorio::getGenerarSemanasAnuales(2017));
 //        $semsns = ConfiguracionRepositorio::getGenerarSemanasAnuales(2017);
 
@@ -92,6 +98,9 @@ class EvaluadosController extends Controller
      */
     public function obtenerVista($tipoWidget)
     {
+
+
+
         $this->dashboard = new nDashboard();
 
         $datos = $this->dashboard->obtenerDatosWidget($tipoWidget);

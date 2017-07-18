@@ -7,12 +7,12 @@
 @section('content')
 <div class="row" id="contentDashboard">
     <section class="content-header" style="min-height: 60px;" >
-        <a href="#" @click="abrirWidget" id="btnOpenWidget" class="btn btn-bitbucket btn-xs pull-right" ><span class="fa fa-list-alt"></span>  @{{ textOpenWidget }}</a>
+        <a href="#" @click="abrirWidget" id="btnOpenWidget" class="btn btn-bitbucket btn-xs pull-right" >
+            <span class="fa fa-list-alt"></span>  @{{ textOpenWidget }}</a>
         <h1>Dashboard
             <small>{{ \Cache::get('evadores')->descripcion }}</small>
-        </h1>p
+        </h1>
     </section>
-
 
     <section class="content" id="contenedor-dashboard">
         <div class="row">

@@ -3,6 +3,7 @@
 namespace ProyectoKpi\Http\Controllers\Evaluadores;
 
 use Illuminate\Http\Request;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Http\Requests;
 use Illuminate\Support\Facades\Auth;
@@ -86,12 +87,7 @@ class EvaluadorController extends Controller
         $indicadoresDisponibles = DB::select('call pa_evaluadores_indicadoresDisponibles('.$id.');');
 
 
-		$indicadores = Indicador::
-	       select('indicadores.id', 'indicadores.nombre','indicadores.descripcion' , 'tipos_indicadores.nombre as tipo')
-			    ->leftjoin('evaluador_indicadores','evaluador_indicadores.indicador_id','=','indicadores.id')
-			    ->leftjoin('tipos_indicadores','tipos_indicadores.id','=','indicadores.tipo_indicador_id')
-			    ->where('evaluador_indicadores.evaluador_id', $id)
-			    ->get();
+		$indicadores = IndicadorRepository::getIndicadoresDeEvaluador($id);
 
 
         $cargosDisponibles = DB::select('call pa_evaluadores_cargosDisponibles('.$id.');');

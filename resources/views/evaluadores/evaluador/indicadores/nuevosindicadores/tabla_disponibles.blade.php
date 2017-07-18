@@ -33,6 +33,7 @@
 			<th></th>
 			<th>Nro</th>
 			<th>Nombre</th>	
+			<th>Ponderacion</th>
 			<th>Tipos</th>
 		</thead>
 		<tbody>
@@ -41,6 +42,7 @@
 				<td>{{ Form::checkbox('prov[]', $item->id, null, ['class'=>'micheckbox']) }} </td>
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}}</td>
+				<td>{{$item->ponderacion}}<b>%</b></td>
 				<td>{{$item->tipoIndicador}}</td>
 			</tr>
 		@endforeach

@@ -49,11 +49,6 @@ class EvaluadoresRepository extends BaseRepository
     /**
      * Retorna los datos de un Indicador de un Mes por Semana
      *
-     * @param $evaluador
-     * @param $anio
-     * @param $mes
-     * @param $indicador
-     * @return mixed
      */
     public static function cnGetIndicadoresSemana($evaluador, $indicador, $anio, $mes)
     {
@@ -64,11 +59,6 @@ class EvaluadoresRepository extends BaseRepository
     /**
      * Retorna las los totales primer indicador 'Eficacia de idicador' para los empleados
      * 
-     * @param $indicador
-     * @param $usuario
-     * @param $anio
-     * @param $mes
-     * @return mixed
      */
     public static function cnGetIndicadoresEmpeladosSemana($indicador, $usuario, $anio, $mes)
     {
@@ -79,11 +69,6 @@ class EvaluadoresRepository extends BaseRepository
     /**
      * Retorna los datos de la eficacia por empleados, tareas y ticket
      *
-     * @param $usuario
-     * @param $anio
-     * @param $mes
-     * @param $semana
-     * @return mixed
      */
     public static function cnGetIndicadoresTareasSemana($usuario, $anio, $mes, $semana)
     {
@@ -109,11 +94,6 @@ class EvaluadoresRepository extends BaseRepository
     /**
      * Devuelve los empleados evaluados con sus evaluacion para un indicador particular.
      *
-     * @param $indicador
-     * @param $evaluador
-     * @param $anio
-     * @param $mes
-     * @return array
      */
     public function cnGetEmpleadosSemana($indicador, $evaluador, $anio, $mes)
     {

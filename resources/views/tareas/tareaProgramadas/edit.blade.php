@@ -10,7 +10,7 @@
 
 <div class="panel panel-default"  id="formEditarTarea">
   <div class="panel-heading">
-      <a  href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}"
+      <a  href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" @click="mostrarModalLoading()"
           class="btn btn-primary btn-xs pull-left btn-back" title="Volver">
         <span class="fa fa-reply"></span>
       </a>
@@ -26,8 +26,9 @@
       </div>
       
       {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT'])!!}
-        {!! Form::hidden('id', $tarea->id) !!}
-{{-- Descripcion --}}
+      {!! Form::hidden('id', $tarea->id) !!}
+
+      {{-- Descripcion --}}
 <div class="">
   <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-5
     @if ($errors->has('descripcion'))
@@ -57,8 +58,8 @@
                 <input-date tipo="text" nombre="fechaInicioEstimado"
                           {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}"--}}
                           valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}" placeholder="Comienzo"
-                          fechainicio="{{  \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}"
-                          fechafin='{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}' >
+                          fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
+                          fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
                 </input-date>
                 @if ($errors->has('fechaInicioEstimado'))
                   <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p>
@@ -74,8 +75,8 @@
                 <input-date tipo="text" nombre="fechaFinEstimado"
                           {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}"--}}
                           valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}" placeholder="Comienzo"
-                          fechainicio="{{  \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}"
-                          fechafin='{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}' >
+                          fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
+                          fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
                 </input-date>
                 @if ($errors->has('fechaFinEstimado'))
                   <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p>
@@ -126,8 +127,9 @@
 
     {{-- Footer de Panel --}}
     <div class="panel-footer text-right">
-      <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>
-      {!! form::button('<i class="fa fa-save"></i> Guardar',['name'=>'guardar', 'id'=>'guardar', 'content'=>'Guardar', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
+      <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" @click="mostrarModalLoading()" class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>
+
+        <button type="submit" name="guardar" @click="mostrarModalLoading()" class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
     </div>
       {!! Form::close()!!}
 </div>

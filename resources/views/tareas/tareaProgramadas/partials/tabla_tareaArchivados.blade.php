@@ -26,7 +26,7 @@ $(document).ready(function(){
 		<tbody>
 @foreach($tareas as $tarea)
 <tr>
-	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" title="Ver"><span >{{$tarea->id}}</span></a></td>
+	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" @click="mostrarModalLoading()"  class="btn btn-warning btn-xs" title="Ver"><span >{{$tarea->id}}</span></a></td>
 	<td>{{$tarea->descripcion}}</td>
 	<td> {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}} </td>
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}</td>
@@ -39,7 +39,7 @@ $(document).ready(function(){
 	<td>
 		<ul>
 		@foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
-			o <li>{{ $ubicacion->nombre }} </li>
+			<li>{{ $ubicacion->nombre }} </li>
 		@endforeach
 		</ul>
 	</td>

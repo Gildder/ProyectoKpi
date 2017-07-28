@@ -8,7 +8,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-	  <a href="{{route('evaluadores.evaluador.show', array($evaluador->id))}}"  class="btn btn-primary btn-xs btn-back pull-left" title="Volver"><span class="fa fa-reply"></span></a>
+	  <a href="{{route('evaluadores.evaluador.show', array($evaluador->id))}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs btn-back pull-left" title="Volver"><span class="fa fa-reply"></span></a>
 	  <p class="titulo-panel">{{$evaluador->abreviatura}} - {{$evaluador->descripcion}}</p>
 	</div>
 
@@ -41,7 +41,7 @@
 		</div>
 
 		<div class="col-sm-12 panel-footer text-right">
-			<a href="{{route('evaluadores.evaluador.show', array($evaluador->id))}}" class="btn btn-primary btn-sm"><span class="fa fa-check text-left"></span><b> Listo</b> </a>
+			<a href="{{route('evaluadores.evaluador.show', array($evaluador->id))}}" @click="mostrarModalLoading()" class="btn btn-primary btn-sm"><span class="fa fa-check text-left"></span><b> Listo</b> </a>
 		</div>
 
 	</div>

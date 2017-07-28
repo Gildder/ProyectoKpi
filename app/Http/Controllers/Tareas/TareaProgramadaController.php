@@ -3,8 +3,11 @@
 namespace ProyectoKpi\Http\Controllers\Tareas;
 
 use function array_push;
+use function date_add;
 use Illuminate\Http\Request;
 use function json_encode;
+use function print_r;
+use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -33,12 +36,31 @@ class TareaProgramadaController extends Controller
     
     public function index()
     {
+        $cadena = 'No Válida';
+
+        if (($timestamp = strtotime($cadena)) === false) {
+//            print_r("La cadena ($cadena) es falsa");
+            print_r(date('d/m/Y',strtotime( "   2009-02-3 +6day" )));
+        } else {
+            print_r( "$cadena == " . date('l dS \o\f F Y h:i:s A', $timestamp));
+        }
+
+
         // obtenemos las tareas programadas
         $tareas = TareaRepository::getTareasProgramadas();
         // obtenemos la semana de tarea
         $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
-// dd($semanas);
+        // guardamos en cache las fechas de la semana
+        // las semanas dentran mes, semana, fechaInicio, fechaFin
+        Caches::guardar('semanas', $semanas);
+
+
+        Caches::guardar('botones', 0);
+
+        // limpiamos el cache la variable estasemana para trabajar con la semana actual
+        Caches::borrar('estasemana');
+
 
         return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
     }
@@ -46,11 +68,12 @@ class TareaProgramadaController extends Controller
     public function archivados()
     {
         $tareas = TareaRepository::getTareasArchivados();
-        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
-        TareaRepository::cachear('semanas', $semanas);
+
+        // guardamos en cache la semana
+        TareaRepository::cachear('botones', 1);
 
 
-        return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas,  'semanas'=> $semanas]);
+        return view('tareas/tareaProgramadas/archivados', ['tareas'=> $tareas]);
     }
 
     public function eliminados()
@@ -60,27 +83,26 @@ class TareaProgramadaController extends Controller
 
     public function create()
     {
-        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        // guardamos la cache de tipo de semana
+        Caches::guardar('estasemana', 0);
 
-        return view('tareas.tareaProgramadas.create', [ 'semanas'=> $semanas]);
+        return view('tareas.tareaProgramadas.create');
     }
 
     public function store(TareaProgramasFormRequest $Request)
     {
-        $fechaInicio = trim(\Request::input('fechaInicioEstimado'));
-        // convertimos a fecha
-        $fechaInicio = \Calcana::cambiarFormatoDB($fechaInicio);
+        // convertimos a fechas en formato base de datos
+        $fechaInicio = date('Y-m-d', \Request::input('fechaInicioEstimado'));
+        $fechaFin = date('Y-m-d', \Request::input('fechaFinEstimado'));
 
-        $fechaFin = trim(\Request::input('fechaFinEstimado'));
-        // convertimos a fecha
-        $fechaFin = \Calcana::cambiarFormatoDB($fechaFin);
+        // valimidamos los limite de las fecha de inicio y fin de semana
         $error = $this->validarLimiteFechas($fechaInicio, $fechaFin);
-//        dd(\Cache::get('semanas'), $fechaInicio,$fechaFin, $error);
+
+
         if(sizeof($error)> 0 ){
-//            \Session::flash('message', 'Mensaje de prueba');
             return redirect()->to($this->getRedirectUrl())
                 ->withErrors('Las fechas ingresadas son incorrectas..')
-            ->withInput();
+                ->withInput();
         }
 
         $user = Auth::user();  //obtenemos el usuario logueado
@@ -110,14 +132,21 @@ class TareaProgramadaController extends Controller
         }
     }
 
+    public function create_next()
+    {
+        Caches::guardar('estasemana', 1);
+
+        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d', strtotime('6 day', strtotime(date('Y-m-d')))));
+
+        return view('tareas.tareaProgramadas.create_next', ['semanas'=> $semanas]);
+    }
     
     public function edit($id)
     {
         $tarea = Tarea::findOrFail($id);
 //        dd($tarea->fechaInicioEstimado);
-        $semanas = TareaRepository::getSemanasTareas($tarea->fechaInicioEstimado);
 //        dd($semanas);
-        return view('tareas/tareaProgramadas/edit', ['tarea'=>$tarea, 'semanas'=>$semanas]);
+        return view('tareas/tareaProgramadas/edit', ['tarea'=>$tarea]);
     }
 
     public function update(TareaProgramasFormRequest $Request, $id)
@@ -131,7 +160,7 @@ class TareaProgramadaController extends Controller
         // convertimos a fecha
         $fechaFin = \Calcana::cambiarFormatoDB($fechaFin);
 
-        $error = $this->validarLimiteFechas($fechaInicio, $fechaFin);
+        $error = $this->validarLimiteFechas($fechaInicio, $fechaFin, \Request::input('estasemana'));
 //        dd(\Cache::get('semanas'), $fechaInicio,$fechaFin, $error);
         if(sizeof($error)> 0 ){
             return redirect()->to($this->getRedirectUrl())
@@ -248,7 +277,7 @@ class TareaProgramadaController extends Controller
     public function cancelarSolucion($id)
     {
         $tarea = Tarea::findOrFail($id);
-        $tarea->estado = 2;
+        $tarea->estadoTarea_id = 2;
         $tarea->save();
 
         // DB::select("call pa_eficacia_cancelarSolucionTarea(".$tarea->fechaFinSolucion.", '".$tarea->empleado_id."');");
@@ -256,9 +285,16 @@ class TareaProgramadaController extends Controller
         return redirect()->back()->with('message', 'Se cancelo la tarea '.$id.' correctamente.');
     }
 
+
     private function validarLimiteFechas($fechaInicio, $fechaFin)
     {
-        $semanas =  \Cache::get('semanas');
+        // obtenermos las semanas trabajadas
+        if(Caches::obtener('estasemana')=== 0){
+            $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        }else{
+            $semanas = TareaRepository::getSemanasTareas(date('Y-m-d', strtotime('Y-m-d +6 day')));
+        }
+
         $errors = array();
 
         if((strtotime($fechaInicio) < strtotime($semanas->fechaInicio)) || (strtotime($fechaInicio) > strtotime($semanas->fechaFin)))

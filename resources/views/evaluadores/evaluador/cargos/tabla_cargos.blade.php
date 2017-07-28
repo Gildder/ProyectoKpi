@@ -1,4 +1,4 @@
-<div class="table-response">
+<div class="table-responsive">
 	<table id="myTableCargos" class="table table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<th>Nro</th>
@@ -11,7 +11,7 @@
 				<td>{{$item->id}}</td>
 				<td>{{$item->nombre}} </td>
 				<td>
-					<a href="{{route('evaluadores.evaluador.agregarcargo', array($item->id, $evaluador->id)) }}"  class="btn btn-success btn-xs" title="Agregar Cargo"> <span class="fa fa-plus"></span>  <b></b> </a>
+					<a href="{{route('evaluadores.evaluador.agregarcargo', array($item->id, $evaluador->id)) }}" @click="mostrarModalLoading()"  class="btn btn-success btn-xs" title="Agregar Cargo"> <span class="fa fa-plus"></span>  <b></b> </a>
 				</td>
 			</tr>
 		@endforeach

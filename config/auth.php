@@ -39,6 +39,8 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+//            'provider' => 'adldap',
+//            'provider' => 'ldap-users',
         ],
 
         'api' => [
@@ -67,7 +69,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            // 'driver' => 'adldap', // Changed from 'eloquent'
+//             'driver' => 'adldap', // Changed from 'eloquent'
+            'model' => ProyectoKpi\Models\User::class,
+        ],
+
+        'adldap' => [
+             'driver' => 'adldap', // Changed from 'eloquent'
             'model' => ProyectoKpi\Models\User::class,
         ],
 
@@ -75,6 +82,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+//        'ldap-users' => [
+//             'driver' => 'ldap',
+//             'model' => \Krenor\LdapAuth\Objects\LdapUser::class,
+//         ],
     ],
 
     /*

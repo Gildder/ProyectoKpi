@@ -14,6 +14,7 @@ use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Indicadores\Indicador;
 use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\EficienciaIndicadorRepository;
+use ProyectoKpi\Models\User;
 
 class IndicadorRepository
 {
@@ -27,14 +28,16 @@ class IndicadorRepository
 
     /**
      * Retorn la lista de indicadores para un Empleado
-     * @param $codigo
+     * @param $id
      * @return
      */
-    public static function cnGetListaInidicadores($codigo)
+    public static function cnGetListaInidicadores($id)
     {
-        return Empleado::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden', 'indicadores.descripcion', 'tipos_indicadores.nombre as tipo','indicador_cargos.objetivo', 'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
-            ->where('empleados.codigo', $codigo)
-            ->join('indicador_cargos', 'indicador_cargos.cargo_id', '=', 'empleados.cargo_id')
+        return User::select('indicadores.id', 'indicadores.nombre', 'indicadores.orden',
+            'indicadores.descripcion', 'tipos_indicadores.nombre as tipo','indicador_cargos.objetivo',
+            'indicador_cargos.condicion', 'indicador_cargos.aclaraciones', 'frecuencias.nombre as freciencia')
+            ->where('users.id', $id)
+            ->join('indicador_cargos', 'indicador_cargos.cargo_id', '=', 'users.cargo_id')
             ->join('indicadores', 'indicadores.id', '=', 'indicador_cargos.indicador_id')
             ->join('tipos_indicadores', 'tipos_indicadores.id', '=', 'indicadores.tipo_indicador_id')
             ->join('frecuencias', 'frecuencias.id', '=', 'indicador_cargos.frecuencia_id')

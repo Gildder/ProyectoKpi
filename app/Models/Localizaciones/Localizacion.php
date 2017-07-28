@@ -45,12 +45,12 @@ class Localizacion extends Model
     /* Relaciones */
     public function grupoLocalizacion()
     {
-        return $this->belongsTo(grupoLocalizacion::class);
+        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\GrupoLocalizacion', 'grupoloc_id', 'id');
     }
 
     public function tareas()
     {
-        return $this->belongsToMany('ProyectoKpi/Models/Tareas/Tarea', 'tarea_realizadas', 'tarea_id', 'localizacion_id', 'id');
+        return $this->belongsToMany('ProyectoKpi/Models/Tareas/Tarea', 'tarea_localizacion', 'tarea_id', 'localizacion_id', 'id');
     }
 
     public function users()

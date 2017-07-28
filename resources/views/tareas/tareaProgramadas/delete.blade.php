@@ -17,7 +17,9 @@
             </div>
             <div class="modal-footer modal-delete-footer">
               <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
-              {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
+            <button type="submit" name="guardar" @click="mostrarModalLoading()" class="btn btn-success"><span class="fa fa-check"></span> Guardar</button>
+
+
             </div>
             {!! Form::close()!!}
       </div>

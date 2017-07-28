@@ -12366,7 +12366,9 @@ $(document).ready(function () {
             type_pass: true,
 
             //Tarea
-            btnEliminar: 1
+            btnResultado: 0,
+            btnEditar: 0,
+            btnEliminar: 0
         },
         ready: function ready() {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -12385,15 +12387,17 @@ $(document).ready(function () {
                 this.panelWidgets = lista;
             },
             'eliminar-widget': function eliminarWidget(id) {
-                resourceWidget = this.$resource('/evaluadores/evaluados/eliminarEvaluadorWidget{/id}');
+                resourceWidget = this.$resource('eliminarEvaluadorWidget/{id}');
 
                 resourceWidget.delete({ id: id }).then(function (response) {
                     this.panelWidgets.$remove(id);
                     this.panelWidgets = response.data;
 
+                    this.obtenerListaWidget();
                     Notificion.success('El Widget se elimino correctamente!');
                 }, function (response) {
                     Notificion.warning('El Widget No elimino, por favor verificar con su administrador!');
+                    alert(JSON.stringify(response));
                 });
             }
 
@@ -12478,6 +12482,17 @@ $(document).ready(function () {
                 } else {
                     this.type_pass = true;
                 }
+            },
+            mostrarModalLoading: function mostrarModalLoading() {
+                utils.mostrarCargando(true);
+            },
+            mostrarDesabilitar: function mostrarDesabilitar($this) {
+                alert($this);
+            },
+
+            /* Supervisados*/
+            verTareasSupervisados: function verTareasSupervisados() {
+                alert('hoal');
             }
 
         }
@@ -12619,7 +12634,6 @@ Object.defineProperty(exports, "__esModule", {
 
 
 /* jshint esnext:true */
-
 var utils = require('./../../utils.js');
 
 var Notificion = new Alert('#notificacion');
@@ -12662,7 +12676,6 @@ exports.default = {
                     this.indicadores = data.indicadores;
                 }.bind(this), error: function (data) {
                     //                        Console.log('Error: ObtenerUltimoMes' + response.err);
-
                 }.bind(this)
             });
         },
@@ -12700,8 +12713,10 @@ exports.default = {
 
             this.guardando = true;
 
+            /* obtener el tipo de indicador seleccionado */
             var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
 
+            /* Obtener el indicador seleccionado */
             var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
 
             this.nuevo_widget.tipo_id = this.tipo_id;
@@ -12713,7 +12728,6 @@ exports.default = {
                 data: this.nuevo_widget,
                 dataType: 'json',
                 success: function (data) {
-
                     this.instacionWidget();
 
                     // pasamos el nuevo widget a la lista de PanelWidget de vm
@@ -12759,11 +12773,11 @@ exports.default = {
         },
         getTitulo: function getTitulo(tipo, indicador) {
             if (this.tipo_id === 1) {
-                return tipo;
+                return 'Indicadores de ' + tipo;
             } else if (this.tipo_id === 2) {
-                return indicador + ' por Usuarios';
+                return 'Indicador de ' + indicador + ' por Usuarios';
             } else if (this.tipo_id === 3) {
-                return indicador + ' por Semanas';
+                return 'Indicador de ' + indicador;
             } else {
                 return 'Sin Nombre';
             }
@@ -12805,7 +12819,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"true\" data-keyboard=\"true\" role=\"dialog\" id=\"modal-nuevo-widget-{{ tipo_id }}\">\n    <div class=\"modal-dialog\">\n        <!-- Modal content-->\n        <div class=\"modal-content modal-delete-content\">\n            <!-- Modal Header -->\n            <div class=\"modal-header modal-delete-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" :disabled=\"guardando\">\n                    <span class=\"sr-only\">Cerrar</span>\n                    <span aria-hidden=\"true\">×</span>\n                </button>\n                <strong class=\"model-title\">Nuevo Widget - {{ titulo }}</strong>\n            </div>\n            <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"guardarWidget\">\n\n                <div class=\"modal-body modal-delete-body\" :disabled=\"guardando\">\n                    <!-- Tipos de Indicadores-->\n                    <div class=\"col-sm-12 form-group\">\n                        <div class=\"col-sm-12\">\n                            <strong>Tipos Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.tipoIndicador_id\" :items=\"tipos_indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- Indicadores -->\n                    <div class=\"col-sm-12  form-group\" v-if=\"tipo_id !== 1\">\n                        <div class=\"col-sm-12\">\n                            <strong>Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.indicador_id\" :items=\"indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- tipos de vista para empleado tipo empleado -->\n                    <div class=\"col-sm-12  form-group\" style=\"margin: 0;\" v-if=\"tipo_id !== 3\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"col-sm-12\">\n                                <hr>\n                                <strong>Tipos de Vista:</strong>\n                            </div>\n                            <div class=\"col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-10 \">\n                                <div class=\"radio\">\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"0\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Semanal\n                                    </label>\n\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"1\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Mensual\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n\n\n\n                        <div class=\"col-sm-12\" style=\"margin-top: 20px;\">\n                            <div class=\"col-sm-6\">\n                                <p v-if=\"nuevo_widget.isSemanal == 0\">Seleccionar el mes para ver:</p>\n                                <p v-if=\"nuevo_widget.isSemanal == 1\">Seleccionar el mes de inicio:</p>\n                            </div>\n                            <div class=\"col-sm-4\">\n                                <select v-model=\"nuevo_widget.mesBuscado\" v-if=\"nuevo_widget.isSemanal == 0\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n\n                                <select v-model=\"nuevo_widget.mesInicio\" v-if=\"nuevo_widget.isSemanal == 1\" class=\"form-control\" :disabled=\"guardando\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n                            </div>\n                        </div>\n\n                    </div>\n                    <!--Vista para las tareas -->\n                    <!--meses-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\">\n                        <br>\n                        <div class=\"col-sm-12\">\n                            <hr>\n                            <p>Selecciona el mes que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.mesTarea\" :disabled=\"guardando\" @change=\"obtenerCantidadSemana\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                    {{ numeroDeMes(n) | nombreMes }}\n                                </option>\n                            </select>\n                        </div>\n                    </div>\n                    <!--semanas-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\"><br>\n                        <div class=\"col-sm-12\">\n                            <p>Selecciona la semana que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.semanaTarea\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option value=\"1\">Semana 1</option>\n                                <option value=\"2\">Semana 2</option>\n                                <option value=\"3\">Semana 3</option>\n                                <option v-if=\"semanas >3\" value=\"4\">Semana 4</option>\n                                <option v-if=\"semanas >4\" value=\"5\">Semana 5</option>\n                                <option v-if=\"semanas >5\" value=\"6\">Semana 6</option>\n\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <!--footer de modal-->\n                <div class=\"modal-footer modal-delete-footer\">\n                    <div class=\"form-group\" style=\"margin-bottom: 0px; margin-right: 10px;\">\n                        <div class=\"col-sm-12\">\n                            <hr>\n                        </div>\n                        <!--<a  @click=\"guardarWidget($event)\"  class=\"btn btn-success\" >Guardar</a>-->\n                        <button class=\"btn btn-success\" type=\"submit\" :disabled=\"guardando\">Guardar\n                        </button>\n                        <button data-dismiss=\"modal\" class=\"btn btn-danger\" :disabled=\"guardando\"> Cancelar</button>\n                    </div>\n\n\n\n                </div>\n            </form>\n\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"true\" data-keyboard=\"true\" role=\"dialog\" id=\"modal-nuevo-widget-{{ tipo_id }}\">\n    <div class=\"modal-dialog\">\n        <!-- Modal content-->\n        <div class=\"modal-content modal-delete-content\">\n            <!-- Modal Header -->\n            <div class=\"modal-header modal-delete-header\">\n                <button type=\"button\" class=\"close\" data-dismiss=\"modal\" :disabled=\"guardando\">\n                    <span class=\"sr-only\">Cerrar</span>\n                    <span aria-hidden=\"true\">×</span>\n                </button>\n                <strong class=\"model-title\">Nuevo Widget - {{ titulo }}</strong>\n            </div>\n            <form class=\"form-horizontal\" role=\"form\" @submit.prevent=\"guardarWidget\">\n\n                <div class=\"modal-body modal-delete-body\" :disabled=\"guardando\">\n                    <!-- Tipos de Indicadores-->\n                    <div class=\"col-sm-12 form-group\">\n                        <div class=\"col-sm-12\">\n                            <strong>Tipos Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.tipoIndicador_id\" :items=\"tipos_indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- Indicadores -->\n                    <div class=\"col-sm-12  form-group\" v-if=\"tipo_id !== 1\">\n                        <div class=\"col-sm-12\">\n                            <strong>Indicadores:</strong>\n                            <selector-modal :disabled=\"guardando\" :id.sync=\"nuevo_widget.indicador_id\" :items=\"indicadores\">\n                            </selector-modal>\n                        </div>\n                    </div>\n\n                    <!-- tipos de vista para empleado tipo empleado -->\n                    <div class=\"col-sm-12  form-group\" style=\"margin: 0;\" v-if=\"tipo_id !== 3\">\n                        <div class=\"col-sm-12\">\n                            <div class=\"col-sm-12\">\n                                <hr>\n                                <strong>Tipos de Vista:</strong>\n                            </div>\n                            <div class=\"col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-10 \">\n                                <div class=\"radio\">\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"0\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Semanal\n                                    </label>\n\n                                    <label class=\"radio-inline\">\n                                        <input type=\"radio\" value=\"1\" v-model=\"nuevo_widget.isSemanal\" :disabled=\"guardando\"> Mensual\n                                    </label>\n                                </div>\n                            </div>\n                        </div>\n\n\n\n                        <div class=\"col-sm-12\" style=\"margin-top: 20px;\">\n                            <div class=\"col-sm-6\">\n                                <p v-if=\"nuevo_widget.isSemanal == 0\">Seleccionar el mes para ver:</p>\n                                <p v-if=\"nuevo_widget.isSemanal == 1\">Seleccionar el mes de inicio:</p>\n                            </div>\n                            <div class=\"col-sm-4\">\n                                <select v-model=\"nuevo_widget.mesBuscado\" v-if=\"nuevo_widget.isSemanal == 0\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n\n                                <select v-model=\"nuevo_widget.mesInicio\" v-if=\"nuevo_widget.isSemanal == 1\" class=\"form-control\" :disabled=\"guardando\" required=\"\">\n                                    <option value=\"\">Seleccionar..</option>\n                                    <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                        {{ numeroDeMes(n) | nombreMes }}\n                                    </option>\n                                </select>\n                            </div>\n                        </div>\n\n                    </div>\n                    <!--Vista para las tareas -->\n                    <!--meses-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\">\n                        <br>\n                        <div class=\"col-sm-12\">\n                            <hr>\n                            <p>Selecciona el mes que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.mesTarea\" :disabled=\"guardando\" @change=\"obtenerCantidadSemana\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option v-for=\"n in nuevo_widget.ultimoMes\" value=\"{{ numeroDeMes(n) }}\">\n                                    {{ numeroDeMes(n) | nombreMes }}\n                                </option>\n                            </select>\n                        </div>\n                    </div>\n                    <!--semanas-->\n                    <div class=\"col-sm-12\" v-if=\"tipo_id === 3\"><br>\n                        <div class=\"col-sm-12\">\n                            <p>Selecciona la semana que desea ver el indicadores:</p>\n                        </div>\n                        <div class=\"col-sm-4\">\n                            <select v-model=\"nuevo_widget.semanaTarea\" :disabled=\"guardando\" class=\"form-control\" required=\"\">\n                                <option value=\"\">Seleccionar..</option>\n                                <option value=\"1\">Semana 1</option>\n                                <option value=\"2\">Semana 2</option>\n                                <option value=\"3\">Semana 3</option>\n                                <option v-if=\"semanas >3\" value=\"4\">Semana 4</option>\n                                <option v-if=\"semanas >4\" value=\"5\">Semana 5</option>\n                                <option v-if=\"semanas >5\" value=\"6\">Semana 6</option>\n\n                            </select>\n                        </div>\n                    </div>\n                </div>\n                <!--footer de modal-->\n                <div class=\"modal-footer modal-delete-footer\">\n                    <div class=\"form-group\" style=\"margin-bottom: 0px; margin-right: 10px;\">\n                        <div class=\"col-sm-12\">\n                            <hr>\n                        </div>\n                        <button class=\"btn btn-success\" type=\"submit\" :disabled=\"guardando\">Guardar\n                        </button>\n                        <button data-dismiss=\"modal\" class=\"btn btn-danger\" :disabled=\"guardando\"> Cancelar</button>\n                    </div>\n                </div>\n            </form>\n\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12847,7 +12861,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
-
+    props: [// 0: listado, 1:archivas, 2:eliminadas
+    'modelo'],
     data: function data() {
         return {
             //                //Tarea
@@ -12855,9 +12870,20 @@ exports.default = {
         };
     },
     ready: function ready() {
-        this.obtenerEstadoBtnEliminarTarea();
+        this.opcionModeloTarea(this.modelo);
     },
     methods: {
+        opcionModeloTarea: function opcionModeloTarea(opcion) {
+            if (opcion == 0) {
+                this.$parent.btnResultado = 1;
+                this.$parent.btnEditar = 1;
+                this.obtenerEstadoBtnEliminarTarea();
+            } else {
+                this.$parent.btnResultado = 0;
+                this.$parent.btnEditar = 0;
+                this.$parent.btnEliminar = 0;
+            }
+        },
         obtenerEstadoBtnEliminarTarea: function obtenerEstadoBtnEliminarTarea() {
             // verificar si se puede eliminar una tarea
             $.ajax({
@@ -12916,7 +12942,12 @@ exports.default = {
             nombreTabla: [],
             cumplimiento: 0,
             category: '',
-            datos: ''
+            datos: '',
+            textBuscaqueda: '',
+            descripcionWidget: '',
+            verTabla: 1,
+            verChart: 1,
+            minimizado: 0
         };
     },
     ready: function ready() {
@@ -12946,8 +12977,14 @@ exports.default = {
             }
 
             return resultado;
+        },
+        vistaParaTitulo: function vistaParaTitulo() {
+            if (this.widget.isSemanal === 1) {
+                return 'Mes';
+            } else {
+                return 'Semana';
+            }
         }
-
     },
     filters: {},
     methods: {
@@ -12968,6 +13005,7 @@ exports.default = {
         },
         obtenerTablaWidget: function obtenerTablaWidget() {
             this.obtenerMesActual();
+            this.cambiarMenuVistaWidget();
             this.obtenerTituloChart();
             $.ajax({
                 url: 'obtenerDatosTablaWidget',
@@ -12996,15 +13034,13 @@ exports.default = {
                 data: this.widget,
                 dataType: 'json',
                 success: function (data) {
-                    MostrarChart(JSON.stringify(data[0]), JSON.stringify(data[1]));
+                    MostrarChart(this.widget.id, JSON.stringify(data[0]), JSON.stringify(data[1]));
                 }.bind(this), error: function (data) {
                     console.log('Error: No se puede cargar los datos a la grafica del widget ' + this.widget.id);
                 }.bind(this)
             });
         },
-        eliminarWidget: function eliminarWidget($event) {
-            $event.preventDefault();
-
+        eliminarWidget: function eliminarWidget() {
             // lanzamos el evento al metos de elimanr del js app-vue
             this.$dispatch('eliminar-widget', this.widget.id);
         },
@@ -13127,6 +13163,26 @@ exports.default = {
                     Notificion.warning('NO se realizo el actualizaciòn de los datos..');
                 }.bind(this)
             });
+        },
+        cambiarMenuVistaWidget: function cambiarMenuVistaWidget() {
+            switch (this.widget.tipo_id) {
+                case 1:
+
+                    break;
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+            }
+
+            if (this.widget.isSemanal === 0) {
+                // si la vista esta mensual isSemanal = 0
+                this.textBuscaqueda = 'Mes Actual:';
+            } else {
+                // si la vista esta semanal isSemanal = 1
+                this.textBuscaqueda = 'Mes Inicio:';
+            }
         }
 
     }
@@ -13135,12 +13191,12 @@ exports.default = {
 
 var chart;
 
-function MostrarChart(datosChart, categoriachart) {
+function MostrarChart(widget_id, datosChart, categoriachart) {
     var dato = JSON.parse(datosChart);
     var categoria = JSON.parse(categoriachart);
 
     chart = c3.generate({
-        bindto: "#chart_tabla",
+        bindto: "#chart-" + widget_id,
         data: {
             type: 'bar',
             // labels: true,
@@ -13179,7 +13235,7 @@ function MostrarChart(datosChart, categoriachart) {
     });
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\">\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo  }}</h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget($event)\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                                <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                                <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart_tabla\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label v-if=\"widget.isSemanal === 0\" style=\"border-right: 20px;\">Mes actual:</label>\n                                <label v-if=\"widget.isSemanal === 1\" style=\"border-right: 20px;\">Mes de inicio:</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\" id=\"panelWidget\">\n            <!--minimizar colocar la clase = box box-warning collapsed-box , mazminazar colcoar = box box-warning -->\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo }} - por {{ vistaParaTitulo }} </h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget()\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                            <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n\n                    <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb\">\n                        <p>{{ descripcionWidget }}</p>\n                    </div>\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart-{{ widget.id  }}\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\">{{ textBuscaqueda }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

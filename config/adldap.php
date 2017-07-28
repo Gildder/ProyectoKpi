@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'auto_connect' => true,
+    'auto_connect' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ return [
         |
         */
 
-        'account_suffix' => '@acme.org',
+        'account_suffix' => '',
 
         /*
         |--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
         |
         */
 
-        'domain_controllers' => ['ldap.forumsys.com'],
+        'domain_controllers' => ['172.17.0.3'],
 
         /*
         |--------------------------------------------------------------------------
@@ -95,7 +95,7 @@ return [
         |
         */
 
-        'base_dn' => 'cn=read-only-admin,dc=example,dc=com',
+        'base_dn' => 'dc=multicenter,dc=com,dc=bo',
 
         /*
         |--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
         |
         */
 
-        'admin_account_suffix' => '@acme.org',
+        'admin_account_suffix' => '',
 
         /*
         |--------------------------------------------------------------------------
@@ -123,8 +123,8 @@ return [
         |
         */
 
-        'admin_username' => 'username',
-        'admin_password' => 'password',
+        'admin_username' => 'agenteproy',
+        'admin_password' => 'mcagenteproy',
 
         /*
         |--------------------------------------------------------------------------

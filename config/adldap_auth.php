@@ -19,7 +19,7 @@ return [
     |
     */
 
-    'username_attribute' => ['username' => 'samaccountname'],
+    'username_attribute' => ['name' => 'samaccountname'],
 
     /*
     |--------------------------------------------------------------------------
@@ -60,7 +60,7 @@ return [
     |
     */
 
-    'login_attribute' => 'samaccountname',
+    'login_attribute' => 'cn',
 
     /*
     |--------------------------------------------------------------------------
@@ -102,7 +102,7 @@ return [
     |
     */
 
-    'bind_user_to_model' => false,
+    'bind_user_to_model' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -124,7 +124,7 @@ return [
     'sync_attributes' => [
 
         'name' => 'cn',
-        'password' => 'mail',
+        'password' => 'userPassword',
         'email' => 'mail',
 
     ],
@@ -145,8 +145,9 @@ return [
     */
 
     'select_attributes' => [
-
-        //
+        'SAMAccountName',
+        'cn',
+        'userPassword'
 
     ],
 

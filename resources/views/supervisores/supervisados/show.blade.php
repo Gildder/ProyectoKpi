@@ -8,9 +8,9 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="{{route('supervisores.supervisados.index')}}" class="btn btn-primary btn-xs  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
-    <p class="titulo-panel">{!! $empleado->codigo !!} - {!! $empleado->nombres !!} {!! $empleado->apellidos !!}</p>
-    
+    <a href="{{route('supervisores.supervisados.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-sm  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
+    <p class="titulo-panel">{!! $usuario->id !!} - {!! $usuario->nombres !!} {!! $usuario->apellidos !!}</p>
+
     {{-- Boton para sincrozizar los indicadores con las tareas --}}
     {{-- <a href="{{route('supervisores.supervisados.index')}}" style="top: -20px;  position: relative;" class="btn btn-info btn-xs  pull-right btn-back" title="Sincronizar Datos"><span class="fa fa-refresh"></span></a> --}}
 
@@ -43,9 +43,9 @@
                 
               {{-- Inicio de Datos de los Indicadores --}}
               <?php
-                      $listaTablas   = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);
+                      $listaTablas   = $indicador::getTablaIndicador($usuario->id, $indicador->id);
                       dd($listaTablas);
-                      $listaGraficas = $indicador::getGraficoIndicador($empleado->codigo, $indicador->id);
+                      $listaGraficas = $indicador::getGraficoIndicador($usuario->id, $indicador->id);
               ?>
 
               @if($indicador->id == '1')

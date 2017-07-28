@@ -27,7 +27,7 @@
 </script>
 
 
-<div class="table-response">
+<div class="table-responsive">
 	<table id="myTableIndicadorEvalaudor" class="table table-striped table-bordered table-condensed table-hover">
 		<thead>
 			<th></th>

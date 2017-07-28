@@ -37,7 +37,6 @@ class TareaProgramasResolverRequest extends Request
 //            'estado'=> 'required',
             'observaciones'=>'max:120',
             'prov'=> 'required',
-
         ];
     }
 

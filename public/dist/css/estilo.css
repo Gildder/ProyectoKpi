@@ -43,6 +43,10 @@ body {
   left: 50%;
   width: 10px;
 }
+.barraEvaluador {
+  margin-top: 5px;
+  border-bottom: 1px solid #a9a9a9;
+}
 .headerTable {
   background: #4f81bd;
   color: #fff;

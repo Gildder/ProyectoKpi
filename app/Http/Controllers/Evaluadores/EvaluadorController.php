@@ -3,6 +3,7 @@
 namespace ProyectoKpi\Http\Controllers\Evaluadores;
 
 use Illuminate\Http\Request;
+use const null;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Http\Requests;
@@ -133,7 +134,7 @@ class EvaluadorController extends Controller
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id])
-            ->update( array('is_evaluador' => 1));
+            ->update( array('is_evaluador' => 1, 'evaluador_id'=> $evaluador_id));
 
 
         return redirect()->back()->with('message', 'Se agrego el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
@@ -147,7 +148,7 @@ class EvaluadorController extends Controller
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id])
-            ->update( array('is_evaluador' => null));
+            ->update( array('is_evaluador' => null, 'evaluador_id'=> null));
 
         return redirect()->back()->with('message', 'Se quito el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
     }
@@ -270,6 +271,10 @@ class EvaluadorController extends Controller
             array('indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion)
         );
 
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['cargo_id' => $cargo_id])
+            ->update( array('evaluado_por'=> $evaluador_id));
+
         return redirect()->back()->with('message', 'Se agrego el cargo "'.$cargo->nombre.'" correctamente.' );
 
     }
@@ -303,6 +308,14 @@ class EvaluadorController extends Controller
         DB::table('indicador_cargos')->where(['indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_idOld])
                                      ->update( array('cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion));
 
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['cargo_id' => $cargo_idOld])
+            ->update( array('evaluado_por'=> null));
+
+        DB::table('users')->where(['cargo_id' => $cargo_id])
+            ->update( array('evaluado_por'=> $evaluador_id));
+
+
         return redirect()->back()->with('message', 'Se modifico el cargo "'.$cargo->nombre.'" correctamente.' );
     }
 
@@ -311,6 +324,10 @@ class EvaluadorController extends Controller
         DB::table('indicador_cargos')->where('indicador_id', $indicador_id)->where('evaluadorIndicador_id', $evaluador_id)->where('evaluadorCargo_id', $evaluador_id)->where('cargo_id', $cargo_id)->delete();
 
         $cargo = Cargo::findOrFail($cargo_id);
+
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['cargo_id' => $cargo_id])
+            ->update( array('evaluado_por'=> null));
 
         return redirect()->back()->with('message', 'Se quito el cargo '.$cargo->nombre.' correctamente.');
     }

@@ -75,7 +75,7 @@
  <hr>
     <a id="btncancelarnuevoindicador" class="btn btn-danger btn-sm " ><span class="fa fa-times"></span> Cancelar</a>
 
-    {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success btn-sm', 'type'=>'submit'  ]) !!}
+     <button type="submit" @click="mostrarModalLoading()"  class="btn btn-success guardar" type="reset"><span class="fa fa-save"></span> Guardar</button>
   </div>
   {!! Form::close()!!}
 </div>

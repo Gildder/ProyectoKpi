@@ -100,7 +100,7 @@ class EmpleadoController extends Controller
     public function index()
     {
         $empleados = EmpleadoRepository::obtenerEmpleados();
-//dd($empleados);
+
         return view('empleados/empleado/index')->with('empleados', $empleados);
     }
 
@@ -151,31 +151,37 @@ class EmpleadoController extends Controller
         $empleado = EmpleadoRepository::obtenerEmpleado($id);
         $cargos = Cargo::all();
         $grlocalizacion = GrupoLocalizacion::all();
-        $localizacion = Localizacion::all();
+        $localizaciones = Localizacion::all();
         $grdepartamento = GrupoDepartamento::all();
-        $departamento = Departamento::all();
+        $departamentos = Departamento::all();
         $tipoUsuario = TipoUsuario::all();
 
-        return view('empleados.empleado.edit', ['empleado'=>$empleado,'cargos'=>$cargos, 'grdepartamento'=>$grdepartamento, 'grlocalizacion'=>$grlocalizacion,'localizacion'=>$localizacion, 'departamento'=>$departamento,'tipoUsuario'=> $tipoUsuario]);
+//        dd($departamentos, $empleado, $localizaciones);
+
+        return view('empleados.empleado.edit', ['empleado'=>$empleado,'cargos'=>$cargos, 'grdepartamento'=>$grdepartamento, 'grlocalizacion'=>$grlocalizacion,'localizaciones'=>$localizaciones, 'departamentos'=>$departamentos,'tipoUsuario'=> $tipoUsuario]);
     }
 
     public function update(EmpleadoRequestUpdate $Request, $id)
     {
-        $empleado = User::where('id', $id)->first();
+        $usuario = User::where('id', $id)->first();
 
-        DB::table('users')->where('id', $id)->update([
-            'nombres' => $Request->nombres,
-            'apellidos' => $Request->apellidos,
-            'codigo' => $Request->codigo,
-            'departamento_id' => $Request->departamento_id,
-            'localizacion_id' => $Request->localizacion_id,
-            'cargo_id' => $Request->cargo_id,
-            'name' => $Request->name,
-            'email' => $Request->email,
-            'type' => $Request->type
-        ]);
+        $usuario->nombres = trim($Request->nombres);
+        $usuario->apellidos = trim($Request->apellidos);
+        $usuario->codigo = trim($Request->codigo);
+        $usuario->departamento_id = $Request->departamento_id;
+        $usuario->localizacion_id = $Request->localizacion_id;
+        $usuario->cargo_id = $Request->cargo_id;
+        $usuario->name = trim($Request->name);
+        $usuario->email = trim($Request->email);
+        $usuario->type = $Request->type;
 
         return redirect('empleados/empleado')->with('message', 'El Empleado '.$Request->name.' se actualizo correctamente.');
+
+        if ($usuario->save()) {
+            return redirect('empleados/empleado')->with('message', 'El Empleado '.$Request->name.' se actualizo correctamente.');
+        } else {
+            return back()->withInput();
+        }
     }
 
     public function show($id)

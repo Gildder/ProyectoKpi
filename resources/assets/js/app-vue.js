@@ -81,7 +81,9 @@ $(document).ready(function() {
             type_pass: true,
 
             //Tarea
-            btnEliminar: 1,
+            btnResultado: 0,
+            btnEditar: 0,
+            btnEliminar: 0,
         },
         ready: function () {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -104,16 +106,17 @@ $(document).ready(function() {
                 this.panelWidgets = lista;
             },
             'eliminar-widget': function (id) {
-                resourceWidget = this.$resource('/evaluadores/evaluados/eliminarEvaluadorWidget{/id}');
+                resourceWidget = this.$resource('eliminarEvaluadorWidget/{id}');
 
                 resourceWidget.delete({id: id}).then( function (response) {
                     this.panelWidgets.$remove(id);
                     this.panelWidgets = response.data;
 
+                    this.obtenerListaWidget();
                     Notificion.success('El Widget se elimino correctamente!');
                 }, function (response) {
                     Notificion.warning('El Widget No elimino, por favor verificar con su administrador!');
-
+                    alert(JSON.stringify(response));
                 });
             },
 
@@ -129,7 +132,8 @@ $(document).ready(function() {
                 resourceWidget.get().then( function (response) {
                     this.panelWidgets = response.data;
 
-                }, function (reponse) {
+
+                }, function (reponse){
 
                 });
             },
@@ -204,8 +208,17 @@ $(document).ready(function() {
                 }
 
             },
+            mostrarModalLoading: function () {
+                utils.mostrarCargando(true);
+            },
+            mostrarDesabilitar: function ($this) {
+                alert($this);
+            },
 
-
+            /* Supervisados*/
+            verTareasSupervisados:  function () {
+                alert('hoal');
+            },
 
         }
     });

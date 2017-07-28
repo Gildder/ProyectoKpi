@@ -16,11 +16,17 @@
 	@include('partials/alert/error')
 	
 	<div class="text-left col-lg-12 breadcrumb">
-		<a  href="{{route('evaluadores.evaluador.create')}}" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span><b>   Nuevo</b> </a>
+		<a  href="{{route('evaluadores.evaluador.create')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span><b>   Nuevo</b> </a>
+	</div>
+
+	<div>
+
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
+			<div class="table-responsive">
 			@include('evaluadores/evaluador/partials/tabla_evaluador')
+		</div>
 		</div>
 	</div>
 

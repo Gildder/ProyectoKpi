@@ -17,6 +17,13 @@ class EvaluadorFormRequest extends Request
         return true;
     }
 
+    public function response(array $errors)
+    {
+        return $this->redirector->to($this->getRedirectUrl())
+            ->withErrors($errors, $this->errorBag)
+            ->withInput($this->all());
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

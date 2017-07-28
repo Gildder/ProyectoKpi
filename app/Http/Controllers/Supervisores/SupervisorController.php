@@ -45,45 +45,45 @@ class SupervisorController extends Controller
         return view('supervisores\supervisor\show', ['lista'=>$lista,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadossupervisores,'tipo'=>$tipo]);
     }
 
-    public function agregardepartamento($empleado_id, $departamento_id)
+    public function agregardepartamento($user_id, $departamento_id)
     {
-        $empleado = User::where('users.id', $empleado_id)->first();
+        $empleado = User::where('users.id', $user_id)->first();
 
         DB::table('supervisor_departamentos')->insert(
-            array('user_id' => $empleado_id, 'departamento_id' => $departamento_id)
+            array('user_id' => $user_id, 'departamento_id' => $departamento_id)
         );
 
         //Actualizacion de Users en campos is_evaluador
-        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $departamento_id])
+        DB::table('users')->where(['id' => $user_id])
             ->update( array('is_supervisor' => 1));
 
         return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');
     }
 
-    public function quitardepartamento($empleado_id, $departamento_id)
+    public function quitardepartamento($user_id, $departamento_id)
     {
-        $empleado =User::where('users.id', $empleado_id)->first();
+        $empleado =User::where('users.id', $user_id)->first();
 
         
-        DB::table('supervisor_departamentos')->where('user_id', $empleado_id)->where('departamento_id', $departamento_id)->delete();
+        DB::table('supervisor_departamentos')->where('user_id', $user_id)->where('departamento_id', $departamento_id)->delete();
 
         //Actualizacion de Users en campos is_evaluador
-        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $departamento_id])
+        DB::table('users')->where(['id' => $user_id, 'departamento_id' => $departamento_id])
             ->update( array('is_supervisor' => null));
 
         return redirect()->back()->with('message', 'Se quito el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');
     }
 
-    public function agregarcargo($empleado_id, $cargo_id)
+    public function agregarcargo($user_id, $cargo_id)
     {
-        $empleado =User::where('users.id', $empleado_id)->first();
+        $empleado =User::where('users.id', $user_id)->first();
 
         DB::table('supervisor_cargos')->insert(
-            array('user_id' => $empleado_id, 'cargo_id' => $cargo_id)
+            array('user_id' => $user_id, 'cargo_id' => $cargo_id)
         );
 
         //Actualizacion de Users en campos is_evaluador
-        DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $cargo_id])
+        DB::table('users')->where(['id' => $user_id])
             ->update( array('is_supervisor' => 1));
 
         return redirect()->back()->with('message', 'Se agrego el empleado "'.$empleado->id.' - '.$empleado->name.' '.$empleado->apellidos.'" correctamente.');

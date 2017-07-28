@@ -11,7 +11,7 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-xs  pull-left btn-back"><span class="fa fa-reply"></span></a>
+      <a  href="{{route('tareas.tareaProgramadas.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs  pull-left btn-back"><span class="fa fa-reply"></span></a>
       <strong>{{ $tarea->id}} - {{ $tarea->descripcion}}</strong>
   </div>
 
@@ -27,7 +27,7 @@
     <div class="row col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
     {{-- Fecha de Inicio --}}
-    <div class="form-group col-xs-12 col-sm-5 col-md-5 col-lg-5
+    <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-5
         @if ($errors->has('fechaInicioSolucion'))
             has-error
         @endif">
@@ -50,7 +50,7 @@
      </div>
 
         {{-- Fecha Fin --}}
-        <div class="form-group col-xs-12 col-sm-5 col-md-5 col-lg-5
+        <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-5
         @if ($errors->has('fechaFinSolucion'))
              has-error
         @endif">
@@ -73,6 +73,7 @@
       {{-- Tiempo estimado --}}
       <div class="row col-sm-12">
         <label class="form-group col-sm-12 col-xs-12" style="margin-top: 10px;">Tiempo de Duracion *:</label>
+          {{-- Horas --}}
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4
             @if ($errors->has('hora'))
                   has-error
@@ -85,7 +86,7 @@
 
           </div>
 
-
+            {{-- Minutos --}}
           <div class="form-group  col-xs-12 col-sm-6 col-md-6 col-lg-4
                 @if ($errors->has('minuto'))
                   has-error
@@ -102,7 +103,7 @@
 
       {{-- Observaciones --}}
       <div class="row col-sm-12">
-        <div class="form-group @if ($errors->has('observaciones')) has-error @endif  col-sm-10">
+        <div class="form-group @if ($errors->has('observaciones')) has-error @endif  col-sm-12 col-md-10 col-lg-10">
             <label for="observaciones">Observaciones</label>
             <textarea type="textArea" name="observaciones" value="{{ $tarea->observaciones }}"   maxlength="120" placeholder="Observaciones" class="form-control" rows="5" cols="9"></textarea>
             @if ($errors->has('observaciones')) <p class="help-block">{{ $errors->first('observaciones') }}</p> @endif
@@ -127,11 +128,12 @@
 
 
     <div class="panel-footer text-right">
-        <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}"
+        <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" @click="mostrarModalLoading()"
             class="btn btn-danger" >
             <span class="fa fa-times"></span> Cancelar
         </a>
-        {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
+        <button type="submit" name="guardar" class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
+
     </div>
         {!! Form::close()!!}
 </div>

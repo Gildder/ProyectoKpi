@@ -15,8 +15,9 @@
               <p>¿Estas seguro que deseas quitar a <b>{{$item->nombre}}?</b></p>
             </div>
             <div class="modal-footer modal-delete-footer">
-              <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
-              {!! form::button('<i class="fa fa-check"></i> Aceptar',['name'=>'aceptar', 'id'=>'aceptar', 'content'=>'<span>Aceptar</span>', 'class'=>'btn btn-success', 'type'=>'submit' ]) !!}
+                <a href="javascript:void(0)"  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
+                <button type="submit" @click="mostrarModalLoading()"  class="btn btn-success guardar" type="reset"><span class="fa fa-check"></span> Aceptar</button>
+
             </div>
             {!! Form::close()!!}
       </div>

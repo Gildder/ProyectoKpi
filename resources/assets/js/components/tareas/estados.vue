@@ -6,7 +6,9 @@
 
 
     export default {
-
+        props: [ // 0: listado, 1:archivas, 2:eliminadas
+            'modelo'
+        ],
         data: function(){
             return {
 //                //Tarea
@@ -14,9 +16,20 @@
             }
         },
         ready: function () {
-            this.obtenerEstadoBtnEliminarTarea();
+            this.opcionModeloTarea(this.modelo);
         },
         methods: {
+            opcionModeloTarea: function(opcion) {
+                if(opcion == 0){
+                    this.$parent.btnResultado = 1;
+                    this.$parent.btnEditar = 1;
+                    this.obtenerEstadoBtnEliminarTarea();
+                }else{
+                    this.$parent.btnResultado = 0;
+                    this.$parent.btnEditar = 0;
+                    this.$parent.btnEliminar = 0;
+                }
+            },
             obtenerEstadoBtnEliminarTarea: function () {
                 // verificar si se puede eliminar una tarea
                 $.ajax({

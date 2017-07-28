@@ -10,6 +10,7 @@ use ProyectoKpi\Cms\Clases\UsuarioActivo;
 use ProyectoKpi\Cms\Negocios\nDashboard;
 use ProyectoKpi\Cms\Negocios\nTablaMes;
 use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
+use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Http\Controllers\Controller;
 
 
@@ -55,13 +56,11 @@ class EvaluadosController extends Controller
     {
 //        $ldap = new Conexion_LDAP();
 ////        $ldap->conectar();
-//        $resulta = $ldap->mailboxpowerloginrd('gguerreros', 'multicenter2');
+//        $resulta = $ldap->login_ldap('gguerrero', 'multicenter2');
 //
 //        dd($resulta);
 //        dd(ConfiguracionRepositorio::getGenerarSemanasAnuales(2017));
 //        $semsns = ConfiguracionRepositorio::getGenerarSemanasAnuales(2017);
-
-
 
         $this->dashboard = new nDashboard();
 
@@ -98,9 +97,6 @@ class EvaluadosController extends Controller
      */
     public function obtenerVista($tipoWidget)
     {
-
-
-
         $this->dashboard = new nDashboard();
 
         $datos = $this->dashboard->obtenerDatosWidget($tipoWidget);
@@ -338,9 +334,9 @@ class EvaluadosController extends Controller
 
     public function guardarWidget(Request $request)
     {
-        \DB::table('evaluador_widget')->truncate();
+//        \DB::table('evaluador_widget')->truncate();
 
-
+        // guardamos el nuevo widget
         $widget = Widget::create([
             'evaluador_id' =>  \Cache::get('evadores')->id,
             'user_id' => \Usuario::get('id'),

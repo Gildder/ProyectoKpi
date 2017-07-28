@@ -2,7 +2,9 @@
 
 namespace ProyectoKpi\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
+use ProyectoKpi\Cms\Clases\PreferenciasUsuario;
 use ProyectoKpi\Cms\Clases\UsuarioActivo;
 
 class UsuarioActivoServiceProvider extends ServiceProvider
@@ -26,7 +28,7 @@ class UsuarioActivoServiceProvider extends ServiceProvider
     {
         \App::bind('useract', function()
         {
-            return new UsuarioActivo();
+            return new UsuarioActivo(new PreferenciasUsuario(\Auth::user()->id));
         });
     }
 }

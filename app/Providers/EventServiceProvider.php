@@ -13,19 +13,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // evento -> acciones
+        // evento -> acciones <-> listener
 
-        // Tarea -> Indicador
-        'ProyectoKpi\Events\Tarea\TareaSaved' => [
-            'ProyectoKpi\Listeners\Tarea\IndicadorSavedListener',
-        ],
-
-        'ProyectoKpi\Events\Tarea\TareaUpdated ' => [
-            'ProyectoKpi\Listeners\Tarea\IndicadorUpdatedListener',
-        ],
-
-        'ProyectoKpi\Events\Tarea\TareaUpdating' => [
-            'ProyectoKpi\Listeners\Tarea\IndicadorUpdatingListener',
+        'ProyectoKpi\Events\Eficacia\ProgramacionImportacionTickets' => [
+            'ProyectoKpi\Listeners\Eficacia\InsertandoImportacion',
         ],
     ];
 

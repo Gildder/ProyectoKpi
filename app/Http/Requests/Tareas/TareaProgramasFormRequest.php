@@ -29,10 +29,17 @@ class TareaProgramasFormRequest extends Request
      */
     public function rules()
     {
+        if($this->get('estimados') == 1){ // las fechas estimadas son requeridos
+            $fechaInicioEstimado = 'required|date_format:d/m/Y|before_equal:fechaFinEstimado';
+            $fechaFinEstimado = 'required|date_format:d/m/Y|after_equal:fechaInicioEstimado';
+        }else{
+            $fechaInicioEstimado = 'date_format:d/m/Y|before_equal:fechaFinEstimado';
+            $fechaFinEstimado = 'date_format:d/m/Y|after_equal:fechaInicioEstimado';
+        }
         return [
                 'descripcion'=>'required|min:5|max:60',
-                'fechaInicioEstimado' => 'required|date_format:d/m/Y|before_equal:fechaFinEstimado',
-                'fechaFinEstimado' => 'required|date_format:d/m/Y|after_equal:fechaInicioEstimado',
+                'fechaInicioEstimado' => $fechaInicioEstimado,
+                'fechaFinEstimado' => $fechaFinEstimado,
                 'hora'=> 'required',
                 'minuto'=> 'required'
         ];

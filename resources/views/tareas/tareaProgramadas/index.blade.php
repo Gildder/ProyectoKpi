@@ -18,12 +18,13 @@
     {{-- Opciones de Menu --}}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <a  href="{{route('tareas.tareaProgramadas.create')}}" class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
+        <a  href="{{route('tareas.tareaProgramadas.create')}}" @click="mostrarModalLoading()"  class="btn btn-primary btn-sm" ><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
         
       </div>
       <div class="text-right col-xs-6 col-sm-6 col-md-6 col-lg-6" >
         {{-- Finalizado --}}
-        <a  href="{{route('tareas.tareaProgramadas.archivados')}}" class="btn btn-success btn-sm" title="Archivados"><span class="fa  fa-archive"></span><b></b></a>
+        <a  href="{{route('tareas.tareaProgramadas.archivados')}}" @click="mostrarModalLoading()"   class="btn btn-success btn-sm" title="Archivados"><span class="fa  fa-archive"></span>  <b class="hidden-xs"> Archivados</b></a>
+        <a  href="{{route('tareas.tareaProgramadas.create_next')}}" @click="mostrarModalLoading()"   class="btn btn-info btn-sm" title="Siguiente Semana"><span class="fa  fa-arrow-right"></span>   <b class="hidden-xs">Prox. Semana</b></a>
       </div>
     </div>
 

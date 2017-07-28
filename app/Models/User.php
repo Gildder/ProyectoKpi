@@ -5,17 +5,26 @@ namespace ProyectoKpi\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use ProyectoKpi\Cms\repositories\UserRepository;
-
+use Adldap\Laravel\Traits\AdldapUserModelTrait;
 
 class User extends Authenticatable
 {
+    use AdldapUserModelTrait;
+
+
+    /**
+    * Los atributos que son asignables en masa.
+    *
+    * @var array
+    */
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id','name', 'email', 'state',  'active',  'type', 'hasRelation','codigo','nombres', 'apellidos', 'departamento_id', 'localizacion_id','cargo_id',
+        'id','name', 'email', 'state',  'active',  'type', 'hasRelation','codigo','nombres', 'apellidos', 'departamento_id', 'localizacion_id','cargo_id', 'is_supervisor', 'is_evaluador', 'has_indicador', 'tecnico_id', 'evaluado_por', 'evaluador_id'
     ];
 
     /**
@@ -53,19 +62,16 @@ class User extends Authenticatable
         return $this->belongsTo('ProyectoKpi\Models\Empleados\TipoUsuario','type');
     }
 
-
-
-    /* Relaciones */
     function cargo(){
         return $this->belongsTo('ProyectoKpi\Models\Empleados\Cargo');
     }
     
     function departamento(){
-        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Departamento');
+        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Departamento', 'departamento_id', 'id');
     }
 
     function localizacion(){
-        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Localizacion');
+        return $this->belongsTo('ProyectoKpi\Models\Localizaciones\Localizacion', 'localizacion_id', 'id');
     }
 
     public function tareas()

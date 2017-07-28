@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0 0 10px 0">
-	<p class="pull-left">Lista de indicadores asignadas a la Gerencia evaluadora  <b>{{$evaluador->abreviatura}}</b>.</p>
+	<p>Lista de indicadores asignadas a la Gerencia evaluadora  <b>{{$evaluador->abreviatura}}</b>.</p>
 </div>
 <div class="table table-responsive">
 	<table id="myTableIndicadores" class="table table-striped table-bordered table-condensed table-hover">
@@ -30,7 +30,7 @@
 					@endforeach
 				</td>
 				<td>
-					<a href="{{route('evaluadores.evaluador.asignarcargo', array($item->id, $evaluador->id)) }}"  class="btn btn-warning btn-xs" title="Indicadores por Cargos"> <span class="fa fa-sitemap"></span>  <b></b> </a>
+					<a href="{{route('evaluadores.evaluador.asignarcargo', array($item->id, $evaluador->id)) }}" @click="mostrarModalLoading()" class="btn btn-warning btn-xs" title="Indicadores por Cargos"> <span class="fa fa-sitemap"></span>  <b></b> </a>
 					
 					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-quitarindicador-{{$item->id}}" class="btn btn-danger btn-xs" title="Quitar Indicador"> <span class="fa fa-trash"></span>  <b></b> </a>
 				</td>
@@ -40,6 +40,8 @@
 		</tbody>
 	</table>
 </div>
-@include('evaluadores/evaluador/indicadores/nuevosindicadores/agregar')
+<div class="raw">
+	@include('evaluadores/evaluador/indicadores/nuevosindicadores/agregar')
+</div>
 
 

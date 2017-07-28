@@ -24,7 +24,7 @@ $(document).ready(function() {
 		<tbody>
 @foreach($tareas as $tarea)
 <tr>
-	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" class="btn btn-warning btn-xs" title="Ver"><span >{{$tarea->id}}</span></a></td>
+	<td><a href="{{route('tareas.tareaProgramadas.show', $tarea->id )}}" @click="mostrarModalLoading()"  class="btn btn-warning btn-xs" title="Ver"><span >{{$tarea->id}}</span></a></td>
 	<td>{{$tarea->descripcion}}</td>
 	<td> {{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}} </td>
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}</td>

@@ -10,7 +10,7 @@
 <div class="panel panel-default">
 	{{-- Header --}}
 	<div class="panel-heading">
-	  <a href="{{route('evaluadores.evaluador.show', $evaluador->id)}}" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
+	  <a href="{{route('evaluadores.evaluador.show', $evaluador->id)}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs btn-back pull-left"><span class="fa fa-reply"></span></a>
 	  <p class="titulo-panel">{!! $indicador->id !!} - {!! $indicador->nombre !!}</p>
 	</div>
 
@@ -18,37 +18,33 @@
 	<div class="panel-body">
 
 		{{-- Mensajes --}}
-		<div class="row col-lg-12">
 			@include('partials/alert/error')
-		</div>
 
-		<div class="col-sm-12">
 			{{-- Formulacion de Boton Nuevo --}}
-			<div id="form" class="row col-sm-12">
-				{{-- Botones --}}
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
-					<a id="btnnuevocargoindicador" href="javascript:void(0)"  class="btn btn-success btn-sm  @if($evaluador->isCargosAgregados($evaluador->id)) disabled @endif"  title="Agregar Indicador"><span class="fa fa-plus"></span>   <b>Agregar</b></a>
-				</div>
-
-				{{-- Comentario --}}
-				<div class="col-sm-12" style="margin-bottom: 10px;">
-					<p>Lista de cargos asignados al indicador <b>{!! $indicador->nombre !!}</b></p>
-				</div>
+			{{-- Botones --}}
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb agregar">
+				<a id="btnnuevocargoindicador" href="javascript:void(0)"  class="btn btn-success btn-sm  @if($evaluador->isCargosAgregados($evaluador->id)) disabled @endif"  title="Agregar Indicador"><span class="fa fa-plus"></span>   <b>Agregar</b></a>
 			</div>
-			
+
+			{{-- Comentario --}}
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 agregar">
+				<p>Lista de cargos asignados al indicador <b>{!! $indicador->nombre !!}</b></p><br>
+			</div>
+
 			{{-- Formualrio para nuevo Cargo --}}
-			<div id="nuevoCargoIndicador" class="col-sm-12 breadcrumb" hidden>
+			<div id="nuevoCargoIndicador" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb" hidden>
 				@include('evaluadores/evaluador/indicadores/cargosasignados/datos_create')
 			</div>
 
 			{{-- Formualrio para Editar Cargo --}}
-			<div id="editarCargoIndicador" class="col-sm-12 breadcrumb" hidden>
+			<div id="editarCargoIndicador" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb" hidden>
 				@include('evaluadores/evaluador/indicadores/cargosasignados/datos_edit')
-				<div style="background: red; height: 50px;"></div>
 			</div>
 
-			@include('evaluadores/evaluador/indicadores/cargosasignados/tabla_agregados')
-		</div>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				@include('evaluadores/evaluador/indicadores/cargosasignados/tabla_agregados')
+			</div>
+
 	</div>
 
 	{{-- Footer --}}
@@ -58,19 +54,19 @@
 
 <script>
 	$('#btnnuevocargoindicador').on( "click", function() {
-		$('#form').hide();
+		$('.agregar').hide();
 		$('#nuevoCargoIndicador').show();
 		$('#editarCargoIndicador').hide();
 	});
 
 	$('#btncancelarnuevoindicador').on('click', function() {
-		$('#form').show();
+		$('.agregar').show();
 		$('#nuevoCargoIndicador').hide();
 		$('#editarCargoIndicador').hide();
 	});
 
 	$('#btnEditarCargoIndicador').on('click', function() {
-		$('#form').hide();
+		$('.agregar').hide();
 		$('#nuevoCargoIndicador').hide();
 		$('#editarCargoIndicador').show();
 		
@@ -106,7 +102,7 @@
 				$("select[name=cargo_id]  option").each(function(){
 				   var id = $(this).attr('value');
 
-				   if (id == {{ $element->id }}) {
+				   if (id === {{ $element->id }}) {
 	                	$("select[name=cargo_id] > option[value="+ {{ $element->id }} +"]").attr("selected",true);
 	                	existe = true;
 	                }

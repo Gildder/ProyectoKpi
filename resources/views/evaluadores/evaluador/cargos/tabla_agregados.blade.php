@@ -1,6 +1,6 @@
 <div class="table-response">
 	<table class="table table-striped table-bordered table-condensed table-hover">
-		<thead>
+		<thead class="headerTable">
 			<th>Nro</th>
 			<th>Nombre</th>	
 			<th></th>	

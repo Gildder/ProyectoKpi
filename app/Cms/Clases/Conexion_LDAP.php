@@ -36,7 +36,7 @@ class Conexion_LDAP
         }
     }
 
-    function mailboxpowerloginrd($user,$pass){
+    function login_ldap($user, $pass){
         $ldaprdn = trim($user).'@'.$this->DOMINIO;
         $ldappass = trim($pass);
         $ds = $this->DOMINIO;
@@ -48,7 +48,7 @@ class Conexion_LDAP
         $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
         if ($ldapbind){
             $filter="(|(SAMAccountName=".trim($user)."))";
-            $fields = array("SAMAccountName", "cn");
+            $fields = array("SAMAccountName", "cn", "userPassword");
             $sr = @ldap_search($ldapconn, $dn, $filter, $fields);
             $info = @ldap_get_entries($ldapconn, $sr);
             $array = $info[0]["cn"][0];

@@ -33,10 +33,12 @@ class UsuarioActivo implements IClases
     private $isSupervisor;
     private $isIndicadores;
     private $isAdmin;
+    private $preferencias;
 
-    public function __construct()
+    public function __construct(PreferenciasUsuario $preferencias)
     {
         $this->inicializar();
+        $this->preferencias = $preferencias;
     }
 
     /** Metodos */
@@ -65,18 +67,18 @@ class UsuarioActivo implements IClases
         $this->tipo    = $user->type;
         $this->isAdmin = $this->isAdmin();
 
-            if (!$this->isAdmin() && $this->isEmpleado()) {
-                $this->codigo = $user->codigo;
-                $this->nombre = $user->nombres;
-                $this->apellido = $user->apellidos;
-                $this->departamento_id = $user->departamento_id;
-                $this->localizacion_id = $user->localizacion_id;
-                $this->cargo_id = $user->cargo_id;
+        if (!$this->isAdmin() && $this->isEmpleado()) {
+            $this->codigo = $user->codigo;
+            $this->nombre = $user->nombres;
+            $this->apellido = $user->apellidos;
+            $this->departamento_id = $user->departamento_id;
+            $this->localizacion_id = $user->localizacion_id;
+            $this->cargo_id = $user->cargo_id;
 
-            }
-            $this->isEvaluador = $this->isEvaluador();
-            $this->isSupervisor = $this->isSupervisor();
-            $this->isIndicadores = $this->isIndicadores();
+        }
+        $this->isEvaluador = $this->isEvaluador();
+        $this->isSupervisor = $this->isSupervisor();
+        $this->isIndicadores = $this->isIndicadores();
     }
 
     public function isAdmin()

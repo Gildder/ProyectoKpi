@@ -388,6 +388,9 @@ route::group(['middleware'=>['auth', 'administrador']], function()
 	Route::get('supervisores/supervisor/quitardepartamento/{emp_id}/{param?}', 
 		array('as' => 'supervisores.supervisor.quitardepartamento', 'uses' => 'Supervisores\SupervisorController@quitardepartamento') );
 
+
+
+
 	/* Metodos Genericos */
 	Route::resource('supervisores/supervisor', 'Supervisores\SupervisorController', 
 		['only' => ['index', 'create', 'store', 'update', 'destroy']]);
@@ -414,6 +417,10 @@ route::group(['middleware'=>['auth', 'supervisores', 'estandard']], function()
 	Route::get('supervisores/supervisados/obtenerTareasErrores/{anio}/{mes}/{semana}/{emp}', 
 		array('as' => 'supervisores.supervisados.obtenerTareasErrores', 'uses' => 'Supervisores\SupervisadosController@obtenerTareasErrores') );
 
+    /* Metodo para mostrar las tareas a los supervisores */
+    Route::get('supervisores/supervisados/verTareasSupervisados',
+        array('as' => 'supervisores.supervisados.verTareasSupervisados', 'uses' => 'Supervisores\SupervisadosController@verTareasSupervisados') );
+
 	/* Metodos Genericos */
 	Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', 
 		['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
@@ -431,7 +438,13 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
 
-	// tareas programadas
+    // tareas siguiente semana
+    Route::get('tareas/tareaProgramadas/create_next',
+        array('as' => 'tareas.tareaProgramadas.create_next', 'uses' => 'Tareas\TareaProgramadaController@create_next') );
+
+
+
+    // tareas programadas
 	Route::get('tareas/tareaProgramadas/archivados',
 		array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );
 

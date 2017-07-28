@@ -39,8 +39,8 @@ $(document).ready(function(){
 			<div class="tab-content">
 				<div id="departamentos" class="tab-pane fade in active">
 					@include('partials/alert/error')
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<p>Puede agregar empleados que supervisen los indicadores por departamentos.</p><br>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
+						<p>Puede agregar empleados que supervisen los indicadores por departamentos.</p>
 					</div>
 
 						<div class="row">
@@ -52,8 +52,8 @@ $(document).ready(function(){
 
 				<div id="cargos" class="tab-pane">
 					@include('partials/alert/error')
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<p>Puede agregar empleados que supervisen los indicadores por cargo o puesto.</p><br>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
+						<p>Puede agregar empleados que supervisen los indicadores por cargo o puesto.</p>
 					</div>
 
 					<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">

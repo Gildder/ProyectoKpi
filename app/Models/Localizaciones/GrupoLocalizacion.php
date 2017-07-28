@@ -42,7 +42,7 @@ class GrupoLocalizacion extends Model
 
     public function localizaciones()
     {
-        return $this->hasMany(Localizacion::class , 'grupoloc_id', 'id');
+        return $this->hasMany('ProyectoKpi\Models\Localizaciones\Localizacion' , 'grupoloc_id', 'id');
     }
 
 }

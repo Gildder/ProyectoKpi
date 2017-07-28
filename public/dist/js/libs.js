@@ -7,6 +7,7 @@ $(document).ready(function(){
     $('#myTableIndicadores').DataTable();
     $('#myTableEvaluador').DataTable();
     $('#myTableGrDepartamento').DataTable();
+    $('.myDataTables').DataTable();
     $('#myTableIndicadorEvalaudor').DataTable({
     	"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
     	 "responsive": true,

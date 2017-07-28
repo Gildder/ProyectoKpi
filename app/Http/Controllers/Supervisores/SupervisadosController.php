@@ -3,6 +3,8 @@
 namespace ProyectoKpi\Http\Controllers\Supervisores;
 
 use Illuminate\Http\Request;
+use ProyectoKpi\Cms\Clases\Caches;
+use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +21,7 @@ use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
 use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Requests\Indicadores\ErrorFormRequest;
+use ProyectoKpi\Models\User;
 
 class SupervisadosController extends Controller
 {
@@ -30,21 +33,23 @@ class SupervisadosController extends Controller
     public function index()
     {
         // lista de empleados asignados para su supervison de su usuario
-        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('codigo').');');
+        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('id').');');
+
+        Caches::guardar('supervisados', $empleadosDisponibles);
 
         return view('supervisores\supervisados\index', ['empleadosDisponibles'=>$empleadosDisponibles]);
     }
 
-    public function show($empleado_id)
+    public function show($user_id)
     {
         // Lista de indicadores supervisados a un empleado supervisado
-        $indicadores = IndicadorRepository::cnGetListaInidicadores($empleado_id);
+        $indicadores = IndicadorRepository::cnGetListaInidicadores($user_id);
         // informacion del empleado supervisado
-        $empleado = Empleado::where('codigo', $empleado_id)->first();
+        $usuario = User::where('id', $user_id)->first();
 
-//        dd(json_encode( $indicadores), $empleado);
+//        dd(json_encode( $user_id), $usuario);
 
-        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'empleado'=>$empleado]);
+        return view('supervisores\supervisados\show', ['indicadores'=>$indicadores, 'usuario'=>$usuario]);
     }
 
     // tareas finalizadas estado = 3 isError = 0
@@ -117,5 +122,19 @@ class SupervisadosController extends Controller
     {
         $indicadores = IndicadorRepository::cnGetListaInidicadores($empleado_id);
 
+    }
+
+    public function verTareasSupervisados()
+    {
+        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+
+        $tareas = TareaRepository::getTareasSupervisados($semanas->fechaInicio, $semanas->fechaFin);
+
+//dd($tareas);
+
+//        foreach ($tareas as $item){
+//            dd($item);
+//        }
+        return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
     }
 }

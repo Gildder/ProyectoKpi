@@ -1,9 +1,10 @@
 <template>
     <div class="row" id="capa-indicadores">
         <div class="col-md-12">
-            <div class="box box-warning">
+            <div class="box box-warning" id="panelWidget">
+                <!--minimizar colocar la clase = box box-warning collapsed-box , mazminazar colcoar = box box-warning -->
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{ widget.titulo  }}</h3>
+                    <h3 class="box-title">{{ widget.titulo }} - por {{ vistaParaTitulo }} </h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -13,12 +14,12 @@
                                 <i class="fa fa-wrench"></i></button>
                             <!-- Cambie este codigo  -->
                             <ul class="dropdown-menu" role="menu">
-                                <li><a @click="eliminarWidget($event)">Eliminar</a></li>
+                                <li><a @click="eliminarWidget()">Eliminar</a></li>
                                 <!--<li><a @click="opcionWidget($event)">Opciones</a></li>-->
                                 <!--<li><a href="#">Graficas</a></li>-->
                                 <li class="divider"></li>
-                                    <li><a @click="cambiarVista($event, 0)">Vista Semanas</a></li>
-                                    <li><a @click="cambiarVista($event, 1)">Vista Meses</a></li>
+                                <li><a @click="cambiarVista($event, 0)">Vista Semanas</a></li>
+                                <li><a @click="cambiarVista($event, 1)">Vista Meses</a></li>
 
                             </ul>
                         </div>
@@ -28,6 +29,9 @@
                 <div class="box-body">
                     <div class="">
 
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
+                            <p>{{ actualizarDescripcionWidget }}</p>
+                        </div>
                         <!-- /.col -->
                         <div class="col-md-12">
                             <p class="text-center">
@@ -35,7 +39,7 @@
                             </p>
                             <!-- Grafica -->
                             <div class="chart">
-                                <div id="chart_tabla"></div>
+                                <div id="chart-{{ widget.id  }}"></div>
                             </div>
                             <hr>
                         </div>
@@ -45,8 +49,7 @@
                             <div class="table">
                                  <!--Filtro guiente Mes -->
                                 <div class="pull-right" data-toggle="buttons-checkbox">
-                                    <label v-if="widget.isSemanal === 0" style="border-right: 20px;">Mes actual:</label>
-                                    <label v-if="widget.isSemanal === 1" style="border-right: 20px;">Mes de inicio:</label>
+                                    <label style="border-right: 20px;">{{ textBuscaqueda }}</label>
                                     <div class="btn-group">
                                         <a class="btn btn-default btn-sm left" title="Anterior"
                                            @click="anteriorMes($event)"
@@ -162,6 +165,11 @@
                 cumplimiento: 0,
                 category: '',
                 datos:'',
+                textBuscaqueda: '',
+                descripcionWidget: '',
+                verTabla: 1,
+                verChart: 1,
+                minimizado: 0,
             }
         },
         ready: function () {
@@ -193,7 +201,21 @@
 
                 return resultado;
             },
+            vistaParaTitulo: function () {
+                if(this.widget.isSemanal === 1){
+                    return 'Mes';
+                }else{
+                    return 'Semana';
+                }
+            },
+            actualizarDescripcionWidget: function () {
+                  // Lista de los Indicadores de Procesos desde el mes de #mesInicio hasta el mes #mesFin
+                // El porcentaje alcanzado los indicadores de procesos desde el mes tanto al mes tanto de todos los empleados evaluados
+                // EL porcentaje alcanzado por los indicadores de procesos del #mesBuscado de todos sus empleados asignado gerencia evaluadora
 
+
+
+            },
         },
          filters: {
 
@@ -216,6 +238,7 @@
             },
             obtenerTablaWidget: function () {
                 this.obtenerMesActual();
+                this.cambiarMenuVistaWidget();
                 this.obtenerTituloChart();
                 $.ajax({
                     url: 'obtenerDatosTablaWidget',
@@ -246,17 +269,15 @@
                     data: this.widget,
                     dataType: 'json',
                     success: function (data) {
-                        MostrarChart(JSON.stringify(data[0]), JSON.stringify(data[1]));
+                        MostrarChart(this.widget.id ,JSON.stringify(data[0]), JSON.stringify(data[1]));
                     }.bind(this), error: function (data) {
                         console.log('Error: No se puede cargar los datos a la grafica del widget '+this.widget.id);
                     }.bind(this)
                 })
             },
-            eliminarWidget: function ($event) {
-                $event.preventDefault();
-
+            eliminarWidget: function () {
                 // lanzamos el evento al metos de elimanr del js app-vue
-                this.$dispatch('eliminar-widget', this.widget.id)
+                this.$dispatch('eliminar-widget', this.widget.id);
             },
             anteriorMes: function ($event) {
                 $event.preventDefault();
@@ -378,6 +399,24 @@
                     }.bind(this)
                 });
             },
+            cambiarMenuVistaWidget: function () {
+                switch (this.widget.tipo_id){
+                    case 1:
+
+                        break;
+                    case 2:
+                        break;
+
+                    case 3:
+                        break;
+                }
+
+                if(this.widget.isSemanal === 0){ // si la vista esta mensual isSemanal = 0
+                    this.textBuscaqueda = 'Mes Actual:';
+                }else{ // si la vista esta semanal isSemanal = 1
+                    this.textBuscaqueda = 'Mes Inicio:';
+                }
+            },
 
         }
     }
@@ -386,12 +425,12 @@
 
     var chart;
 
-    function MostrarChart(datosChart, categoriachart) {
+    function MostrarChart(widget_id, datosChart, categoriachart) {
          let dato = JSON.parse(datosChart);
          let categoria = JSON.parse(categoriachart);
 
         chart = c3.generate({
-            bindto: "#chart_tabla",
+            bindto: "#chart-"+widget_id,
             data: {
                 type: 'bar',
                 // labels: true,

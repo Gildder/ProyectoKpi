@@ -17,8 +17,9 @@
 				<td>{{$item->cargo}}</td>
 				<td>{{$item->localizacion}}</td>
 				<td>{{$item->departamento}}</td>
-				<td><a href="{{route('supervisores.supervisados.show', $item->codigo)}}" 
-				class="btn btn-info btn-xs" title="Ver Indicadores"><span class="fa fa-bar-chart"></span><span ></span></a></td>
+				<td>
+					<a href="{{route('supervisores.supervisados.show', $item->id)}}" class="btn btn-info btn-xs" title="Ver Indicadores"><span class="fa fa-bar-chart"></span><span ></span></a>
+				</td>
 				
 			</tr>
 		@endforeach

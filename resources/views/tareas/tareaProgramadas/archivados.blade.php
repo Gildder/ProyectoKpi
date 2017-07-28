@@ -16,18 +16,17 @@
 
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="col-sm-12" >Tareas de la Semana {{ $semanas->semana }} del del mes de <b>{{ \Calcana::getNombreMes($semanas->mes) }}</b>, del <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}</b> al <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}</b>
+      <div class="col-sm-12 breadcrumb" >Tareas anteriores a la Semana {{ \Cache::get('semanas')->semana }} del del mes de <b>{{ \Calcana::getNombreMes(\Cache::get('semanas')->mes) }}</b>, del <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b> al <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}</b>
           </div><br>
     </div><br><hr>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive">
       @include('tareas/tareaProgramadas/partials/tabla_tareaArchivados')
     </div>
-    
-
   </div>
   <div class="panel-footer">
   </div>
 </div>
+
 
 
 @endsection

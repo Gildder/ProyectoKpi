@@ -126,14 +126,10 @@
                             <div class="col-sm-12">
                                 <hr>
                             </div>
-                            <!--<a  @click="guardarWidget($event)"  class="btn btn-success" >Guardar</a>-->
                             <button class="btn btn-success" type="submit" :disabled="guardando">Guardar
                             </button>
                             <button  data-dismiss="modal" class="btn btn-danger" :disabled="guardando"> Cancelar</button>
                         </div>
-
-
-
                     </div>
                 </form>
 
@@ -144,7 +140,6 @@
 
 <script>
     /* jshint esnext:true */
-
     var utils = require('./../../utils.js');
 
     var Notificion = new Alert('#notificacion');
@@ -187,7 +182,6 @@
                         this.indicadores = data.indicadores;
                     }.bind(this), error: function (data) {
 //                        Console.log('Error: ObtenerUltimoMes' + response.err);
-
                     }.bind(this)
                 });
             },
@@ -225,12 +219,14 @@
 
                 this.guardando = true;
 
+                /* obtener el tipo de indicador seleccionado */
                 var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
 
+                /* Obtener el indicador seleccionado */
                 var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
 
                 this.nuevo_widget.tipo_id = this.tipo_id;
-                this.nuevo_widget.titulo = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
+                this.nuevo_widget.titulo  = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
 
                 $.ajax({
                     url: 'guardarWidget',
@@ -238,9 +234,7 @@
                     data: this.nuevo_widget,
                     dataType: 'json',
                     success: function (data) {
-
                         this.instacionWidget();
-
 
                         // pasamos el nuevo widget a la lista de PanelWidget de vm
                         this.$dispatch('agregarWidgetPanel', data);
@@ -286,13 +280,13 @@
             },
             getTitulo: function (tipo, indicador) {
                 if (this.tipo_id === 1) {
-                    return  tipo;
+                    return  'Indicadores de ' + tipo;
                 }
                 else if (this.tipo_id === 2) {
-                    return  indicador + ' por Usuarios';
+                    return  'Indicador de '+ indicador + ' por Usuarios';
                 }
                 else if (this.tipo_id === 3) {
-                    return  indicador + ' por Semanas';
+                    return  'Indicador de ' + indicador ;
                 } else {
                     return 'Sin Nombre';
                 }

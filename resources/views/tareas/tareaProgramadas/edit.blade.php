@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-  {{$tarea->id}} - {{$tarea->descripcion}}
+    Tarea Nro. {{$tarea->numero}}
 @endsection
 
 @section('content')
@@ -14,7 +14,7 @@
           class="btn btn-primary btn-xs pull-left btn-back" title="Volver">
         <span class="fa fa-reply"></span>
       </a>
-    <p class="titulo-panel">{{$tarea->id}} - {{$tarea->descripcion}}</p>
+    <p class="titulo-panel">Editar - Tarea Nro. {{$tarea->numero}}</p>
   </div>
 
   <div class="panel-body">
@@ -47,7 +47,7 @@
 </div>
 
 {{-- Fecha de Estimada --}}
-        <div class="form-group col-xs-12 row">
+        <div class="form-group col-xs-12 row" v-if="{{ \Usuario::get('preferencias')->get('verFechasEstimadas') }}">
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2
                 @if ($errors->has('fechaInicioEstimado'))
                   has-error

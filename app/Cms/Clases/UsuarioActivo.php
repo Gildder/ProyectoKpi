@@ -30,6 +30,7 @@ class UsuarioActivo implements IClases
     private $localizacion;
     private $cargo;
     private $isEvaluador;
+    private $evaluador_id;
     private $isSupervisor;
     private $isIndicadores;
     private $isAdmin;

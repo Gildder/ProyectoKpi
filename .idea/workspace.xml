@@ -5,85 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b9670753-c098-43f6-9acd-aad2e89f428f" name="Default" comment="Comenzando a utilizar babel">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/public/dist/js/app-vuejs.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Cms/Clases/Conexion_LDAP.php" afterPath="$PROJECT_DIR$/app/Cms/Clases/Conexion_LDAP.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Cms/Clases/UsuarioActivo.php" afterPath="$PROJECT_DIR$/app/Cms/Clases/UsuarioActivo.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Cms/Repositories/EvaluadoresRepository.php" afterPath="$PROJECT_DIR$/app/Cms/Repositories/EvaluadoresRepository.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Cms/Repositories/IndicadorRepository.php" afterPath="$PROJECT_DIR$/app/Cms/Repositories/IndicadorRepository.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php" afterPath="$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php" afterPath="$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Console/Kernel.php" afterPath="$PROJECT_DIR$/app/Console/Kernel.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Empleados/EmpleadoController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Empleados/EmpleadoController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Evaluadores/EvaluadorController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Evaluadores/EvaluadorController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Evaluadores/EvaluadosController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Evaluadores/EvaluadosController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Supervisores/SupervisadosController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Supervisores/SupervisadosController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Supervisores/SupervisorController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Supervisores/SupervisorController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Requests/Evaluadores/EvaluadorFormRequest.php" afterPath="$PROJECT_DIR$/app/Http/Requests/Evaluadores/EvaluadorFormRequest.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Requests/Tareas/TareaProgramasFormRequest.php" afterPath="$PROJECT_DIR$/app/Http/Requests/Tareas/TareaProgramasFormRequest.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Requests/Tareas/TareaProgramasResolverRequest.php" afterPath="$PROJECT_DIR$/app/Http/Requests/Tareas/TareaProgramasResolverRequest.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/routes.php" afterPath="$PROJECT_DIR$/app/Http/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Empleados/TipoUsuario.php" afterPath="$PROJECT_DIR$/app/Models/Empleados/TipoUsuario.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Localizaciones/GrupoLocalizacion.php" afterPath="$PROJECT_DIR$/app/Models/Localizaciones/GrupoLocalizacion.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Localizaciones/Localizacion.php" afterPath="$PROJECT_DIR$/app/Models/Localizaciones/Localizacion.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/User.php" afterPath="$PROJECT_DIR$/app/Models/User.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" afterPath="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Providers/UsuarioActivoServiceProvider.php" afterPath="$PROJECT_DIR$/app/Providers/UsuarioActivoServiceProvider.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/adldap.php" afterPath="$PROJECT_DIR$/config/adldap.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/adldap_auth.php" afterPath="$PROJECT_DIR$/config/adldap_auth.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/auth.php" afterPath="$PROJECT_DIR$/config/auth.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dist/css/estilo.css" afterPath="$PROJECT_DIR$/public/dist/css/estilo.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dist/css/estilo.styl" afterPath="$PROJECT_DIR$/public/dist/css/estilo.styl" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dist/js/app-vue.js" afterPath="$PROJECT_DIR$/public/dist/js/app-vue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dist/js/app-vue.js.map" afterPath="$PROJECT_DIR$/public/dist/js/app-vue.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/dist/js/libs.js" afterPath="$PROJECT_DIR$/public/dist/js/libs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/js/app-vue.js" afterPath="$PROJECT_DIR$/resources/assets/js/app-vue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/js/components/nuevo_widget/ModalWidget.vue" afterPath="$PROJECT_DIR$/resources/assets/js/components/nuevo_widget/ModalWidget.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/js/components/tareas/estados.vue" afterPath="$PROJECT_DIR$/resources/assets/js/components/tareas/estados.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/js/components/widget/PanelWidget.vue" afterPath="$PROJECT_DIR$/resources/assets/js/components/widget/PanelWidget.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/empleados/empleado/partials/actualizar_atributos.blade.php" afterPath="$PROJECT_DIR$/resources/views/empleados/empleado/partials/actualizar_atributos.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/cargos/delete.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/cargos/delete.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/cargos/tabla_agregados.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/cargos/tabla_agregados.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/cargos/tabla_cargos.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/cargos/tabla_cargos.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/create.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/create.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/delete.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/delete.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/edit.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/empleados/delete.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/empleados/delete.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/empleados/tabla_agregados.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/empleados/tabla_agregados.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/empleados/tabla_empleados.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/empleados/tabla_empleados.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/index.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/asignar_cargos.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/asignar_cargos.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/agregar.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/agregar.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/datos_create.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/datos_create.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/datos_edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/datos_edit.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/delete.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/delete.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/editar.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/editar.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/tabla_agregados.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/cargosasignados/tabla_agregados.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/delete.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/delete.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/nuevo_indicador.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/nuevo_indicador.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/nuevosindicadores/agregar.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/nuevosindicadores/agregar.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/nuevosindicadores/tabla_disponibles.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/nuevosindicadores/tabla_disponibles.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/tabla_indicadores.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/indicadores/tabla_indicadores.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/partials/tabla_evaluador.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/partials/tabla_evaluador.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/show.blade.php" afterPath="$PROJECT_DIR$/resources/views/evaluadores/evaluador/show.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/partials/loading/loading.blade.php" afterPath="$PROJECT_DIR$/resources/views/partials/loading/loading.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/supervisores/supervisados/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/supervisores/supervisados/index.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/supervisores/supervisados/partials/tabla_empleados.blade.php" afterPath="$PROJECT_DIR$/resources/views/supervisores/supervisados/partials/tabla_empleados.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/supervisores/supervisados/show.blade.php" afterPath="$PROJECT_DIR$/resources/views/supervisores/supervisados/show.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/supervisores/supervisor/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/supervisores/supervisor/index.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/archivados.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/archivados.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/Tareas/Tarea.php" afterPath="$PROJECT_DIR$/app/Models/Tareas/Tarea.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/delete.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/delete.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create_next.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create_next.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/edit.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/edit.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/index.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/index.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/datos_tarea.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/datos_tarea.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaArchivados.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaArchivados.blade.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaEliminadas.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaEliminadas.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaProgramadas.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaProgramadas.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/resolver.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/resolver.blade.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/show.blade.php" afterPath="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/show.blade.php" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/Console/Commands/ImportarTicket.php" afterPath="$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php" />
     </list>
     <ignored path="Indicador_Kpi.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -126,8 +65,12 @@
         <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="duplex_whd" />
+        <option name="myItemId" value="indicador_kpi" />
         <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" />
+        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$GroupNode" />
       </PATH_ELEMENT>
     </PATH>
     <PATH>
@@ -140,12 +83,8 @@
         <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
       </PATH_ELEMENT>
       <PATH_ELEMENT>
-        <option name="myItemId" value="duplex_whd" />
+        <option name="myItemId" value="indicador_kpi" />
         <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$GroupNode" />
       </PATH_ELEMENT>
     </PATH>
   </component>
@@ -155,60 +94,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="create.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php">
+      <file leaf-file-name="ImportarTicketCommand.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
-              <folding>
-                <marker date="1500855946111" expanded="true" signature="9:22" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="34:42" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="80:89" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="193:231" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="589:659" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="729:796" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="933:1003" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="1073:1140" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="1258:1280" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="1292:1366" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="1379:1465" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="1747:1767" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="1999:2030" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="2154:2212" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="2496:2524" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="2586:2657" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="2693:2760" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="2874:2913" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="3221:3246" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="3312:3383" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="3419:3486" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="3598:3634" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="4050:4063" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="4191:4215" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="4485:4500" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="4632:4658" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="4820:4858" ph="..." />
-                <marker date="1500855946111" expanded="true" signature="5138:5152" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Tarea.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Models/Tareas/Tarea.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-305">
-              <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="178" selection-end-column="5" />
+            <state relative-caret-position="332">
+              <caret line="61" column="47" lean-forward="true" selection-start-line="61" selection-start-column="47" selection-end-line="61" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TareaProgramadaController.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php">
+      <file leaf-file-name="TareaRepository.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="296" column="0" lean-forward="true" selection-start-line="296" selection-start-column="0" selection-end-line="296" selection-end-column="0" />
+            <state relative-caret-position="328">
+              <caret line="188" column="34" lean-forward="true" selection-start-line="188" selection-start-column="34" selection-end-line="188" selection-end-column="34" />
+              <folding>
+                <element signature="e#48#64#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImportarTareasCommand.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Console/Commands/ImportarTareasCommand.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="244">
+              <caret line="25" column="6" lean-forward="true" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
+              <folding>
+                <element signature="e#48#79#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Kernel.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="8" column="1" lean-forward="false" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -226,12 +150,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>$semanas</find>
-      <find>selecion_semana</find>
-      <find>obtenerFechasSemanas</find>
-      <find>cachearFiltro</find>
-      <find>obtenerEstadoBtnEliminarTarea</find>
-      <find>obtenerTiposIndicadores</find>
       <find>obtenerDatosTablaWidget</find>
       <find>create</find>
       <find>redirectPath</find>
@@ -256,6 +174,12 @@
       <find>agregarWidgetPanel</find>
       <find>guardarWidget</find>
       <find>importarTicketAbiertos</find>
+      <find>create_</find>
+      <find>update</find>
+      <find>validarLimiteFechas</find>
+      <find>validarFechaFinEstimacion</find>
+      <find>estadoTarea_id</find>
+      <find>fechafin</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -284,20 +208,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthController.php" />
-        <option value="$PROJECT_DIR$/resources/assets/js/components/tareas/estados.vue" />
-        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/archivados.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/edit.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/show.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaArchivados.blade.php" />
-        <option value="/22af39ae/03c459ee-a824-44f7-95c5-fc42433a2a23/schema/indicador_kpi/routine/pa_reportes_tickets.(date,date).sql" />
-        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Models/Evaluadores/EvaluadorPreferencias.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2017_07_21_093501_create_evaluador_preferencias_table.php" />
-        <option value="$PROJECT_DIR$/app/Http/Requests/Tareas/TareaProgramasResolverRequest.php" />
-        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Requests/Tareas/TareaProgramasFormRequest.php" />
-        <option value="/22af39ae/03c459ee-a824-44f7-95c5-fc42433a2a23/schema/duplex_whd/routine/pa_crear_reporte_tickets.().sql" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Supervisores/SupervisorController.php" />
         <option value="$PROJECT_DIR$/resources/views/supervisores/supervisor/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Models/Localizaciones/GrupoLocalizacion.php" />
@@ -306,7 +216,6 @@
         <option value="$PROJECT_DIR$/app/Models/User.php" />
         <option value="$PROJECT_DIR$/resources/views/empleados/empleado/partials/actualizar_atributos.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Empleados/EmpleadoController.php" />
-        <option value="$PROJECT_DIR$/app/Http/routes.php" />
         <option value="$PROJECT_DIR$/app/Cms/Clases/Caches.php" />
         <option value="$PROJECT_DIR$/storage/framework/views/ec47035bbe2fdea9bb8f1376873c4003016cb164.php" />
         <option value="$PROJECT_DIR$/resources/views/supervisores/supervisados/index.blade.php" />
@@ -324,17 +233,32 @@
         <option value="$PROJECT_DIR$/resources/assets/js/components/widget/PanelWidget.vue" />
         <option value="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" />
         <option value="$PROJECT_DIR$/app/Console/Commands/ImportarTicket.php" />
-        <option value="$PROJECT_DIR$/app/Console/Kernel.php" />
         <option value="$PROJECT_DIR$/storage/logs/laravel.log" />
-        <option value="$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Evaluadores/EvaluadosController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2017_07_27_112631_create_temporal_tareas_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2017_07_27_113154_create_importar_tareas_table.php" />
         <option value="$PROJECT_DIR$/app/Models/ImportarTareas.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/ImportarTareasComntroller.php" />
-        <option value="$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php" />
+        <option value="$PROJECT_DIR$/app/Http/routes.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaEliminadas.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaArchivados.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/datos_tarea.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create_next.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaProgramadas.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/edit.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/show.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/resolver.blade.php" />
         <option value="$PROJECT_DIR$/app/Models/Tareas/Tarea.php" />
+        <option value="$PROJECT_DIR$/app/Cms/Clases/UsuarioActivo.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php" />
+        <option value="/22af39ae/03c459ee-a824-44f7-95c5-fc42433a2a23/schema/indicador_kpi/routine/pa_eficacia_insertarTareas.(int(11),int(11),int(11),int(11),int(11),date,date,int(11)).sql" />
+        <option value="$PROJECT_DIR$/app/Console/Commands/ImportarTareasCommand.php" />
+        <option value="/22af39ae/03c459ee-a824-44f7-95c5-fc42433a2a23/schema/indicador_kpi/routine/pa_eficacia_insertarTareas.(int(11),int(11),int(11),date,date,int(11),int(11),int(11)).sql" />
+        <option value="$PROJECT_DIR$/app/Console/Kernel.php" />
+        <option value="$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php" />
+        <option value="$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php" />
       </list>
     </option>
   </component>
@@ -357,8 +281,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="754" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -442,7 +366,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -520,6 +444,36 @@
               <option name="myItemId" value="tareas" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tareaProgramadas" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="partials" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Indicador_Kpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Nueva carpeta (7)" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tareas" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -581,17 +535,35 @@
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Models" />
+              <option name="myItemId" value="Console" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Indicador_Kpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Nueva carpeta (7)" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Tareas" />
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Console" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Commands" />
               <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -607,7 +579,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="LayoutCode.rearrangeEntriesPHP" value="false" />
-    <property name="SearchEverywhereHistoryKey" value="TareaPro&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;Evaluad&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;TareaRepos&#9;null&#9;null&#10;routes&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/routes.php&#10;Prefere&#9;null&#9;null&#10;Pane&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;Widget&#9;null&#9;null&#10;app-vue&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/app-vue.js&#10;app-&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/js/app-vue.js.map&#10;Modal&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/nuevo_widget/ModalWidget.vue&#10;e0f4b3787ed61bbb36&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/e0f4b3787ed61bbb36a5cc6338aabc38435a44d6.php&#10;lib&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/js/libs.js&#10;ec47035bbe2fd&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/ec47035bbe2fdea9bb8f1376873c4003016cb164.php&#10;tarea&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;app&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/app-vue.js&#10;Super&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Supervisores/SupervisorController.php&#10;0182d942e2d0c0aede5b&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/0182d942e2d0c0aede5b8a6beb12861bab03de6c.php&#10;0182d942e2d0c0aed&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/0182d942e2d0c0aede5b8a6beb12861bab03de6c.php&#10;0182d942e2d0c0aede5b8a6&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/0182d942e2d0c0aede5b8a6beb12861bab03de6c.php&#10;Emplead&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Empleados/EmpleadoController.php&#10;Emplea&#9;null&#9;null&#10;TareaPr&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;Tarea&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;modal&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/nuevo_widget/ModalWidget.vue&#10;pane&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;TArea&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Repositories/TareaRepository.php&#10;Tare&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;resolver&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/views/tareas/tareaProgramadas/resolver.blade.php&#10;65ef74a60eab0c79f4c80e5&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/65ef74a60eab0c79f4c80e5c2bbdc7c9466a27e9.php&#10;est&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/tareas/estados.vue&#10;Home&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/HomeController.php&#10;Indic&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Repositories/IndicadorRepository.php&#10;nDA&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Negocios/nDashboard.php&#10;Eva&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Repositories/EvaluadoresRepository.php&#10;evaluado&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;omposer&#9;FILE&#9;file://I:/Nueva carpeta (7)/composer.json&#10;Gua&#9;null&#9;null&#10;cone&#9;null&#9;null&#10;Evalu&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;emplea&#9;null&#9;null&#10;authen&#9;FILE&#9;file://I:/Nueva carpeta (7)/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php&#10;hom&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/HomeController.php&#10;login&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/views/auth/login.blade.php&#10;pan&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;nTA&#9;RUN_CONFIGURATION&#9;nTablaSemana.php&#10;evaluad&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;panel&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;estil&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/css/estilo.styl&#10;libs&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/js/libs.js&#10;evaluador&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Models/Tareas/Tarea.php&#10;login&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/views/auth/login.blade.php&#10;routes&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/routes.php&#10;rpu&#9;null&#9;null&#10;TareaPro&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;Evaluad&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;TareaRepos&#9;null&#9;null&#10;Prefere&#9;null&#9;null&#10;Pane&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;Widget&#9;null&#9;null&#10;app-vue&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/app-vue.js&#10;app-&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/js/app-vue.js.map&#10;Modal&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/nuevo_widget/ModalWidget.vue&#10;e0f4b3787ed61bbb36&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/e0f4b3787ed61bbb36a5cc6338aabc38435a44d6.php&#10;lib&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/js/libs.js&#10;ec47035bbe2fd&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/ec47035bbe2fdea9bb8f1376873c4003016cb164.php&#10;tarea&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;app&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/app-vue.js&#10;Super&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Supervisores/SupervisorController.php&#10;0182d942e2d0c0aede5b&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/0182d942e2d0c0aede5b8a6beb12861bab03de6c.php&#10;0182d942e2d0c0aed&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/0182d942e2d0c0aede5b8a6beb12861bab03de6c.php&#10;0182d942e2d0c0aede5b8a6&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/0182d942e2d0c0aede5b8a6beb12861bab03de6c.php&#10;Emplead&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Empleados/EmpleadoController.php&#10;Emplea&#9;null&#9;null&#10;TareaPr&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;Tarea&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;modal&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/nuevo_widget/ModalWidget.vue&#10;pane&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;TArea&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Repositories/TareaRepository.php&#10;Tare&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Tareas/TareaProgramadaController.php&#10;resolver&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/views/tareas/tareaProgramadas/resolver.blade.php&#10;65ef74a60eab0c79f4c80e5&#9;FILE&#9;file://I:/Nueva carpeta (7)/storage/framework/views/65ef74a60eab0c79f4c80e5c2bbdc7c9466a27e9.php&#10;est&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/tareas/estados.vue&#10;Home&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/HomeController.php&#10;Indic&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Repositories/IndicadorRepository.php&#10;nDA&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Negocios/nDashboard.php&#10;Eva&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Cms/Repositories/EvaluadoresRepository.php&#10;evaluado&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;omposer&#9;FILE&#9;file://I:/Nueva carpeta (7)/composer.json&#10;Gua&#9;null&#9;null&#10;cone&#9;null&#9;null&#10;Evalu&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;emplea&#9;null&#9;null&#10;authen&#9;FILE&#9;file://I:/Nueva carpeta (7)/vendor/laravel/framework/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php&#10;hom&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/HomeController.php&#10;pan&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;nTA&#9;RUN_CONFIGURATION&#9;nTablaSemana.php&#10;evaluad&#9;FILE&#9;file://I:/Nueva carpeta (7)/app/Http/Controllers/Evaluadores/EvaluadosController.php&#10;panel&#9;FILE&#9;file://I:/Nueva carpeta (7)/resources/assets/js/components/widget/PanelWidget.vue&#10;estil&#9;FILE&#9;file://I:/Nueva carpeta (7)/public/dist/css/estilo.styl" />
     <property name="SearchEverywhereHistory" value="evaluad&#10;mo&#10;Home&#10;Evaluad&#10;Super&#10;Evaluado&#10;Eval&#10;usuar&#10;Usu&#10;TareaPr&#10;TareaPro&#10;Tarea&#10;tarea&#10;hom&#10;nD&#10;nDa&#10;usua&#10;home" />
     <property name="settings.editor.splitter.proportion" value="0.251714" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="DDL Data Source&#10;MySQL" />
@@ -879,7 +851,9 @@
       <workItem from="1500956539421" duration="2582000" />
       <workItem from="1501093624583" duration="7261000" />
       <workItem from="1501158649689" duration="11457000" />
-      <workItem from="1501199836939" duration="3293000" />
+      <workItem from="1501199836939" duration="27991000" />
+      <workItem from="1501247051183" duration="638000" />
+      <workItem from="1501249673761" duration="20219000" />
     </task>
     <task id="LOCAL-00001" summary="backup de los cambios en el comtrolador para los evaludos">
       <created>1498337955692</created>
@@ -892,7 +866,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1479091000" />
+    <option name="totallyTimeSpent" value="1524646000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -904,16 +878,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22768533" sideWeight="0.38255033" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23294243" sideWeight="0.38255033" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993197" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31632653" sideWeight="0.8195793" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30863538" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32550335" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31973538" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32524806" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21499449" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22768533" sideWeight="0.61744964" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2818792" sideWeight="0.18042071" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4277839" sideWeight="0.18042071" order="16" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2540453" sideWeight="0.5090703" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2734289" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -932,8 +908,36 @@
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32083791" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31632653" sideWeight="0.8195793" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Duplicates" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291714" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30863538" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22768533" sideWeight="0.61744964" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2734289" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993197" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32993197" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="PHP-CGI Server" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32885906" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="1398" y="303" width="1096" height="836" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Command Line Tools Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32550335" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21499449" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2818792" sideWeight="0.18042071" order="16" side_tool="false" content_ui="tabs" />
+      <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Database Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22768533" sideWeight="0.38255033" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3204698" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2540453" sideWeight="0.5090703" order="3" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -986,7 +990,7 @@
           <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="28" />
+      <option name="time" value="29" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1003,120 +1007,6 @@
     </PATH>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Cms/Clases/Caches.php" />
-    <entry file="file://$PROJECT_DIR$/storage/framework/views/ec47035bbe2fdea9bb8f1376873c4003016cb164.php" />
-    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaProgramadas.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="42" column="9" lean-forward="true" selection-start-line="34" selection-start-column="4" selection-end-line="42" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_agregados.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="42" lean-forward="false" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/dist/js/libs.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="20" lean-forward="false" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/supervisores/supervisados/tareas/partials/tabla_tareas.blade.php" />
-    <entry file="file://$PROJECT_DIR$/resources/views/supervisores/supervisados/tareas/index.blade.php" />
-    <entry file="file://$PROJECT_DIR$/app/Cms/Repositories/IndicadorRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="36" column="34" lean-forward="false" selection-start-line="36" selection-start-column="34" selection-end-line="36" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage/framework/views/e0f4b3787ed61bbb36a5cc6338aabc38435a44d6.php" />
-    <entry file="file://$PROJECT_DIR$/resources/views/supervisores/supervisados/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="67" lean-forward="false" selection-start-line="23" selection-start-column="67" selection-end-line="23" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/supervisores/supervisados/partials/tabla_empleados.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="21" lean-forward="false" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Supervisores/SupervisadosController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="50" column="0" lean-forward="false" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/supervisores/supervisados/show.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="18" lean-forward="true" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/dist/js/app-vue.js.map">
-      <provider editor-type-id="sourcemapFileViewerProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Cms/Negocios/nTablaSemana.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="481" column="49" lean-forward="true" selection-start-line="481" selection-start-column="49" selection-end-line="481" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/dist/js/app-vue.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="12409" column="12" lean-forward="false" selection-start-line="12409" selection-start-column="12" selection-end-line="12409" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Cms/Repositories/EvaluadoresRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1717">
-          <caret line="247" column="23" lean-forward="false" selection-start-line="247" selection-start-column="23" selection-end-line="247" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/utils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="88" column="10" lean-forward="false" selection-start-line="88" selection-start-column="10" selection-end-line="88" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Cms/Negocios/nDashboard.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="161" column="49" lean-forward="false" selection-start-line="161" selection-start-column="49" selection-end-line="161" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/assets/js/components/nuevo_widget/Fila_Widget.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-34">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/assets/js/components/nuevo_widget/selector_modal.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1142,13 +1032,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="24" lean-forward="false" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3910">
-          <caret line="239" column="19" lean-forward="false" selection-start-line="239" selection-start-column="19" selection-end-line="239" selection-end-column="69" />
         </state>
       </provider>
     </entry>
@@ -1182,14 +1065,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="16" column="47" lean-forward="false" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/evaluadores/evaluados/dashboard/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -1215,17 +1090,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="55">
           <caret line="9" column="7" lean-forward="true" selection-start-line="9" selection-start-column="7" selection-end-line="9" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="141" column="42" lean-forward="false" selection-start-line="141" selection-start-column="42" selection-end-line="141" selection-end-column="42" />
-          <folding>
-            <element signature="e#48#82#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1233,7 +1097,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
           <caret line="21" column="38" lean-forward="true" selection-start-line="15" selection-start-column="11" selection-end-line="21" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1242,7 +1105,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1250,7 +1112,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1258,7 +1119,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-544">
           <caret line="172" column="11" lean-forward="true" selection-start-line="172" selection-start-column="11" selection-end-line="172" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1271,7 +1131,194 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/User.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/alert/error.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/Console/VendorPublishCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="11" column="6" lean-forward="false" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="443" column="0" lean-forward="true" selection-start-line="443" selection-start-column="0" selection-end-line="443" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/alert/message.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/date/date.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="989" column="9" lean-forward="false" selection-start-line="989" selection-start-column="9" selection-end-line="989" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaEliminadas.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="79" lean-forward="false" selection-start-line="14" selection-start-column="79" selection-end-line="14" selection-end-column="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaArchivados.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29">
+          <caret line="28" column="171" lean-forward="false" selection-start-line="28" selection-start-column="171" selection-end-line="28" selection-end-column="171" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_localizaciones.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_agregados.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/auth/login.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="35" column="70" lean-forward="false" selection-start-line="35" selection-start-column="56" selection-end-line="35" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/datos_tarea.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="10" lean-forward="false" selection-start-line="17" selection-start-column="10" selection-end-line="17" selection-end-column="10" />
+          <folding>
+            <marker date="1501220719065" expanded="true" signature="1556:1627" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="50" column="107" lean-forward="false" selection-start-line="50" selection-start-column="38" selection-end-line="50" selection-end-column="107" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="90" column="38" lean-forward="false" selection-start-line="90" selection-start-column="32" selection-end-line="90" selection-end-column="38" />
+          <folding>
+            <marker date="1501224234405" expanded="true" signature="1616:5073" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/show.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="40" lean-forward="false" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
+          <folding>
+            <marker date="1501224255216" expanded="true" signature="1582:1591" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="48" column="8" lean-forward="false" selection-start-line="48" selection-start-column="8" selection-end-line="48" selection-end-column="8" />
+          <folding>
+            <marker date="1501222807105" expanded="true" signature="1873:2058" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create_next.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/resolver.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="93" column="0" lean-forward="false" selection-start-line="93" selection-start-column="0" selection-end-line="93" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Tareas/Tarea.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="277" column="0" lean-forward="false" selection-start-line="277" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
+          <folding>
+            <element signature="e#45#84#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/partials/tabla_tareaProgramadas.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding>
+            <marker date="1501223387397" expanded="true" signature="1312:1533" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Cms/Clases/UsuarioActivo.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="76" column="26" lean-forward="false" selection-start-line="76" selection-start-column="26" selection-end-line="76" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="55" column="13" lean-forward="false" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbSrc:///22af39ae/03c459ee-a824-44f7-95c5-fc42433a2a23/schema/indicador_kpi/routine/pa_eficacia_insertarTareas.(int(11),int(11),int(11),int(11),int(11),date,date,int(11)).sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="41" lean-forward="false" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbSrc:///22af39ae/03c459ee-a824-44f7-95c5-fc42433a2a23/schema/indicador_kpi/routine/pa_eficacia_insertarTareas.(int(11),int(11),int(11),date,date,int(11),int(11),int(11)).sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="35" column="41" lean-forward="true" selection-start-line="35" selection-start-column="41" selection-end-line="35" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_6.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -1279,84 +1326,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php">
+    <entry file="file://$PROJECT_DIR$/app/Models/User.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="918">
-          <caret line="73" column="13" lean-forward="true" selection-start-line="73" selection-start-column="13" selection-end-line="73" selection-end-column="13" />
+        <state relative-caret-position="459">
+          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <marker date="1500829267213" expanded="true" signature="9:22" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="34:42" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="87:96" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="266:288" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="467:506" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="767:810" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="996:1040" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="1392:1410" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="1429:1468" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="1505:1561" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="1596:1649" ph="..." />
-            <marker date="1500829267213" expanded="true" signature="1789:1846" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/tareas/tareaProgramadas/create.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
-          <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
-          <folding>
-            <marker date="1500855946111" expanded="true" signature="9:22" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="34:42" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="80:89" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="193:231" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="589:659" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="729:796" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="933:1003" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="1073:1140" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="1258:1280" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="1292:1366" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="1379:1465" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="1747:1767" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="1999:2030" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="2154:2212" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="2496:2524" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="2586:2657" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="2693:2760" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="2874:2913" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="3221:3246" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="3312:3383" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="3419:3486" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="3598:3634" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="4050:4063" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="4191:4215" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="4485:4500" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="4632:4658" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="4820:4858" ph="..." />
-            <marker date="1500855946111" expanded="true" signature="5138:5152" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Tareas/TareaProgramadaController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="296" column="0" lean-forward="true" selection-start-line="296" selection-start-column="0" selection-end-line="296" selection-end-column="0" />
+          <caret line="8" column="1" lean-forward="false" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Tareas/Tarea.php">
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/ImportarTareasCommand.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-305">
-          <caret line="147" column="0" lean-forward="false" selection-start-line="147" selection-start-column="0" selection-end-line="178" selection-end-column="5" />
+        <state relative-caret-position="244">
+          <caret line="25" column="6" lean-forward="true" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
+          <folding>
+            <element signature="e#48#79#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="188" column="34" lean-forward="true" selection-start-line="188" selection-start-column="34" selection-end-line="188" selection-end-column="34" />
+          <folding>
+            <element signature="e#48#64#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Commands/ImportarTicketCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="61" column="47" lean-forward="true" selection-start-line="61" selection-start-column="47" selection-end-line="61" selection-end-column="47" />
           <folding />
         </state>
       </provider>

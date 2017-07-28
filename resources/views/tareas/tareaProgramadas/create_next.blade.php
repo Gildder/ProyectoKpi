@@ -40,10 +40,10 @@
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4
             @if ($errors->has('descripcion')) has-error @endif">
             <label>Descripcion *</label>
-            <input type="text" minlength="5" value="{{ old('descripcion') }}" style="margin-bottom: 15px;"
-                   maxlength="50" name="descripcion" placeholder="Descripcion"
+              <input type="text" minlength="5" value="{{ old('descripcion') }}" style="margin-bottom: 15px;"
+                   maxlength="60" name="descripcion" placeholder="Descripcion"
                    class="form-control" required>
-            @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
+          @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
           </div>
       </div>
 

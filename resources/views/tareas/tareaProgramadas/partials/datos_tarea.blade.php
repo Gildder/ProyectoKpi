@@ -2,7 +2,7 @@
    <tbody>
       <tr>
          <td class="text-right"><b>Nro.:</b></td>
-         <td>{{$tarea->id}}</td>
+         <td>{{$tarea->numero}}</td>
       </tr>
 
       <tr>
@@ -43,7 +43,7 @@
       <tr>
           <td class="text-right"><b>Estado:</b></td>
           <td>
-          <span class="badge bg-{{ $tarea->getEstadoColor() }}">
+          <span class="label label-{{ $tarea->getEstadoColor() }} label-md">
             {{$tarea->getEstado()}}
           </span>
           </td>

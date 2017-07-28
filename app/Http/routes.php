@@ -439,10 +439,8 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
 
     // tareas siguiente semana
-    Route::get('tareas/tareaProgramadas/create_next',
-        array('as' => 'tareas.tareaProgramadas.create_next', 'uses' => 'Tareas\TareaProgramadaController@create_next') );
-
-
+    Route::get('tareas/tareaProgramadas/createnext',
+        array('as' => 'tareas.tareaProgramadas.createnext', 'uses' => 'Tareas\TareaProgramadaController@createnext') );
 
     // tareas programadas
 	Route::get('tareas/tareaProgramadas/archivados',

@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
+use ProyectoKpi\Models\User;
 
 class ImportarTicketCommand extends Command
 {
@@ -42,21 +43,16 @@ class ImportarTicketCommand extends Command
     {
 
         $fechaDeSemana = TareaRepository::getSemanasTareas($this->argument('fecha'));
-//        $fechaDeSemana = TareaRepository::getSemanasTareas(date('Y-m-d'));
-
-        // obtener los respuesta como un array
-//        $resultado = $this->argument();
-
-        // recuperando una opcion especifica, si la opcion no existe devolvera nulo
-//        $queueName = $this->option('queue');
 
         // lista  total de tickets abiertos por tecnicos y cantidad de ticket
         $tickets = TareaRepository::importarTickets($fechaDeSemana->fechaInicio, $fechaDeSemana->fechaFin);
 
-
         foreach ($tickets->ticket as $ticket){
-//            $this->info(\GuzzleHttp\json_encode($ticket));
-            $user_id = \DB::table('users')->where('users.tecnico_id', $ticket->id)->select('users.id')->first();
+            $usuario = \DB::table('users')->select('users.id')->where('users.tecnico_id', '=', $ticket->id)->first();
+            $usuario = User::where('users.tecnico_id', '=', $ticket->id)->select('users.id')->first();
+
+            $this->error($usuario);
+
 
             $resultado = TareaRepository::insetarTicketsEficacia(
                         $ticket->abiertos,
@@ -66,7 +62,7 @@ class ImportarTicketCommand extends Command
                         $fechaDeSemana->semana,
                         $fechaDeSemana->fechaInicio,
                         $fechaDeSemana->fechaFin,
-                        $user_id
+                        $usuario
             );
 
             if ($resultado == true){

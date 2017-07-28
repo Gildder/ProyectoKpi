@@ -12,7 +12,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
       <a  href="{{route('tareas.tareaProgramadas.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs  pull-left btn-back"><span class="fa fa-reply"></span></a>
-      <strong>{{ $tarea->id}} - {{ $tarea->descripcion}}</strong>
+      <strong>Finalizar - Tarea Nro. {{$tarea->numero}}</strong>
   </div>
 
 

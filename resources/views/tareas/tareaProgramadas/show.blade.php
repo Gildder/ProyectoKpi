@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-	{{$tarea->id}} - {{$tarea->descripcion}}
+	Tarea Nro. {{$tarea->numero}}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 	<div class="panel-heading">
 		<a href="{{route('tareas.tareaProgramadas.index')}}" v-if="{{ \Cache::get('botones') }} == 0" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back"  title="Volver"><span class="fa fa-reply"></span></a>
 		<a href="{{route('tareas.tareaProgramadas.archivados')}}" v-if="{{ \Cache::get('botones') }} == 1" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back"  title="Volver"><span class="fa fa-reply"></span></a>
-	  <p class="titulo-panel">{{$tarea->id}} - {{$tarea->descripcion}}</p>
+	  <p class="titulo-panel">Detalle - Tarea Nro. {{$tarea->numero}}</p>
 	</div>
 
 	<div class="panel-body">
@@ -34,7 +34,7 @@
 				class="btn btn-success btn-sm" @click="mostrarModalLoading()"
 				v-if="btnResultado === 1"
 				style="margin-right: 10px;"
-			><span class="fa fa-thumbs-up text-left" ></span><b> Resolver</b> </a>
+			><span class="fa fa-thumbs-up text-left" ></span><b> Finalizar</b> </a>
 
 			<a   href="{{route('tareas.tareaProgramadas.edit', $tarea->id)}}"
 				 v-if="btnEditar === 1" @click="mostrarModalLoading()"

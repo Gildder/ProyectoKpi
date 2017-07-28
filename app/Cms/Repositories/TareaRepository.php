@@ -1,6 +1,7 @@
 <?php 
 namespace ProyectoKpi\Cms\Repositories;
 
+use function dd;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
@@ -19,13 +20,13 @@ class TareaRepository
     public static function getTareasProgramadas()
     {
         // Obtenemos las semanas de tareas
-        $semanaActual = \Calcana::getSemanasProgramadas(date('Y-m-d'));
+        $semanaActual = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
-        $tareas = Tarea::select('tareas.id', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
+        $tareas = Tarea::select('tareas.id','tareas.numero', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
                         'tareas.observaciones', 'tareas.estadoTarea_id', 'tareas.isError', 'tarea_tipos.nombre as tipo', 'tareas.proyecto_id')
                     ->leftjoin('tarea_tipos', 'tarea_tipos.id','=', 'tareas.tipoTarea_id')
                     ->where('user_id', '=', \Usuario::get('id'))
-                    ->where('fechaInicioEstimado', '>=', $semanaActual->getDateDB('fechaInicio'))
+                    ->where('fechaInicioEstimado', '>=', $semanaActual->fechaInicio)
                     ->whereNull('tareas.deleted_at')
                     ->orderBy('tareas.fechaInicioEstimado', 'desc')
                     ->get();
@@ -103,6 +104,18 @@ class TareaRepository
         return $lista;
     }
 
+    public static function getNumero()
+    {
+        $nro =  \DB::table('tareas')
+            ->where('user_id', '=', \Usuario::get('id'))
+            ->max('numero');
+        if(!isset($nro)){
+            return 1;
+        }else{
+            return $nro + 1;
+        }
+
+    }
 
     public function getTareasEliminados()
     {
@@ -113,12 +126,26 @@ class TareaRepository
         return $tareas;
     }
 
+
+    /**
+     * Obtenemos datos de datos de la semana de la fecha buscada
+     * Anio, mes, semana, fecha Inicio, fecha Fin
+     *
+     * @param $fecha
+     * @return mixed
+     */
     public static function getSemanasTareas($fecha)
     {
-        $fechas =   \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+//        dd($fecha);
+        $fechas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+//        dd($fechas);
+        if(isset($fechas)){
+            return $fechas[0];
+        }else{
+            Log::info('Error al obtener los datos de la fecha de las semana del año');
 
-        return $fechas[0];
-
+            \DB::select('call pa_obtenerFechaSemanaAnual(\''.date('Y-m-d').'\');');
+        }
     }
 
     public static  function importarTickets($fechaInicio, $fechaFin)
@@ -139,6 +166,19 @@ class TareaRepository
         return $content;
     }
 
+    public static function importarTareas($fechaInicio, $fechaFin)
+    {
+        // llamar aun procedimiento almacenado que retorne todas las tareas
+        // agrupadas por tecnico y semana
+        $fechas =  \DB::select('call pa_obtenerTareasEntreFechas(\''.$fechaInicio.'\', \''.$fechaFin.'\');');
+
+        if(isset($fechas)){
+            return $fechas;
+        }else{
+            Log::info('No hay tareas entre las fecha buscadas');
+        }
+    }
+
     public static function insetarTicketsEficacia($ticketsAbiertos, $ticketsCerrados, $anio, $mes, $semana, $fechaInicio, $fechaFin, $user_id)
     {
         try
@@ -150,13 +190,20 @@ class TareaRepository
             Log::error('No importaron los usuarios en la tabla de eficacion');
             return 'false';
         }
-
     }
 
-    public static function cachear($clave, $valor)
+
+    public static function insertarTareasEficacia($programados, $resueltos, $anio, $mes, $semana, $fechaInicio, $fechaFin, $user_id)
     {
-            \Cache::forget($clave);
-            \Cache::forever($clave, $valor);
+        try
+        {
+            \DB::select("call pa_eficacia_insertarTareas(".$programados.", ".$resueltos.", ".$anio.", ".$mes.", ".$semana.", '".$fechaInicio."', '".$fechaFin."', ".$user_id." );");
+
+            return 'true';
+        }catch (\Exception $errr){
+            Log::error('No importaron los usuarios en la tabla de eficacion');
+            return 'false';
+        }
     }
 
     public function preferenciasUsuario($user_id)

@@ -3,14 +3,13 @@
 namespace ProyectoKpi\Models\Tareas;
 
 use Illuminate\Database\Eloquent\Model;
-use Yajra\Datatables\Facades\Datatables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
-
-
-use ProyectoKpi\Cms\Clases\CalcularSemana;
+use function print_r;
+use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Clases\Tiempo;
+use ProyectoKpi\Cms\Repositories\TareaRepository;
+use function strtotime;
 
 
 class Tarea extends Model
@@ -18,7 +17,7 @@ class Tarea extends Model
 
     protected $table = "tareas";
     protected $primarykey = "id";
-    
+
     use SoftDeletes;
     public $timestamps = true;
     
@@ -36,7 +35,7 @@ class Tarea extends Model
      * @var array
      */
     protected $fillable = [
-        'id','descripcion', 'fechaInicioEstimado', 'fechaFinEstimado', 'tiempoEstimado', 'fechaInicioSolucion', ' fechaFinSolucion', 'tiempoSolucion', 'estadoTarea_id', ' tipoTarea_id', 'proyecto_id', 'user_id','localizacion_id', 'hora', 'minuto'
+        'id','numero','descripcion', 'fechaInicioEstimado', 'fechaFinEstimado', 'tiempoEstimado', 'fechaInicioSolucion', ' fechaFinSolucion', 'tiempoSolucion', 'estadoTarea_id', ' tipoTarea_id', 'proyecto_id', 'user_id','localizacion_id', 'hora', 'minuto'
     ];
 
     /**
@@ -128,17 +127,17 @@ class Tarea extends Model
     public function getEstadoColor()
     {
         if ($this->attributes['estadoTarea_id'] == '1') {
-            return 'red';
+            return 'danger';
         }elseif ($this->attributes['estadoTarea_id'] == '2') {
-            return 'yellow';
+            return 'warning';
         }elseif ($this->attributes['estadoTarea_id'] == '3') {
-            return 'green';
+            return 'success';
         }
     }
 
     public function getObservacion()
     {
-        if ($this->attributes['observaciones'] == '') {
+        if (empty($this->attributes['observaciones'])) {
             return 'Ninguna';
         }else{
             return $this->attributes['observaciones'];
@@ -153,12 +152,13 @@ class Tarea extends Model
      */
     public function cambiarFormatoEuropeo($fecha)
     {
-        if($fecha == null){
+        if(isset($fecha)){
+            $partes=explode('-',$fecha);//se parte la fecha
+            $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];
+            return $fecha;
+        }else{
             return '00/00/0000';
         }
-        $partes=explode('-',$fecha);//se parte la fecha
-        $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
-        return trim($fecha);
     }
 
     /*
@@ -169,13 +169,13 @@ class Tarea extends Model
      */
     public function cambiarFormatoDB($fecha)
     {
-        if($fecha == null){
+        if(isset($fecha)){
+            $partes=explode('/',$fecha);//se parte la fecha
+            $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];
+            return $fecha;
+        }else{
             return '0000-00-00';
         }
-        $partes=explode('/',$fecha);//se parte la fecha
-        $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
-
-        return trim($fecha);
     }
 
     public function obtenerHora($horas, $minutos)
@@ -183,6 +183,34 @@ class Tarea extends Model
         $tiempo = new Tiempo;
         
         return $tiempo->obtenerHora($horas, $minutos);
+    }
+
+    public function validarLimiteFechas()
+    {
+        $semanas = $this->obtnerSemanaDelAnio();
+
+        if((strtotime($this->fechaInicioEstimado) >= strtotime($semanas->fechaInicio))
+            && (strtotime($this->fechaFinEstimado) <= strtotime($semanas->fechaFin)))
+        {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function validarLimiteFechaSolucion()
+    {
+        $semanas = $this->obtnerSemanaDelAnio();
+
+        if((strtotime($this->fechaInicioSolucion) >= strtotime($semanas->fechaInicio))
+            && (strtotime($this->fechaFinsolucion) <= strtotime($semanas->fechaFin)))
+        {
+            return true;
+        }else{
+            return false;
+        }
+
     }
 
 
@@ -202,8 +230,48 @@ class Tarea extends Model
         }
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[1];
-    }  
+    }
 
+    public function validarFechaInicioEstimacion($fechaInicio)
+    {
+        if(\Usuario::get('preferencias')->get('verFechasEstimadas') === 0)
+        {
+            $semanas = $this->obtnerSemanaDelAnio();
+            return $semanas->fechaInicio;
+        }else{
+            return $this->cambiarFormatoDB($fechaInicio);
+
+        }
+    }
+
+    public function validarFechaFinEstimacion($fechaFin)
+    {
+        if(\Usuario::get('preferencias')->get('verFechasEstimadas') === 0)
+        {
+            $semanas = $this->obtnerSemanaDelAnio();
+            return $semanas->fechaFin;
+        }else{
+            return $this->cambiarFormatoDB($fechaFin);
+
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function obtnerSemanaDelAnio()
+    {
+        $fecha = date('Y-m-d');
+        if (Caches::obtener('proxSemana') === 1) {
+            $fecha = date(date('Y-m-d', strtotime('now +6 day')));
+        }
+        return TareaRepository::getSemanasTareas($fecha);
+    }
+
+    public function getNumero()
+    {
+        return TareaRepository::getNumero();
+    }
 
 
 }

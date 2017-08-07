@@ -63,8 +63,8 @@ $(document).ready(function () {
               <div class="box-body" style="display: block; "><div class="row">
                 
               {{-- Inicio de DAtos de los Indicadores --}}
-              <?php  
-                $listaTablas = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);  
+              <?php 
+                $listaTablas = $indicador::getTablaIndicador($empleado->codigo, $indicador->id);
                 $listaGraficas = $indicador::getGraficoIndicador($empleado->codigo, $indicador->id);
               ?>
 

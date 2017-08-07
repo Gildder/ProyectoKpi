@@ -22,7 +22,7 @@
                 <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}</b>
             </p>
             <p class="hidden-xs">
-                Tarea programadas del
+                Tarea  del
                 <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
                 hasta
                 <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}.</b>
@@ -33,8 +33,7 @@
       @include('partials/alert/error')
 
       {!! Form::open(['route'=>'tareas.tareaProgramadas.store', 'method'=>'POST']) !!}
-      {!! Form::hidden('estimados', \Usuario::get('preferencias')->get('verFechasEstimadas') ) !!}
-
+{{--      {!! Form::hidden('estimados', \Usuario::get('preferencias')->get('verFechasEstimadas') ) !!}--}}
      {{-- Descripcion --}}
       <div class="form-group">
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4
@@ -47,8 +46,10 @@
           </div>
       </div>
 
+
+
 {{-- Fechas de Inicio y Fin --}}
-<div class="form-group col-xs-12 row" v-if="{{ \Usuario::get('preferencias')->get('verFechasEstimadas') }}">
+<div class="form-group col-xs-12 row" >
     <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2
         @if ($errors->has('fechaInicioEstimado'))
             has-error
@@ -83,7 +84,19 @@
             <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p>
         @endif
     </div>
+    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
+        <span id="observacion" style="color: green; font-weight: bold;"></span>
+    </div>
+    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="checkbox">
+            <label>
+                <input  type="checkbox" name="todasemana"  id="default-fechaEstimadas">
+                Utilizar fechas de la semana
+            </label>
+        </div>
+    </div>
 </div>
+
 
   {{-- Tiempo estimado --}}
   <div class="col-sm-12 row" >
@@ -124,5 +137,27 @@
 {!! Form::close()!!}
 </div>
 
+
+<script>
+    $('#default-fechaEstimadas').click(function () {
+        var fechaInicio = $('input[name=fechaInicioEstimado]');
+        var fechaFin = $('input[name=fechaFinEstimado]');
+        var mensaje = $('#observacion');
+
+
+        if(this.checked){
+            fechaInicio.attr('disabled', true);
+            fechaFin.attr('disabled', true);
+
+            mensaje.html('La tarea esta programada para toda la semana.');
+        }else{
+            fechaInicio.attr('disabled', false);
+            fechaFin.attr('disabled', false);
+
+            mensaje.html('');
+        }
+    });
+
+</script>
 @endsection
 

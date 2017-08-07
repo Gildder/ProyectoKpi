@@ -12334,6 +12334,8 @@ $(document).ready(function () {
 
     Vue.component('estado-tarea', require('./components/tareas/estados.vue'));
 
+    Vue.component('tabla-indicador', require('./components/indicadores/TablaIndicador.vue'));
+
     //noinspection JSAnnotator
     /**
      * Creacion de VueJS
@@ -12368,7 +12370,8 @@ $(document).ready(function () {
             //Tarea
             btnResultado: 0,
             btnEditar: 0,
-            btnEliminar: 0
+            btnEliminar: 0,
+            utilizarfechasestimadas: true
         },
         ready: function ready() {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -12378,7 +12381,6 @@ $(document).ready(function () {
                 this.obtenerListaWidget();
             }
         },
-        components: {},
         events: {
             'agregarWidgetPanel': function agregarWidgetPanel(widget) {
                 this.obtenerListaWidget();
@@ -12391,7 +12393,9 @@ $(document).ready(function () {
 
                 resourceWidget.delete({ id: id }).then(function (response) {
                     this.panelWidgets.$remove(id);
-                    this.panelWidgets = response.data;
+                    // this.panelWidgets = response.data;
+
+                    $('#capa-indicadores-' + id).css('display', 'none');
 
                     this.obtenerListaWidget();
                     Notificion.success('El Widget se elimino correctamente!');
@@ -12406,8 +12410,12 @@ $(document).ready(function () {
             // },
         },
         methods: {
-            saludar: function saludar() {
-                alert('Hola Mundo');
+            obtenerFechasEstimadasTareas: function obtenerFechasEstimadasTareas() {
+                if (localStorage.getItem('fechas-checked') != undefined) {
+                    return localStorage.getItem('fechas-checked');
+                } else {
+                    return false;
+                }
             },
             obtenerListaWidget: function obtenerListaWidget() {
                 resourceWidget.get().then(function (response) {
@@ -12499,7 +12507,7 @@ $(document).ready(function () {
     });
 });
 
-},{"./components/date/inputDate.vue":7,"./components/loading/loading.vue":8,"./components/nuevo_widget/Fila_Widget.vue":9,"./components/nuevo_widget/ModalWidget.vue":10,"./components/nuevo_widget/selector_modal.vue":11,"./components/tareas/estados.vue":12,"./components/widget/PanelWidget.vue":13,"./components/widget/grafica.vue":14,"./utils.js":15,"vue":5,"vue-resource":4}],7:[function(require,module,exports){
+},{"./components/date/inputDate.vue":7,"./components/indicadores/TablaIndicador.vue":8,"./components/loading/loading.vue":9,"./components/nuevo_widget/Fila_Widget.vue":10,"./components/nuevo_widget/ModalWidget.vue":11,"./components/nuevo_widget/selector_modal.vue":12,"./components/tareas/estados.vue":13,"./components/widget/PanelWidget.vue":14,"./components/widget/grafica.vue":15,"./utils.js":16,"vue":5,"vue-resource":4}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12515,6 +12523,7 @@ exports.default = {
         fechainicio: { type: String, required: true },
         fechafin: { type: String, required: true },
         placeholder: { type: String, required: true },
+        readonly: { type: String, default: false },
         valor: { type: String, required: true }
     },
     ready: function ready() {
@@ -12532,7 +12541,7 @@ exports.default = {
     methods: {}
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" placeholder=\"{{ placeholder }}\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" readonly=\"{{ readonly}}\" placeholder=\"{{ placeholder }}\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -12544,6 +12553,41 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: ['indicador_id', 'user_id'],
+    data: function data() {
+        return {};
+    },
+    ready: function ready() {
+        //            this.jxObtenerDatos();
+    },
+    methods: {
+        jxObtenerDatos: function jxObtenerDatos($event) {
+            $event.preventDefault();
+
+            ;
+        }
+    }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"table-responsive col-xs-12 col-sm-12 col-md-12 col-lg-12 \">\n    <div id=\"chart_Eficacia\"></div>\n</div>\n<div class=\"table-responsive col-xs-12 col-sm-12 col-md-12 col-lg-12 \">\n    <table id=\"myTable1\" class=\"table table-bordered table-hover table-response\">\n        <thead>\n        <tr>\n            <th>Nro</th>\n            <th>Mes</th>\n            <th>Semana</th>\n            <th>Actividades Programadas</th>\n            <th>Actividades Realizadas</th>\n            <th>Eficacia</th>\n        </tr>\n        </thead>\n        <tbody>\n        <tr v-for=\"item in tabla\">\n            <td>{{$contador++ }}</td>\n            <td class=\"m-{{item.mes}}\">{{ item.mes) }}</td>\n            <td>Semana {{item.semana}}</td>\n            <td>{{item.actpro}}</td>\n            <td>{{item.actrea}}</td>\n            <td><span class=\"{{item.semana}}\"> {{item.efeser}}%</span></td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-3e9b4dd9", module.exports)
+  } else {
+    hotAPI.update("_v-3e9b4dd9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12591,7 +12635,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c552a752", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12625,7 +12669,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-cd0711a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12713,14 +12757,7 @@ exports.default = {
 
             this.guardando = true;
 
-            /* obtener el tipo de indicador seleccionado */
-            var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
-
-            /* Obtener el indicador seleccionado */
-            var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
-
-            this.nuevo_widget.tipo_id = this.tipo_id;
-            this.nuevo_widget.titulo = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
+            this.validandoWidget();
 
             $.ajax({
                 url: 'guardarWidget',
@@ -12744,6 +12781,24 @@ exports.default = {
 
             this.guardando = false;
             $('#modal-nuevo-widget-' + this.nuevo_widget.tipo_id).modal('hide');
+        },
+        validandoWidget: function validandoWidget() {
+            /* obtener el tipo de indicador seleccionado */
+            var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
+
+            /* Obtener el indicador seleccionado */
+            var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
+
+            this.nuevo_widget.tipo_id = this.tipo_id;
+            this.nuevo_widget.titulo = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
+
+            if (this.nuevo_widget.mesBuscado === 0) {
+                this.nuevo_widget.mesBuscado = this.nuevo_widget.mesInicio;
+            }
+
+            if (this.nuevo_widget.mesInicio === 0) {
+                this.nuevo_widget.mesInicio = this.nuevo_widget.mesBuscado;
+            }
         },
         getTipoIndicadorSelecionado: function getTipoIndicadorSelecionado(tipo) {
             if (tipo === '') {
@@ -12775,7 +12830,7 @@ exports.default = {
             if (this.tipo_id === 1) {
                 return 'Indicadores de ' + tipo;
             } else if (this.tipo_id === 2) {
-                return 'Indicador de ' + indicador + ' por Usuarios';
+                return 'Usuarios de ' + indicador;
             } else if (this.tipo_id === 3) {
                 return 'Indicador de ' + indicador;
             } else {
@@ -12830,7 +12885,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7533f876", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":15,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],11:[function(require,module,exports){
+},{"./../../utils.js":16,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12854,7 +12909,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2da397d0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12912,7 +12967,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-12a71318", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],13:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12926,6 +12981,7 @@ var utils = require('./../../utils.js');
 var Notificion = new Alert('#notificacion');
 var Vue = require('vue');
 Vue.use(require('vue-resource'));
+var cambiar = false;
 
 exports.default = {
     props: {
@@ -12934,8 +12990,11 @@ exports.default = {
     data: function data() {
         return {
             ultimoMes: this.calcularUltimosMes(),
-            mesActual: this.obtenerMesActual(),
+            mesActual: '',
+            semanaActual: '',
             tituloChart: '',
+            tituloTabla: '',
+            NombreCampoTipoWidget: '',
             tabla: [],
             dataChart: [],
             categoriaChart: [],
@@ -12943,43 +13002,59 @@ exports.default = {
             cumplimiento: 0,
             category: '',
             datos: '',
-            textBuscaqueda: '',
+            textoMesBuscado: '',
+            textoSemanaBuscada: '',
             descripcionWidget: '',
-            verTabla: 1,
-            verChart: 1,
-            minimizado: 0
+            minimizado: 0,
+            semanas: 0
         };
     },
-    ready: function ready() {
-        this.obtenerTablaWidget();
 
-        this.obtenerChartWidget();
-    },
     computed: {
         bloquearSiguienteMes: function bloquearSiguienteMes() {
             var resultado = false;
-
-            if (this.widget.isSemanal === 0) {
-                resultado = this.widget.mesBuscado >= this.ultimoMes;
+            if (this.widget.isSemanal == 0) {
+                if (this.widget.tipo_id == 3) {
+                    resultado = this.widget.mesTarea >= this.ultimoMes;
+                } else {
+                    resultado = this.widget.mesBuscado >= this.ultimoMes;
+                }
             } else {
-                resultado = this.widget.mesInicio >= this.ultimoMes;
+                if (this.widget.tipo_id == 3) {
+                    resultado = this.widget.mesTarea >= this.ultimoMes;
+                } else {
+                    resultado = this.widget.mesInicio >= this.ultimoMes;
+                }
             }
 
             return resultado;
         },
         bloquearAnteriorMes: function bloquearAnteriorMes() {
             var resultado = false;
-
-            if (this.widget.isSemanal === 0) {
-                resultado = this.widget.mesBuscado <= 1;
+            if (this.widget.isSemanal == 0) {
+                if (this.widget.tipo_id == 3) {
+                    resultado = this.widget.mesTarea <= 1;
+                } else {
+                    resultado = this.widget.mesBuscado <= 1;
+                }
             } else {
-                resultado = this.widget.mesInicio <= 1;
+                if (this.widget.tipo_id == 3) {
+                    resultado = this.widget.mesTarea <= 1;
+                } else {
+                    resultado = this.widget.mesInicio <= 1;
+                }
             }
 
             return resultado;
         },
+        bloquearSiguienteSemana: function bloquearSiguienteSemana() {
+            return this.widget.semanaTarea >= this.semanas;
+        },
+        bloquearAnteriorSemana: function bloquearAnteriorSemana() {
+            return this.widget.semanaTarea <= 1;
+        },
         vistaParaTitulo: function vistaParaTitulo() {
-            if (this.widget.isSemanal === 1) {
+            if (this.widget.isSemanal == 1) {
                 return 'Mes';
             } else {
                 return 'Semana';
@@ -12987,58 +13062,16 @@ exports.default = {
         }
     },
     filters: {},
+    ready: function ready() {
+        this.inicializarDatos(false);
+    },
     methods: {
-        obtenerNombreTabla: function obtenerNombreTabla(tipo) {
-            switch (tipo) {
-                case 1:
-                    return 'Indicadores';
-                    break;
-                case 2:
-                    return 'Usuarios';
+        inicializarDatos: function inicializarDatos(opcion) {
+            // Actualizamos Widget
+            this.obtenerTablaWidget(opcion);
 
-                    break;
-                case 3:
-                    return 'Usuarios';
-
-                    break;
-            }
-        },
-        obtenerTablaWidget: function obtenerTablaWidget() {
-            this.obtenerMesActual();
             this.cambiarMenuVistaWidget();
-            this.obtenerTituloChart();
-            $.ajax({
-                url: 'obtenerDatosTablaWidget',
-                method: 'POST',
-                data: this.widget,
-                dataType: 'json',
-                success: function (data) {
-                    if (this.widget.tipo_id !== 3) {
-                        this.cumplimiento = data.pop();
-                        this.nombreTabla = data.pop();
-                    }
-                    this.tabla = data;
-                }.bind(this), error: function (data) {
-                    console.log('Error: No se puede cargar datos de la tabla del widget ' + this.widget.id);
-                }.bind(this)
-            });
-        },
-        opcionWidget: function opcionWidget($event) {
-            $event.preventDefault();
-            //                this.$dispatch('editar-widget', this.widget)
-        },
-        obtenerChartWidget: function obtenerChartWidget() {
-            $.ajax({
-                url: 'obtenerDatosChartWidget',
-                method: 'POST',
-                data: this.widget,
-                dataType: 'json',
-                success: function (data) {
-                    MostrarChart(this.widget.id, JSON.stringify(data[0]), JSON.stringify(data[1]));
-                }.bind(this), error: function (data) {
-                    console.log('Error: No se puede cargar los datos a la grafica del widget ' + this.widget.id);
-                }.bind(this)
-            });
+            this.obtenerNombreTablaChart();
         },
         eliminarWidget: function eliminarWidget() {
             // lanzamos el evento al metos de elimanr del js app-vue
@@ -13046,62 +13079,124 @@ exports.default = {
         },
         anteriorMes: function anteriorMes($event) {
             $event.preventDefault();
+            cambiar = true;
 
-            if (this.widget.isSemanal === 0) {
-                if (this.widget.mesBuscado > 1) {
-                    this.widget.mesBuscado--;
-
-                    this.obtenerDatosSgteAntSemana();
-                }
-            } else {
-                if (this.widget.mesInicio > 1) {
-                    this.widget.mesInicio--;
-
-                    this.obtenerDatosSgteAntSemana();
-                }
-            }
+            this.sincronizarAnteriorMes();
+            this.inicializarDatos(true);
         },
         siguienteMes: function siguienteMes($event) {
             $event.preventDefault();
 
-            if (this.widget.isSemanal === 0) {
-                if (this.widget.mesBuscado < this.ultimoMes) {
-                    this.widget.mesBuscado++;
+            cambiar = true;
 
-                    this.obtenerDatosSgteAntSemana();
+            this.sincronizarSiguienteMes();
+            this.inicializarDatos(true);
+        },
+        anteriorSemana: function anteriorSemana($event) {
+            $event.preventDefault();
+
+            cambiar = true;
+
+            this.sincronizarAnteriorSemana();
+            this.inicializarDatos(true);
+        },
+        siguienteSemana: function siguienteSemana($event) {
+            $event.preventDefault();
+
+            cambiar = true;
+
+            this.sincronizarSiguienteSemana();
+            this.inicializarDatos(true);
+        },
+        sincronizarSiguienteMes: function sincronizarSiguienteMes() {
+            /* Si widget esta vista semana */
+            if (this.widget.isSemanal == 0) {
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.mesTarea < this.ultimoMes) {
+                        this.widget.mesTarea++;
+                        this.widget.semanaTarea = 1;
+                    }
+                } else {
+                    if (this.widget.mesBuscado < this.ultimoMes) {
+                        this.widget.mesBuscado++;
+                    }
                 }
             } else {
-                if (this.widget.mesInicio < this.ultimoMes) {
-                    this.widget.mesInicio++;
-
-                    this.obtenerDatosSgteAntSemana();
+                /* Vista Mes*/
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.mesTarea < this.ultimoMes) {
+                        this.widget.mesTarea++;
+                        this.widget.semanaTarea = 1;
+                    }
+                } else {
+                    if (this.widget.mesInicio < this.ultimoMes) {
+                        this.widget.mesInicio++;
+                    }
                 }
             }
         },
-        obtenerDatosSgteAntSemana: function obtenerDatosSgteAntSemana() {
-            utils.mostrarCargando(true);
-
-            $.ajax({
-                url: 'actualizarWidget',
-                method: 'POST',
-                data: this.widget,
-                dataType: 'json',
-                success: function (data) {
-                    this.widget = data;
-
-                    this.obtenerTablaWidget();
-
-                    this.obtenerChartWidget();
-                    utils.mostrarCargando(false);
-
-                    Notificion.success('Se realizo el actualizaciòn de los datos..');
-                }.bind(this), error: function (data) {
-                    utils.mostrarCargando(false);
-
-                    Notificion.warning('NO se realizo el actualizaciòn de los datos..');
-                }.bind(this)
-            });
+        sincronizarAnteriorMes: function sincronizarAnteriorMes() {
+            /* Si widget esta vista semana */
+            if (this.widget.isSemanal == 0) {
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.mesTarea > 1) {
+                        this.widget.mesTarea--;
+                        this.widget.semanaTarea = 1;
+                    }
+                } else {
+                    if (this.widget.mesBuscado > 1) {
+                        this.widget.mesBuscado--;
+                    }
+                }
+            } else {
+                /* Vista Mes*/
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.mesTarea > 1) {
+                        this.widget.mesTarea--;
+                        this.widget.semanaTarea = 1;
+                    }
+                } else {
+                    if (this.widget.mesInicio > 1) {
+                        this.widget.mesInicio--;
+                    }
+                }
+            }
         },
+        sincronizarSiguienteSemana: function sincronizarSiguienteSemana() {
+            /* Si widget esta vista semana */
+            if (this.widget.isSemanal == 0) {
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.semanaTarea < this.semanas) {
+                        this.widget.semanaTarea++;
+                    }
+                }
+            } else {
+                /* Vista Mes*/
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.semanaTarea < this.semanas) {
+                        this.widget.semanaTarea++;
+                    }
+                }
+            }
+        },
+        sincronizarAnteriorSemana: function sincronizarAnteriorSemana() {
+            /* Si widget esta vista semana */
+            if (this.widget.isSemanal == 0) {
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.semanaTarea > 1) {
+                        this.widget.semanaTarea--;
+                    }
+                }
+            } else {
+                /* Vista Mes*/
+                if (this.widget.tipo_id == 3) {
+                    if (this.widget.semanaTarea > 1) {
+                        this.widget.semanaTarea--;
+                    }
+                }
+            }
+        },
+
         calcularUltimosMes: function calcularUltimosMes() {
             var mes = new Date().getMonth() + 1;
             if (mes === 1) {
@@ -13110,81 +13205,184 @@ exports.default = {
                 return mes - 1;
             }
         },
-        obtenerTituloChart: function obtenerTituloChart() {
-            var tipografica = this.obtenerNombreTabla(this.widget.tipo_id);
-            if (this.widget.isSemanal === 0) {
-                if (this.widget.tipo_id === 3) {
-                    // validamos los titulo de la grafica para tipo de widget por tarea
-                    this.tituloChart = 'Grafica de ' + tipografica + ' de ' + utils.nombreMes(this.widget.mesTarea);
-                } else {
-                    this.tituloChart = 'Grafica de ' + tipografica + ' de ' + this.mesActual;
-                }
-            } else {
-                this.tituloChart = 'Grafica de ' + tipografica + ' - ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(this.calcularUltimosMes());
-            }
+        obtenerNombreTablaChart: function obtenerNombreTablaChart() {
+            //                this.validarMesSemanas();
+            if (this.widget.tipo_id == 1) {
+                if (this.widget.isSemanal == 0) {
+                    // Actualizamos el mesActual
+                    this.mesActual = utils.nombreMes(parseInt(this.widget.mesBuscado));
 
-            return 'mes';
-        },
-        obtenerMesActual: function obtenerMesActual() {
-            if (this.widget.isSemanal === 0) {
-                if (this.widget.mesBuscado === 0) {
-                    this.widget.mesBuscado = this.widget.mesInicio;
+                    // Actualizamos los titulo de graficas y la tabla
+                    this.tituloChart = 'Grafica de Indicadores de ' + this.mesActual;
+                    this.tituloTabla = 'Tabla de Indicadores de ' + this.mesActual;
+                } else {
+                    // Actualizamos el mesActual
+                    this.mesActual = utils.nombreMes(parseInt(this.widget.mesInicio));
+
+                    // Actualizamos los titulo de graficas y la tabla
+                    this.tituloChart = 'Grafica de Usuarios - ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(parseInt(this.calcularUltimosMes()));
+                    this.tituloTabla = 'Tabla de Usuarios - ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(parseInt(this.calcularUltimosMes()));
                 }
-                this.mesActual = utils.nombreMes(this.widget.mesBuscado);
+                this.NombreCampoTipoWidget = 'Indicadores';
+            } else if (this.widget.tipo_id == 2) {
+                if (this.widget.isSemanal == 0) {
+                    // Actualizamos el mesActual
+                    this.mesActual = utils.nombreMes(parseInt(this.widget.mesBuscado));
+
+                    // Actualizamos los titulo de graficas y la tabla
+                    this.tituloChart = 'Grafica de Indicadores de ' + this.mesActual;
+                    this.tituloTabla = 'Tabla de Indicadores de ' + this.mesActual;
+                } else {
+                    // Actualizamos el mesActual
+                    this.mesActual = utils.nombreMes(parseInt(this.widget.mesInicio));
+
+                    // Actualizamos los titulo de graficas y la tabla
+                    this.tituloChart = 'Grafica de Usuarios - ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(parseInt(this.calcularUltimosMes()));
+                    this.tituloTabla = 'Tabla de Usuarios - ' + utils.nombreMes(this.widget.mesInicio) + ' a ' + utils.nombreMes(parseInt(this.calcularUltimosMes()));
+                }
+
+                this.NombreCampoTipoWidget = 'Usuarios';
             } else {
-                if (this.widget.mesInicio === 0) {
-                    this.widget.mesInicio = this.widget.mesBuscado;
+                var semana = '';
+                if (this.widget.isSemanal == 0) {
+                    semana = 'la Semana ' + this.widget.semanaTarea + ' de ';
                 }
-                this.mesActual = utils.nombreMes(this.widget.mesInicio);
+
+                // Actualizar el mes Actual
+                this.mesActual = utils.nombreMes(parseInt(this.widget.mesTarea));
+                this.semanaActual = this.widget.semanaTarea;
+
+                this.tituloChart = 'Grafica de Eficacia de Usuarios de ' + semana + utils.nombreMes(parseInt(this.widget.mesTarea));
+                this.tituloTabla = 'Tabla de Eficacia de Usuarios de ' + semana + utils.nombreMes(parseInt(this.widget.mesTarea));
+                this.NombreCampoTipoWidget = 'Usuarios';
             }
         },
         cambiarVista: function cambiarVista($event, vista) {
             $event.preventDefault();
+            cambiar = true;
 
             this.widget.isSemanal = vista;
+            this.inicializarDatos(true);
+        },
+        validarMesSemanas: function validarMesSemanas() {
+            if (this.widget.isSemanal == 1) {
+                if (this.widget.mesBuscado == 0) {
+                    this.widget.mesInicio = this.ultimoMes;
+                } else {
+                    this.widget.mesInicio = this.widget.mesBuscado;
+                }
+            } else {
+                if (this.widget.mesInicio == 0) {
+                    this.widget.mesInicio = this.ultimoMes;
+                } else {
+                    this.widget.mesBuscado = this.widget.mesInicio;
+                }
+            }
+        },
+        cambiarMenuVistaWidget: function cambiarMenuVistaWidget() {
+            if (this.widget.tipo_id == 1) {
+                this.textoMesBuscado = 'Mes Actual:';
+            } else if (this.widget.tipo_id == 1) {
+                this.textoMesBuscado = 'Mes Inicio:';
+            } else {
+                this.obtenerCantidadSemana();
+                this.textoMesBuscado = 'Mes Actual:';
+                this.textoSemanaBuscada = 'Semana Actual: ';
+            }
+        },
+        obtenerCantidadSemana: function obtenerCantidadSemana() {
+            if (this.widget.mesTarea != "") {
+                // utils.mostrarCargando(true);
+
+                $.ajax({
+                    url: 'obtenerCantidadSemanasMes',
+                    method: 'POST',
+                    data: this.widget,
+                    dataType: 'json',
+                    success: function (data) {
+                        this.semanas = data;
+
+                        // utils.mostrarCargando(false);
+                    }.bind(this), error: function (data) {
+                        console.log('Error: No se obtuvo las cantidad de semanas');
+
+                        // utils.mostrarCargando(false);
+                    }.bind(this)
+                });
+            }
+        },
+        obtenerTablaWidget: function obtenerTablaWidget(opcion) {
+            var store = localStorage.getItem('wg' + this.widget.id);
+
+            if (store != undefined && cambiar == false) {
+
+                store = JSON.parse(store);
+
+                this.widget = store[0];
+                var chart = store[1];
+                var table = store[2];
+
+                // Mostrar chart c3
+                MostrarChart(this.widget.id, JSON.stringify(chart[0]), JSON.stringify(chart[1]));
+
+                //  cargar la tabla
+                if (this.widget.tipo_id != 3) {
+                    this.cumplimiento = table.pop();
+                    this.nombreTabla = table.pop();
+                }
+                this.tabla = table;
+
+                return;
+            }
 
             utils.mostrarCargando(true);
+            if (opcion == true) {
+                $.ajax({
+                    url: 'actualizarWidget',
+                    method: 'POST',
+                    data: this.widget,
+                    dataType: 'json',
+                    success: function (data) {
+                        this.widget = data;
+                    }.bind(this), error: function (data) {
+                        console.log('NO se actualizò el Widget ' + this.widget.id + ' correctamente...');
+                    }.bind(this)
+                });
+            }
 
             $.ajax({
-                url: 'actualizarWidget',
+                url: 'obtenerDatosTablaWidget',
                 method: 'POST',
                 data: this.widget,
                 dataType: 'json',
                 success: function (data) {
-                    this.obtenerTablaWidget();
-                    this.obtenerChartWidget();
-                    this.obtenerMesActual();
-                    utils.mostrarCargando(false);
+                    // sacamos el chart del Widget
+                    console.log(JSON.stringify(data));
+                    var grafica = data.pop();
+                    var tablaResponse = data.pop();
 
-                    Notificion.success('Se realizo el actualizaciòn de los datos..');
+                    // Mostrar chart c3
+                    MostrarChart(this.widget.id, JSON.stringify(grafica[0]), JSON.stringify(grafica[1]));
+
+                    //  cargar la tabla
+                    if (this.widget.tipo_id != 3) {
+                        this.cumplimiento = tablaResponse.pop();
+                        this.nombreTabla = tablaResponse.pop();
+                    }
+                    this.tabla = tablaResponse;
+
+                    // guardamos en el localstore
+                    localStorage.setItem('wg' + this.widget.id, JSON.stringify([this.widget, grafica, tablaResponse]));
+                    cambiar = false;
+
+                    utils.mostrarCargando(false);
+                    Notificion.success('Se actualizò el Widget ' + this.widget.id + ' correctamente...');
                 }.bind(this), error: function (data) {
                     utils.mostrarCargando(false);
-
-                    Notificion.warning('NO se realizo el actualizaciòn de los datos..');
+                    Notificion.success('NO se actualizò el Widget ' + this.widget.id + ' correctamente...');
                 }.bind(this)
             });
-        },
-        cambiarMenuVistaWidget: function cambiarMenuVistaWidget() {
-            switch (this.widget.tipo_id) {
-                case 1:
-
-                    break;
-                case 2:
-                    break;
-
-                case 3:
-                    break;
-            }
-
-            if (this.widget.isSemanal === 0) {
-                // si la vista esta mensual isSemanal = 0
-                this.textBuscaqueda = 'Mes Actual:';
-            } else {
-                // si la vista esta semanal isSemanal = 1
-                this.textBuscaqueda = 'Mes Inicio:';
-            }
         }
-
     }
 };
 
@@ -13235,7 +13433,7 @@ function MostrarChart(widget_id, datosChart, categoriachart) {
     });
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\" id=\"panelWidget\">\n            <!--minimizar colocar la clase = box box-warning collapsed-box , mazminazar colcoar = box box-warning -->\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">{{ widget.titulo }} - por {{ vistaParaTitulo }} </h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget()\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                            <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n\n                    <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb\">\n                        <p>{{ descripcionWidget }}</p>\n                    </div>\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart-{{ widget.id  }}\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"table\">\n                             <!--Filtro guiente Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\">{{ textBuscaqueda }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"anteriorMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹</a>\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"siguienteMes($event)\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteMes }\" :style=\"bloquearSiguienteMes? {color: white }:''\" :disabled=\"bloquearSiguienteMes\">›</a>\n                                </div>\n                            </div>\n\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ obtenerNombreTabla(widget.tipo_id) }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores-{{ widget.id  }}\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\" id=\"panelWidget\">\n            <!--minimizar colocar la clase = box box-warning collapsed-box , mazminazar colcoar = box box-warning -->\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">\n                    <b>{{ widget.id }}. {{ widget.titulo }}</b><br>\n                    <strong class=\"pull-left\" style=\"color:gray; font-size:14px; padding-top:5px;\">Por {{ vistaParaTitulo }}</strong>\n                </h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget()\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                            <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n\n                    <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb\">\n                        <p>{{ actualizarDescripcionWidget }}</p>\n                    </div>\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart-{{ widget.id  }}\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n                            <p class=\"text-center\">\n                                <strong>{{ tituloTabla }}</strong>\n                            </p>\n                        </div>\n                            <!--Filtro Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\" class=\"hidden-xs\">{{ textoMesBuscado }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"bloquearAnteriorMes == false?anteriorMes($event):''\" :class=\"{'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹ </a>\n\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"bloquearSiguienteMes == false?siguienteMes($event):''\" :class=\"{'btn-danger': bloquearSiguienteMes }\" :disabled=\"bloquearSiguienteMes\">› </a>\n                                </div>\n                            </div>\n\n                            <!--Filtro Semana -->\n                            <div v-if=\"widget.tipo_id == 3 &amp;&amp; widget.isSemanal == 0\" class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\" class=\"hidden-xs\">{{ textoSemanaBuscada }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"bloquearAnteriorSemana == false?anteriorSemana($event):''\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorSemana }\" :disabled=\"bloquearAnteriorSemana\">‹ </a>\n\n                                    <a class=\"btn btn-default btn-sm \"><b>Semana {{ semanaActual }}</b></a>\n\n                                    <a class=\"btn btn-default btn-sm  right\" style=\" margin-right:15px;\" title=\"Siguiente\" @click=\"bloquearSiguienteSemana == false? siguienteSemana($event):''\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteSemana }\" :style=\"bloquearSiguienteSemana? {color: white }:''\" :disabled=\"bloquearSiguienteSemana\">› </a>\n                                </div>\n                            </div>\n\n\n                        <div class=\"table table-responsive\">\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ NombreCampoTipoWidget }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ NombreCampoTipoWidget }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -13246,7 +13444,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-9b626b76", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":15,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],14:[function(require,module,exports){
+},{"./../../utils.js":16,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13334,7 +13532,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-2f890b98", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
 'use strict';
 
 /**

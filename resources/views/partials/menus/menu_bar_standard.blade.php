@@ -34,7 +34,7 @@
           {{--</li>--}}
           {{--@endif--}}
 
-          @if( \Usuario::get('isSupervisor'))
+          @if(\Usuario::get('isSupervisor')))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >
@@ -44,14 +44,21 @@
           </li>
           @endif
 
-          @if(  \Usuario::get('isIndicadores'))
-           <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-          <a href="{{url('tareas/tareaProgramadas')}}" >
+          @if(\Usuario::is_indicador(1))
+            <!-- Messages: style can be found in dropdown.less-->
+            <li class="dropdown messages-menu">
+            <a href="{{url('tareas/tareaProgramadas')}}" >
               <i class="fa  fa-calendar-check-o "></i>
               <label for="Tareas" class="hidden-xs">Tareas</label>
             </a>
-          </li>
+            </li>
+
+            <li class="dropdown messages-menu">
+                <a href="{{url('calendario/empleado/index')}}" >
+                    <i class="fa  fa-calendar"></i>
+                    <label for="Tareas" class="hidden-xs">Calendario</label>
+                </a>
+            </li>
           @endif
          <!-- Messages: style can be found in dropdown.less-->
          {{--  <li class="dropdown messages-menu">

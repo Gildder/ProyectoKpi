@@ -260,9 +260,6 @@ Route::group(['middleware'=>['auth', 'estandard']], function ()
         array('as' => 'evaluadores.evaluados.obtenerDatosTablaWidget',
             'uses' => 'Evaluadores\EvaluadosController@obtenerDatosTablaWidget') );
 
-    Route::post('evaluadores/evaluados/obtenerDatosChartWidget',
-        array('as' => 'evaluadores.evaluados.obtenerDatosChartWidget',
-            'uses' => 'Evaluadores\EvaluadosController@obtenerDatosChartWidget') );
 
     Route::post('evaluadores/evaluados/actualizarWidget',
         array('as' => 'evaluadores.evaluados.actualizarWidget',
@@ -459,6 +456,22 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::get('tareas/tareaProgramadas/{id}/obtenerEstadoBtnEliminarTarea',
         array('as' => 'tareas.tareaProgramadas.obtenerEstadoBtnEliminarTarea',
             'uses'=> 'Tareas\TareaProgramadaController@obtenerEstadoBtnEliminarTarea'));
+
+    /* calendario de Tareas*/
+    Route::get('calendario/empleado/index',
+        array('as' => 'calendario.empleado.index', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@listaMiTareas') );
+
+    Route::get('calendario/empleado/cargarTareas',
+            array('as' => 'calendario.empleado.cargarTareas', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@cargarTareas') );
+
+
+    Route::post('calendario/empleado/guardarTarea',
+        array('as' => 'calendario.empleado.guardarTarea', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@guardarTarea') );
+
+
+    Route::post('calendario/empleado/actualizarTareaHora',
+        array('as' => 'calendario.empleado.actualizarTareaHora', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@actualizarTareaHora') );
+
 });
 
 

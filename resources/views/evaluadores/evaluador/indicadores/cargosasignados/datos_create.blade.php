@@ -70,7 +70,7 @@
  <div class="modal-footer col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 5px;" >
      <div style="border-top: 2px solid white; padding-top: 10px;">
          <a id="btncancelarnuevoindicador" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
-         <button type="submit"    class="btn btn-success guardar"><span class="fa fa-save"></span> Guardar</button>
+         <button type="submit"  @click="mostrarModalLoading()"   class="btn btn-success guardar"><span class="fa fa-save"></span> Guardar</button>
      </div>
 
   </div>

@@ -16,7 +16,7 @@
 				<td>{{$item->codigo}}</td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
 				<td>
-					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteEmpleadoEvaluador-{{$evaluador->id}}"  class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"  title="Quitar Empleado"></span></a>
+					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-deleteEmpleadoEvaluador-{{$item->id}}"  class="btn btn-danger btn-xs" ><span class="glyphicon glyphicon-trash"  title="Quitar Empleado"></span></a>
 				</td>
 			</tr>
 			@include('evaluadores/evaluador/empleados/delete')

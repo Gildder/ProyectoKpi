@@ -70,7 +70,7 @@ class EvaluadoresRepository extends BaseRepository
      * Retorna los datos de la eficacia por empleados, tareas y ticket
      *
      */
-    public static function cnGetIndicadoresTareasSemana($usuario, $anio, $mes, $semana)
+    public static function cnGetIndicadoresTareasSemana($usuario, $anio, $mes, $semana=null)
     {
         return \DB::select('call pa_evaluados_tareasSemana(' . $usuario . ', ' . $anio . ', ' . $mes . ', ' . $semana . ');');
     }

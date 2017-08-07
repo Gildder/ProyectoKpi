@@ -11,6 +11,9 @@ class Tiempo implements IClases
 
     public function __construct()
     {
+        $this->hora = 0;
+        $this->minuto = 0;
+
     }
 
     /* Metodos */
@@ -27,9 +30,10 @@ class Tiempo implements IClases
 
     public function obtenerHora($horas, $minutos)
     {
+
         $horaEntera = floor($minutos/60);
 
-        if (($minutos % 60)!=0) {
+        if (($minutos % 60)!= 0) {
             $horaDecimal = ($minutos/60) - $horaEntera;
             $this->minuto = floor($horaDecimal * 60);
         }

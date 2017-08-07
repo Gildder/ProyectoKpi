@@ -40,12 +40,12 @@
 				 v-if="btnEditar === 1" @click="mostrarModalLoading()"
 				 class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
 
-			<a href="#" v-if="btnEliminar === 1"  data-toggle="modal"
-			   data-target="#modal-delete-{{$tarea->id}}" @click="mostrarModalLoading()"
+			<a href="#" v-if="btnEliminar === 1"  style="margin-left: 10px;" data-toggle="modal"
+			   data-target="#modal-delete-{{$tarea->id}}"
 			   class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
 
 		@else
-			<a href="#"  data-toggle="modal" v-if="{{ \Cache::get('botones') }} == 0" @click="mostrarModalLoading()"  data-target="#modal-cancelar-{{$tarea->id}}" title="Cancelar Solucion"
+			<a href="#"  data-toggle="modal" v-if="{{ \Cache::get('botones') }} == 0"  data-target="#modal-cancelar-{{$tarea->id}}" title="Cancelar Solucion"
 			class="btn btn-danger btn-sm"><span class="fa fa-times"></span><b>  Cancelar Solución</b> </a>
 		@endif
 	</div>

@@ -95,7 +95,7 @@ class EvaluadorController extends Controller
         $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$id.');');
 
 
-
+//dd($empleadosDisponibles, $empleadosAgregados);
 		return view('evaluadores/evaluador/show',['evaluador'=>$evaluador,'empleadosDisponibles'=>$empleadosDisponibles,'empleadosAgregados'=>$empleadosAgregados,
                 'indicadores'=>$indicadores, 'indicadoresDisponibles'=>$indicadoresDisponibles, 'cargosDisponibles'=>$cargosDisponibles,'cargoAgregados'=>$cargoAgregados ]);
 	}
@@ -180,7 +180,7 @@ class EvaluadorController extends Controller
         
             return redirect()->back()->with('message', 'Se quito el cargo "'.$cargo->nombre.'" correctamente.');
         }else{
-            return redirect()->back()->withErrors('No puede quitar cargo '.$cargo->nombre.' porque esta asignado a un indicador.');
+            return redirect()->back()->withErrors('No puede quitar cargo "'.$cargo->nombre.'" porque esta asignado a un indicador.');
         }
 
         
@@ -246,6 +246,7 @@ class EvaluadorController extends Controller
 
     public function agregarcargoasignado($indicador_id, $evaluador_id, Request $Request)
     {
+        /* validamos los parametros enviados */
         $validator = \Validator::make($Request->all(), [
             'cargo_id' => 'required',
             'condicion'=>'max:120',
@@ -267,6 +268,7 @@ class EvaluadorController extends Controller
 
         $cargo = Cargo::findOrFail($cargo_id);
 
+        /* insertamos el indicador al cargo asignado */
         $ids = DB::table('indicador_cargos')->insertGetId(
             array('indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion)
         );

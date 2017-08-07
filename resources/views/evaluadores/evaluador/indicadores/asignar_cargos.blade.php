@@ -52,7 +52,9 @@
 	</div>
 </div>
 
-<script>
+<script type="text/javascript">+
+    $(document).ready(function () {
+
 	$('#btnnuevocargoindicador').on( "click", function() {
 		$('.agregar').hide();
 		$('#nuevoCargoIndicador').show();
@@ -63,13 +65,21 @@
 		$('.agregar').show();
 		$('#nuevoCargoIndicador').hide();
 		$('#editarCargoIndicador').hide();
+
+	});
+
+	$('#btncancelareditarindicador').on('click', function() {
+		$('.agregar').show();
+		$('#nuevoCargoIndicador').hide();
+		$('#editarCargoIndicador').hide();
+
 	});
 
 	$('#btnEditarCargoIndicador').on('click', function() {
 		$('.agregar').hide();
 		$('#nuevoCargoIndicador').hide();
 		$('#editarCargoIndicador').show();
-		
+
 		var row = $(this).parent().parent();
 		test(row);
 
@@ -85,11 +95,11 @@
 		var celdas= row.children();
 
 	  //Obtenemos la celda 1 y la colocamos en el div con id resultado_2
-		cargo_id.val(agragarCargo($(celdas[1]).html())); 
-		objetivo.val($(celdas[2]).html()); 
-		frecuencia_id.val(obtenerFrecuencia($(celdas[3]).html())); 
-		condicion.val(trim(obtenerCondicion($(celdas[4]).html()))); 
-		aclaraciones.val(trim(obtenerCondicion($(celdas[5]).html()))); 
+		cargo_id.val(agragarCargo($(celdas[1]).html()));
+		objetivo.val($(celdas[2]).html());
+		frecuencia_id.val(obtenerFrecuencia($(celdas[3]).html()));
+		condicion.val(obtenerCondicion($(celdas[4]).html()).trim());
+		aclaraciones.val(obtenerCondicion($(celdas[5]).html()).trim());
 	}
 
 	function agragarCargo(param)
@@ -102,7 +112,7 @@
 				$("select[name=cargo_id]  option").each(function(){
 				   var id = $(this).attr('value');
 
-				   if (id === {{ $element->id }}) {
+				   if (id == {{ $element->id }}) {
 	                	$("select[name=cargo_id] > option[value="+ {{ $element->id }} +"]").attr("selected",true);
 	                	existe = true;
 	                }
@@ -143,7 +153,9 @@
 
 		return param;
 	}
+
+    });
+
 </script>
 @endsection
 
- 

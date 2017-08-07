@@ -34,7 +34,7 @@ $(document).ready(function(){
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}</td>
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}</td>
 	<td> {{$tarea->tiempoSolucion}}</td>
-	<td> <label class="label label-{{ $tarea->getEstadoColor() }}"> {{$tarea->getEstado()}} </label> </td>
+	<td> <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label> </td>
 	<td>{{$tarea->getObservacion() }}</td>
 	<td>
 		<ul>

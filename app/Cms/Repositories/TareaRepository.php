@@ -37,12 +37,12 @@ class TareaRepository
 
     public static function getTareasProgramadasUsuario($usuario_id, $fechaInicio, $fechaFin)
     {
-        $tareas = Tarea::select('users.id as user_id','users.nombres', 'users.apellidos' ,'tareas.id', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
+        $tareas = Tarea::select('users.id as user_id','users.nombres','users.color', 'users.apellidos' ,'tareas.id', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
             'tareas.observaciones', 'tareas.estadoTarea_id', 'tareas.isError', 'tarea_tipos.nombre as tipo', 'tareas.proyecto_id')
             ->leftjoin('tarea_tipos', 'tarea_tipos.id','=', 'tareas.tipoTarea_id')
             ->join('users', 'users.id','=', 'tareas.user_id')
             ->where('user_id', '=', $usuario_id)
-            ->where('fechaInicioEstimado', '>=', $fechaFin)
+            ->where('fechaInicioEstimado', '>=', $fechaInicio)
             ->whereNull('tareas.deleted_at')
             ->orderBy('tareas.fechaInicioEstimado', 'desc')
             ->get();
@@ -117,6 +117,40 @@ class TareaRepository
 
     }
 
+    public static function getEstadosEditar()
+    {
+        return \DB::table('estado_tareas')
+            ->whereNull('estado_tareas.deleted_at')
+            ->where('estado_tareas.id', '<>', '3')
+            ->get();
+    }
+
+    public static function Actualizar($tarea)
+    {
+        try
+        {
+            dd($tarea);
+            \DB::table('tareas')
+                ->where('id', $tarea->id)
+                ->update([
+                    'descripcion'=> "'".$tarea->descripcion."'",
+                    'estadoTarea_id'=> "'".$tarea->estadoTarea_id."'",
+                    'fechaInicioEstimado'=> "'".$tarea->fechaInicioEstimado."'",
+                    'fechaFinEstimado'=> "'".$tarea->fechaFinEstimado."'",
+                    'tiempoEstimado'=> "'".$tarea->tiempoEstimad."'"
+            ]);
+            return true;
+        }catch (\Exception $errr){
+            Log::info($errr);
+            return false;
+        }
+    }
+
+    public static function Resolver( $tarea)
+    {
+
+    }
+
     public function getTareasEliminados()
     {
         $tareas = Tarea::where('user_id', '=', \Usuario::get('id'))
@@ -183,12 +217,19 @@ class TareaRepository
     {
         try
         {
-            \DB::select("call pa_eficacia_insertarTicket(".$ticketsAbiertos.", ".$ticketsCerrados.", ".$anio.", ".$mes.", ".$semana.", '".$fechaInicio."', '".$fechaFin."', ".$user_id." );");
+            if(isset($user_id))
+            {
+                Log::info($ticketsCerrados. '- '.$ticketsAbiertos);
+                \DB::select("call pa_eficacia_insertarTicket(".$ticketsAbiertos.", ".$ticketsCerrados.", ".$anio.", ".$mes.", ".$semana.", '".$fechaInicio."', '".$fechaFin."', ".$user_id->p." );");
 
-            return 'true';
+                return true;
+            }else{
+                return false;
+            }
+
         }catch (\Exception $errr){
             Log::error('No importaron los usuarios en la tabla de eficacion');
-            return 'false';
+            return false;
         }
     }
 

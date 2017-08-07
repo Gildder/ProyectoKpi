@@ -7,9 +7,9 @@
 @section('content')
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<a href="{{route('supervisores.supervisados.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
+{{--			<a href="{{route('supervisores.supervisados.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>--}}
 
-			<p class="titulo-panel">Lista de Tareas de Supervisados</p>
+			<p class="titulo-panel">Lista de Tareas</p>
 		</div>
 		<div class="panel-body">
 			<div id="datos" class="tab-pane fade in active">

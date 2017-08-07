@@ -33,7 +33,9 @@ class UsuarioActivo implements IClases
     private $evaluador_id;
     private $isSupervisor;
     private $isIndicadores;
+    private $is_eficacia;
     private $isAdmin;
+    private $indicadores;
     private $preferencias;
 
     public function __construct(PreferenciasUsuario $preferencias)
@@ -50,11 +52,11 @@ class UsuarioActivo implements IClases
 
     public function get($atributo)
     {
-        if(isset($this->$atributo)){
+//        if(isset($this->$atributo)){
             return $this->$atributo;
-        }else{
-            return 'Ninguno';
-        }
+//        }else{
+//            return 'Ninguno';
+//        }
     }
 
     public function inicializar()
@@ -67,19 +69,22 @@ class UsuarioActivo implements IClases
         $this->correo  = $user->email;
         $this->tipo    = $user->type;
         $this->isAdmin = $this->isAdmin();
+        $this->is_eficacia = $user->is_eficacia;
+        $this->indicadores = $this->indicadorAsignados($user->id);
 
         if (!$this->isAdmin() && $this->isEmpleado()) {
             $this->codigo = $user->codigo;
             $this->nombre = $user->nombres;
             $this->apellido = $user->apellidos;
-            $this->departamento_id = $user->departamento_id;
-            $this->localizacion_id = $user->localizacion_id;
-            $this->cargo_id = $user->cargo_id;
+            $this->departamento = $user->departamento;
+            $this->localizacion = $user->localizacion;
+            $this->cargo = $user->cargo;
 
         }
         $this->isEvaluador = $this->isEvaluador();
         $this->isSupervisor = $this->isSupervisor();
         $this->isIndicadores = $this->isIndicadores();
+
     }
 
     public function isAdmin()
@@ -140,6 +145,29 @@ class UsuarioActivo implements IClases
 
     }
 
+    public function indicadorAsignados($usuario_id)
+    {
+        $indicadores = \DB::select('call pa_empleados_obtenerIndicadores(\''.$usuario_id.'\');');
+
+        $lista = array();
+        foreach ($indicadores as $indicador){
+            array_push($lista, $indicador->id);
+        }
+
+        return $lista;
+    }
+
+    public function is_indicador($indicador)
+    {
+        $position =  array_search($indicador, $this->indicadores);
+
+        if($position == true || isset($position)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 
     /**
      * Verificar si el usuario logueado esata asignado como supervisor de otro emplaedo
@@ -175,6 +203,11 @@ class UsuarioActivo implements IClases
         }else{
             return false;
         }
+    }
+
+    public function getThis()
+    {
+        return $this;
     }
 
 }

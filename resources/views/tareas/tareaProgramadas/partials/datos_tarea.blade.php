@@ -43,8 +43,7 @@
       <tr>
           <td class="text-right"><b>Estado:</b></td>
           <td>
-          <span class="label label-{{ $tarea->getEstadoColor() }} label-md">
-            {{$tarea->getEstado()}}
+              <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label>
           </span>
           </td>
       </tr>

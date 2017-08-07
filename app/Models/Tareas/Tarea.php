@@ -57,6 +57,11 @@ class Tarea extends Model
         return $this->hasMany('ProyectoKpi\Models\Tareas\Proyecto', 'proyecto_id');
     }
 
+    function estados(){
+        return $this->belongsTo('ProyectoKpi\Models\Tareas\Estados','estadoTarea_id');
+
+    }
+
     public function  notaErrores()
     {
         return $this->hasMany('ProyectiKpi/Models/Tareas/Tarea', 'tarea_id', 'id');
@@ -73,7 +78,7 @@ class Tarea extends Model
     // Las localizaciones de disponibles para un empleado particular
     public static function getLocalizaciones()
     {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion'))->first();
         $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
 
         return $localizaciones;
@@ -82,35 +87,51 @@ class Tarea extends Model
     // lista de ubidadciones Ocupadas para una tarea
     public static function ubicacionesOcupadas($tarea_id)
     {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion_id'))->first();
+        if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion')))
+        {
+            $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion')->id)->first();
         // $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
+
         $ubicacionesOcupadas = DB::table('localizaciones')->join('tarea_localizacion','tarea_localizacion.localizacion_id','=', 'localizaciones.id')
-                                ->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)
-                                ->where('tarea_localizacion.tarea_id',$tarea_id)
-                                ->select('localizaciones.id','localizaciones.nombre')->get();
+            ->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)
+            ->where('tarea_localizacion.tarea_id',$tarea_id)
+            ->select('localizaciones.id','localizaciones.nombre')->get();
 
 
         return $ubicacionesOcupadas;
+        }else{
+            return [];
+        }
+
     }
 
 
     // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesDisponibles($tarea_id)
     {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id','=', \Usuario::get('localizacion_id'))->first();
+        if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion')))
+        {
+            $localizacion = DB::table('localizaciones')->where('localizaciones.id','=', \Usuario::get('localizacion')->id)->first();
 
         $ubicacionesDisponible  = DB::select('call pa_tareas_ubicaionesDisponibles('.$localizacion->grupoloc_id.','.$tarea_id.');');
 
         return $ubicacionesDisponible;
+        }else{
+            return [];
+        }
     }
 
      // lista de ubidadciones disponbiles para una tarea
     public static function ubicacionesTodos($tarea_id)
     {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id','=', \Usuario::get('localizacion_id'))->first();
-        $localizaciones = DB::table('localizaciones')->select('localizaciones.id', 'localizaciones.nombre')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->get();
+        if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion'))) {
+            $localizacion = DB::table('localizaciones')->where('localizaciones.id', '=', \Usuario::get('localizacion')->id)->first();
+            $localizaciones = DB::table('localizaciones')->select('localizaciones.id', 'localizaciones.nombre')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->get();
 
-        return $localizaciones;
+            return $localizaciones;
+        }else{
+            return [];
+        }
     }
 
     public function getEstado()
@@ -232,9 +253,9 @@ class Tarea extends Model
         return $partes[1];
     }
 
-    public function validarFechaInicioEstimacion($fechaInicio)
+    public function validarFechaInicioEstimacion($fechaInicio, $todasemana)
     {
-        if(\Usuario::get('preferencias')->get('verFechasEstimadas') === 0)
+        if(isset($todasemana))
         {
             $semanas = $this->obtnerSemanaDelAnio();
             return $semanas->fechaInicio;
@@ -244,9 +265,9 @@ class Tarea extends Model
         }
     }
 
-    public function validarFechaFinEstimacion($fechaFin)
+    public function validarFechaFinEstimacion($fechaFin, $todasemana)
     {
-        if(\Usuario::get('preferencias')->get('verFechasEstimadas') === 0)
+        if(isset($todasemana))
         {
             $semanas = $this->obtnerSemanaDelAnio();
             return $semanas->fechaFin;

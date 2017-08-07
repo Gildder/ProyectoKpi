@@ -2,8 +2,10 @@
 
 namespace ProyectoKpi\Http\Controllers\Evaluadores;
 
+use function array_push;
 use Httpful\Response;
 use Illuminate\Http\Request;
+use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Clases\Conexion_LDAP;
 use ProyectoKpi\Cms\Clases\FiltroTabla;
 use ProyectoKpi\Cms\Clases\UsuarioActivo;
@@ -28,7 +30,6 @@ class EvaluadosController extends Controller
     public function __contruct()
     {
         $this->middleware('auth');
-        $this->filtro = new FiltroTabla();
     }
 
     /**
@@ -66,7 +67,7 @@ class EvaluadosController extends Controller
 
 //        dd(json_encode($this->dashboard->obtenerEvaluadorWidget()));
 
-        $this->cachearFiltro(new FiltroTabla());
+        Caches::guardar('filtroTabla',new FiltroTabla());
 
         return view('evaluadores/evaluados/dashboard/index', [
             'tipos'  => $this->dashboard->obtenerPondTiposIndicadores(),
@@ -158,39 +159,30 @@ class EvaluadosController extends Controller
      * Obtenermos las datos para mostra en la tabl de widget
      *
      */
+    public function actualizarWidget(Request $request)
+    {
+            $widget = Widget::findOrFail($request->id);
+            $widget->tipo_id = $request->tipo_id;
+            $widget->titulo = $request->titulo;
+            $widget->isSemanal = $request->isSemanal;
+            $widget->tipoIndicador_id = $request->tipoIndicador_id;
+            $widget->indicador_id = $request->indicador_id;
+            $widget->anio = $request->anio;
+            $widget->mesInicio = $request->mesInicio;
+            $widget->mesBuscado = $request->mesBuscado;
+            $widget->mesTarea = $request->mesTarea;
+            $widget->semanaTarea = $request->semanaTarea;
+
+            $widget->save();
+
+            return $widget;
+    }
+
     public function obtenerDatosTablaWidget(Request $request)
     {
-        $widget = new Widget();
-        $widget->id = $request->id;
-        $widget->evaluador_id = \Cache::get('evadores')->id;
-        $widget->user_id = \Usuario::get('id');
-        $widget->tipo_id = $request->tipo_id;
-        $widget->titulo = $request->titulo;
-        $widget->isSemanal = $request->isSemanal;
-        $widget->tipoIndicador_id = $request->tipoIndicador_id;
-        $widget->indicador_id = $request->indicador_id;
-        $widget->anio = $request->anio;
-        $widget->mesInicio = $request->mesInicio;
-        $widget->mesBuscado = $request->mesBuscado;
-        $widget->mesTarea = $request->mesTarea;
-        $widget->semanaTarea = $request->semanaTarea;
-
-//        return $widget;
-
-        $this->dashboard = new nDashboard();
-
-        return $this->dashboard->obtenerDatosTabla($widget);
+        $lista = array();
 
 
-
-    }
-
-    /**
-     * Obtenermos las datos para mostra en la tabl de widget
-     *
-     */
-    public function obtenerDatosChartWidget(Request $request)
-    {
         $widget = new Widget();
         $widget->id = $request->id;
         $widget->evaluador_id = \Cache::get('evadores')->id;
@@ -208,10 +200,16 @@ class EvaluadosController extends Controller
 
         $this->dashboard = new nDashboard();
 
-        return $this->dashboard->obtenerDatosChart($widget);
+        $tabla = $this->dashboard->obtenerDatosTabla($widget);
+
+        $chart = $this->dashboard->obtenerDatosChart($widget);
+
+        array_push($lista, $tabla);
+        array_push($lista, $chart);
+
+        return $lista;
+
     }
-
-
 
     public function filtroMes($cantidad)
     {
@@ -265,12 +263,6 @@ class EvaluadosController extends Controller
         return [
             'filtroVista' => \FiltroTabla::toString()
         ];
-    }
-
-    public function cachearFiltro($filtro)
-    {
-        \Cache::forget('filtroTabla');
-        \Cache::forever('filtroTabla', $filtro);
     }
 
 
@@ -374,25 +366,6 @@ class EvaluadosController extends Controller
         return Response()->json($widgets);
     }
 
-    public function actualizarWidget(Request $request)
-    {
-        $widget = Widget::findOrFail($request->id);
-        $widget->tipo_id = $request->tipo_id;
-        $widget->titulo = $request->titulo;
-        $widget->isSemanal = $request->isSemanal;
-        $widget->tipoIndicador_id = $request->tipoIndicador_id;
-        $widget->indicador_id = $request->indicador_id;
-        $widget->anio = $request->anio;
-        $widget->mesInicio = $request->mesInicio;
-        $widget->mesBuscado = $request->mesBuscado;
-        $widget->mesTarea = $request->mesTarea;
-        $widget->semanaTarea = $request->semanaTarea;
 
-        $widget->save();
-
-
-
-        return Widget::findOrFail($request->id);
-    }
 
 }

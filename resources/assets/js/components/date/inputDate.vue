@@ -3,7 +3,7 @@
         <div class="input-group-addon row">
             <i class="fa fa-calendar"></i>
         </div>
-        <input type="{{ tipo }}" id="inputdate-{{ nombre }}" value="{{ valor }}"
+        <input type="{{ tipo }}" id="inputdate-{{ nombre }}" value="{{ valor }}" readonly="{{ readonly}}"
                placeholder="{{ placeholder }}" class="form-control" name="{{ nombre }}" required>
     </div>
 </template>
@@ -17,6 +17,7 @@
             fechainicio:{type:String, required: true},
             fechafin:{type:String, required: true},
             placeholder:{type:String, required: true},
+            readonly:{type:String, default: false},
             valor:{type:String, required: true},
         },
         ready: function () {

@@ -1,5 +1,4 @@
-
-<div class="table-responsive row col-sm-12 ">
+<div class="table-responsive row col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
 <table id="myTable1" class="table table-bordered table-hover table-response">
   <thead>
     <tr>
@@ -19,7 +18,8 @@
           <td >Semana {{$item->semana}}</td>
           <td>{{$item->actpro}}</td>
           <td>{{$item->actrea}}</td>
-          <td><span class="{{$item->semana}}"> {{$item->efeser}}%</span></td>
+          <td><span> {{$item->efeser}}%</span></td>
+          {{--<td><span class="{{$item->semana}}"> {{$item->efeser}}%</span></td>--}}
         </tr>
     @endforeach
   </tbody>

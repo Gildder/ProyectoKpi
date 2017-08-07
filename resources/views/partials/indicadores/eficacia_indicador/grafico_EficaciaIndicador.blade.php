@@ -15,7 +15,8 @@ $(document).ready(function(){
       @foreach($listaGraficas as $item)
         [ 
           <?php  $contador = 0; $limite = date('n', now()); ?>
-          <?php while($contador < $limite ){ ?>
+          <?php while ($contador < $limite) {
+    ?>
             @if($contador == 0)
               '{{ $item[$contador] }}',
             @else
@@ -29,7 +30,8 @@ $(document).ready(function(){
               @endif
             @endif
             <?php $contador++; ?>
-          <?php } ?>
+          <?php 
+} ?>
         ],
       @endforeach
   ];

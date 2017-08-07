@@ -11,9 +11,6 @@
     <a href="{{route('supervisores.supervisados.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-sm  pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
     <p class="titulo-panel">{!! $usuario->id !!} - {!! $usuario->nombres !!} {!! $usuario->apellidos !!}</p>
 
-    {{-- Boton para sincrozizar los indicadores con las tareas --}}
-    {{-- <a href="{{route('supervisores.supervisados.index')}}" style="top: -20px;  position: relative;" class="btn btn-info btn-xs  pull-right btn-back" title="Sincronizar Datos"><span class="fa fa-refresh"></span></a> --}}
-
   </div>
 
   <div id="emplados-supervisados"  class="panel-body">
@@ -44,31 +41,32 @@
               {{-- Inicio de Datos de los Indicadores --}}
               <?php
                       $listaTablas   = $indicador::getTablaIndicador($usuario->id, $indicador->id);
-                      dd($listaTablas);
                       $listaGraficas = $indicador::getGraficoIndicador($usuario->id, $indicador->id);
+                      dd($listaTablas, $listaGraficas)
               ?>
 
+
               @if($indicador->id == '1')
-                {{-- Capa Tabla --}}
-                <div class="col-md-6">
-                  @include('/partials/indicadores/eficacia_indicador/tabla_EficaciaIndicador')
+                 {{--Capa Tabla --}}
+                <div class="col-xs-12 col-md-6 col-md-6 col-lg-6">
+                    @include('/partials/indicadores/eficacia_indicador/tabla_EficaciaIndicador')
                 </div>
                 {{--Capa Grafica--}}
-                <div class="col-md-6">
+                <div class="col-xs-12 col-md-6 col-md-6 col-lg-6">
                   @include('/partials/indicadores/eficacia_indicador/grafico_EficaciaIndicador')
                 </div>
               @elseif($indicador->id == '2')
-                {{-- Capa Tabla --}}
-                <div class="col-md-6">
+                 {{--Capa Tabla --}}
+                <div class="col-xs-12 col-md-6 col-md-6 col-lg-6">
                   @include('/partials/indicadores/eficiencia_indicador/tabla_EficienciaIndicador')
                 </div>
 
-                {{-- Capa Grafica --}}
-                 <div class="col-md-6">
+                 {{--Capa Grafica --}}
+                 <div class="col-xs-12 col-md-6 col-md-6 col-lg-6">
                   @include('/partials/indicadores/eficiencia_indicador/grafico_EficienciaIndicador')
                  </div>
               @endif
-              {{-- Fin Datos de los Indicadores --}}
+               {{--Fin Datos de los Indicadores --}}
               </div></div>
             </div> 
 

@@ -32,12 +32,24 @@ class SupervisadosController extends Controller
     
     public function index()
     {
-        // lista de empleados asignados para su supervison de su usuario
-        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('id').');');
+        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
-        Caches::guardar('supervisados', $empleadosDisponibles);
+        $tareas = TareaRepository::getTareasSupervisados($semanas->fechaInicio, $semanas->fechaFin);
 
-        return view('supervisores\supervisados\index', ['empleadosDisponibles'=>$empleadosDisponibles]);
+//dd($tareas);
+
+//        foreach ($tareas as $item){
+//            dd($item);
+//        }
+        return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
+
+
+//        // lista de empleados asignados para su supervison de su usuario
+//        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('id').');');
+//
+//        Caches::guardar('supervisados', $empleadosDisponibles);
+//
+//        return view('supervisores\supervisados\index', ['empleadosDisponibles'=>$empleadosDisponibles]);
     }
 
     public function show($user_id)

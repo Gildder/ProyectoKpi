@@ -1,44 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>@yield('titulo')</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="{{URL::asset('bootstrap/css/bootstrap.min.css')}}">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{URL::asset('dist/css/font-awesome.min.css')}}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="{{URL::asset('dist/css/ionicons.min.css')}}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{URL::asset('dist/css/AdminLTE.css')}}">
-  
-  <!-- My style -->
-  <link rel="stylesheet" href="{{URL::asset('dist/css/estilo.css')}}">
-  {{-- Loading --}}
-  <link rel="stylesheet" href="{{URL::asset('dist/css/loading.css')}}">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@yield('titulo')</title>
 
-  <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="{{URL::asset('bootstrap/css/bootstrap.min.css')}}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{URL::asset('dist/css/font-awesome.min.css')}}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{{URL::asset('dist/css/ionicons.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{URL::asset('dist/css/AdminLTE.css')}}">
 
-  <!-- iCheck -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/iCheck/flat/blue.css')}}">
-  <!-- Date Picker -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/datepicker/datepicker3.css')}}"> 
-  <!-- Time Picker -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/timepicker/bootstrap-timepicker.min.css')}}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/daterangepicker/daterangepicker.css')}}">  
-  <!-- Datetables -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
-  <link rel="stylesheet" href="{{URL::asset('plugins/datatables/dataTables.bootstrap.css')}}">
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui.css')}}">
-  <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui-12.css')}}">
-  <!-- c3  -->
-  <link rel="stylesheet" href="{{URL::asset('plugins/d3/c3.css')}}">
+    <!-- My style -->
+    <link rel="stylesheet" href="{{URL::asset('dist/css/estilo.css')}}">
+    {{-- Loading --}}
+    <link rel="stylesheet" href="{{URL::asset('dist/css/loading.css')}}">
+
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">
+
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/iCheck/flat/blue.css')}}">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/datepicker/datepicker3.css')}}">
+    <!-- Time Picker -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/timepicker/bootstrap-timepicker.min.css')}}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/daterangepicker/daterangepicker.css')}}">
+    <!-- Datetables -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('plugins/datatables/dataTables.bootstrap.css')}}">
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('plugins/jQueryUI/jquery-ui-12.css')}}">
+    <!-- c3  -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/d3/c3.css')}}">
 
 
 

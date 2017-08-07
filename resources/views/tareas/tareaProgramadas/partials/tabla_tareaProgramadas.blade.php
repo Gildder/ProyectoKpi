@@ -9,19 +9,19 @@ $(document).ready(function() {
 
 	<table id="myTableTareas" class="table table-responsive table-striped table-bordered table-condensed table-hover display" cellspacing="0" width="100%">
 		<thead>
-        <tr>
-			<th>Nro</th>
-			<th>Descripcion</th>	
-			<th>Fecha Inicio </th>	
-			<th>Fecha Fin  </th>	
-			<th>Tiempo Estimado</th>	
-			<th>Fecha Inicio Ejecucion </th>	
-			<th>Fecha Fin Ejecucion </th>	
-			<th>Tiempo Ejecucion</th>	
-			<th>Estado</th>	
-			<th>Observacion</th>	
-			<th>Ubicaciones</th>
-        </tr>
+			<tr>
+				<th>Nro</th>
+				<th>Descripcion</th>
+				<th>Fecha Inicio </th>
+				<th>Fecha Fin  </th>
+				<th>Tiempo Estimado</th>
+				<th>Fecha Inicio Ejecucion </th>
+				<th>Fecha Fin Ejecucion </th>
+				<th>Tiempo Ejecucion</th>
+				<th>Estado</th>
+				<th>Observacion</th>
+				<th>Ubicaciones</th>
+			</tr>
 		</thead>
 		<tbody>
 @foreach($tareas as $tarea)
@@ -34,7 +34,7 @@ $(document).ready(function() {
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}</td>
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}</td>
 	<td> {{$tarea->tiempoSolucion}}</td>
-	<td> <label class="label label-{{ $tarea->getEstadoColor() }}"> {{$tarea->getEstado()}} </label> </td>
+	<td> <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label> </td>
 	<td>{{$tarea->getObservacion() }}</td>
 	<td>
 		<ul style="padding: 10px;">

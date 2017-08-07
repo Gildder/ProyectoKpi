@@ -28,3 +28,46 @@
 
   </div>
 </div>
+
+
+   <script>
+       $(document).ready(function(){
+
+           $("#formEvaluador  input,select").change(function () {
+               let form = $(this).parents("#formEvaluador");
+               let check = checkCampos(form);
+               if (check) {
+                   $(".guardar").prop("disabled", false);
+               }
+               else {
+                   $(".guardar").prop("disabled", true);
+               }
+           });
+
+           //Función para comprobar los campos de texto
+           function checkCampos(obj) {
+               var camposRellenados = false;
+               cantidad = 0;
+               obj.find("input").each(function () {
+                   let $this = $(this);
+                   if ($this.val().length > 0) {
+                       cantidad ++;
+                       console.log($this.val().length);
+
+                       camposRellenados = true;
+                       return true;
+                   }else {
+                       if(cantidad >0)
+                           cantidad--;
+                   }
+               });
+               if (camposRellenados && cantidad === 3) {
+                   return true;
+               }
+               else {
+                   return false;
+               }
+           }
+
+       });
+   </script>

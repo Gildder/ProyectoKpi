@@ -48,10 +48,20 @@ class ImportarTicketCommand extends Command
         $tickets = TareaRepository::importarTickets($fechaDeSemana->fechaInicio, $fechaDeSemana->fechaFin);
 
         foreach ($tickets->ticket as $ticket){
-            $usuario = \DB::table('users')->select('users.id')->where('users.tecnico_id', '=', $ticket->id)->first();
-            $usuario = User::where('users.tecnico_id', '=', $ticket->id)->select('users.id')->first();
+//            $usuario = \DB::table('users')->select('users.id')->where('users.tecnico_id', '=', $ticket->id)->first();
+            $usuario = User::where('users.tecnico_id', '=', $ticket->id)->select('users.id as p')->first();
 
-            $this->error($usuario);
+            $this->info(
+                $ticket->abiertos.' - '.
+                $ticket->resueltos.' - '.
+                $fechaDeSemana->anio.' - '.
+                $fechaDeSemana->mes.' - '.
+                $fechaDeSemana->semana.' - '.
+                $fechaDeSemana->fechaInicio.' - '.
+                $fechaDeSemana->fechaFin.' - '.
+                $ticket->id.' - '.
+                $usuario
+            );
 
 
             $resultado = TareaRepository::insetarTicketsEficacia(

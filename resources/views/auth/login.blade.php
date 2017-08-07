@@ -56,7 +56,7 @@
                         </div> --}}
 
                         <div class="form-group">
-                            <div class="col-xs-12 col-md-6 ">
+                            <div class="col-xs-12 col-sm-6  col-md-6  col-lg-6 ">
                                 <button type="submit" class="btn btn-warning btn-lg  col-sm-5 col-md-5 col-lg-6" style="box-shadow: 1px 2px 1px #1c2529;">
                                     <i class="fa fa-btn fa-sign-in"></i> <strong style="text-shadow: 1px 1px 1px grey;">Entrar</strong>
                                 </button>

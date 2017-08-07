@@ -4,6 +4,7 @@ namespace ProyectoKpi\Models;
 
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Cms\repositories\UserRepository;
 use Adldap\Laravel\Traits\AdldapUserModelTrait;
 

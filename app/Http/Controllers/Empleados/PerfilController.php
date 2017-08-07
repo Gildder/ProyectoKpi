@@ -19,7 +19,7 @@ class PerfilController extends Controller
      */
     public function index()
     {
-
+//       dd(\Usuario::getThis(), \Usuario::is_indicador(1) );
         return view('empleados.perfil.index');
 
     }

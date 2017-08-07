@@ -20,7 +20,7 @@
 
       {!!Form::open(['route'=>'indicadores.indicador.store', 'method'=>'POST'])!!}
 
-      <div class="row col-md-12">
+      <div class="row  col-xs-12 col-sm-12  col-md-12  col-lg-12 ">
         <div class="form-group @if ($errors->has('nombre')) has-error @endif  col-sm-4">
             <label for="nombre" class="hidden-xs">Nombre *</label>
             <input  type="text" maxlength="50" name="nombre" placeholder="Ingresar el Nombre" class="form-control" required>
@@ -28,7 +28,7 @@
         </div>
       </div>
         
-      <div class="row col-md-12">
+      <div class="row  col-xs-12 col-sm-12  col-md-12  col-lg-12 ">
         <div class="form-group @if ($errors->has('descripcion_objetivo')) has-error @endif  col-sm-6">
             <label for="descripcion_objetivo" class="hidden-xs">Descripcion *</label>
           <textarea type="textArea" name="descripcion" maxlength="120" placeholder="Ingresar Descripcion" class="form-control" rows="5" cols="9"></textarea>
@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="row col-md-12">
+      <div class="row  col-xs-12 col-sm-12  col-md-12  col-lg-12 ">
         <div class="form-group  @if ($errors->has('orden')) has-error @endif  col-xs-12 col-sm-3 col-md-2">
           <label for="orden">Orden *</label>
           <select class="form-control" name="orden">
@@ -50,8 +50,9 @@
         </div>
       </div>
 
-      <div class="row col-md-12">
-        <div class="form-group @if ($errors->has('tipo_indicador_id')) has-error @endif  col-sm-3  col-md-2">
+      <div class="row  col-xs-12 col-sm-12  col-md-12  col-lg-12 ">
+        <div class="form-group @if ($errors->has('tipo_indicador_id')) has-error @endif
+                col-xs-12 col-sm-5 col-md-5 col-lg-5 ">
           <label for="tipo_indicador_id" class="hidden-xs">Tipo Indicador *</label>
               <!--
               {!! form::select('tipo',$tipo, null, ['id'=>'tipo', 'class'=>'form-control', 'placeholder'=>'Seleccionar..']) !!}

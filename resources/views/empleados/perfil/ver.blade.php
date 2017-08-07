@@ -2,17 +2,20 @@
    <tbody>
       <tr>
          <td class="text-right"><b>Codigo:</b></td>
-         <td>{{ \Usuario::get('codigo') }}</td>
+         <td>@if(! is_null(\Usuario::get('codigo'))) {{ \Usuario::get('codigo')  }}@else '' @endif</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Nombre Completo:</b></td>
-         <td>{{  \Usuario::get('nombre')}}</td>
+{{--         <td>{{  \Usuario::get('nombre')}}</td>--}}
+         <td>@if(! is_null(\Usuario::get('nombre'))) {{ \Usuario::get('nombre')  }}@else '' @endif</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Apellidos:</b></td>
-         <td>{{ \Usuario::get('apellido') }}</td>
+{{--         <td>{{ \Usuario::get('apellido') }}</td>--}}
+         <td>@if(! is_null(\Usuario::get('apellido'))) {{ \Usuario::get('apellido')  }} @else '' @endif</td>
+
       </tr>
 
       <tr>
@@ -22,22 +25,28 @@
      
       <tr>
          <td class="text-right"><b>Cargo:</b></td>
-         <td>{{ \Usuario::get('cargo') }}</td>
+{{--         <td>{{ \Usuario::get('cargo')->nombre }}</td>--}}
+         <td>@if(! is_null( \Usuario::get('cargo'))) {{  \Usuario::get('cargo')->nombre  }} @else '' @endif</td>
+
       </tr>
 
       <tr>
          <td class="text-right"><b>Correo Electronico:</b></td>
-         <td>{{ \Usuario::get('correo') }}</td>
+{{--         <td>{{ \Usuario::get('correo') }}</td>--}}
+         <td>@if(! is_null( \Usuario::get('correo')))  {{\Usuario::get('correo')}} @else '' @endif</td>
+
       </tr>
 
       <tr>
          <td class="text-right"><b>Localizacion:</b></td>
-         <td>{{ \Usuario::get('localizacion') }}</td>
+         {{--<td>{{ \Usuario::get('localizacion')->nombre }}</td>--}}
+         <td>@if(! is_null( \Usuario::get('localizacion')))  {{ \Usuario::get('localizacion')->nombre  }} @else '' @endif</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Departamento:</b></td>
-         <td>{{ \Usuario::get('departamento')}}</td>
+         {{--<td>{{ \Usuario::get('departamento')->nombre }}</td>--}}
+         <td>@if(! is_null( \Usuario::get('departamento'))) {{ \Usuario::get('departamento')->nombre }} @else '' @endif</td>
       </tr>
 
    </tbody>

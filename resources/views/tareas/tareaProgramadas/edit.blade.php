@@ -21,8 +21,20 @@
 
       @include('partials/alert/error')
 
-      <div class="col-sm-12 breadcrumb">
-        <p><b class="hidden-xs">Los campos con (*) son obligatorios</b> </p>
+      <div class="breadcrumb col-sm-12">
+          <p class="visible-xs">
+              De
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
+              hasta
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}</b>
+          </p>
+          <p class="hidden-xs">
+              Tarea  del
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
+              hasta
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}.</b>
+              <b > Los campos con (*) son obligatorios </b>
+          </p>
       </div>
       
       {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT'])!!}
@@ -47,7 +59,7 @@
 </div>
 
 {{-- Fecha de Estimada --}}
-        <div class="form-group col-xs-12 row" v-if="{{ \Usuario::get('preferencias')->get('verFechasEstimadas') }}">
+        <div class="form-group col-xs-12 row">
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2
                 @if ($errors->has('fechaInicioEstimado'))
                   has-error
@@ -82,13 +94,34 @@
                   <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p>
                 @endif
             </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
+                <span id="observacion" style="color: green; font-weight: bold;"></span>
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="checkbox">
+                    <label>
+                        <input  type="checkbox" name="todasemana"  id="default-fechaEstimadas">
+                        Utilizar fechas de la semana
+                    </label>
+                </div>
+            </div>
       </div>
 
       {{-- estado --}}
       <div class="row col-sm-12">
-          <div class="form-group  col-xs-12 col-sm-2 col-md-2 col-lg-2">
+          <div class="form-group  col-xs-12 col-sm-3 col-md-3 col-lg-3">
               <label >Estado </label>
-              {!! Form::select('estado', [ '1' => 'Programado', '2' => 'En Progreso'], $tarea->estado, ['class' => 'form-control' ]) !!}
+{{--              {!! Form::select('estado', [ '1' => 'Programado', '2' => 'En Progreso'], $tarea->estado, ['class' => 'form-control' ]) !!}--}}
+              <select class="form-control" name="estado">
+                  <option value="" >Seleccionar...</option>
+                  @foreach($estados as $estado)
+                      @if(($estado->id == $tarea->estadoTarea_id)&& (isset($tarea->estadoTarea_id)))
+                          <option value="{{$estado->id}}" selected="selected" >{{$estado->nombre}}</option>
+                      @else
+                          <option value="{{$estado->id}}" >{{$estado->nombre}}</option>
+                      @endif
+                  @endforeach
+              </select>
           </div>
       </div>
 {{-- Tiempo estimado --}}
@@ -136,7 +169,27 @@
 
 <!-- Fin Nuevo -->
 
+<script>
+    $('#default-fechaEstimadas').click(function () {
+        var fechaInicio = $('input[name=fechaInicioEstimado]');
+        var fechaFin = $('input[name=fechaFinEstimado]');
+        var mensaje = $('#observacion');
 
+
+        if(this.checked){
+            fechaInicio.attr('disabled', true);
+            fechaFin.attr('disabled', true);
+
+            mensaje.html('La tarea esta programada para toda la semana.');
+        }else{
+            fechaInicio.attr('disabled', false);
+            fechaFin.attr('disabled', false);
+
+            mensaje.html('');
+        }
+    });
+
+</script>
 
 @endsection
 

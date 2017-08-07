@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
+
 @section('titulo')
-	{{$evaluador->id}} - {{$evaluador->abreviatura}}
+    {{ $evaluador->id }} - {{ $evaluador->abreviatura }}
 @endsection
 
 @section('content')
@@ -16,6 +17,8 @@ $(document).ready(function(){
 	var activeTab = localStorage.getItem('activeTab');
 	if(activeTab){
 		$('#myTab a[href="' + activeTab + '"]').tab('show');
+	}else{
+	    $('#datos').tab('show');
 	}
 });
 </script>
@@ -39,7 +42,7 @@ $(document).ready(function(){
 		</ul>
 
 		<div class="tab-content">
-			<div id="datos" class="tab-pane fade in active">
+			<div id="datos" class="tab-pane">
 				<div class="content col-sm-6">
 
 					@include('evaluadores/evaluador/partials/datos_evaluador')	
@@ -117,9 +120,6 @@ $(document).ready(function(){
 	</div>
 		
 </div>
-
-
-
 @endsection
 
 

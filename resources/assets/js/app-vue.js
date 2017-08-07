@@ -48,6 +48,10 @@ $(document).ready(function() {
         require('./components/tareas/estados.vue')
     );
 
+    Vue.component('tabla-indicador',
+        require('./components/indicadores/TablaIndicador.vue')
+    );
+
     //noinspection JSAnnotator
     /**
      * Creacion de VueJS
@@ -84,6 +88,7 @@ $(document).ready(function() {
             btnResultado: 0,
             btnEditar: 0,
             btnEliminar: 0,
+            utilizarfechasestimadas: true,
         },
         ready: function () {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -93,9 +98,6 @@ $(document).ready(function() {
                 this.obtenerListaWidget();
             }
 
-
-        },
-        components: {
 
         },
         events: {
@@ -110,7 +112,9 @@ $(document).ready(function() {
 
                 resourceWidget.delete({id: id}).then( function (response) {
                     this.panelWidgets.$remove(id);
-                    this.panelWidgets = response.data;
+                    // this.panelWidgets = response.data;
+
+                    $('#capa-indicadores-'+id).css('display', 'none');
 
                     this.obtenerListaWidget();
                     Notificion.success('El Widget se elimino correctamente!');
@@ -125,8 +129,12 @@ $(document).ready(function() {
             // },
         },
         methods: {
-            saludar: function () {
-                alert('Hola Mundo');
+            obtenerFechasEstimadasTareas: function () {
+                if(localStorage.getItem('fechas-checked') != undefined){
+                    return localStorage.getItem('fechas-checked');
+                }else{
+                    return false;
+                }
             },
             obtenerListaWidget: function () {
                 resourceWidget.get().then( function (response) {

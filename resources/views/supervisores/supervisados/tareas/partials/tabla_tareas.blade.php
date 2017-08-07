@@ -20,16 +20,20 @@
 		<tbody>
 			@foreach($tareas as $item)
 			<tr>
-				<td>{{ $item->user_id }}</td>
-				<td>{{ $item->nombres }} {{ $item->apellidos }}</td>
-				<td>{{ $item->descripcion }}</td>
+				<td><b class="btn btn-warning btn-xs"> {{ $item->user_id }}</b></td>
+				<td>
+                    <label  style="background: {{$item->color}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{ $item->nombres }} {{ $item->apellidos }} </label>
+                </td>
+				<td> {{ $item->descripcion }}</td>
 				<td>{{ $item->fechaInicioEstimado }}</td>
 				<td>{{ $item->fechaFinEstimado }}</td>
 				<td>{{ $item->tiempoEstimado }}</td>
 				<td>{{ $item->fechaInicioEjecucion }}</td>
 				<td>{{ $item->fechaFinEjecucion }}</td>
 				<td>{{ $item->tiempoSolucion }}</td>
-				<td> <span class="badge bg-{{ $item->getEstadoColor() }}"> {{$item->getEstado()}} </span> </td>
+				<td>
+					<label  style="background: {{$item->estados->color}}; color:{{$item->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$item->estados->nombre}} </label>
+				</td>
 				<td>{{$item->getObservacion() }}</td>
 				<td>
 					<ul style="padding: 10px;">

@@ -5,6 +5,12 @@
          <td>{{$indicador->id}}</td>
       </tr>
       <tr>
+         <td class="text-right"><b>Nombre:</b></td>
+         <td>
+          <p class="row col-xs-12 col-sm-8">{{$indicador->nombre}}</p>
+          </td>
+      </tr>
+      <tr>
          <td class="text-right"><b>Descripción:</b></td>
          <td>
           <p class="row col-xs-12 col-sm-8">{{$indicador->descripcion}}</p>
@@ -23,7 +29,7 @@
 
   <p><b>Formula de Indicador: </b></p>
 <div style="background: #dff0d8; padding: 10px;">
-        @include('partials/formulas/formula_'.$indicador->id)
+{{--        @include('partials/formulas/formula_'.$indicador->id)--}}
   
 </div>
 

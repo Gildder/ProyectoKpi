@@ -39,21 +39,21 @@ class EmpleadoController extends Controller
     public function obtenerEmpleado($id)
     {
         return User::
-                        select('users.codigo', 'users.nombres', 'users.apellidos',
-                                'departamentos.grupodep_id as grdepartamento', 'localizaciones.nombre as localizacion', 'localizaciones.id as localizacion_id', 'departamentos.id as departamento_id',
-                                'departamentos.nombre as departamento', 'localizaciones.grupoloc_id as grlocalizacion',
-                                'grupo_departamentos.nombre as grupodepartamento', 'grupo_localizaciones.nombre as grupolocalizacion',
-                                'users.name as usuario', 'users.type as tipo', 'users.email', 'cargos.id as cargo_id', 'cargos.nombre as cargo'
+            select('users.codigo', 'users.nombres', 'users.apellidos',
+                    'departamentos.grupodep_id as grdepartamento', 'localizaciones.nombre as localizacion', 'localizaciones.id as localizacion_id', 'departamentos.id as departamento_id',
+                    'departamentos.nombre as departamento', 'localizaciones.grupoloc_id as grlocalizacion',
+                    'grupo_departamentos.nombre as grupodepartamento', 'grupo_localizaciones.nombre as grupolocalizacion',
+                    'users.name as usuario', 'users.type as tipo', 'users.email', 'cargos.id as cargo_id', 'cargos.nombre as cargo'
 
-                              )
-                            ->join('localizaciones', 'localizaciones.id', '=', 'users.localizacion_id')
-                            ->join('departamentos', 'departamentos.id', '=', 'users.departamento_id')
-                            ->join('grupo_departamentos', 'grupo_departamentos.id', '=', 'departamentos.grupodep_id')
-                            ->join('grupo_localizaciones', 'grupo_localizaciones.id', '=', 'localizaciones.grupoloc_id')
-                            ->join('cargos', 'cargos.id', '=', 'users.cargo_id')
-                        ->whereNull('users.deleted_at')
-                        ->where('users.id', '=', $id)
-                        ->first();
+                  )
+                ->join('localizaciones', 'localizaciones.id', '=', 'users.localizacion_id')
+                ->join('departamentos', 'departamentos.id', '=', 'users.departamento_id')
+                ->join('grupo_departamentos', 'grupo_departamentos.id', '=', 'departamentos.grupodep_id')
+                ->join('grupo_localizaciones', 'grupo_localizaciones.id', '=', 'localizaciones.grupoloc_id')
+                ->join('cargos', 'cargos.id', '=', 'users.cargo_id')
+            ->whereNull('users.deleted_at')
+            ->where('users.id', '=', $id)
+            ->first();
     }
 
 
@@ -161,26 +161,28 @@ class EmpleadoController extends Controller
         return view('empleados.empleado.edit', ['empleado'=>$empleado,'cargos'=>$cargos, 'grdepartamento'=>$grdepartamento, 'grlocalizacion'=>$grlocalizacion,'localizaciones'=>$localizaciones, 'departamentos'=>$departamentos,'tipoUsuario'=> $tipoUsuario]);
     }
 
-    public function update(EmpleadoRequestUpdate $Request, $id)
+    public function update(EmpleadoRequestUpdate $request, $id)
     {
         $usuario = User::where('id', $id)->first();
 
-        $usuario->nombres = trim($Request->nombres);
-        $usuario->apellidos = trim($Request->apellidos);
-        $usuario->codigo = trim($Request->codigo);
-        $usuario->departamento_id = $Request->departamento_id;
-        $usuario->localizacion_id = $Request->localizacion_id;
-        $usuario->cargo_id = $Request->cargo_id;
-        $usuario->name = trim($Request->name);
-        $usuario->email = trim($Request->email);
-        $usuario->type = $Request->type;
+        $usuario->nombres = trim($request->nombres);
+        $usuario->apellidos = trim($request->apellidos);
+        $usuario->codigo = trim($request->codigo);
+        $usuario->departamento_id = $request->departamento_id;
+        $usuario->localizacion_id = $request->localizacion_id;
+        $usuario->cargo_id = $request->cargo_id;
+        $usuario->name = trim($request->name);
+        $usuario->email = trim($request->email);
+        $usuario->type = $request->type;
+//dd($usuario);
+//        return redirect('empleados/empleado')->with('message', 'El Empleado '.$request->name.' se actualizo correctamente.');
 
-        return redirect('empleados/empleado')->with('message', 'El Empleado '.$Request->name.' se actualizo correctamente.');
-
-        if ($usuario->save()) {
-            return redirect('empleados/empleado')->with('message', 'El Empleado '.$Request->name.' se actualizo correctamente.');
+        if($usuario->save()) {
+            return redirect('empleados/empleado')->with('message', 'El Empleado '.$request->name.' se actualizo correctamente.');
         } else {
-            return back()->withInput();
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors('El Usuario NO se guardo, por favor verifique los campos')
+                ->withInput();
         }
     }
 

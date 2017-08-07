@@ -17,22 +17,47 @@
 
 
   <div class="panel-body">
-      <div class="col-sm-12 breadcrumb">
-          <p><b>Cierre de Tarea:</b> Para finalizar una tarea es obligatorio llenar todos campos con (*). </p>
+      <div class="breadcrumb col-sm-12">
+          <p class="visible-xs">
+              De
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
+              hasta
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}</b>
+          </p>
+          <p class="hidden-xs">
+              Tarea  del
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
+              hasta
+              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}.</b>
+              <b > Los campos con (*) son obligatorios </b>
+          </p>
       </div>
+
+      <div class="col-xs-12">
+          <label>Descripcion:</label>
+          <p>{{ $tarea->descripcion }}</p>
+          <hr>
+      </div>
+
 
       @include('partials/alert/error')
 {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT'])!!}
 
     <div class="row col-xs-12 col-sm-6 col-md-6 col-lg-6">
-
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;"  v-if="utilizarfechasestimadas == true" >
+            <p>
+            <span id="observacion" >Las fechas de inicio, finalizacion y el tiempo estimado son los estimados</span>
+            </p>
+        </div>
     {{-- Fecha de Inicio --}}
     <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-5
         @if ($errors->has('fechaInicioSolucion'))
             has-error
         @endif">
+
       <label>Fecha de Comienzo *: </label>
-        <input-date tipo="text" nombre="fechaInicioSolucion"
+
+        <input-date tipo="text" nombre="fechaInicioSolucion" v-if="utilizarfechasestimadas == false"
             @if($tarea->fechaInicioSolucion != '0000-00-00')
                 valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}"
             @else
@@ -43,6 +68,12 @@
             fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
         </input-date>
 
+        <input-date tipo="text" nombre="fechaInicioSolucion"  v-if="utilizarfechasestimadas == true" readonly="true"
+                    {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}"--}}
+                    valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}" placeholder="Comienzo"
+                    fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
+                    fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+        </input-date>
 
         @if ($errors->has('fechaInicioSolucion'))
             <p class="help-block">{{ $errors->first('fechaInicioSolucion') }}</p>
@@ -54,8 +85,9 @@
         @if ($errors->has('fechaFinSolucion'))
              has-error
         @endif">
+
         <label>Fecha de Finalizacion *:</label>
-            <input-date tipo="text" nombre="fechaFinSolucion"
+            <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == false"
                 {{--valor="{{ old('fechaInicioEstimado') }}"--}}
                 @if($tarea->fechaFinSolucion != '0000-00-00')
                    valor="{{ \Calcana::cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}"
@@ -67,7 +99,24 @@
                 fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
             </input-date>
 
+            <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == true" readonly="true"
+                        {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}"--}}
+                        valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}" placeholder="Comienzo"
+                        fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
+                        fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+            </input-date>
+
         @if ($errors->has('fechaFinSolucion')) <p class="help-block">{{ $errors->first('fechaFinSolucion') }}</p> @endif
+        </div>
+
+
+        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="checkbox">
+                <label>
+                    <input  type="checkbox" name="todasemana" v-model="utilizarfechasestimadas" id="default-fechaEstimadas">
+                    Utilizar fechas y tiempo estimados
+                </label>
+            </div>
         </div>
 
       {{-- Tiempo estimado --}}
@@ -79,9 +128,16 @@
                   has-error
             @endif ">
             <p>Horas:<p>
-            <input type="number" name="hora" min="0" max="999" placeholder="Horas" class="form-control"   required
-                   @if($tarea->tiempoSolucion == "00:00:00")
-                    value="" @else value="{{$tarea->sacarHoras($tarea->tiempoSolucion)}}"  @endif >
+             <input type="number" name="hora" min="0" max="999" placeholder="Horas" class="form-control"   required  v-if="utilizarfechasestimadas == false"
+                    @if($tarea->tiempoSolucion != "00:00:00")
+                    value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"
+                    @else valor="{{ old('minuto') }}"  @endif >
+
+              <input type="number" name="hora" min="0" max="999" v-if="utilizarfechasestimadas == true" readonly="true"
+                     value="{{$tarea->sacarHoras($tarea->tiempoEstimado)}}"
+                     placeholder="Horas"
+                     class="form-control" value="00"  required >
+
             @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
           </div>
@@ -93,8 +149,19 @@
                 @endif">
 
             <p>Minutos:</p>
-            <input type="number" name="minuto" min="0"  max="999"   placeholder="Horas"  class="form-control"    required
-                   @if($tarea->tiempoSolucion == "00:00:00") value=""  @else value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}" @endif>
+            <input type="number" name="minuto" min="0"  max="999"
+                   placeholder="Minutos"  class="form-control"
+                   required  v-if="utilizarfechasestimadas == false"
+                   @if($tarea->tiempoSolucion != "00:00:00")
+                        value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"
+                   @else valor="{{ old('minuto') }}"
+                   @endif>
+
+              <input type="number" name="minuto" min="0" v-if="utilizarfechasestimadas == true" readonly="true"
+                     value="{{$tarea->sacarMinutos($tarea->tiempoEstimado)}}"
+                     placeholder="Minutos"
+                     max="999" class="form-control" value="00"   required>
+
             @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
           </div>
       </div>
@@ -176,6 +243,26 @@ $(document).ready(function(){
       $(".InicioEjecucion").datepicker( "option", "maxDate", selectedDate);
     }
   });
+
+  var check = $('input [name="todasemana"]');
+  var observacion = $('#observacion');
+
+  if(localStorage.getItem('fechas-checked') != undefined){
+      check.attr('checked', true);
+  }
+
+  check.click(function () {
+      if(check.checked){
+          localStorage.setItem('fechas-checked', this.checked);
+
+          observacion.html('Las fechas de inicion, finalizacion y tiempo de duracion son las estimadas.')
+      }else{
+          localStorage.removeItem('fechas-checked');
+          observacion.html('')
+
+      }
+  });
+
 });
 </script>
 

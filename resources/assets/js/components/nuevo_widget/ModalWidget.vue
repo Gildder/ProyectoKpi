@@ -219,14 +219,7 @@
 
                 this.guardando = true;
 
-                /* obtener el tipo de indicador seleccionado */
-                var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
-
-                /* Obtener el indicador seleccionado */
-                var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
-
-                this.nuevo_widget.tipo_id = this.tipo_id;
-                this.nuevo_widget.titulo  = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
+                this.validandoWidget();
 
                 $.ajax({
                     url: 'guardarWidget',
@@ -251,6 +244,24 @@
 
                 this.guardando = false;
                 $('#modal-nuevo-widget-' + this.nuevo_widget.tipo_id).modal('hide');
+            },
+            validandoWidget: function(){
+                /* obtener el tipo de indicador seleccionado */
+                var tipoIndicador = this.getTipoIndicadorSelecionado(this.nuevo_widget.tipoIndicador_id);
+
+                /* Obtener el indicador seleccionado */
+                var indicador = this.getIndicadorSelecionado(this.nuevo_widget.indicador_id);
+
+                this.nuevo_widget.tipo_id = this.tipo_id;
+                this.nuevo_widget.titulo  = this.getTitulo(tipoIndicador.nombre, indicador.nombre);
+
+                if(this.nuevo_widget.mesBuscado === 0){
+                    this.nuevo_widget.mesBuscado = this.nuevo_widget.mesInicio;
+                }
+
+                if(this.nuevo_widget.mesInicio === 0){
+                    this.nuevo_widget.mesInicio = this.nuevo_widget.mesBuscado;
+                }
             },
             getTipoIndicadorSelecionado: function (tipo) {
                 if(tipo === ''){
@@ -283,7 +294,7 @@
                     return  'Indicadores de ' + tipo;
                 }
                 else if (this.tipo_id === 2) {
-                    return  'Indicador de '+ indicador + ' por Usuarios';
+                    return  'Usuarios de '+ indicador;
                 }
                 else if (this.tipo_id === 3) {
                     return  'Indicador de ' + indicador ;

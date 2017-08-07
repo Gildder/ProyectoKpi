@@ -23,7 +23,7 @@
 				<td>@if(isset($item->aclaraciones)) {{ 'Ninguna' }} @else {{$item->aclaraciones}} @endif</td>
 				<td>
 					{{-- Editar cargo  --}}
-					<a href="javascript:void(0)"  id="btnEditarCargoIndicador" @click="mostrarModalLoading()" class="btn btn-warning btn-sm" title="Editar"><span class="fa fa-edit" ></span></a>
+					<a href="javascript:void(0)"  id="btnEditarCargoIndicador"  class="btn btn-warning btn-sm" title="Editar"><span class="fa fa-edit" ></span></a>
 
 					{{-- Quitar Cargo --}}
 					<a href="javascript:void(0)" data-toggle="modal" data-target="#modal-deleteCargos-{{$item->id}}" class="btn btn-danger btn-sm"  title="Quitar"><span class="fa fa-trash" ></span></a>

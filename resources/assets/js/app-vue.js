@@ -8,8 +8,9 @@ $(document).ready(function() {
     var Vue = require('vue');
     var Notificion = new Alert('#notificacion');
     var chart;
-    var vm;
     var resourceWidget;
+    var vm;
+
 
     var utils = require('./utils.js');
     Vue.use(require('vue-resource'));
@@ -52,6 +53,11 @@ $(document).ready(function() {
         require('./components/indicadores/TablaIndicador.vue')
     );
 
+    // componente de busquedas de ticket  supervisores
+    Vue.component('tarea-filtro-supervisores',
+        require('./components/supervisores/tareas/filtro.vue')
+    );
+
     //noinspection JSAnnotator
     /**
      * Creacion de VueJS
@@ -89,6 +95,14 @@ $(document).ready(function() {
             btnEditar: 0,
             btnEliminar: 0,
             utilizarfechasestimadas: true,
+
+            // Empelados
+            isTecnico: 0,
+
+            // Buscar Tareas
+            tareaBuscar: {},
+            id_usuario_buscar: 12,
+
         },
         ready: function () {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -97,8 +111,6 @@ $(document).ready(function() {
             if (window.location.pathname === '/evaluadores/evaluados/dashboard' ){
                 this.obtenerListaWidget();
             }
-
-
         },
         events: {
             'agregarWidgetPanel': function (widget) {
@@ -214,11 +226,11 @@ $(document).ready(function() {
                 }else {
                     this.type_pass=  true;
                 }
-
             },
             mostrarModalLoading: function () {
                 utils.mostrarCargando(true);
             },
+
             mostrarDesabilitar: function ($this) {
                 alert($this);
             },
@@ -228,7 +240,11 @@ $(document).ready(function() {
                 alert('hoal');
             },
 
+            /* buscar tareas de supervisores */
+            buscarTareasSupervisores: function () {
+                alert('Hola Mundo');
+            }
+
         }
     });
-
 });

@@ -12299,6 +12299,26 @@ setTimeout(function () {
 module.exports = Vue;
 }).call(this,require('_process'))
 },{"_process":2}],6:[function(require,module,exports){
+var inserted = exports.cache = {}
+
+exports.insert = function (css) {
+  if (inserted[css]) return
+  inserted[css] = true
+
+  var elem = document.createElement('style')
+  elem.setAttribute('type', 'text/css')
+
+  if ('textContent' in elem) {
+    elem.textContent = css
+  } else {
+    elem.styleSheet.cssText = css
+  }
+
+  document.getElementsByTagName('head')[0].appendChild(elem)
+  return elem
+}
+
+},{}],7:[function(require,module,exports){
 'use strict';
 
 /**
@@ -12311,8 +12331,8 @@ $(document).ready(function () {
     var Vue = require('vue');
     var Notificion = new Alert('#notificacion');
     var chart;
-    var vm;
     var resourceWidget;
+    var vm;
 
     var utils = require('./utils.js');
     Vue.use(require('vue-resource'));
@@ -12335,6 +12355,9 @@ $(document).ready(function () {
     Vue.component('estado-tarea', require('./components/tareas/estados.vue'));
 
     Vue.component('tabla-indicador', require('./components/indicadores/TablaIndicador.vue'));
+
+    // componente de busquedas de ticket  supervisores
+    Vue.component('tarea-filtro-supervisores', require('./components/supervisores/tareas/filtro.vue'));
 
     //noinspection JSAnnotator
     /**
@@ -12371,7 +12394,15 @@ $(document).ready(function () {
             btnResultado: 0,
             btnEditar: 0,
             btnEliminar: 0,
-            utilizarfechasestimadas: true
+            utilizarfechasestimadas: true,
+
+            // Empelados
+            isTecnico: 0,
+
+            // Buscar Tareas
+            tareaBuscar: {},
+            id_usuario_buscar: 12
+
         },
         ready: function ready() {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
@@ -12494,6 +12525,7 @@ $(document).ready(function () {
             mostrarModalLoading: function mostrarModalLoading() {
                 utils.mostrarCargando(true);
             },
+
             mostrarDesabilitar: function mostrarDesabilitar($this) {
                 alert($this);
             },
@@ -12501,14 +12533,19 @@ $(document).ready(function () {
             /* Supervisados*/
             verTareasSupervisados: function verTareasSupervisados() {
                 alert('hoal');
+            },
+
+            /* buscar tareas de supervisores */
+            buscarTareasSupervisores: function buscarTareasSupervisores() {
+                alert('Hola Mundo');
             }
 
         }
     });
 });
 
-},{"./components/date/inputDate.vue":7,"./components/indicadores/TablaIndicador.vue":8,"./components/loading/loading.vue":9,"./components/nuevo_widget/Fila_Widget.vue":10,"./components/nuevo_widget/ModalWidget.vue":11,"./components/nuevo_widget/selector_modal.vue":12,"./components/tareas/estados.vue":13,"./components/widget/PanelWidget.vue":14,"./components/widget/grafica.vue":15,"./utils.js":16,"vue":5,"vue-resource":4}],7:[function(require,module,exports){
-'use strict';
+},{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/tareas/estados.vue":15,"./components/widget/PanelWidget.vue":16,"./components/widget/grafica.vue":17,"./utils.js":18,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -12516,6 +12553,10 @@ Object.defineProperty(exports, "__esModule", {
 
 
 var Vue = require('vue');
+
+var RangeDates = ["12/8/2017, 13/8/2017"];
+var RangeDatesIsDisable = true;
+
 exports.default = {
     props: {
         tipo: { type: String, required: true },
@@ -12524,21 +12565,92 @@ exports.default = {
         fechafin: { type: String, required: true },
         placeholder: { type: String, required: true },
         readonly: { type: String, default: false },
-        valor: { type: String, required: true }
+        valor: { type: String, required: true },
+        diainicio: { type: String, required: true }
     },
     ready: function ready() {
         $("#inputdate-" + this.nombre).datepicker({
             format: 'dd/mm/yyyy',
             changeMonth: true,
-            showWeek: true,
-            numberOfMonths: 1,
+            showWeek: false,
+            numberOfMonths: this.isSemanaTieneFinMes(),
+            firstDay: this.diainicio,
             showButtonPanel: true,
-            beforeShowDay: $.datepicker.noWeekends,
+            //                beforeShowDay: $.datepicker.noWeekends,php artis
             minDate: this.fechainicio,
-            maxDate: this.fechafin
+            maxDate: this.fechafin,
+            selectOtherMonths: true,
+            showAnim: 'fadeIn',
+            beforeShowDay: false
         });
+        this.DisableDays(new Date());
     },
-    methods: {}
+    methods: {
+        DisableDays: function DisableDays(date) {
+            var isd = RangeDatesIsDisable;
+            var rd = RangeDates;
+
+            var d = date.getDate();
+            var m = date.getMonth();
+            var y = date.getFullYear();
+
+            for (var i = 0; i < rd.length; i++) {
+                var ds = rd[i].split(',');
+
+                var di, df;
+                var m1, d1, y1, m2, d2, y2;
+
+                if (ds.length == 1) {
+                    di = ds[0].split('/');
+
+                    m1 = parseInt(di[0]);
+                    d1 = parseInt(di[1]);
+                    y1 = parseInt(di[2]);
+                    if (y1 == y && m1 == m + 1 && d1 == d) return [!isd];
+                } else if (ds.length > 1) {
+                    di = ds[0].split('/');
+                    df = ds[1].split('/');
+                    m1 = parseInt(di[0]);
+                    d1 = parseInt(di[1]);
+                    y1 = parseInt(di[2]);
+                    m2 = parseInt(df[0]);
+                    d2 = parseInt(df[1]);
+                    y2 = parseInt(df[2]);
+
+                    if (y1 >= y || y <= y2) {
+                        if (m + 1 >= m1 && m + 1 <= m2) {
+                            if (m1 == m2) {
+                                if (d >= d1 && d <= d2) return [!isd];
+                            } else if (m1 == m + 1) {
+                                if (d >= d1) return [!isd];
+                            } else if (m2 == m + 1) {
+                                if (d <= d2) return [!isd];
+                            } else return [!isd];
+                        }
+                    }
+                }
+            }
+            console.log([isd]);
+            return [isd];
+        },
+        isSemanaTieneFinMes: function isSemanaTieneFinMes() {
+            var arrayFechaInicio = this.fechainicio.split('/');
+            var arrayFechaFin = this.fechafin.split('/');
+
+            var mesInicio = parseInt(arrayFechaInicio[1]);
+            var mesFin = parseInt(arrayFechaFin[1]);
+            if (mesInicio !== mesFin) {
+                console.log(2);
+                return 2;
+            } else {
+                console.log(1);
+
+                return 1;
+            }
+        }
+
+    }
+
 };
 if (module.exports.__esModule) module.exports = module.exports.default
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" readonly=\"{{ readonly}}\" placeholder=\"{{ placeholder }}\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
@@ -12547,12 +12659,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4fabd7ff", module.exports)
+    hotAPI.createRecord("_v-ffeacd1c", module.exports)
   } else {
-    hotAPI.update("_v-4fabd7ff", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ffeacd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],8:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12582,12 +12694,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3e9b4dd9", module.exports)
+    hotAPI.createRecord("_v-82870a68", module.exports)
   } else {
-    hotAPI.update("_v-3e9b4dd9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-82870a68", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12630,12 +12742,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-c552a752", module.exports)
+    hotAPI.createRecord("_v-78d01944", module.exports)
   } else {
-    hotAPI.update("_v-c552a752", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-78d01944", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12664,12 +12776,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-cd0711a0", module.exports)
+    hotAPI.createRecord("_v-8c4b763a", module.exports)
   } else {
-    hotAPI.update("_v-cd0711a0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8c4b763a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],11:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12880,12 +12992,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-7533f876", module.exports)
+    hotAPI.createRecord("_v-d4dc73ae", module.exports)
   } else {
-    hotAPI.update("_v-7533f876", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d4dc73ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":16,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],12:[function(require,module,exports){
+},{"./../../utils.js":18,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12904,12 +13016,124 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2da397d0", module.exports)
+    hotAPI.createRecord("_v-6d32a585", module.exports)
   } else {
-    hotAPI.update("_v-2da397d0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6d32a585", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],13:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+
+$(document).ready(function () {
+    /*Calendarios */
+    $(".fechas").datepicker({
+        format: 'dd/mm/yyyy',
+        autoclose: true,
+        changeMonth: true
+    });
+});
+
+exports.default = {
+    props: {
+        supervisorid: {
+            type: Number,
+            default: 0
+        },
+        cargos: {
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        },
+        departamentos: {
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        },
+        estados: {
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        },
+        ubicaciones: {
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        },
+        usuarios: {
+            type: Array,
+            default: function _default() {
+                return [];
+            }
+        }
+    },
+    data: function data() {
+        return {
+            //                //Tarea
+            param_filtro: {
+                usuario_id: '',
+                apellido: '',
+                cargo_id: '',
+                departamento_id: '',
+                tarea_nro: '',
+                fechaInicio: '',
+                fechaFin: '',
+                fechaSeleccionada: 1,
+                ubicacion_id: '',
+                estado_id: ''
+            },
+            mostrar_bar_botones: true
+        };
+    },
+    ready: function ready() {
+        //            alert(this.cargos);
+    },
+    methods: {
+        buscarTarea: function buscarTarea() {
+            this.param_filtro.supervisorid = this.supervisorid,
+            //                    alert(JSON.stringify(this.param_filtro));
+            $.ajax({
+                url: 'buscarTareasSupervisadas',
+                method: 'POST',
+                data: this.param_filtro,
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    localStorage.setItem('tarea_' + this.supervisorid, data);
+                }.bind(this), error: function (data) {
+                    console.log('Error: No puede obtener las tareas');
+                }.bind(this)
+            });
+        },
+        ocultarFiltro: function ocultarFiltro() {
+            this.mostrar_bar_botones = true;
+            this.form_buscar_tareas = false;
+        }
+
+    }
+
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<script src=\"https://code.jquery.com/ui/1.12.1/jquery-ui.js\"></script>\n<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>\n\n<div v-show=\"mostrar_bar_botones\" class=\"breadcrumb col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n    <a @click=\"mostrar_bar_botones = !mostrar_bar_botones\" style=\"float: right\" class=\"btn btn-instagram btn-sm\" title=\"Tareas Archivadas\">Filtrar <span class=\"fa fa-filter\"></span></a>\n</div>\n\n<div v-show=\"mostrar_bar_botones == false\" transition=\"fade-filtro\" class=\"form-group col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n    <form @submit.prevent=\"buscarTarea()\">\n\n    <div class=\"col-xs-12\" style=\"border: 1px solid gray; border-radius: 20px; padding: 10px; border-shadow: 1px 1px 1px gray;\">\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <label style=\"color: gray; font-style: italic;\">Usuario</label>\n            <hr style=\"margin: 0px; margin-bottom: 10px;\">\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Usuarios</label>\n            <select class=\"form-control\" name=\"cargo_id\" v-model=\"param_filtro.usuario_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"usuario in usuarios\" value=\"{{ usuario.id }}\">{{ usuario.usuario }} {{ usuario.activo }} {{ usuario.vacacion }} {{ usuario.bloqueado }}  </option>\n            </select>\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-2 col-md-2 col-lg-2\">\n            <label>Apellidos</label>\n            <input type=\"text\" v-model=\"param_filtro.apellido\" name=\"apellido\" placeholder=\"Apellidos\" maxlength=\"40\" class=\"form-control\">\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Cargos</label>\n            <select class=\"form-control\" name=\"cargo_id\" v-model=\"param_filtro.cargo_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"cargo in cargos\" value=\"{{ cargo.id }}\">{{ cargo.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Departamentos</label>\n            <select class=\"form-control\" name=\"departamento_id\" v-model=\"param_filtro.departamento_id\">\n                <option value=\"\">Seleccionar...</option>\n                <option v-for=\"departamento in departamentos\" value=\"{{ departamento.id }}\">{{ departamento.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <label style=\"color: gray; font-style: italic;\">Tareas</label>\n            <hr style=\"margin: 0px; margin-bottom: 10px;\">\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-2 col-md-2 col-lg-1\">\n            <label>Nro. </label>\n            <input type=\"number\" v-model=\"param_filtro.tarea_nro\" name=\"tarea_nro\" placeholder=\"Nro. #\" min=\"1\" class=\"form-control\">\n        </div>\n        <div class=\"form-group col-xs-12 col-sm-3 col-md-3 col-lg-2\">\n            <label>Ubicaciones</label>\n            <select class=\"form-control\" name=\"ubicacion_id\" v-model=\"param_filtro.ubicacion_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"ubicacion in ubicaciones\" value=\"{{ ubicacion.id }}\">{{ ubicacion.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"row col-xs-12 col-sm-6 col-md-5 col-lg-4\">\n            <div class=\"form-group col-xs-12 col-sm-6 col-md-6 col-lg-6\" style=\"margin: 0px;\">\n                <label>Fecha Inicio</label>\n                <div class=\"input-group row\" style=\"margin: 0px;\">\n                    <input type=\"text\" v-model=\"fechaInicio\" placeholder=\"Fecha Inicio\" class=\"form-control fechas\" name=\"fechaInicio\">\n                    <div class=\"input-group-addon row\">\n                        <i class=\"fa fa-calendar\"></i>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"form-group col-xs-12 col-sm-6 col-md-6 col-lg-6\" style=\"margin: 0;\">\n                <label>Fecha Fin</label>\n                <div class=\"input-group row\" style=\"margin: 0px;\">\n                    <input type=\"text\" v-model=\"param_filtro.fechaFin\" placeholder=\"Fecha Fin\" class=\"form-control fechas\" name=\"fechaFin\">\n                    <div class=\"input-group-addon row\">\n                        <i class=\"fa fa-calendar\"></i>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"text-align: center; margin:  2px 0 0 0;\">\n                <label class=\"radio-inline\"><input type=\"radio\" checked=\"\" v-model=\"param_filtro.fechaSeleccionada\" value=\"1\">Fechas Estimadas</label>\n                <label class=\"radio-inline\"><input type=\"radio\" v-model=\"param_filtro.fechaSeleccionada\" value=\"0\">Fechas Soluciones</label>\n            </div>\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-3 col-md-3 col-lg-2\">\n            <label>Estados</label>\n            <select class=\"form-control\" name=\"estado_id\" v-model=\"param_filtro.estado_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"estado in estados\" value=\"{{ estado.id }}\">{{ estado.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n            <hr style=\"margin: 10px;\">\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <button type=\"reset\" @click=\"mostrar_bar_botones = !mostrar_bar_botones\" class=\"btn btn-danger   btn-sm\">Ocultar  <span class=\"fa  fa-filter\"></span> </button>\n            <button type=\"reset\" class=\"btn btn-primary btn-sm\">Limpiar  <span class=\"fa  fa-times\"></span> </button>\n            <button type=\"submit\" class=\"btn btn-success btn-sm\">Buscar  <span class=\"fa  fa-search\"></span> </button>\n        </div>\n    </div>\n    </form>\n</div>\n\n<style>\n    .fade-filtro-transition {\n        transition: all 1.5s ease;\n        opacity: 100;\n    }\n    .fade-filtro-enter, .fade-filtro-leave {\n        opacity: 0;\n        transition: all .2s ease;\n    }\n</style>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-57edf7d4", module.exports)
+  } else {
+    hotAPI.update("_v-57edf7d4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12962,12 +13186,14 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-12a71318", module.exports)
+    hotAPI.createRecord("_v-4305d48b", module.exports)
   } else {
-    hotAPI.update("_v-12a71318", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4305d48b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.colProm {background-color: #ddffdd; font-weight: bold;}\n.colTarea {background-color: lightskyblue; font-weight: bold;}\n.colTicket {background-color: bisque; font-weight: bold;}\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13261,8 +13487,11 @@ exports.default = {
             $event.preventDefault();
             cambiar = true;
 
+            this.validarMesSemanas();
+
             this.widget.isSemanal = vista;
             this.inicializarDatos(true);
+            this.obtenerNombreTablaChart();
         },
         validarMesSemanas: function validarMesSemanas() {
             if (this.widget.isSemanal == 1) {
@@ -13312,28 +13541,29 @@ exports.default = {
             }
         },
         obtenerTablaWidget: function obtenerTablaWidget(opcion) {
-            var store = localStorage.getItem('wg' + this.widget.id);
+            //                var store = localStorage.getItem('wg'+ this.widget.id);
+            //
+            //                if(store != undefined && cambiar == false){
+            //
+            //                    store = JSON.parse(store);
+            //
+            //                    this.widget = store[0];
+            //                    var chart = store[1];
+            //                    var table = store[2];
+            //
+            //                    // Mostrar chart c3
+            //                    MostrarChart(this.widget.id ,JSON.stringify(chart[0]), JSON.stringify(chart[1]));
+            //
+            //                    //  cargar la tabla
+            //                    if(this.widget.tipo_id != 3) {
+            //                        this.cumplimiento = table.pop();
+            //                        this.nombreTabla = table.pop();
+            //                    }
+            //                    this.tabla = table;
+            //
+            //                    return;
+            //                }
 
-            if (store != undefined && cambiar == false) {
-
-                store = JSON.parse(store);
-
-                this.widget = store[0];
-                var chart = store[1];
-                var table = store[2];
-
-                // Mostrar chart c3
-                MostrarChart(this.widget.id, JSON.stringify(chart[0]), JSON.stringify(chart[1]));
-
-                //  cargar la tabla
-                if (this.widget.tipo_id != 3) {
-                    this.cumplimiento = table.pop();
-                    this.nombreTabla = table.pop();
-                }
-                this.tabla = table;
-
-                return;
-            }
 
             utils.mostrarCargando(true);
             if (opcion == true) {
@@ -13357,10 +13587,13 @@ exports.default = {
                 dataType: 'json',
                 success: function (data) {
                     // sacamos el chart del Widget
-                    console.log(JSON.stringify(data));
+                    //                        console.log(JSON.stringify(data));
                     var grafica = data.pop();
                     var tablaResponse = data.pop();
 
+                    if (this.widget.tipo_id == 2) {
+                        console.log(JSON.stringify(tablaResponse));
+                    }
                     // Mostrar chart c3
                     MostrarChart(this.widget.id, JSON.stringify(grafica[0]), JSON.stringify(grafica[1]));
 
@@ -13372,14 +13605,14 @@ exports.default = {
                     this.tabla = tablaResponse;
 
                     // guardamos en el localstore
-                    localStorage.setItem('wg' + this.widget.id, JSON.stringify([this.widget, grafica, tablaResponse]));
+                    //                        localStorage.setItem('wg'+this.widget.id, JSON.stringify([this.widget, grafica, tablaResponse]));
                     cambiar = false;
 
                     utils.mostrarCargando(false);
                     Notificion.success('Se actualizò el Widget ' + this.widget.id + ' correctamente...');
                 }.bind(this), error: function (data) {
                     utils.mostrarCargando(false);
-                    Notificion.success('NO se actualizò el Widget ' + this.widget.id + ' correctamente...');
+                    Notificion.warning('NO se actualizò el Widget ' + this.widget.id + ' correctamente...');
                 }.bind(this)
             });
         }
@@ -13433,18 +13666,22 @@ function MostrarChart(widget_id, datosChart, categoriachart) {
     });
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores-{{ widget.id  }}\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\" id=\"panelWidget\">\n            <!--minimizar colocar la clase = box box-warning collapsed-box , mazminazar colcoar = box box-warning -->\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">\n                    <b>{{ widget.id }}. {{ widget.titulo }}</b><br>\n                    <strong class=\"pull-left\" style=\"color:gray; font-size:14px; padding-top:5px;\">Por {{ vistaParaTitulo }}</strong>\n                </h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget()\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                            <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n\n                    <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb\">\n                        <p>{{ actualizarDescripcionWidget }}</p>\n                    </div>\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart-{{ widget.id  }}\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n                            <p class=\"text-center\">\n                                <strong>{{ tituloTabla }}</strong>\n                            </p>\n                        </div>\n                            <!--Filtro Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\" class=\"hidden-xs\">{{ textoMesBuscado }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"bloquearAnteriorMes == false?anteriorMes($event):''\" :class=\"{'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹ </a>\n\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"bloquearSiguienteMes == false?siguienteMes($event):''\" :class=\"{'btn-danger': bloquearSiguienteMes }\" :disabled=\"bloquearSiguienteMes\">› </a>\n                                </div>\n                            </div>\n\n                            <!--Filtro Semana -->\n                            <div v-if=\"widget.tipo_id == 3 &amp;&amp; widget.isSemanal == 0\" class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\" class=\"hidden-xs\">{{ textoSemanaBuscada }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"bloquearAnteriorSemana == false?anteriorSemana($event):''\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorSemana }\" :disabled=\"bloquearAnteriorSemana\">‹ </a>\n\n                                    <a class=\"btn btn-default btn-sm \"><b>Semana {{ semanaActual }}</b></a>\n\n                                    <a class=\"btn btn-default btn-sm  right\" style=\" margin-right:15px;\" title=\"Siguiente\" @click=\"bloquearSiguienteSemana == false? siguienteSemana($event):''\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteSemana }\" :style=\"bloquearSiguienteSemana? {color: white }:''\" :disabled=\"bloquearSiguienteSemana\">› </a>\n                                </div>\n                            </div>\n\n\n                        <div class=\"table table-responsive\">\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ NombreCampoTipoWidget }}</th>\n                                    <th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot>\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }}</td>\n                                        </template>\n                                        <td>{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ NombreCampoTipoWidget }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td>{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td>{{ item.eficacia_ticket }} %</td>\n                                    <td>{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\" id=\"capa-indicadores-{{ widget.id  }}\">\n    <div class=\"col-md-12\">\n        <div class=\"box box-warning\" id=\"panelWidget\">\n            <!--minimizar colocar la clase = box box-warning collapsed-box , mazminazar colcoar = box box-warning -->\n            <div class=\"box-header with-border\">\n                <h3 class=\"box-title\">\n                    <b>{{ widget.id }}. {{ widget.titulo }}</b><br>\n                    <strong class=\"pull-left\" style=\"color:gray; font-size:14px; padding-top:5px;\">Por {{ vistaParaTitulo }}</strong>\n                </h3>\n\n                <div class=\"box-tools pull-right\">\n                    <button type=\"button\" class=\"btn btn-box-tool\" data-widget=\"collapse\"><i class=\"fa fa-minus\"></i>\n                    </button>\n                    <div class=\"btn-group\">\n                        <button type=\"button\" class=\"btn btn-box-tool dropdown-toggle\" data-toggle=\"dropdown\">\n                            <i class=\"fa fa-wrench\"></i></button>\n                        <!-- Cambie este codigo  -->\n                        <ul class=\"dropdown-menu\" role=\"menu\">\n                            <li><a @click=\"eliminarWidget()\">Eliminar</a></li>\n                            <!--<li><a @click=\"opcionWidget($event)\">Opciones</a></li>-->\n                            <!--<li><a href=\"#\">Graficas</a></li>-->\n                            <li class=\"divider\"></li>\n                            <li><a @click=\"cambiarVista($event, 0)\">Vista Semanas</a></li>\n                            <li><a @click=\"cambiarVista($event, 1)\">Vista Meses</a></li>\n                        </ul>\n                    </div>\n                </div>\n            </div>\n            <!-- /.box-header -->\n            <div class=\"box-body\">\n                <div class=\"\">\n\n                    <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb\">\n                        <p>{{ actualizarDescripcionWidget }}</p>\n                    </div>\n                    <!-- /.col -->\n                    <div class=\"col-md-12\">\n                        <p class=\"text-center\">\n                            <strong>{{ tituloChart }}</strong>\n                        </p>\n                        <!-- Grafica -->\n                        <div class=\"chart\">\n                            <div id=\"chart-{{ widget.id  }}\"></div>\n                        </div>\n                        <hr>\n                    </div>\n                    <!-- /.col -->\n                    <!--Tabla y Grafico del indicador -->\n                    <div class=\"col-md-12\">\n                        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n                            <p class=\"text-center\">\n                                <strong>{{ tituloTabla }}</strong>\n                            </p>\n                        </div>\n                            <!--Filtro Mes -->\n                            <div class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\" class=\"hidden-xs\">{{ textoMesBuscado }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"bloquearAnteriorMes == false?anteriorMes($event):''\" :class=\"{'btn-danger': bloquearAnteriorMes }\" :disabled=\"bloquearAnteriorMes\">‹ </a>\n\n                                    <a class=\"btn btn-default btn-sm \"><b>{{ mesActual }}</b></a>\n\n                                    <a class=\"btn btn-default btn-sm  right\" title=\"Siguiente\" @click=\"bloquearSiguienteMes == false?siguienteMes($event):''\" :class=\"{'btn-danger': bloquearSiguienteMes }\" :disabled=\"bloquearSiguienteMes\">› </a>\n                                </div>\n                            </div>\n\n                            <!--Filtro Semana -->\n                            <div v-if=\"widget.tipo_id == 3 &amp;&amp; widget.isSemanal == 0\" class=\"pull-right\" data-toggle=\"buttons-checkbox\">\n                                <label style=\"border-right: 20px;\" class=\"hidden-xs\">{{ textoSemanaBuscada }}</label>\n                                <div class=\"btn-group\">\n                                    <a class=\"btn btn-default btn-sm left\" title=\"Anterior\" @click=\"bloquearAnteriorSemana == false?anteriorSemana($event):''\" :class=\"{btn:true, 'btn-danger': bloquearAnteriorSemana }\" :disabled=\"bloquearAnteriorSemana\">‹ </a>\n\n                                    <a class=\"btn btn-default btn-sm \"><b>Semana {{ semanaActual }}</b></a>\n\n                                    <a class=\"btn btn-default btn-sm  right\" style=\" margin-right:15px;\" title=\"Siguiente\" @click=\"bloquearSiguienteSemana == false? siguienteSemana($event):''\" :class=\"{btn:true, 'btn-danger': bloquearSiguienteSemana }\" :style=\"bloquearSiguienteSemana? {color: white }:''\" :disabled=\"bloquearSiguienteSemana\">› </a>\n                                </div>\n                            </div>\n\n\n                        <div class=\"table table-responsive\">\n                            <!-- Tabla -->\n                            <table v-if=\"this.widget.tipo_id!=3\" class=\"table table-bordered table-hover table-responsive\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ NombreCampoTipoWidget }}</th>\n                                    <!--<th title=\"Ponderacion\" v-if=\"this.widget.tipo_id==1\">Ponderacion</th>-->\n                                    <th v-for=\"descripcion in nombreTabla\">{{ descripcion.desc }}</th>\n                                    <th>Promedio</th>\n                                </tr>\n                                </thead>\n                                <tfoot v-if=\"this.widget.tipo_id !=2\">\n                                <tr style=\"border-top: 2px solid gray;\">\n                                    <td colspan=\"2\" align=\"right\">El % de Cumplimiento de los Indicadores</td>\n                                    <td><b>{{ cumplimiento }} %</b></td>\n                                    <th v-for=\"descripcion in nombreTabla\"></th>\n                                    <td v-if=\"this.widget.tipo_id==1\"></td>\n                                </tr>\n                                </tfoot>\n                                <tbody>\n                                    <tr v-for=\"item in tabla\">\n                                        <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                        <td>{{ item.nombre }}</td>\n                                        <!--<td v-if=\"this.widget.tipo_id==1\">{{ item.ponderacion }} %</td>-->\n                                        <template v-for=\"dato in item.datos\">\n                                            <td>{{ dato.valor }} %</td>\n                                        </template>\n                                        <td class=\"colProm\">{{ item.promedio }} %</td>\n\n                                    </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n\n                            <!-- Tabla Tareas -->\n                            <table class=\"table table-bordered table-hover table-responsive\" v-if=\"this.widget.tipo_id==3\" cellspacing=\"0\" width=\"100%\">\n                                <thead class=\"headerTable\" style=\"background-color: #0f74a8;  color: white;\">\n                                <tr style=\"font-weight: bold;\">\n                                    <th>Nro</th>\n                                    <th>{{ NombreCampoTipoWidget }}</th>\n                                    <th>Tareas Programadas</th>\n                                    <th>Tareas Realizados</th>\n                                    <th>Eficacia / Tareas</th>\n                                    <th>Tickets Abiertos</th>\n                                    <th>Tickets Cerrados</th>\n                                    <th>Eficacia / Tickets</th>\n                                    <th>Eficacia Total</th>\n                                </tr>\n                                </thead>\n                                <tbody>\n                                <tr v-for=\"item in tabla\">\n                                    <td><a href=\"#\" class=\"btn btn-warning btn-xs\"> {{ item.id }} </a></td>\n                                    <td>{{ item.nombre }}</td>\n                                    <td>{{ item.actividad_programada }} </td>\n                                    <td>{{ item.actividad_realizada }} </td>\n                                    <td class=\"colTarea\">{{ item.eficacia_tarea }} %</td>\n                                    <td>{{ item.ticket_abierto }} </td>\n                                    <td>{{ item.ticket_cerrado }} </td>\n                                    <td class=\"colTicket\">{{ item.eficacia_ticket }} %</td>\n                                    <td class=\"colProm\">{{ item.eficacia_total }} %</td>\n                                </tr>\n                                </tbody>\n                            </table>\n                            <!-- Fin de Tabla -->\n                        </div>\n                    </div>\n\n                </div>\n                <!-- /.row -->\n            </div>\n        </div>\n        <!-- /.box -->\n    </div>\n    <!-- /.col -->\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.colProm {background-color: #ddffdd; font-weight: bold;}\n.colTarea {background-color: lightskyblue; font-weight: bold;}\n.colTicket {background-color: bisque; font-weight: bold;}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-9b626b76", module.exports)
+    hotAPI.createRecord("_v-29b99a38", module.exports)
   } else {
-    hotAPI.update("_v-9b626b76", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-29b99a38", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":16,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],15:[function(require,module,exports){
+},{"./../../utils.js":18,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13527,12 +13764,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2f890b98", module.exports)
+    hotAPI.createRecord("_v-189a3ba7", module.exports)
   } else {
-    hotAPI.update("_v-2f890b98", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-189a3ba7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],18:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13632,6 +13869,6 @@ module.exports = {
 
 };
 
-},{}]},{},[6]);
+},{}]},{},[7]);
 
 //# sourceMappingURL=app-vue.js.map

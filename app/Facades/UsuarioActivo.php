@@ -17,4 +17,4 @@ class UsuarioActivo extends Facade{
     {
         return 'useract';
     }
-} 
+}

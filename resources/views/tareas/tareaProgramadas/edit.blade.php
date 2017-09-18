@@ -48,8 +48,8 @@
     @endif">
 
     <label class="form-group">Descripcion *</label>
-    <input  type="text" minlength="5"
-            maxlength="60" name="descripcion" placeholder="Descripcion"
+    <input  type="text" minlength="5"   diaInicio="{{ \Cache::get('diainicio') }}"
+            maxlength="120" name="descripcion" placeholder="Descripcion"
             placeholder="Descripcion" class="form-control" value="{{ $tarea->descripcion }}"
             required>
     @if ($errors->has('descripcion'))
@@ -67,7 +67,7 @@
 
                 <label>Fecha de Comienzo *: </label>
 
-                <input-date tipo="text" nombre="fechaInicioEstimado"
+                <input-date tipo="text" nombre="fechaInicioEstimado"   diaInicio="{{ \Cache::get('diainicio') }}"
                           {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}"--}}
                           valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}" placeholder="Comienzo"
                           fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
@@ -84,7 +84,7 @@
                 @endif">
                 <label >Fecha de Finalizacion *: </label>
 
-                <input-date tipo="text" nombre="fechaFinEstimado"
+                <input-date tipo="text" nombre="fechaFinEstimado"   diaInicio="{{ \Cache::get('diainicio') }}"
                           {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}"--}}
                           valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}" placeholder="Comienzo"
                           fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
@@ -94,10 +94,10 @@
                   <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p>
                 @endif
             </div>
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
+            <div v-if="false" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
                 <span id="observacion" style="color: green; font-weight: bold;"></span>
             </div>
-            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" v-if="false">
                 <div class="checkbox">
                     <label>
                         <input  type="checkbox" name="todasemana"  id="default-fechaEstimadas">
@@ -155,6 +155,16 @@
       @endif
     </div>
 </div>
+
+      {{-- Observaciones --}}
+      <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group @if ($errors->has('observaciones')) has-error @endif  col-xs-12 col-sm-6 col-md-6 col-lg-5">
+              <label for="observaciones">Observaciones</label>
+              <textarea type="textArea" name="observaciones" value="{{ $tarea->observaciones }}"   maxlength="120" placeholder="Observaciones" class="form-control" rows="5" cols="9"></textarea>
+              @if ($errors->has('observaciones')) <p class="help-block">{{ $errors->first('observaciones') }}</p> @endif
+          </div>
+      </div>
+
     {{-- Fin Body Panel --}}
     </div>
 

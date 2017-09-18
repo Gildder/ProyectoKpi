@@ -26,7 +26,7 @@ class Estados extends Model
      * @var array
      */
     protected $fillable = [
-        'id','nombre','descripcion', 'color', 'habilitarCalendario', 'visiblePorEmpleado', 'solucion'
+        'id','nombre','descripcion', 'color', 'texto', 'habilitarCalendario', 'visiblePorEmpleado', 'solucion'
     ];
 
     /**
@@ -37,6 +37,7 @@ class Estados extends Model
     protected $hidden = [
         'created_at', 'update_at', 'deleted_at',
     ];
+
 
     /* Relaciones */
     public function tareas()

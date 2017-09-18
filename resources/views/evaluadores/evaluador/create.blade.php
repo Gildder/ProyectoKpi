@@ -49,7 +49,12 @@
             @if ($errors->has('ponderacion_id')) <p class="help-block">{{ $errors->first('ponderacion_id') }}</p> @endif
         </div>
       </div>
-      
+
+      <hr>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb">
+          <label>Preferencias</label>
+      </div>
+
   </div>
   <div class="panel-footer text-right">
       <a  id="cancelar" href="{{route('evaluadores.evaluador.index')}}" @click="mostrarModalLoading()"  class="btn btn-danger" type="reset"><span class="fa fa-times"></span> Cancelar</a>

@@ -74,14 +74,14 @@ class Indicador extends Model
         return $this->hasMany('ProyectoKpi\Models\Indicadores\EficaciaIndicador', 'indicador_id', 'id');
     }
 
-
     /* Metodo Repsoitorio */
-    public static function getCargos($id)
+    public static function getCargos($id, $evaluador_id)
     {   
         $cargosindicadores = Cargo::select('cargos.*')
                 ->join('indicador_cargos','indicador_cargos.cargo_id','=', 'cargos.id')
                 ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
                 ->where('indicadores.id',$id)
+                ->where('indicador_cargos.evaluadorIndicador_id',$evaluador_id)
                 ->get();
 
         return $cargosindicadores;

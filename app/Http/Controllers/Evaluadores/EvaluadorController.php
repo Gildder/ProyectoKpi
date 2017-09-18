@@ -90,12 +90,10 @@ class EvaluadorController extends Controller
 
 		$indicadores = IndicadorRepository::getIndicadoresDeEvaluador($id);
 
-
         $cargosDisponibles = DB::select('call pa_evaluadores_cargosDisponibles('.$id.');');
         $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$id.');');
 
 
-//dd($empleadosDisponibles, $empleadosAgregados);
 		return view('evaluadores/evaluador/show',['evaluador'=>$evaluador,'empleadosDisponibles'=>$empleadosDisponibles,'empleadosAgregados'=>$empleadosAgregados,
                 'indicadores'=>$indicadores, 'indicadoresDisponibles'=>$indicadoresDisponibles, 'cargosDisponibles'=>$cargosDisponibles,'cargoAgregados'=>$cargoAgregados ]);
 	}

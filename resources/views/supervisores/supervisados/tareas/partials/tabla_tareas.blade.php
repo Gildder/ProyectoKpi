@@ -3,7 +3,7 @@
 		<thead>
             <tr>
                 <th>Nro</th>
-                <th>Nombre Completo</th>
+                <th>Usuario</th>
                 <th>Tareas</th>
                 <th>Fechas Inicio Estimadas</th>
                 <th>Fechas Fin Estimadas</th>
@@ -14,38 +14,50 @@
                 <th>Estado</th>
                 <th>Observaciones</th>
                 <th>Ubicaciones</th>
+                <th></th>
             </tr>
 		</thead>
 
 		<tbody>
-			@foreach($tareas as $item)
-			<tr>
-				<td><b class="btn btn-warning btn-xs"> {{ $item->user_id }}</b></td>
-				<td>
-                    <label  style="background: {{$item->color}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{ $item->nombres }} {{ $item->apellidos }} </label>
-                </td>
-				<td> {{ $item->descripcion }}</td>
-				<td>{{ $item->fechaInicioEstimado }}</td>
-				<td>{{ $item->fechaFinEstimado }}</td>
-				<td>{{ $item->tiempoEstimado }}</td>
-				<td>{{ $item->fechaInicioEjecucion }}</td>
-				<td>{{ $item->fechaFinEjecucion }}</td>
-				<td>{{ $item->tiempoSolucion }}</td>
-				<td>
-					<label  style="background: {{$item->estados->color}}; color:{{$item->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$item->estados->nombre}} </label>
-				</td>
-				<td>{{$item->getObservacion() }}</td>
-				<td>
-					<ul style="padding: 10px;">
-						@foreach($item->ubicacionesOcupadas($item->id) as $ubicacion)
-							<li>{{ $ubicacion->nombre }} </li>
-						@endforeach
-					</ul>
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
+            @if(isset($tareas))
+                @foreach($tareas as $tarea)
+                    <tr>
+                        <td><b class="btn btn-warning btn-xs" title="Ver Empleado" data-toggle="modal" data-target="#modal-usuarioTarea-{{$tarea->user_id}}" > {{ $tarea->user_id }}</b></td>
+                        <td>
+                            <label  style="background: {{$tarea->color}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{ $tarea->usuario }} </label>
+                        </td>
+                        <td> {{ $tarea->descripcion }}</td>
+                        <td>{{ $tarea->fechaInicioEstimado }}</td>
+                        <td>{{ $tarea->fechaFinEstimado }}</td>
+                        <td>{{ $tarea->tiempoEstimado }}</td>
+                        <td>{{ $tarea->fechaInicioEjecucion }}</td>
+                        <td>{{ $tarea->fechaFinEjecucion }}</td>
+                        <td>{{ $tarea->tiempoSolucion }}</td>
+                        <td>
+                            <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label>
+                        </td>
+        				<td>{{$tarea->getObservacion() }}</td>
+                        <td>
+                            <ul style="padding: 10px;">
+                                @foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
+                                    <li>{{ $ubicacion->nombre }} </li>
+                                @endforeach
+                            </ul>
+                        </td>
+                        <td>
+                            <a href="#" class="btn btn-google btn-xs" title="Agregar Error"> <span class=" fa fa-legal"></span></a>
+                            <a class="btn btn-dropbox btn-xs"
+                               href="javascript:void(0)"  data-toggle="modal" data-target="#modal-tareaDetalle-{{$tarea->tarea_id}}" title="Ver Tarea"> <span class=" fa fa-eye"></span></a>
+                        </td>
+                    </tr>
+                    <div class="col-xs-12">
+                        @include('supervisores/supervisados/tareas/partials/tarea')
+                        @include('supervisores/supervisados/tareas/partials/empleado')
+                    </div>
+                @endforeach
+            @endif
+        </tbody>
+    </table>
 </div>
 
 

@@ -36,7 +36,7 @@ class Widget extends Model
         'deleted_at',
     ];
 
-    public function ultimoMes(){
+    public static function ultimoMes(){
         return date('n');
     }
 }

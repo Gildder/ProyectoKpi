@@ -144,20 +144,23 @@ class nTablaSemana  extends Tabla
         $contador = 0;
         if(sizeof($usuarios)>0) {
             foreach ($usuarios as $usuario) {
-                $objeto = new \stdClass();
+                    $objeto = new \stdClass();
 
-                $objeto->id = $usuario->id;
-                $objeto->nombre = $usuario->nombres . ' ' . $usuario->apellidos;
+                    $objeto->id = $usuario->id;
+                    $objeto->nombre = $usuario->nombres . ' ' . $usuario->apellidos;
 
-                $objeto = $this->obtenerEmpleadoDeMes($objeto, $usuario->id);
+                    $objeto = $this->obtenerEmpleadoDeMes($objeto, $usuario->id);
 
-                $cumplimiento = $cumplimiento + $objeto->promedio;
-                $contador++;
+                    if(isset($objeto)){
+                        $cumplimiento = $cumplimiento + $objeto->promedio;
+                        $contador++;
+                        array_push($lista, $objeto);
+                    }
 
-                array_push($lista, $objeto);
+
             }
             array_push($lista, $this->descripcionPorSemanas());
-            array_push($lista, ($cumplimiento / $contador));
+            array_push($lista, round(($cumplimiento / $contador), 2));
         }
         return $lista;
     }
@@ -313,6 +316,8 @@ class nTablaSemana  extends Tabla
 
         $datos = $this->ValoresIndicadoresPorSemanaPorEmpleados($usuario->id);
 
+        if( $datos[0]->habilitado <> -1) {
+
 
         array_push($lista, $datos[0]->semana_1);
         array_push($lista, $datos[0]->semana_2);
@@ -330,7 +335,7 @@ class nTablaSemana  extends Tabla
 
         $this->semanas = $datos[0]->cantidadSemana;
 
-
+        }
 
         return $lista;
     }
@@ -388,19 +393,21 @@ class nTablaSemana  extends Tabla
      */
     public function obtenerEmpleadoDeMes($objeto, $usuario_id)
     {
-
         $datos = $this->ValoresIndicadoresPorSemanaPorEmpleados($usuario_id);
+        if( $datos[0]->habilitado <> -1) {
+            $objeto->mes = \Calcana::getNombreMes($this->widget->mesBuscado);
 
-        $objeto->mes = \Calcana::getNombreMes($this->widget->mesBuscado);
+            $objeto->semanas = $datos[0]->cantidadSemana;
+            $objeto->promedio = $datos[0]->promedio;
+            $objeto->datos = $this->obtenerSemanas($datos);
 
-        $objeto->semanas  = $datos[0]->cantidadSemana;
-        $objeto->promedio = $datos[0]->promedio;
-        $objeto->datos = $this->obtenerSemanas($datos);
+            //rescatamos los descripcion de las semanas
+            $this->semanas = $datos[0]->cantidadSemana;
 
-        //rescatamos los descripcion de las semanas
-        $this->semanas = $datos[0]->cantidadSemana;
-
-        return $objeto;
+            return $objeto;
+        }else{
+            return null;
+        }
     }
 
 

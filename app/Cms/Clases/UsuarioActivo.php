@@ -9,13 +9,10 @@
 namespace ProyectoKpi\Cms\Clases;
 
 use Mockery\Exception;
-use Predis\Transaction\AbortedMultiExecException;
 use ProyectoKpi\Cms\Interfaces\IClases;
 use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
-use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
-use ProyectoKpi\Models\Evaluadores\Evaluador;
 
 class UsuarioActivo implements IClases
 {
@@ -40,8 +37,9 @@ class UsuarioActivo implements IClases
 
     public function __construct(PreferenciasUsuario $preferencias)
     {
-        $this->inicializar();
         $this->preferencias = $preferencias;
+        $this->inicializar();
+
     }
 
     /** Metodos */
@@ -52,17 +50,15 @@ class UsuarioActivo implements IClases
 
     public function get($atributo)
     {
-//        if(isset($this->$atributo)){
             return $this->$atributo;
-//        }else{
-//            return 'Ninguno';
-//        }
     }
 
     public function inicializar()
     {
         $user = \Auth::user();  //obtenemos el usuario logueado
+        $this->preferencias->inicializar($user->id);
 
+//        dd(\Auth::user(), $this->preferencias);
         // datos del usuario
         $this->id = $user->id;
         $this->usuario = $user->name;
@@ -159,13 +155,19 @@ class UsuarioActivo implements IClases
 
     public function is_indicador($indicador)
     {
-        $position =  array_search($indicador, $this->indicadores);
+        if(sizeof($this->indicadores)>0){
 
-        if($position == true || isset($position)){
-            return true;
+            $position =  array_search($indicador, $this->indicadores);
+
+            if(isset($position)){
+                return true;
+            }else{
+                return false;
+            }
         }else{
             return false;
         }
+
     }
 
 

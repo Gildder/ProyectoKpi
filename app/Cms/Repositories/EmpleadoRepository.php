@@ -2,27 +2,27 @@
 
 namespace ProyectoKpi\Cms\Repositories;
 
-use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Indicadores\Indicador;
-use Illuminate\Support\Facades\DB;
 use ProyectoKpi\Models\User;
 
 class EmpleadoRepository
 {
     
-     /**
+    /**
      * [obtenerEmpleado Obtenemos los datos de un Empleado]
      * @param  [int] $id [Id del Empleado]
      * @return [Array]     [Empleado]
      */
     public static function obtenerEmpleado($id)
     {
-        return User::
-            select('users.id','users.codigo', 'users.nombres', 'users.apellidos',
-                'departamentos.grupodep_id as grdepartamento', 'localizaciones.nombre as localizacion', 'localizaciones.id as localizacion_id', 'departamentos.id as departamento_id',
+        return User::select(
+				'users.id','users.codigo', 'users.nombres', 'users.apellidos', 'users.color','users.active','users.vacacion','users.tecnico_id',
+                'departamentos.grupodep_id as grdepartamento', 'localizaciones.nombre as localizacion',
+				'localizaciones.id as localizacion_id', 'departamentos.id as departamento_id',
                 'departamentos.nombre as departamento', 'localizaciones.grupoloc_id as grlocalizacion',
                 'grupo_departamentos.nombre as grupodepartamento', 'grupo_localizaciones.nombre as grupolocalizacion',
-                'users.name as usuario', 'users.type as tipo', 'users.email as correo', 'cargos.id as cargo_id', 'cargos.nombre as cargo'
+                'users.name as usuario', 'users.type as tipo', 'users.email as correo', 'cargos.id as cargo_id',
+				'cargos.nombre as cargo'
             )
             ->leftJoin('localizaciones', 'localizaciones.id', '=', 'users.localizacion_id')
             ->leftJoin('departamentos', 'departamentos.id', '=', 'users.departamento_id')
@@ -34,26 +34,14 @@ class EmpleadoRepository
             ->first();
     }
 
-    public static function obtenerEmpleados()
+    public static function getCargosDeSupervisados($get)
     {
-        return User::
-        select('users.id', 'users.name as usuario','users.codigo', 'users.nombres', 'users.apellidos',
-            'departamentos.grupodep_id as grdepartamento', 'localizaciones.nombre as localizacion', 'localizaciones.id as localizacion_id', 'departamentos.id as departamento_id',
-            'departamentos.nombre as departamento', 'localizaciones.grupoloc_id as grlocalizacion',
-            'grupo_departamentos.nombre as grupodepartamento', 'grupo_localizaciones.nombre as grupolocalizacion',
-            'users.name as usuario', 'users.type as tipo', 'users.email as correo', 'cargos.id as cargo_id', 'cargos.nombre as cargo'
-
-        )
-            ->leftJoin('localizaciones', 'localizaciones.id', '=', 'users.localizacion_id')
-            ->leftJoin('departamentos', 'departamentos.id', '=', 'users.departamento_id')
-            ->leftJoin('grupo_departamentos', 'grupo_departamentos.id', '=', 'departamentos.grupodep_id')
-            ->leftJoin('grupo_localizaciones', 'grupo_localizaciones.id', '=', 'localizaciones.grupoloc_id')
-            ->leftJoin('cargos', 'cargos.id', '=', 'users.cargo_id')
-                ->get();
+        return User::select(
+            ''
+        );
     }
 
-
-      public function obtenerIndicadoresDisponibles($id, $idCargo)
+    public function obtenerIndicadoresDisponibles($id, $idCargo)
     {
         $indicadores = $this->obtenerIndicadores($id);
         
@@ -67,4 +55,24 @@ class EmpleadoRepository
 
         return $todos_indicadores->diff($cargos_indicador);
     }
+
+    public static function obtenerLista()
+    {
+        return User::select(
+            'users.id', 'users.name as usuario','users.codigo', 'users.nombres', 'users.apellidos', 'users.active','users.color',
+            'departamentos.grupodep_id as grdepartamento', 'localizaciones.nombre as localizacion', 'localizaciones.id as localizacion_id', 'departamentos.id as departamento_id',
+            'departamentos.nombre as departamento', 'localizaciones.grupoloc_id as grlocalizacion',
+            'grupo_departamentos.nombre as grupodepartamento', 'grupo_localizaciones.nombre as grupolocalizacion',
+            'users.name as usuario', 'users.type as tipo', 'users.email as correo', 'cargos.id as cargo_id', 'cargos.nombre as cargo'
+
+        )
+            ->leftJoin('localizaciones', 'localizaciones.id', '=', 'users.localizacion_id')
+            ->leftJoin('departamentos', 'departamentos.id', '=', 'users.departamento_id')
+            ->leftJoin('grupo_departamentos', 'grupo_departamentos.id', '=', 'departamentos.grupodep_id')
+            ->leftJoin('grupo_localizaciones', 'grupo_localizaciones.id', '=', 'localizaciones.grupoloc_id')
+            ->leftJoin('cargos', 'cargos.id', '=', 'users.cargo_id')
+            ->get();
+    }
+
+
 }

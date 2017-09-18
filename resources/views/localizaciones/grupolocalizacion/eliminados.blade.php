@@ -8,7 +8,7 @@
 	
 <div class="panel panel-default">
   <div class="panel-heading">
-    <p class="titulo-panel">Grupo Eliminados</p>
+    <p class="titulo-panel">Grupo Localizacion Eliminados</p>
   </div>
 
   <div class="panel-body">

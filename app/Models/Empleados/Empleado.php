@@ -10,8 +10,6 @@ use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 
 class Empleado extends Model
 {
-    //
-
 
     protected $table = "empleados";
     protected $primarykey = "codigo";

@@ -97,7 +97,11 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 	Route::get('empleados/listaDepartamento/{item}', 'Empleados\EmpleadoController@listaDepartamento');
 	Route::get('empleados/listaLocalizacion/{item}', 'Empleados\EmpleadoController@listaLocalizacion');
 
+    Route::get('empleados/empleado/eliminados',
+        array('as' => 'empleados.empleado.eliminados', 'uses' => 'Empleados\EmpleadoController@eliminados') );
 
+    Route::put('empleados/empleado/restaurar/{empleado}',
+        array('as' => 'empleados.empleado.restaurar', 'uses' => 'Empleados\EmpleadoController@restaurar') );
 
 	Route::resource('empleados/empleado', 'Empleados\EmpleadoController', 
 		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
@@ -386,8 +390,6 @@ route::group(['middleware'=>['auth', 'administrador']], function()
 		array('as' => 'supervisores.supervisor.quitardepartamento', 'uses' => 'Supervisores\SupervisorController@quitardepartamento') );
 
 
-
-
 	/* Metodos Genericos */
 	Route::resource('supervisores/supervisor', 'Supervisores\SupervisorController', 
 		['only' => ['index', 'create', 'store', 'update', 'destroy']]);
@@ -418,11 +420,26 @@ route::group(['middleware'=>['auth', 'supervisores', 'estandard']], function()
     Route::get('supervisores/supervisados/verTareasSupervisados',
         array('as' => 'supervisores.supervisados.verTareasSupervisados', 'uses' => 'Supervisores\SupervisadosController@verTareasSupervisados') );
 
-	/* Metodos Genericos */
+
+    /* Metodo para Buscar tareas pasada SUPERVISORES por empleados */
+    Route::get('supervisores/supervisados/tareas/buscar',
+        array('as' => 'supervisores.supervisados.tareas.buscar', 'uses' => 'Tareas\BuscarTareaController@listaSupervidor') );
+
+    Route::post('supervisores/supervisados/tareas/buscarTareasSupervisadas',
+        array('as' => 'supervisores.supervisados.tareas.buscarTareasSupervisadas', 'uses' => 'Tareas\BuscarTareaController@buscarTareasSupervisadas') );
+
+    /* Metodos Genericos */
 	Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', 
 		['only' => ['index', 'create', 'store', 'update', 'destroy', 'show']]);
 
 });
+
+
+
+
+
+
+
 // **********************  MODULO TAREAS  *****************************************
 
 /*  TAREAS */
@@ -465,12 +482,15 @@ route::group(['middleware'=>['auth', 'estandard']], function()
             array('as' => 'calendario.empleado.cargarTareas', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@cargarTareas') );
 
 
-    Route::post('calendario/empleado/guardarTarea',
+	Route::post('calendario/empleado/guardarTarea',
         array('as' => 'calendario.empleado.guardarTarea', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@guardarTarea') );
 
 
-    Route::post('calendario/empleado/actualizarTareaHora',
+	Route::post('calendario/empleado/actualizarTareaHora',
         array('as' => 'calendario.empleado.actualizarTareaHora', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@actualizarTareaHora') );
+
+	Route::get('calendario/empleado/obtenerEstadosTareas',
+		array('as' => 'calendario.empleado.obtenerEstadosTareas', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@obtenerEstadosTareas') );
 
 });
 

@@ -6,6 +6,7 @@ use function array_push;
 use function date_add;
 use DateTime;
 use ProyectoKpi\Cms\Clases\Caches;
+use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +32,6 @@ class TareaProgramadaController extends Controller
     
     public function index()
     {
-//        dd(\Usuario::is_indicador(1), \Usuario::get('indicadores'), \Usuario::is_indicador(1), \Auth::user());
         // obtenemos las tareas programadas
         $tareas = TareaRepository::getTareasProgramadas();
 
@@ -43,6 +43,7 @@ class TareaProgramadaController extends Controller
         Caches::guardar('semanas', $semanas);
 
         Caches::guardar('botones', 0);
+        Caches::guardar('diainicio', ConfiguracionRepositorio::getDiaInicio());
 
         // limpiamos el cache la variable proxSemana para trabajar con la semana actual
         Caches::borrar('proxSemana');
@@ -69,6 +70,12 @@ class TareaProgramadaController extends Controller
 
     public function create()
     {
+		// obtenemos la semana de tarea
+		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+
+		// guardamos en cache las fechas de la semana
+		// las semanas dentran mes, semana, fechaInicio, fechaFin
+		Caches::guardar('semanas', $semanas);
         // guardamos la cache de tipo de semana
         Caches::guardar('proxSemana', 0);
 
@@ -88,7 +95,7 @@ class TareaProgramadaController extends Controller
         $tarea->estadoTarea_id = '1';
         $tarea->user_id = \Usuario::get('id');
 
-        // valimidamos los limite de las fecha de inicio y fin de semana
+        // validamos los limite de las fecha de inicio y fin de semana
         if(!$tarea->validarLimiteFechas()){
             return redirect()->to($this->getRedirectUrl())
                 ->withErrors('Las fechas estan fuera del rango permitido.')
@@ -132,6 +139,7 @@ class TareaProgramadaController extends Controller
         $tarea->fechaFinEstimado = $tarea->validarFechaFinEstimacion(\Request::input('fechaFinEstimado'), \Request::input('todasemana'));
         $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
         $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1].':00';
+        $tarea->observaciones = trim(\Request::input('observaciones'));
 
         if(!$tarea->validarLimiteFechas() ){
             return redirect()->to($this->getRedirectUrl())
@@ -214,6 +222,9 @@ class TareaProgramadaController extends Controller
     {
         $tarea = Tarea::findOrFail($id);
         $tarea->estadoTarea_id = 2;
+        $tarea->fechaInicioSolucion = '0000-00-00';
+        $tarea->fechaFinSolucion = '0000-00-00';
+        $tarea->tiempoSolucion = '00:00:00';
 
         if ($tarea->save()) {
             return redirect()->back()->with('message', 'La tarea '.$tarea->numero.' se cambio al estado en proceso');

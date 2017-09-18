@@ -28,7 +28,8 @@ class UsuarioActivoServiceProvider extends ServiceProvider
     {
         \App::bind('useract', function()
         {
-            return new UsuarioActivo(new PreferenciasUsuario(\Auth::user()->id));
+            $preferencias = new PreferenciasUsuario();
+            return new UsuarioActivo($preferencias);
         });
     }
 }

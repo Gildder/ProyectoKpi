@@ -25,7 +25,7 @@
 				<td>{{$item->ponderacion}} <b>%</b>	 </td>
 				<td>{{$item->tipo}}</td>
 				<td> 
-					@foreach($item->getCargos($item->id) as $cargo)
+					@foreach($item->getCargos($item->id, $evaluador->id) as $cargo)
 						{{ $cargo->nombre }} <br>
 					@endforeach
 				</td>

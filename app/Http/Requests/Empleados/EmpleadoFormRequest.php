@@ -30,10 +30,11 @@ class EmpleadoFormRequest extends Request
      */
     public function rules()
     {
-     return [
+        return [
             'codigo'=>'required|max:10',
-            'name'=>'required|max:20',
-            'email'=>'required|max:30',
+            'usuario'=>'required|max:20',
+            'tecnico_id'=>'unique:users',
+            'email'=>'required|max:50',
             'nombres'=>'required|max:50',
             'apellidos'=>'required|max:50',
             'grdepartamento_id'=>'required',
@@ -41,7 +42,7 @@ class EmpleadoFormRequest extends Request
             'grlocalizacion_id'=>'required',
             'localizacion_id'=>'required',
             'cargo_id'=>'required',
-            'type'=>'required',
+            'type_id'=>'required',
             'password'=>'required|AlphaNum|min:8|Confirmed',
             'password_confirmation'=>'Required|AlphaNum|min:8'
         ];
@@ -50,12 +51,13 @@ class EmpleadoFormRequest extends Request
     public function messages()
     {
         return [
-            'nombre.required' => 'El nombre del empleado es requerido!',
-            'nombre.max' => 'El nombre completo no puede tener más de 50 carácteres',
+            'nombres.required' => 'El nombre del empleado es requerido!',
+            'tecnico_id.unique' => 'El Id del Tecnico ta existe',
+            'nombres.max' => 'El nombre completo no puede tener más de 50 carácteres',
             'usuario.required' => 'El nombre usuario es requerido!',
             'usuario.max' => 'El nombre usuario no puede tener más de 20 carácteres',
             'email.required' => 'El correo es requerido!',
-            'email.max' => 'El correo no puede tener más de 30 carácteres',
+            'email.max' => 'El correo no puede tener más de 50 carácteres',
             'apellidos.required' => 'Los apellidos del empleado son requeridos!',
             'apellidos.max' => 'Los apellidos no puede tener más de 50 carácteres',
             'codigo.required' => 'El codigo del empleado es requerido!',

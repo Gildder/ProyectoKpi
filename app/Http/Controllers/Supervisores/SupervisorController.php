@@ -68,6 +68,10 @@ class SupervisorController extends Controller
         DB::table('supervisor_departamentos')->where('user_id', $user_id)->where('departamento_id', $departamento_id)->delete();
 
         //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $user_id])
+            ->update( array('is_supervisor' => null));
+
+        //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id, 'departamento_id' => $departamento_id])
             ->update( array('is_supervisor' => null));
 
@@ -95,6 +99,10 @@ class SupervisorController extends Controller
 
 
         DB::table('supervisor_cargos')->where('user_id', $empleado_id)->where('cargo_id', $cargo_id)->delete();
+
+        //Actualizacion de Users en campos is_evaluador
+        DB::table('users')->where(['id' => $empleado_id])
+            ->update( array('is_supervisor' => null));
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $empleado_id, 'departamento_id' => $cargo_id])

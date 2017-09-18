@@ -41,7 +41,7 @@
             @if ($errors->has('descripcion')) has-error @endif">
             <label>Descripcion *</label>
               <input type="text" minlength="5" value="{{ old('descripcion') }}" style="margin-bottom: 15px;"
-                   maxlength="60" name="descripcion" placeholder="Descripcion"
+                   maxlength="60" name="descripcion" placeholder="Descripcion"  diaInicio="{{ \Cache::get('diainicio') }}"
                    class="form-control" required>
           @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
           </div>
@@ -56,7 +56,7 @@
 
         <label>Fecha de Comienzo *: </label>
 
-        <input-date tipo="text" nombre="fechaInicioEstimado"
+        <input-date tipo="text" nombre="fechaInicioEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
                     valor="{{ old('fechaInicioEstimado') }}" placeholder="Comienzo"
                     fechainicio="{{  \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}"
                     fechafin='{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}' >
@@ -73,7 +73,7 @@
 
         <label>Fecha Finalizacion *: </label>
 
-        <input-date tipo="text" nombre="fechaFinEstimado"
+        <input-date tipo="text" nombre="fechaFinEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
                     valor="{{ old('fechaFinEstimado') }}" placeholder="Finalizacion"
                     fechainicio="{{  \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}"
                     fechafin='{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}' >
@@ -84,10 +84,10 @@
         @endif
     </div>
 
-    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
+    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;" v-if="false">
         <span id="observacion" style="color: green; font-weight: bold;"></span>
     </div>
-    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" v-if="false">
         <div class="checkbox">
             <label>
                 <input  type="checkbox" name="todasemana"  id="default-fechaEstimadas">
@@ -103,7 +103,7 @@
       <div class="form-group  col-xs-12 col-sm-3 col-md-3 col-lg-2 @if ($errors->has('hora')) has-error @endif">
           Horas:
           <input type="number" min="0"  name="hora" max="999" placeholder="Horas"
-                 value="{{ old('hora') }}" class="form-control"
+                 value="{{ old('hora') }}" class="form-control"   diaInicio="{{ \Cache::get('diainicio') }}"
                  required >
           @if ($errors->has('hora'))
               <p class="help-block">{{ $errors->first('hora') }}</p>
@@ -112,7 +112,7 @@
 
       <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 @if ($errors->has('minuto')) has-error @endif">
           Minutos:
-          <input type="number" min="0" name="minuto" max="999"
+          <input type="number" min="0" name="minuto" max="999"   diaInicio="{{ \Cache::get('diainicio') }}"
                  class="form-control" value="{{ old('minuto') }}"  placeholder="Minutos"
                  required>
 

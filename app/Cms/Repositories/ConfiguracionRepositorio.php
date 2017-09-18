@@ -31,7 +31,16 @@ class ConfiguracionRepositorio
          return 'true';
     }
 
-    public function cargarPrimerIndicador()
+	public static function getDiaInicio()
+	{
+		$preferencia = \DB::table('preferencias')
+			->select('preferencias.diaInicioSemana')
+			->where('preferencias.id', 1)
+			->first();
+		return $preferencia->diaInicioSemana;
+	}
+
+	public function cargarPrimerIndicador()
     {
         
     }

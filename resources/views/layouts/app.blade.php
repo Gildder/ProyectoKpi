@@ -42,6 +42,9 @@
     <!-- c3  -->
     <link rel="stylesheet" href="{{URL::asset('plugins/d3/c3.css')}}">
 
+    <!-- animate.css vuesj  -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/animate/animate.css')}}">
+
 
 
     <!-- jQuery 1.8.23 -->

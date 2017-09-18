@@ -4,6 +4,7 @@ namespace ProyectoKpi\Console\Commands;
 
 use Illuminate\Console\Command;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
+use ProyectoKpi\Cms\Repositories\UsuarioVacacionRepositorio;
 
 class ImportarTareasCommand extends Command
 {
@@ -42,9 +43,12 @@ class ImportarTareasCommand extends Command
 
         // obtener los tareas que se encuestran dentro de las fechas indicadas
         $tareas = TareaRepository::importarTareas($fechaDeSemana->fechaInicio, $fechaDeSemana->fechaFin);
+//dd(json_encode($tareas));
 
         foreach ($tareas as $tarea) {
-            $this->info(\GuzzleHttp\json_encode($tarea->programados));
+            // verificamos si tiene vacaciones
+            $isVacacion = UsuarioVacacionRepositorio::isEntreVacacion($fechaDeSemana->fechaInicio, $fechaDeSemana->fechaFin, $tarea->user_id);
+
             $resultado = TareaRepository::insertarTareasEficacia(
                 $tarea->programados,
                 $tarea->resueltos,
@@ -53,7 +57,8 @@ class ImportarTareasCommand extends Command
                 $fechaDeSemana->semana,
                 $fechaDeSemana->fechaInicio,
                 $fechaDeSemana->fechaFin,
-                $tarea->user_id
+                $tarea->user_id,
+                $isVacacion
             );
 
             if ($resultado == true){

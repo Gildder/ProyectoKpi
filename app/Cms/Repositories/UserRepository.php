@@ -3,22 +3,16 @@
 namespace ProyectoKpi\Cms\Repositories;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
-
-use ProyectoKpi\Models\Empleados\Cargo;
-use ProyectoKpi\Models\Indicadores\Indicador;
-use ProyectoKpi\Cms\repositories\SupervisoresRepository;
-use ProyectoKpi\Cms\repositories\EvaluadoresRepository;
-use ProyectoKpi\Cms\repositories\IndicadorRepository;
+use ProyectoKpi\Models\User;
 
 class UserRepository
 {
 
-     /*contructores */
-    public function __construct()
+    public function getModel()
     {
+        return new User;
     }
 
     public static function isAdmin()

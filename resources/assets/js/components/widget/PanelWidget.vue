@@ -98,12 +98,12 @@
                                     <tr style="font-weight: bold;" >
                                         <th>Nro</th>
                                         <th>{{ NombreCampoTipoWidget }}</th>
-                                        <th title="Ponderacion" v-if="this.widget.tipo_id==1">Ponderacion</th>
+                                        <!--<th title="Ponderacion" v-if="this.widget.tipo_id==1">Ponderacion</th>-->
                                         <th v-for="descripcion in nombreTabla">{{ descripcion.desc }}</th>
                                         <th>Promedio</th>
                                     </tr>
                                     </thead>
-                                    <tfoot>
+                                    <tfoot v-if="this.widget.tipo_id !=2" >
                                     <tr style="border-top: 2px solid gray;">
                                         <td colspan="2" align="right">El % de Cumplimiento de los Indicadores</td>
                                         <td><b>{{ cumplimiento }} %</b></td>
@@ -115,11 +115,11 @@
                                         <tr v-for="item in tabla">
                                             <td><a href="#" class="btn btn-warning btn-xs"> {{ item.id }} </a></td>
                                             <td>{{ item.nombre }}</td>
-                                            <td v-if="this.widget.tipo_id==1">{{ item.ponderacion }} %</td>
+                                            <!--<td v-if="this.widget.tipo_id==1">{{ item.ponderacion }} %</td>-->
                                             <template v-for="dato in item.datos">
-                                                <td>{{ dato.valor }}</td>
+                                                <td>{{ dato.valor }} %</td>
                                             </template>
-                                            <td>{{ item.promedio }} %</td>
+                                            <td class="colProm" >{{ item.promedio }} %</td>
 
                                         </tr>
                                     </tbody>
@@ -147,11 +147,11 @@
                                         <td>{{ item.nombre }}</td>
                                         <td>{{ item.actividad_programada }} </td>
                                         <td>{{ item.actividad_realizada }} </td>
-                                        <td>{{ item.eficacia_tarea }} %</td>
+                                        <td class="colTarea">{{ item.eficacia_tarea }} %</td>
                                         <td>{{ item.ticket_abierto }} </td>
                                         <td>{{ item.ticket_cerrado }} </td>
-                                        <td>{{ item.eficacia_ticket }} %</td>
-                                        <td>{{ item.eficacia_total }} %</td>
+                                        <td class="colTicket">{{ item.eficacia_ticket }} %</td>
+                                        <td class="colProm">{{ item.eficacia_total }} %</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -169,6 +169,11 @@
     </div>
 </template>
 
+<style>
+    .colProm {background-color: #ddffdd; font-weight: bold;}
+    .colTarea {background-color: lightskyblue; font-weight: bold;}
+    .colTicket {background-color: bisque; font-weight: bold;}
+</style>
 <script>
     /* jshint esnext:true */
 
@@ -470,8 +475,11 @@
                 $event.preventDefault();
                 cambiar = true;
 
+                this.validarMesSemanas()
+
                 this.widget.isSemanal = vista;
                 this.inicializarDatos(true);
+                this.obtenerNombreTablaChart();
 
             },
             validarMesSemanas: function()
@@ -525,28 +533,28 @@
                 }
             },
             obtenerTablaWidget: function (opcion) {
-                var store = localStorage.getItem('wg'+ this.widget.id);
-
-                if(store != undefined && cambiar == false){
-
-                    store = JSON.parse(store);
-
-                    this.widget = store[0];
-                    var chart = store[1];
-                    var table = store[2];
-
-                    // Mostrar chart c3
-                    MostrarChart(this.widget.id ,JSON.stringify(chart[0]), JSON.stringify(chart[1]));
-
-                    //  cargar la tabla
-                    if(this.widget.tipo_id != 3) {
-                        this.cumplimiento = table.pop();
-                        this.nombreTabla = table.pop();
-                    }
-                    this.tabla = table;
-
-                    return;
-                }
+//                var store = localStorage.getItem('wg'+ this.widget.id);
+//
+//                if(store != undefined && cambiar == false){
+//
+//                    store = JSON.parse(store);
+//
+//                    this.widget = store[0];
+//                    var chart = store[1];
+//                    var table = store[2];
+//
+//                    // Mostrar chart c3
+//                    MostrarChart(this.widget.id ,JSON.stringify(chart[0]), JSON.stringify(chart[1]));
+//
+//                    //  cargar la tabla
+//                    if(this.widget.tipo_id != 3) {
+//                        this.cumplimiento = table.pop();
+//                        this.nombreTabla = table.pop();
+//                    }
+//                    this.tabla = table;
+//
+//                    return;
+//                }
 
 
                 utils.mostrarCargando(true);
@@ -571,10 +579,13 @@
                     dataType: 'json',
                     success: function (data) {
                         // sacamos el chart del Widget
-                        console.log(JSON.stringify(data));
+//                        console.log(JSON.stringify(data));
                         var grafica = data.pop();
                         var tablaResponse = data.pop();
 
+                        if(this.widget.tipo_id == 2){
+                            console.log(JSON.stringify(tablaResponse));
+                        }
                         // Mostrar chart c3
                         MostrarChart(this.widget.id ,JSON.stringify(grafica[0]), JSON.stringify(grafica[1]));
 
@@ -586,14 +597,14 @@
                         this.tabla = tablaResponse;
 
                         // guardamos en el localstore
-                        localStorage.setItem('wg'+this.widget.id, JSON.stringify([this.widget, grafica, tablaResponse]));
+//                        localStorage.setItem('wg'+this.widget.id, JSON.stringify([this.widget, grafica, tablaResponse]));
                         cambiar = false;
 
                         utils.mostrarCargando(false);
                         Notificion.success('Se actualizò el Widget '+ this.widget.id +' correctamente...')
                     }.bind(this), error: function (data) {
                         utils.mostrarCargando(false);
-                        Notificion.success('NO se actualizò el Widget '+this.widget.id +' correctamente...')
+                        Notificion.warning('NO se actualizò el Widget '+this.widget.id +' correctamente...')
                     }.bind(this)
                 });
 

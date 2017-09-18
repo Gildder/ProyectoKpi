@@ -16,7 +16,7 @@ use ProyectoKpi\Models\Evaluadores\Widget;
 use ProyectoKpi\Models\User;
 use stdClass;
 
-class EvaluadoresRepository extends BaseRepository
+class EvaluadoresRepository
 {
 
     /*contructores */
@@ -64,7 +64,6 @@ class EvaluadoresRepository extends BaseRepository
     {
         return \DB::select('call pa_evaluados_empleadosSemana(' . $indicador . ', ' . $usuario . ', ' . $anio . ', ' . $mes . ');');
     }
-
 
     /**
      * Retorna los datos de la eficacia por empleados, tareas y ticket

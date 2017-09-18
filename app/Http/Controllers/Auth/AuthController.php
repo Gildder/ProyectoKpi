@@ -107,13 +107,16 @@ class AuthController extends Controller
 //
 //        $result = $con->login_ldap($data['username'], $data['password']);
 //
-//        if($result != 0  || !empty($result) )
+//        // todo: corregir esta validacion de login por AD
+//        if(is_string($result))
 //        {
 //            /* obtnemos los parametros del formualario*/
 //            $request->request->set('password', '12345678');
+//        }else{
+//            $request->request->set('password', 'dfadfjfah!"#43SDF#$');
 //        }
-//
 //        $this->validateLogin($request);
+//
 //
 //        // If the class is using the ThrottlesLogins trait, we can automatically throttle
 //        // the login attempts for this application. We'll key this by the username and

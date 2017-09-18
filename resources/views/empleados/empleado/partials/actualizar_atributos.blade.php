@@ -1,3 +1,7 @@
+{{-- ColorPicker --}}
+<link rel="stylesheet" href="{{URL::asset('plugins/colorpicker/bootstrap-colorpicker.css')}}">
+<script src="{{URL::asset('plugins/colorpicker/bootstrap-colorpicker.js')}}"></script>
+
 <div class="form-group col-xs-12 col-sm-10 col-md-8">
 
 	<div class="row">
@@ -40,8 +44,14 @@
 		</div>
 	</div>
 
-	<div class=" row col-lg-12 breadcrumb"><b><i>Datos de Usuarios</i></b></div>
-
+	<div class=" row col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb"><b><i>Datos de Usuarios</i></b></div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <label>
+            <input type="checkbox" name="active" @if($empleado->active == 1) checked value="1" @endif id="active">
+            Activar Cuenta
+        </label>
+        <br><br>
+    </div>
 
 	<div class="row">
 		<div class="form-group col-xs-12 col-sm-6 col-md-5   @if ($errors->has('name')) has-error @endif ">
@@ -76,8 +86,44 @@
 		</div>
 	</div>
 
+    {{-- Verificar si es tecnico --}}
+    <div class="row" style="padding: 10px; margin-bottom: 20px;">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <label>Tecnico ID</label>   <small><i>Opcional</i></small>
+        </div>
+        <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4 @if ($errors->has('tecnico_id')) has-error @endif"   >
+            {{--<input type="number" name="tecnico_id" value="{{ ($empleado->tecnico_id != null)? $empleado->tecnico_id: '' }}" min="1" max="999" placeholder="ID de Tecnico" class="form-control">--}}
+            {!! form::text('tecnico_id',($empleado->tecnico_id != null)? $empleado->tecnico_id: null , ['id'=>'tecnico_id', 'class'=>'form-control', 'placeholder'=>'ID de Tecnico', 'maxlength'=>'50', 'type'=>'text']) !!}
+            @if ($errors->has('tecnico_id')) <p class="help-block">{{ $errors->first('tecnico_id') }}</p> @endif
+        </div>
+    </div>
 
-	<div class=" row col-lg-12 breadcrumb"><b><i>Datos de Localizaciones</i></b></div>
+	{{-- Color --}}
+	<div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		<label>Color: <input type="text" id="color" class="input-xs" name="color" style="background-color:@if(!isset($empleado->color))#FFFFff @else {{ $empleado->color }} @endif" readonly="true"></label>
+		<div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+			<ul class="fc-color-picker" id="color-chooser">
+                <li><a class="text-gray" href="#"><i class="fa fa-square"></i></a></li>
+                <li><a class="text-maroon" href="#"><i class="fa fa-square"></i></a></li>
+                <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
+				<li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
+				<a class="fa fa-square btn btn-default btn-sn"  id="color-chooser-btn">  Seleccionar Color</a>
+			</ul>
+
+		</div>
+	</div>
+
+
+	<div class=" row col-xs-12 col-sm-12 col-md-12 col-lg-12 breadcrumb"><b><i>Datos de Localizaciones</i></b></div>
 
 	{{-- Grupo Localizacion --}}
 	<div class="row">
@@ -153,12 +199,19 @@
 		</div>
 	</div>
 
+    {{-- Opciones --}}
+    <div class=" row col-lg-12 breadcrumb"><b><i>Opciones</i></b></div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <label>
+            <input type="checkbox" name="vacacion" id="vacacion" @if($empleado->vacacion == 1) checked value="1" @endif >
+            Activar Vacaciones
+        </label>
+    </div>
+
 </div>
 
 <script>
     $(document).ready(function(){
-
-
 
 		/* Evento en los item de select Grupo Departamento*/
         $('#grdepartamento').change(function(){
@@ -207,7 +260,6 @@
             });
         }
 
-
         function limpiarSelectLocalizacion(argument) {
             var msj = 'Seleccionar...';
             if (argument == '0') {
@@ -225,5 +277,37 @@
             $('#departamento').empty();
             $('#departamento').append("<option value='0'>"+msj+"</option>");
         }
+
+        var currColor = "#3c8dbc"; //Red by default
+        //Color chooser button
+        var colorChooser = $("#color-chooser-btn");
+        $("#color-chooser > li > a").click(function (e) {
+            e.preventDefault();
+            //Save color
+            currColor = rgb2hex($(this).css("color"));
+
+            //Add color effect to button
+            $('#color').val(currColor)
+            $('#color').css({"background-color": currColor, "color": currColor,"border-color": currColor});
+        });
+
+        $('#color-chooser-btn').colorpicker().on('changeColor', function(e) {
+            currColor = e.color.toString('hex');
+
+            //Add color effect to button
+            $('#color').val(currColor)
+            $('#color').css({"background-color": currColor, "color": currColor, "border-color": currColor});
+            $('#color-chooser-btn').css({"background-color": currColor,  "color": currColor, "border-color": currColor, "color": "#fff"});
+
+        });
+
+        function rgb2hex(rgb){
+            rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+            return (rgb && rgb.length === 4) ? "#" +
+                ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+                ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+                ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+        }
+
     });
 </script>

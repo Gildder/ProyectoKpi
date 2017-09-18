@@ -5,6 +5,7 @@ namespace ProyectoKpi\Models\Localizaciones;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Http\Controllers\Localizaciones\LocalizacionController;
 
 
 class Localizacion extends Model

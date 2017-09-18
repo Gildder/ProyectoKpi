@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         // Commands\Inspire::class,
          Commands\ImportarTicketCommand::class,
          Commands\ImportarTareasCommand::class,
+         Commands\actualizarEficienciaTareasCommand::class,
     ];
 
     /**
@@ -29,5 +30,6 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
          $schedule->command('whd:importarTicket '.date(strtotime('Y-m-d')))->everyMinute();
          $schedule->command('whd:importarTareas '.date(strtotime('Y-m-d')))->everyMinute();
+         $schedule->command('kpi:actualizarEficienciaTarea '.date(strtotime('Y-m-d')))->everyMinute();
     }
 }

@@ -18,9 +18,8 @@ class PreferenciasUsuario
     private $diaInicioParaTareaSigSemana;
 
 
-    public function __construct($user_id)
+    public function __construct()
     {
-        $this->inicializar($user_id);
     }
 
     public function get($atributo)
@@ -32,7 +31,7 @@ class PreferenciasUsuario
     {
         $usuario = \DB::table('users')
             ->select('users.evaluado_por')
-                ->where('id', $user_id)
+            ->where('id', $user_id)
             ->first();
 
         if(isset($usuario->evaluado_por)){
@@ -43,11 +42,13 @@ class PreferenciasUsuario
 //            dd($preferencias);
 
             $this->verFechasEstimadas = $preferencias->verFechasEstimadas;
-            $this->dialimiteParaBorrarTareas = $preferencias->dialimiteParaBorrarTareas;
+            $this->diaLimiteParaBorrarTareas = $preferencias->dialimiteParaBorrarTareas;
             $this->diaInicioParaTareaSigSemana = $preferencias->diaInicioParaTareaSigSemana;
         }else{
             $this->verFechasEstimadas = 1;
         }
+
+
     }
 
 }

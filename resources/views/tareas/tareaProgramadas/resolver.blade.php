@@ -63,13 +63,14 @@
             @else
                 valor="{{ old('fechaInicioSolucion') }}"
             @endif
-            placeholder="Fecha de inicio"
+            placeholder="Fecha de inicio"   diaInicio="{{ \Cache::get('diainicio') }}"
             fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
             fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
         </input-date>
 
         <input-date tipo="text" nombre="fechaInicioSolucion"  v-if="utilizarfechasestimadas == true" readonly="true"
                     {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}"--}}
+                    diaInicio="{{ \Cache::get('diainicio') }}"
                     valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}" placeholder="Comienzo"
                     fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
                     fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
@@ -94,13 +95,14 @@
                 @else
                     valor="{{ old('fechaFinSolucion') }}"
                 @endif
-                placeholder="Fecha finalizacion"
+                placeholder="Fecha finalizacion"   diaInicio="{{ \Cache::get('diainicio') }}"
                 fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
                 fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
             </input-date>
 
             <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == true" readonly="true"
                         {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}"--}}
+                        diaInicio="{{ \Cache::get('diainicio') }}"
                         valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}" placeholder="Comienzo"
                         fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
                         fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >

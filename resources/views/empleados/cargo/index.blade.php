@@ -22,9 +22,7 @@
         <a  href="{{route('empleados.cargo.create')}}" class="btn btn-primary btn-sm" title="Nuevo"><span class="fa fa-plus">  </span>   <b>Nuevo</b></a>
       </div>
       <div class="text-right col-xs-6 col-sm-6 col-md-6 col-lg-6" tabindex="2" >
-        {{-- Importar --}}
-        <a  href="#" class="btn btn-info btn-sm"  title="Exportar"><span class="fa  fa-archive"></span>  <b></b></a>
-        <a  href="#" class="btn btn-success btn-sm"  title="Importar"><span class="fa  fa-archive"></span>  <b></b></a>
+
         <a  href="{{route('empleados.cargo.eliminados')}}" class="btn btn-danger btn-sm"  title="Eliminados"><span class="fa  fa-trash"></span>  <b></b></a>
       </div>
     </div>

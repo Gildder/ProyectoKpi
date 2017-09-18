@@ -1,4 +1,4 @@
-<div class="table-response">
+<div class="table-responsive">
 	<table id="myTable" class="table table-striped table-responsive table-bordered table-condensed table-hover">
 		<thead>
 			<th>id</th>
@@ -10,6 +10,19 @@
 			<th>Localizaciones</th>	
 			<th>Departamentos</th>	
 		</thead>
+
+		{{--<tfoot>--}}
+			{{--<tr>--}}
+				{{--<th>id</th>--}}
+				{{--<th>Usuario</th>--}}
+				{{--<th>Correo</th>--}}
+				{{--<th>Codigo</th>--}}
+				{{--<th>Nombre Completo</th>--}}
+				{{--<th>Cargo</th>--}}
+				{{--<th>Localizaciones</th>--}}
+				{{--<th>Departamentos</th>--}}
+			{{--</tr>--}}
+		{{--</tfoot>--}}
 
 		<tbody>
 		@foreach($empleados as $empleado)

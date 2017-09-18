@@ -4,6 +4,9 @@
 body {
   padding: 0px;
 }
+body a {
+  color: #1c2529;
+}
 .fechaTareas {
   font-size: 14px;
   color: #b22222;

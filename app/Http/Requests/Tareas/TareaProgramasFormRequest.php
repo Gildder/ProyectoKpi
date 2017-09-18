@@ -39,12 +39,13 @@ class TareaProgramasFormRequest extends Request
             $estado = '';
         }
         return [
-                'descripcion'=>'required|min:5|max:60',
+                'descripcion'=>'required|min:5|max:120',
                 'fechaInicioEstimado' => $fechaInicioEstimado,
                 'fechaFinEstimado' => $fechaFinEstimado,
                 'hora'=> 'required',
                 'estado'=> $estado,
-                'minuto'=> 'required'
+                'minuto'=> 'required',
+                'observaciones'=>'max:120',
         ];
     }
 
@@ -53,7 +54,7 @@ class TareaProgramasFormRequest extends Request
         return [
             'descripcion.required' => 'La descripcion es requerida!',
             'descripcion.min' => 'Este campo no puede tener menos de 5 carácteres',
-            'descripcion.max' => 'Este campo no puede tener más de 60 carácteres',
+            'descripcion.max' => 'Este campo no puede tener más de 120 carácteres',
             'fechaInicioEstimado.required' => 'Este campo es requerido!',
             'fechaInicioEstimado.date_format' => 'El formato es dd/mm/aaaa',
             'fechaInicioEstimado.before_equal' => 'La fecha inicio debe ser menor o igual a la fecha fin',
@@ -62,6 +63,7 @@ class TareaProgramasFormRequest extends Request
             'fechaFinEstimado.after_equal' => 'La fecha fin debe ser mayor o igual a la fecha comienzo',
             'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El minuto es requerido',
+            'observaciones.max' => 'Este campo no puede tener mas de 120 carácteres',
         ];
     }
 }

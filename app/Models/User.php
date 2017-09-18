@@ -3,9 +3,10 @@
 namespace ProyectoKpi\Models;
 
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use ProyectoKpi\Cms\Repositories\EmpleadoRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
-use ProyectoKpi\Cms\repositories\UserRepository;
 use Adldap\Laravel\Traits\AdldapUserModelTrait;
 
 class User extends Authenticatable
@@ -19,13 +20,17 @@ class User extends Authenticatable
     * @var array
     */
     protected $table = 'users';
+
+    use softDeletes;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id','name', 'email', 'state',  'active',  'type', 'hasRelation','codigo','nombres', 'apellidos', 'departamento_id', 'localizacion_id','cargo_id', 'is_supervisor', 'is_evaluador', 'has_indicador', 'tecnico_id', 'evaluado_por', 'evaluador_id'
+        'id','name', 'email', 'state','color','vacacion',  'active',  'type', 'hasRelation','codigo','nombres', 'tecnico_id',
+        'apellidos', 'departamento_id', 'localizacion_id','cargo_id', 'is_supervisor', 'is_evaluador',
+        'has_indicador', 'tecnico_id', 'evaluado_por', 'evaluador_id'
     ];
 
     /**
@@ -126,6 +131,5 @@ class User extends Authenticatable
     {
         return IndicadorRepository::getGraficoIndicador($emp_id, $ind_id);
     }
-
 
 }

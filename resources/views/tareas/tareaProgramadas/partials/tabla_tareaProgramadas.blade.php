@@ -19,8 +19,8 @@ $(document).ready(function() {
 				<th>Fecha Fin Ejecucion </th>
 				<th>Tiempo Ejecucion</th>
 				<th>Estado</th>
-				<th>Observacion</th>
 				<th>Ubicaciones</th>
+				<th>Observacion</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -35,14 +35,14 @@ $(document).ready(function() {
 	<td>{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}</td>
 	<td> {{$tarea->tiempoSolucion}}</td>
 	<td> <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label> </td>
-	<td>{{$tarea->getObservacion() }}</td>
 	<td>
-		<ul style="padding: 10px;">
+		<ul style="padding: 1px;">
 		@foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
-			<li>{{ $ubicacion->nombre }} </li>
+			<li style="padding: 0;">{{ $ubicacion->nombre }} </li>
 		@endforeach
 		</ul>
 	</td>
+	<td>{{$tarea->getObservacion() }}</td>
 </tr>
 @endforeach
 		</tbody>

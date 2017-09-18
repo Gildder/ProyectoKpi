@@ -2,6 +2,7 @@
 
 namespace ProyectoKpi\Providers;
 
+use DateTime;
 use Illuminate\Support\ServiceProvider;
 
 use Validator;
@@ -17,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Validator::extend('before_equal', function($attribute, $value, $parameters, $validator) {
             $fechaFin = $validator->getData()[$parameters[0]];
-            if($fechaFin >= $value){
+
+            if(\Calcana::compararFechas($value, $fechaFin)<= 0){
                 return true;
             }else{
                 return false;
@@ -26,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('after_equal', function($attribute, $value, $parameters,$validator) {
             $fechaInicio = $validator->getData()[$parameters[0]];
-            if($fechaInicio <= $value){
+            /**dd($fechaInicio, $value);*/
+            if(\Calcana::compararFechas($fechaInicio, $value)<= 0){
                 return true;
             }else{
                 return false;

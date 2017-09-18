@@ -15,11 +15,11 @@
     </section>
 
     <section class="content" id="contenedor-dashboard">
-        <div class="row">
+        {{--<div class="row">--}}
           {{-- Inicio Panel Tipo Indicadores Ponderacion --}}
-            @include('evaluadores.evaluados.dashboard.partials.ponderacionTipo')
+            {{--@include('evaluadores.evaluados.dashboard.partials.ponderacionTipo')--}}
           {{-- Fin Panel Tipo Indicadores --}}
-        </div>
+        {{--</div>--}}
 
         {{-- Contenedor  de Widget --}}
         <div class="">
@@ -35,11 +35,11 @@
         </div>
         {{-- Fin de Tipo de Indicadores --}}
 
-    <div>
-        <!-- Panel de Escalas-->
-        @include('evaluadores.evaluados.dashboard.partials.EscalasEvaluadores')
+    {{--<div>--}}
+        {{--<!-- Panel de Escalas-->--}}
+        {{--@include('evaluadores.evaluados.dashboard.partials.EscalasEvaluadores')--}}
         {{-- Fin Panel Escalas --}}
-    </div>
+    {{--</div>--}}
 
 
     </section>

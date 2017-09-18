@@ -6,7 +6,6 @@
 
 @section('content')
 
-    {{-- ColorPicker --}}
     <link rel="stylesheet" href="{{URL::asset('plugins/colorpicker/bootstrap-colorpicker.css')}}">
     <script src="{{URL::asset('plugins/colorpicker/bootstrap-colorpicker.js')}}"></script>
 
@@ -26,61 +25,19 @@
         <div class="col-md-3">
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h4 class="box-title">Lista de Tareas</h4>
+                    <h4 class="box-title">Estados de Tareas</h4>
                 </div>
                 <div class="box-body">
                     <!-- the events -->
-                    <div id="external-events">
-                        <div class="external-event bg-green">Lunch</div>
-                        <div class="external-event bg-yellow">Go home</div>
-                        <div class="external-event bg-aqua">Do homework</div>
-                        <div class="external-event bg-blue">Work on UI design</div>
-                        <div class="external-event bg-red">Sleep tight</div>
-                        <div class="checkbox">
-                            <label for="drop-remove">
-                                <input type="checkbox" id="drop-remove">
-                                Eliminar al Desplazar
-                            </label>
-                        </div>
+                    <div id="external-events" >
+                        @foreach($estados as $estado)
+                            <div class="external-event col-xs-4 col-sm-3 col-md-3 col-lg-12"
+                             style="background-color: {{ $estado->color }};
+                                     color: {{ $estado->texto }}">{{ $estado->nombre }}</div>
+                        @endforeach
                     </div>
                 </div>
                 <!-- /.box-body -->
-            </div>
-            <!-- /. box -->
-            <div class="box box-solid">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Crear Tarea</h3>
-                </div>
-                <div class="box-body">
-                    <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-                        <button type="button" id="color-chooser-btn" class="btn btn-default btn-block">Seleccionar Color</button>
-                        <ul class="fc-color-picker" id="color-chooser">
-                            <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
-                            <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
-                        </ul>
-                    </div>
-                    <!-- /btn-group -->
-                    <div class="input-group">
-                        <input id="new-event" type="text" class="form-control" placeholder="Titulo de Tarea">
-
-                        <div class="input-group-btn">
-                            <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Agregar</button>
-                        </div>
-                        <!-- /btn-group -->
-                    </div>
-                    <!-- /input-group -->
-                </div>
             </div>
         </div>
         <!-- /.col -->
@@ -92,24 +49,11 @@
                 </div>
                 <!-- /.box-body -->
             </div>
+            @include('calendario/empleado/tarea_modal')
             <!-- /. box -->
         </div>
         <!-- /.col -->
     </div>
-
-
-
-                    {{--Formularios de Tarea--}}
-                    {{-- Crear tareas --}}
-                    {!! Form::open(['route'=>'calendario.empleado.guardarTarea', 'method'=>'POST']) !!}
-                    {!! Form::close() !!}
-                    {{-- Crear tareas --}}
-                    {!! Form::open(['route'=>'calendario.empleado.guardarTarea', 'method'=>'POST']) !!}
-                    {!! Form::close() !!}
-                    {{--Fin de Formularios--}}
-
-
-
     <!-- fullCalendar 2.2.5 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
     <script src="{{URL::asset('plugins/fullcalendar/fullcalendar.min.js')}}"></script>
@@ -117,11 +61,11 @@
 
     <script>
         $(document).ready(function() {
-//            var utils = import('/utils.js');
             var Notificion = new Alert('#notificacion');
 
         $(function () {
-
+            var tooltip = '';
+            var modal = '';
             /* initialize the external events
              -----------------------------------------------------------------*/
             function ini_events(ele) {
@@ -135,13 +79,6 @@
 
                     // store the Event Object in the DOM element so we can get to it later
                     $(this).data('eventObject', eventObject);
-
-                    // make the event draggable using jQuery UI
-                    $(this).draggable({
-                        zIndex: 1070,
-                        revert: true, // will cause the event to go back to its
-                        revertDuration: 0  //  original position after the drag
-                    });
 
                 });
             }
@@ -157,15 +94,16 @@
                 y = date.getFullYear();
             $('#calendar').fullCalendar({
                 header: {
-                    left: 'prev,next today',
+                    left: 'prev,next today, listMonth',
                     center: 'title',
-                    right: 'month,basicWeek,basicDay',
+                    right: 'month, basicWeek, basicDay',
                 },
                 buttonText: {
                     today: 'Hoy',
                     month: 'Mes',
                     week: 'Semana',
-                    day: 'Dia'
+                    day: 'Dia',
+                    list: 'Lista'
                 },
 
                 /* traduccion de los textos */
@@ -179,213 +117,106 @@
                 firstDay: 1,
                 businessHours: true, // display business hours
                 navLinks: true, // can click day/week names to navigate views
-                editable: true,
                 eventLimit: true, // allow "more" link when too many events
-                droppable: true, // this allows things to be dropped onto the calendar !!!
-
                 //Obteniendo las tareas
                 events: { url: 'cargarTareas'},
 
-                drop: function (date, allDay) { // this function is called when something is dropped
+                eventMouseover: function (data, event, view) {
+                    var start = data.start.format('DD/MM/YYYY');
+                    var back = LightenDarkenColor(data.backgroundColor, 90);
+                    var hora = data.hora;
+                    var end = convertDateFormat(data.fin);
 
-                    // retrieve the dropped element's stored Event Object
-                    var originalEventObject = $(this).data('eventObject');
+                    tooltip =
+                        "<div id='tooltip' class=\'tooltipevent\' style=\'width:200px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:"+data.backgroundColor +"; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>"+data.nro +"</span></label></center>" +
+                        "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" +
+                        "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" +
+                        "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
 
-                    // we need to copy it, so that multiple events don't have a reference to the same object
-                    var copiedEventObject = $.extend({}, originalEventObject);
-
-                    allDay = true;
-
-                    // assign it the date that was reported
-                    copiedEventObject.start = date;
-                    copiedEventObject.allDay = allDay;
-                    copiedEventObject.backgroundColor = $(this).css("background-color");
-                    copiedEventObject.borderColor = $(this).css("border-color");
-
-                    // render the event on the calendar
-                    // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                    $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-
-                    // is the "remove after drop" checkbox checked?
-                    if ($('#drop-remove').is(':checked')) {
-                        // if so, remove the element from the "Draggable Events" list
-                        $(this).remove();
-                    }
-
-                    /* guardamos el evento creado en la Base de datos */
-                    /* objeto Tarea */
-                    var tarea = new Object();
-
-                    console.log(copiedEventObject);
-
-                    tarea.titulo = copiedEventObject.title;
-                    tarea.fechaInicio = copiedEventObject.start.format('YYYY-MM-DD HH:mm');
-                    tarea.color = copiedEventObject.backgroundColor;
-                    tarea.todoeldia = allDay;
-
-                    if(allDay){
-                        tarea.fechaFin = copiedEventObject.start.format('YYYY-MM-DD HH:mm');
-                    }
-
-
-                    /* Guardamos Tarea Comunes */
-                    $.ajax({
-                        url: 'guardarTarea',
-                        method: 'POST',
-                        data: tarea,
-                        dataType: 'json',
-                        success: function (data) {
-                            /* relanzar todas las tareas de Full Calendario */
-                            copiedEventObject.re
-                            $('#calendar').fullCalendar('rerenderEvents');
-                            $('#calendar').fullCalendar('refetchEvents');
-
-                            Notificion.success('La Tarea se guardo correctamente...')
-                        }.bind(this), error: function (data) {
-                            Notificion.warning('La Tarea NO se guardó correntamente')
-                        }.bind(this)
+                    $('body').append(tooltip);
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $('.tooltipevent').fadeIn('500');
+                        $('.tooltipevent').fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $('.tooltipevent').css('top', e.pageY + 10);
+                        $('.tooltipevent').css('left', e.pageX + 20);
                     });
                 },
-                eventReceive: function(event){
-                    var title = event.title;
-                    var start = event.start.format("YYYY-MM-DD[T]HH:MM:SS");
-                    $.ajax({
-                        url: 'process.php',
-                        data: 'type=new&title='+title+'&startdate='+start+'&zone='+zone,
-                        type: 'POST',
-                        dataType: 'json',
-                        success: function(response){
-                            event.id = response.eventid;
-                            $('#calendar').fullCalendar('updateEvent',event);
-                        },
-                        error: function(e){
-                            console.log(e.responseText);
-                        }
-                    });
-                    $('#calendar').fullCalendar('updateEvent',event);
+                eventMouseout: function (data, event, view) {
+                    $(this).css('z-index', 8);
+                    $('.tooltipevent').remove();
                 },
-                /* evento para tomar las rango de horas */
-                eventResize: function(event) {
-                    var tarea = new Object();
-
-                    tarea.id = event.id;
-                    tarea.titulo = event.title;
-                    tarea.fechaInicio = event.start.format('YYYY-MM-DD HH:mm');
-                    tarea.color = event.backgroundColor;
-                    tarea.allDay = event.allDay;
-
-                    if(event.end){
-                        tarea.fechaFin = event.end.format('YYYY-MM-DD HH:mm');
-                    }else {
-                        tarea.fechaFin = 'NULL';
-                    }
-
-                    console.log(tarea);
-
-                    /* Metodos para actualizar fecha de finalizacion de una tarea */
-                    $.ajax({
-                        url: 'actualizarTareaHora',
-                        method: 'POST',
-                        data: tarea,
-                        dataType: 'json',
-                        success: function (data) {
-                            Notificion.success('La Tarea se actualizo correctamente...')
-                        }.bind(this), error: function (data) {
-                            console.log(data.err);
-                            Notificion.warning('La Tarea NO se guardó correntamente')
-                        }.bind(this)
-                    });
-                },
-                eventDrop: function (event, delta) {
-                    var tarea = new Object();
-
-                    tarea.id = event.id;
-                    tarea.titulo = event.title;
-                    tarea.fechaInicio = event.start.format('YYYY-MM-DD HH:mm');
-                    tarea.color = event.backgroundColor;
-                    tarea.allDay = event.allDay;
-
-                    if(event.end){
-                        tarea.fechaFin = event.end.format('YYYY-MM-DD HH:mm');
-                    }else {
-                        tarea.fechaFin = 'NULL';
-                    }
-
-                    console.log(tarea);
-
-                    /* Metodos para actualizar fecha de finalizacion de una tarea */
-                    $.ajax({
-                        url: 'actualizarTareaHora',
-                        method: 'POST',
-                        data: tarea,
-                        dataType: 'json',
-                        success: function (data) {
-                            Notificion.success('La Tarea se actualizo correctamente...')
-                        }.bind(this), error: function (data) {
-                            console.log(data.err);
-                            Notificion.warning('La Tarea NO se guardó correntamente')
-                        }.bind(this)
-                    });
+                dayClick: function (date, allDay, jsEvent, view) {
+//                    tooltip.hide();
+                    $('#tooltip').hide();
                 },
 
-            });
+                eventClick: function(data, jsEvent, view) {
+                    var start = data.start.format('DD/MM/YYYY');
+                    var back = LightenDarkenColor(data.backgroundColor, 90);
+                    var hora = data.hora;
+                    var end = convertDateFormat(data.fin);
 
-            /* ADDING EVENTS */
-            var currColor = "#3c8dbc"; //Red by default
-            //Color chooser button
-            var colorChooser = $("#color-chooser-btn");
-            $("#color-chooser > li > a").click(function (e) {
-                e.preventDefault();
-                //Save color
-                currColor = $(this).css("color");
-                //Add color effect to button
-                $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
-            });
+                    console.log(data);
 
-            $('#color-chooser-btn').colorpicker().on('changeColor', function(e) {
-                currColor = e.color.toString('rgba');
-                //Add color effect to button
-                $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
-                $('#color-chooser-btn').css({"background-color": currColor, "border-color": currColor, "color": "#fff"});
+                    $('#modal-tarea-Calendario').modal("show");
+                    $('#modalTareaTitle').html(data.title);
+                    $('#modalTareaNro').html(data.numero);
+                    $('#idTarea').html(data.id);
+                    $('#modalTareaDesc').html(data.descrip);
+                    $('#modalTareaFchIn').html(start);
+                    $('#modalTareaFchFn').html(end);
+                    $('#modalTareaTmp').html(data.hora);
+                    $('#modalTareaStd').html(data.estado);
+                    $('#modalTareaStd').css('background',data.backgroundColor );
+                    $('#modalTareaStd').css('color',data.textColor );
 
-            });
-
-
-            $("#add-new-event").click(function (e) {
-                e.preventDefault();
-                //Get value and make sure it is not null
-                var val = $("#new-event").val();
-                if (val.length == 0) {
-                    return;
+                    var pathname = window.location.host+'/tareas/tareaProgramadas/' + data.id;
+                    $('#verDetalleTarea').attr('action','');
+                    $('#verDetalleTarea').attr('action',pathname);
                 }
 
-                //Create events
-                var event = $("<div />");
-                event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"})
-                    .addClass("external-event");
-                event.html(val);
-                $('#external-events').prepend(event);
-
-                //Add draggable funtionality
-                ini_events(event);
-
-                //Remove event from text input
-                $("#new-event").val("");
             });
-
-
-
         });
 
+        function convertDateFormat(string) {
+            var info = string.split('-');
+            return info[2] + '/' + info[1] + '/' + info[0];
+        }
 
+        function LightenDarkenColor(col, amt) {
+
+            var usePound = false;
+
+            if (col[0] == "#") {
+                col = col.slice(1);
+                usePound = true;
+            }
+
+            var num = parseInt(col,16);
+
+            var r = (num >> 16) + amt;
+
+            if (r > 255) r = 255;
+            else if  (r < 0) r = 0;
+
+            var b = ((num >> 8) & 0x00FF) + amt;
+
+            if (b > 255) b = 255;
+            else if  (b < 0) b = 0;
+
+            var g = (num & 0x0000FF) + amt;
+
+            if (g > 255) g = 255;
+            else if (g < 0) g = 0;
+
+            return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
+
+        }
 
     });
 
     </script>
-    <style>
-        a{
-            color: #1c2529;
-        }
-    </style>
 @endsection
 

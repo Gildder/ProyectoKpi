@@ -13,7 +13,7 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
-           @if( \Usuario::get('isEvaluador'))
+          @if( \Usuario::get('isEvaluador'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados/dashboard') }}" >
@@ -23,28 +23,17 @@
           </li>
           @endif
 
-
-          {{--@if( \Usuario::get('isEvaluador'))--}}
-          {{--<!-- Messages: style can be found in dropdown.less-->--}}
-          {{--<li class="dropdown messages-menu">--}}
-          {{--<a href="{{url('evaluadores/evaluados/index') }}" >--}}
-              {{--<i class="fa fa-users"></i>--}}
-              {{--<label for="Tareas" class="hidden-xs">Mis Evaluados</label>--}}
-            {{--</a>--}}
-          {{--</li>--}}
-          {{--@endif--}}
-
-          @if(\Usuario::get('isSupervisor')))
+          @if(\Usuario::get('isSupervisor'))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >
               <i class="fa fa-binoculars"></i>
-              <label for="Tareas" class="hidden-xs">Supervisiones</label>
+              <label for="Tareas" class="hidden-xs">Supervisar</label>
             </a>
           </li>
           @endif
 
-          @if(\Usuario::is_indicador(1))
+          @if(\Usuario::is_indicador(1) == true)
             <!-- Messages: style can be found in dropdown.less-->
             <li class="dropdown messages-menu">
             <a href="{{url('tareas/tareaProgramadas')}}" >

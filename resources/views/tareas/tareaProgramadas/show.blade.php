@@ -28,7 +28,7 @@
 			</div>
 	</div>
 	<div class="panel-footer text-right">
-		@if($tarea->estadoTarea_id != 3)
+		@if($tarea->estado_id != 3)
 			{{-- <a href="{{route('tareas.tareaProgramadas.edit', $tarea->id)}}" class="btn btn-primary btn-sm"><span class="fa fa-ok text-left"></span><b> Solucion</b> </a> --}}
 			<a  href="{{route('tareas.tareaProgramadas.resolver', $tarea->id)}}"
 				class="btn btn-success btn-sm" @click="mostrarModalLoading()"

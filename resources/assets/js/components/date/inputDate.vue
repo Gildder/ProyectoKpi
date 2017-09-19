@@ -3,8 +3,10 @@
         <div class="input-group-addon row">
             <i class="fa fa-calendar"></i>
         </div>
-        <input type="{{ tipo }}" id="inputdate-{{ nombre }}" value="{{ valor }}" readonly="{{ readonly}}"
-               placeholder="{{ placeholder }}" class="form-control" name="{{ nombre }}" required>
+        <input type="{{ tipo }}" id="inputdate-{{ nombre }}" value="{{ valor }}"
+               readonly="{{ readonly}}"
+               placeholder="{{ placeholder }}"
+               class="form-control" name="{{ nombre }}" required>
     </div>
 </template>
 
@@ -23,6 +25,7 @@
             placeholder:{type:String, required: true},
             readonly:{type:String, default: false},
             valor:{type:String, required: true},
+            diainicio:{type:String, required: true},
             diainicio:{type:String, required: true},
         },
         ready: function () {
@@ -88,7 +91,6 @@
                         }
                     }
                 }
-                console.log([isd]);
                 return [isd];
             },
             isSemanaTieneFinMes: function () {
@@ -98,15 +100,14 @@
                 var mesInicio = parseInt(arrayFechaInicio[1]);
                 var mesFin = parseInt(arrayFechaFin[1]);
                 if(mesInicio !== mesFin){
-                    console.log(2);
                     return 2;
                 }else{
-                    console.log(1);
-
                     return 1;
                 }
-            }
+            },
+            validarFecha: function () {
 
+            }
 
         },
 

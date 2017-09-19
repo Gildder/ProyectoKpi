@@ -12,7 +12,7 @@ $(document).ready(function() {
     var vm;
 
 
-    var utils = require('./utils.js');
+    var utils = require('./helper/utils.js');
     Vue.use(require('vue-resource'));
 
 
@@ -58,10 +58,129 @@ $(document).ready(function() {
         require('./components/supervisores/tareas/filtro.vue')
     );
 
+    /* tareas programadas */
+    Vue.component('tabla-tarea',
+        require('./components/tareas/tabla/tabla.vue')
+    );
+
     //noinspection JSAnnotator
     /**
      * Creacion de VueJS
      */
+
+    var vmTarea = new Vue({
+        el: '#tareaNormales',
+        data: {
+            showTarea: false,
+            showTareaAgenda: false,
+            tareas: [],
+            tarea: {
+                descripcion:'',
+                fechaInicio: '',
+                fechaFin: '',
+                hora: '',
+                minuto:''
+            },
+            tareasAgenda: [],
+            tareasArchivo: [],
+            semanas: '',
+        },
+        computed:{
+            cmpShowTarea: function () {
+                return this.showTarea;
+            }
+        },
+        ready: function() {
+            this.hasNuevaTarea();
+        },
+        methods: {
+            obtenerTareas: function () {
+                $.ajax({
+                    url: 'tareas/tareaProgramadas/listaTareas',
+                    method:'POST',
+                    dataType:'json',
+                    success: function (data) {
+                        vmTarea.tareas = data.tareas;
+
+                        vmTarea.semanas = data.semanas;
+                    }
+                })
+            },
+            guardarTarea: function () {
+                alert('Hola' );
+            },
+            /******************** Metodos de la Vista **********************/
+            evenNuevaTarea: function () {
+                $('#submenu').toggle(300);
+                $('#nuevaTarea').toggle(500);
+
+                this.showTarea= ! this.showTarea;
+            },
+            evenNuevaTareaAgenda: function () {
+                $('#submenuagenda').toggle(300);
+                $('#nuevaTareaAgenda').toggle(500);
+
+                this.showTareaAgenda= ! this.showTareaAgenda;
+            },
+            newTarea: function () {
+                this.tarea.descripcion = '';
+                this.tarea.fechaInicio = '';
+                this.tarea.fechaFin = '';
+                this.tarea.hora = '0';
+                this.tarea.minuto = '0';
+            },
+            hasNuevaTarea: function () {
+                let cache = localStorage.getItem('showTarea');
+                let cacheAgenda = localStorage.getItem('showTarea');
+
+                if(cache !== undefined || cache !== null){
+                    this.showTarea = cache;
+                }else {
+                    this.showTarea = false;
+                }
+
+                if(cacheAgenda !== undefined || cacheAgenda !== null){
+                    this.showTareaAgenda = cacheAgenda;
+                }else {
+                    this.showTareaAgenda = false;
+                }
+            },
+            /* Permite mostra la vista de Nueva Tarea */
+            showNuevaTarea: function ($event) {
+                $event.preventDefault();
+
+                this.evenNuevaTarea();
+                this.newTarea();
+
+
+            },
+            /* Permite mostra la vista de Nueva Tarea */
+            showNuevaTareaAgenda: function ($event) {
+                $event.preventDefault();
+
+                this.evenNuevaTareaAgenda();
+                this.newTarea();
+
+
+            },
+
+            hideNuevaTarea: function ($event) {
+                $event.preventDefault();
+                localStorage.removeItem('showTarea');
+
+                this.evenNuevaTarea();
+                this.evenNuevaTareaAgenda();
+            },
+
+            hideNuevaTareaAgenda: function ($event) {
+                $event.preventDefault();
+                localStorage.removeItem('showTarea');
+
+                this.evenNuevaTareaAgenda();
+            }
+
+        }
+    });
     vm = new Vue({
         el: 'body',
         data: {

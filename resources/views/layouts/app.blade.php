@@ -19,8 +19,6 @@
 
     <!-- My style -->
     <link rel="stylesheet" href="{{URL::asset('dist/css/estilo.css')}}">
-    {{-- Loading --}}
-    <link rel="stylesheet" href="{{URL::asset('dist/css/loading.css')}}">
 
     <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">
@@ -89,6 +87,11 @@
     @endif
     <div id="notificacion">
     </div>
+    <div class="row">
+        {{--              @include('partials/loading/loading')--}}
+
+        <loading-comp></loading-comp>
+    </div>
     <!-- Main content -->
     <section class="content">
           @if(session('success'))
@@ -99,9 +102,7 @@
 
           @yield('content')
 
-          <div class="row">
-              @include('partials/loading/loading')
-          </div>
+
     </section>
     <!-- /.content -->
 

@@ -1,5 +1,6 @@
 * {
   padding: 0px;
+  margin: 1px solid #f00;
 }
 body {
   padding: 0px;
@@ -38,13 +39,6 @@ body a {
   left: 50%;
   width: 500px;
   margin-left: -250px;
-}
-#loading {
-  z-index: 999999;
-  position: absolute;
-  bottom: 50px;
-  left: 50%;
-  width: 10px;
 }
 .barraEvaluador {
   margin-top: 5px;

@@ -6,7 +6,7 @@ namespace ProyectoKpi\Models\Indicadores;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use ProyectoKpi\Models\Empleados\Cargo;
+use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 
 
 class Indicador extends Model
@@ -15,8 +15,10 @@ class Indicador extends Model
     protected $table = "indicadores";
     protected $primarykey = "id";
 
-    use SoftDeletes;
     public $timestamps = true;
+
+    use SoftDeletes;
+    use IndicadorRepository;
 
     /**
      * The attributes that should be mutated to dates 
@@ -73,20 +75,5 @@ class Indicador extends Model
     {
         return $this->hasMany('ProyectoKpi\Models\Indicadores\EficaciaIndicador', 'indicador_id', 'id');
     }
-
-    /* Metodo Repsoitorio */
-    public static function getCargos($id, $evaluador_id)
-    {   
-        $cargosindicadores = Cargo::select('cargos.*')
-                ->join('indicador_cargos','indicador_cargos.cargo_id','=', 'cargos.id')
-                ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
-                ->where('indicadores.id',$id)
-                ->where('indicador_cargos.evaluadorIndicador_id',$evaluador_id)
-                ->get();
-
-        return $cargosindicadores;
-    }
-
-   
 
 }

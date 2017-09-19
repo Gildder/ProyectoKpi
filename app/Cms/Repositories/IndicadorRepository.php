@@ -16,16 +16,8 @@ use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\EficienciaIndicadorRepository;
 use ProyectoKpi\Models\User;
 
-class IndicadorRepository
+trait IndicadorRepository
 {
-    /*contructores */
-    public function __construct()
-    {
-    }
-
-
-    /* Metodos */
-
     /**
      * Retorn la lista de indicadores para un Empleado
      * @param $id
@@ -140,6 +132,19 @@ class IndicadorRepository
         }
         return $indicador;
     }
+
+    public static function getCargos($id, $evaluador_id)
+    {
+        $cargosindicadores = Cargo::select('cargos.*')
+            ->join('indicador_cargos','indicador_cargos.cargo_id','=', 'cargos.id')
+            ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
+            ->where('indicadores.id',$id)
+            ->where('indicador_cargos.evaluadorCargo_id',$evaluador_id)
+            ->get();
+
+        return $cargosindicadores;
+    }
+
 
 
 }

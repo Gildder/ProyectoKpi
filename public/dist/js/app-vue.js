@@ -12334,7 +12334,7 @@ $(document).ready(function () {
     var resourceWidget;
     var vm;
 
-    var utils = require('./utils.js');
+    var utils = require('./helper/utils.js');
     Vue.use(require('vue-resource'));
 
     // Componentes VueJS
@@ -12359,10 +12359,123 @@ $(document).ready(function () {
     // componente de busquedas de ticket  supervisores
     Vue.component('tarea-filtro-supervisores', require('./components/supervisores/tareas/filtro.vue'));
 
+    /* tareas programadas */
+    Vue.component('tabla-tarea', require('./components/tareas/tabla/tabla.vue'));
+
     //noinspection JSAnnotator
     /**
      * Creacion de VueJS
      */
+
+    var vmTarea = new Vue({
+        el: '#tareaNormales',
+        data: {
+            showTarea: false,
+            showTareaAgenda: false,
+            tareas: [],
+            tarea: {
+                descripcion: '',
+                fechaInicio: '',
+                fechaFin: '',
+                hora: '',
+                minuto: ''
+            },
+            tareasAgenda: [],
+            tareasArchivo: [],
+            semanas: ''
+        },
+        computed: {
+            cmpShowTarea: function cmpShowTarea() {
+                return this.showTarea;
+            }
+        },
+        ready: function ready() {
+            this.hasNuevaTarea();
+        },
+        methods: {
+            obtenerTareas: function obtenerTareas() {
+                $.ajax({
+                    url: 'tareas/tareaProgramadas/listaTareas',
+                    method: 'POST',
+                    dataType: 'json',
+                    success: function success(data) {
+                        vmTarea.tareas = data.tareas;
+
+                        vmTarea.semanas = data.semanas;
+                    }
+                });
+            },
+            guardarTarea: function guardarTarea() {
+                alert('Hola');
+            },
+            /******************** Metodos de la Vista **********************/
+            evenNuevaTarea: function evenNuevaTarea() {
+                $('#submenu').toggle(300);
+                $('#nuevaTarea').toggle(500);
+
+                this.showTarea = !this.showTarea;
+            },
+            evenNuevaTareaAgenda: function evenNuevaTareaAgenda() {
+                $('#submenuagenda').toggle(300);
+                $('#nuevaTareaAgenda').toggle(500);
+
+                this.showTareaAgenda = !this.showTareaAgenda;
+            },
+            newTarea: function newTarea() {
+                this.tarea.descripcion = '';
+                this.tarea.fechaInicio = '';
+                this.tarea.fechaFin = '';
+                this.tarea.hora = '0';
+                this.tarea.minuto = '0';
+            },
+            hasNuevaTarea: function hasNuevaTarea() {
+                var cache = localStorage.getItem('showTarea');
+                var cacheAgenda = localStorage.getItem('showTarea');
+
+                if (cache !== undefined || cache !== null) {
+                    this.showTarea = cache;
+                } else {
+                    this.showTarea = false;
+                }
+
+                if (cacheAgenda !== undefined || cacheAgenda !== null) {
+                    this.showTareaAgenda = cacheAgenda;
+                } else {
+                    this.showTareaAgenda = false;
+                }
+            },
+            /* Permite mostra la vista de Nueva Tarea */
+            showNuevaTarea: function showNuevaTarea($event) {
+                $event.preventDefault();
+
+                this.evenNuevaTarea();
+                this.newTarea();
+            },
+            /* Permite mostra la vista de Nueva Tarea */
+            showNuevaTareaAgenda: function showNuevaTareaAgenda($event) {
+                $event.preventDefault();
+
+                this.evenNuevaTareaAgenda();
+                this.newTarea();
+            },
+
+            hideNuevaTarea: function hideNuevaTarea($event) {
+                $event.preventDefault();
+                localStorage.removeItem('showTarea');
+
+                this.evenNuevaTarea();
+                this.evenNuevaTareaAgenda();
+            },
+
+            hideNuevaTareaAgenda: function hideNuevaTareaAgenda($event) {
+                $event.preventDefault();
+                localStorage.removeItem('showTarea');
+
+                this.evenNuevaTareaAgenda();
+            }
+
+        }
+    });
     vm = new Vue({
         el: 'body',
         data: {
@@ -12544,13 +12657,14 @@ $(document).ready(function () {
     });
 });
 
-},{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/tareas/estados.vue":15,"./components/widget/PanelWidget.vue":16,"./components/widget/grafica.vue":17,"./utils.js":18,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
+},{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/tareas/estados.vue":15,"./components/tareas/tabla/tabla.vue":16,"./components/widget/PanelWidget.vue":17,"./components/widget/grafica.vue":18,"./helper/utils.js":19,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var Vue = require('vue');
 
@@ -12558,7 +12672,7 @@ var RangeDates = ["12/8/2017, 13/8/2017"];
 var RangeDatesIsDisable = true;
 
 exports.default = {
-    props: {
+    props: _defineProperty({
         tipo: { type: String, required: true },
         nombre: { type: String, required: true },
         fechainicio: { type: String, required: true },
@@ -12567,7 +12681,7 @@ exports.default = {
         readonly: { type: String, default: false },
         valor: { type: String, required: true },
         diainicio: { type: String, required: true }
-    },
+    }, "diainicio", { type: String, required: true }),
     ready: function ready() {
         $("#inputdate-" + this.nombre).datepicker({
             format: 'dd/mm/yyyy',
@@ -12630,7 +12744,6 @@ exports.default = {
                     }
                 }
             }
-            console.log([isd]);
             return [isd];
         },
         isSemanaTieneFinMes: function isSemanaTieneFinMes() {
@@ -12640,14 +12753,12 @@ exports.default = {
             var mesInicio = parseInt(arrayFechaInicio[1]);
             var mesFin = parseInt(arrayFechaFin[1]);
             if (mesInicio !== mesFin) {
-                console.log(2);
                 return 2;
             } else {
-                console.log(1);
-
                 return 1;
             }
-        }
+        },
+        validarFecha: function validarFecha() {}
 
     }
 
@@ -12659,9 +12770,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ffeacd1c", module.exports)
+    hotAPI.createRecord("_v-76821412", module.exports)
   } else {
-    hotAPI.update("_v-ffeacd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-76821412", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
@@ -12694,60 +12805,30 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-82870a68", module.exports)
+    hotAPI.createRecord("_v-d44d905e", module.exports)
   } else {
-    hotAPI.update("_v-82870a68", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d44d905e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    props: {
-        mostrar: {
-            type: Boolean, required: true
-        },
-        opcion: {
-            // Gen, facebook, circle, outer, circular
-            type: String, required: true
-        }
-    },
-    methods: {
-        toggle: function toggle() {
-            if (this.mostrar === true) {
-                this.mostrar = false;
-            } else {
-                this.mostrar = true;
-            }
-        },
-        ocultar: function ocultar() {
-            this.mostrar = false;
-        },
-        mostrar: function mostrar() {
-            this.mostrar = true;
-        },
-        cambiarOpcion: function cambiarOpcion(opcion) {
-            this.opcion = opcion;
-        }
-    }
-
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"static\" data-keyboard=\"false\" role=\"dialog\" id=\"modal-loading\" v-if=\"mostrar\">\n\n<div id=\"Gen\" class=\"marginLeft\" v-if=\"opcion == 'Gen'\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" v-if=\"opcion == 'facebook'\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" v-if=\"opcion == 'circle'\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" v-if=\"opcion == 'outer'\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" v-if=\"opcion == 'circular'\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n</div>\n"
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n    top:20%;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"static\" data-keyboard=\"false\" role=\"dialog\" id=\"loading\">\n\n    <div class=\"modal-dialog modal-sm\">\n    <div class=\"modal-content modal-load-content\">\n        <div class=\"modal-heading modal-load-header\">\n            <h4 class=\"modal-title\" style=\"padding: 10px;\">Espere por favor..</h4>\n        </div>\n        <div class=\"modal-body modal-load-body\">\n\n            <p>Estamos procesando su solicitud...</p>\n\n<div id=\"Gen\" class=\"marginLeft\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n</div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n    top:20%;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-78d01944", module.exports)
+    hotAPI.createRecord("_v-6ab16542", module.exports)
   } else {
-    hotAPI.update("_v-78d01944", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6ab16542", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],11:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12776,9 +12857,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8c4b763a", module.exports)
+    hotAPI.createRecord("_v-389c7f28", module.exports)
   } else {
-    hotAPI.update("_v-8c4b763a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-389c7f28", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
@@ -12790,7 +12871,7 @@ Object.defineProperty(exports, "__esModule", {
 
 
 /* jshint esnext:true */
-var utils = require('./../../utils.js');
+var utils = require('../../helper/utils.js');
 
 var Notificion = new Alert('#notificacion');
 var Vue = require('vue');
@@ -12992,12 +13073,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d4dc73ae", module.exports)
+    hotAPI.createRecord("_v-1454006e", module.exports)
   } else {
-    hotAPI.update("_v-d4dc73ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1454006e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":18,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
+},{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13016,9 +13097,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6d32a585", module.exports)
+    hotAPI.createRecord("_v-79ad8920", module.exports)
   } else {
-    hotAPI.update("_v-6d32a585", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-79ad8920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
@@ -13128,9 +13209,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-57edf7d4", module.exports)
+    hotAPI.createRecord("_v-2f0ab4d9", module.exports)
   } else {
-    hotAPI.update("_v-57edf7d4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-2f0ab4d9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
@@ -13186,12 +13267,142 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4305d48b", module.exports)
+    hotAPI.createRecord("_v-f08b9de0", module.exports)
   } else {
-    hotAPI.update("_v-4305d48b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f08b9de0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.estado {\n    font-size: 10px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+
+var utils = require('../../../helper/utils.js');
+
+exports.default = {
+    props: {
+        tareas: {
+            type: Array,
+            default: []
+        }
+    },
+    data: function data() {
+        return {
+            textoFiltro: 'Mostrar'
+        };
+    },
+    computed: {
+        cmpFiltroHide: function cmpFiltroHide() {
+            if (this.textoFiltro === 'Mostrar') {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    },
+    ready: function ready() {
+        cargarTabla();
+    },
+    methods: {
+        mostrarFiltro: function mostrarFiltro($event) {
+            $event.preventDefault();
+
+            if (this.textoFiltro === 'Mostrar') {
+                this.textoFiltro = 'Ocultar';
+            } else {
+                this.textoFiltro = 'Mostrar';
+            }
+        },
+        verDetalle: function verDetalle($event) {
+            $event.preventDefault();
+
+            alert('Funciono click' + $('#nro').html());
+            $.ajax({
+                url: 'tareas/tareaProgramadas/show/' + $('#nro').html(),
+                method: 'POST',
+                dataType: 'json',
+                success: function (data) {
+
+                    console.log(JSON.stringify(data));
+                }.bind(this), error: function (data) {
+                    console.log('Error: en el metodo show');
+                }.bind(this)
+            });
+        }
+    }
+
+    // funcion para cargar la tabla
+};
+function cargarTabla() {
+
+    var table = $('#tablaTareasNormal').DataTable({
+        dom: 'Blfrtip',
+        buttons: ['colvis', 'excel', 'print']
+    });
+
+    $('#tablaTareasNormal tbody').on('dblclick', 'tr', function () {
+        var data = table.row(this).data();
+        alert('You clicked on ' + data[0]);
+    });
+
+    // agregamos texto al input de busqueda
+    $('#tablaTareasNormal tfoot th').each(function () {
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder="busq. ' + title + '" />');
+    });
+
+    // Aplicamos la Busquedas
+    table.columns().every(function () {
+        var that = this;
+
+        $('input', this.footer()).on('keyup change', function () {
+            if (that.search() !== this.value) {
+                that.search(this.value).draw();
+            }
+        });
+    });
+
+    // Capturamos el evento de paginacion
+    table.on('page.dt', function () {
+        mostraModaLading();
+    });
+};
+
+function mostraModaLading() {
+    utils.mostrarCargando(true);
+
+    var duracion = false;
+    var time = setTimeout(function () {
+        duracion = true;
+        utils.mostrarCargando(false);
+    }, 300);
+
+    if (duracion) {
+        clearTimeout(time);
+    }
+}
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"@\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Ubicaciones</th>\n        <th>Observacion</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Ubicaciones</th>\n        <th>Observacion</th>\n    </tr>\n    </tfoot>\n\n\n    <tbody>\n\n    <tr v-for=\"tarea in tareas\">\n        <td style=\"display: none\">{{ tarea.id }}</td>\n        <td>\n            <a href=\"#\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\" @click=\"verDetalle($event)\">\n                <span id=\"nro\">{{ tarea.numero }}</span>\n            </a>\n        </td>\n        <td>{{ tarea.descripcion }}</td>\n        <td> {{ tarea.fechaInicio }} </td>\n        <td>{{ tarea.fechaFin }}</td>\n        <td>{{ tarea.tiempo }}</td>\n        <td> <label :style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\" class=\"estado\">\n            {{ tarea.estado }}\n            </label>\n        </td>\n        <td>\n            <ul style=\"padding: 1px;\">\n                <li v-for=\"ubicacion in tarea.ubicaciones\">\n                    {{ ubicacion.nombre }}\n                </li>\n            </ul>\n        </td>\n        <td>{{ tarea.observaciones }}</td>\n    </tr>\n\n\n    </tbody>\n\n</table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.estado {\n    font-size: 10px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-1762590a", module.exports)
+  } else {
+    hotAPI.update("_v-1762590a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"../../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.colProm {background-color: #ddffdd; font-weight: bold;}\n.colTarea {background-color: lightskyblue; font-weight: bold;}\n.colTicket {background-color: bisque; font-weight: bold;}\n")
 'use strict';
@@ -13203,7 +13414,7 @@ Object.defineProperty(exports, "__esModule", {
 
 /* jshint esnext:true */
 
-var utils = require('./../../utils.js');
+var utils = require('../../helper/utils.js');
 var Notificion = new Alert('#notificacion');
 var Vue = require('vue');
 Vue.use(require('vue-resource'));
@@ -13676,12 +13887,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-29b99a38", module.exports)
+    hotAPI.createRecord("_v-0c322c3d", module.exports)
   } else {
-    hotAPI.update("_v-29b99a38", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0c322c3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./../../utils.js":18,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
+},{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13764,12 +13975,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-189a3ba7", module.exports)
+    hotAPI.createRecord("_v-5d4e982c", module.exports)
   } else {
-    hotAPI.update("_v-189a3ba7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5d4e982c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],18:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],19:[function(require,module,exports){
 'use strict';
 
 /**
@@ -13861,10 +14072,58 @@ module.exports = {
     },
     mostrarCargando: function mostrarCargando(opcion) {
         if (opcion) {
-            $('#modal-loading').modal('show');
+            $('#loading').modal('show');
         } else {
-            $('#modal-loading').modal('hide');
+            $('#loading').modal('hide');
         }
+    },
+
+    DisableDays: function DisableDays(date) {
+        var isd = RangeDatesIsDisable;
+        var rd = RangeDates;
+
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        for (var i = 0; i < rd.length; i++) {
+            var ds = rd[i].split(',');
+
+            var di, df;
+            var m1, d1, y1, m2, d2, y2;
+
+            if (ds.length == 1) {
+                di = ds[0].split('/');
+
+                m1 = parseInt(di[0]);
+                d1 = parseInt(di[1]);
+                y1 = parseInt(di[2]);
+                if (y1 == y && m1 == m + 1 && d1 == d) return [!isd];
+            } else if (ds.length > 1) {
+                di = ds[0].split('/');
+                df = ds[1].split('/');
+                m1 = parseInt(di[0]);
+                d1 = parseInt(di[1]);
+                y1 = parseInt(di[2]);
+                m2 = parseInt(df[0]);
+                d2 = parseInt(df[1]);
+                y2 = parseInt(df[2]);
+
+                if (y1 >= y || y <= y2) {
+                    if (m + 1 >= m1 && m + 1 <= m2) {
+                        if (m1 == m2) {
+                            if (d >= d1 && d <= d2) return [!isd];
+                        } else if (m1 == m + 1) {
+                            if (d >= d1) return [!isd];
+                        } else if (m2 == m + 1) {
+                            if (d <= d2) return [!isd];
+                        } else return [!isd];
+                    }
+                }
+            }
+        }
+        console.log([isd]);
+        return [isd];
     }
 
 };

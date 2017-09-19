@@ -19,6 +19,10 @@ class Tarea extends Model
     protected $primarykey = "id";
 
     use SoftDeletes;
+
+    /* agrego los datos del repositorio */
+    use TareaRepository;
+
     public $timestamps = true;
     
     /**
@@ -75,18 +79,21 @@ class Tarea extends Model
 
     /* ;Metodos de repositorio */
 
-    // Las localizaciones de disponibles para un empleado particular
-    public static function getLocalizaciones()
-    {
-        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion'))->first();
-        $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
 
-        return $localizaciones;
-    }
 
     // lista de ubidadciones Ocupadas para una tarea
-    public static function ubicacionesOcupadas($tarea_id)
+    public static function ubicacionTarea($tarea_id)
     {
+        return
+            DB::table('localizaciones')
+            ->join('tarea_localizacion','tarea_localizacion.localizacion_id','=', 'localizaciones.id')
+            ->where('tarea_localizacion.tarea_id',$tarea_id)
+            ->select('localizaciones.id','localizaciones.nombre')->get();
+
+
+
+
+        /*
         if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion')))
         {
             $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion')->id)->first();
@@ -102,7 +109,7 @@ class Tarea extends Model
         }else{
             return [];
         }
-
+*/
     }
 
 
@@ -131,37 +138,6 @@ class Tarea extends Model
             return $localizaciones;
         }else{
             return [];
-        }
-    }
-
-    public function getEstado()
-    {
-        if ($this->attributes['estadoTarea_id'] == '1') {
-            return 'Programado';
-        }elseif ($this->attributes['estadoTarea_id'] == '2') {
-            return 'En Proceso';
-        }elseif ($this->attributes['estadoTarea_id'] == '3') {
-            return 'Finalizado';
-        }
-    }
-
-    public function getEstadoColor()
-    {
-        if ($this->attributes['estadoTarea_id'] == '1') {
-            return 'danger';
-        }elseif ($this->attributes['estadoTarea_id'] == '2') {
-            return 'warning';
-        }elseif ($this->attributes['estadoTarea_id'] == '3') {
-            return 'success';
-        }
-    }
-
-    public function getObservacion()
-    {
-        if (empty($this->attributes['observaciones'])) {
-            return 'Ninguna';
-        }else{
-            return $this->attributes['observaciones'];
         }
     }
 
@@ -202,11 +178,11 @@ class Tarea extends Model
     public function obtenerHora($horas, $minutos)
     {
         $tiempo = new Tiempo;
-        
+
         return $tiempo->obtenerHora($horas, $minutos);
     }
 
-    public function validarLimiteFechas()
+    public function validarLimiteFechaEstimadas()
     {
         $semanas = $this->obtnerSemanaDelAnio();
 
@@ -235,22 +211,13 @@ class Tarea extends Model
     }
 
 
-    public function sacarHoras($hora)
-    {   
-        if($hora == null){
-            return 0;
-        } 
-        $partes=explode(':',$hora);//se parte la fecha
-        return $partes[0];
-    }    
-
-    public function sacarMinutos($hora)
-    {     
-        if($hora == null){
-            return 0;
+    public function validarDuracionCeros()
+    {
+        if((string) $this->tiempoEstimado == '0:0'){
+            return false;
+        }else{
+            return true;
         }
-        $partes=explode(':',$hora);//se parte la fecha
-        return $partes[1];
     }
 
     public function validarFechaInicioEstimacion($fechaInicio, $todasemana)
@@ -277,22 +244,23 @@ class Tarea extends Model
         }
     }
 
+
+
     /**
      * @return mixed
      */
     public function obtnerSemanaDelAnio()
     {
         $fecha = date('Y-m-d');
-        if (Caches::obtener('proxSemana') === 1) {
-            $fecha = date(date('Y-m-d', strtotime('now +6 day')));
+        if (Caches::obtener('proxSemana') == 1) {
+            $fecha = self::getSemanasTareas(date(date('Y-m-d', strtotime('now +7 day'))));
+        }else{
+            $fecha = self::getSemanasTareas($fecha);
         }
-        return TareaRepository::getSemanasTareas($fecha);
+        return $fecha;
     }
 
-    public function getNumero()
-    {
-        return TareaRepository::getNumero();
-    }
+
 
 
 }

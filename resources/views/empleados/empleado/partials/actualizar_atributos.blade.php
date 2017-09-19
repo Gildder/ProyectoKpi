@@ -212,7 +212,6 @@
 
 <script>
     $(document).ready(function(){
-
 		/* Evento en los item de select Grupo Departamento*/
         $('#grdepartamento').change(function(){
             verificarGrupoDepartamento($(this).val());
@@ -263,19 +262,19 @@
         function limpiarSelectLocalizacion(argument) {
             var msj = 'Seleccionar...';
             if (argument == '0') {
-                msj = 'Selecciona un grupo';
+                msj = 'Selecciona...';
             }
             $('#localizacion').empty();
-            $('#localizacion').append("<option value='0'>"+msj+"</option>");
+            $('#localizacion').append("<option value=''>"+msj+"</option>");
         }
 
         function limpiarSelectDepartamento(argument) {
             var msj = 'Seleccionar...';
             if (argument== '0') {
-                msj = 'Selecciona un grupo';
+                msj = 'Selecciona...';
             }
             $('#departamento').empty();
-            $('#departamento').append("<option value='0'>"+msj+"</option>");
+            $('#departamento').append("<option value=''>"+msj+"</option>");
         }
 
         var currColor = "#3c8dbc"; //Red by default

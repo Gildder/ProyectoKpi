@@ -90,6 +90,8 @@ class EvaluadorController extends Controller
 
 		$indicadores = IndicadorRepository::getIndicadoresDeEvaluador($id);
 
+//		dd($indicadores[0]::getCargos(1, 1));
+
         $cargosDisponibles = DB::select('call pa_evaluadores_cargosDisponibles('.$id.');');
         $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$id.');');
 
@@ -207,7 +209,7 @@ class EvaluadorController extends Controller
     public function quitarindicador($indicador_id, $evaluador_id)
     {
     	$existeCargaConIndicador = DB::select('call pa_evaluadores_existeCargoIndicador('.$indicador_id.','.$evaluador_id.');');
-
+//dd($indicador_id, $evaluador_id, $existeCargaConIndicador);
 
     	$indicador = Indicador::findOrFail($indicador_id);
 
@@ -218,7 +220,10 @@ class EvaluadorController extends Controller
     		// \Session::flash('No se puede quitar, el indicador '.$indicador->nombre.' tiene cargos agregados.');
         	 return redirect()->back()->withErrors( 'No se puede quitar, el indicador "'.$indicador->nombre.'" tiene cargos agregados.');
     	}else{
-        	DB::table('evaluador_indicadores')->where('indicador_id', $indicador_id)->where('evaluador_id', $evaluador_id)->delete();
+        	DB::table('evaluador_indicadores')
+                ->where('indicador_id', $indicador_id)
+                ->where('evaluador_id', $evaluador_id)
+                ->delete();
         	
         	return redirect()->back()->with('message', 'Se quito el indicador "'.$indicador->nombre.'" correctamente.');
     	}

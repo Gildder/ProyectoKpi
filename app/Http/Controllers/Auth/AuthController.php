@@ -107,14 +107,17 @@ class AuthController extends Controller
 //
 //        $result = $con->login_ldap($data['username'], $data['password']);
 //
-//        // todo: corregir esta validacion de login por AD
-//        if(is_string($result))
+//        if ($data['username'] !== 'admin')
 //        {
-//            /* obtnemos los parametros del formualario*/
-//            $request->request->set('password', '12345678');
-//        }else{
-//            $request->request->set('password', 'dfadfjfah!"#43SDF#$');
+//            // todo: corregir esta validacion de login por AD
+//            if (is_string($result)) {
+//                /* obtnemos los parametros del formualario*/
+//                $request->request->set('password', '12345678');
+//            } else {
+//                $request->request->set('password', 'dfadfjfah!"#43SDF#$');
+//            }
 //        }
+//
 //        $this->validateLogin($request);
 //
 //

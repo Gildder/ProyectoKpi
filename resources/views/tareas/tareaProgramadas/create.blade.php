@@ -1,52 +1,20 @@
-@extends('layouts.app')
-
-@section('titulo')
-  Nueva Tarea
-@endsection
-
-@section('content')
-
 <div class="panel panel-default" id="formNuevaTarea">
-
-  <div class="panel-heading">
-    <a  href="{{route('tareas.tareaProgramadas.index')}}" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
-    <p class="titulo-panel">Nueva Tarea</p>
-  </div>
-
+    <div class="panel-heading">
+        <p class="titulo-panel">Nueva Tarea <b></b> </p>
+    </div>
   <div class="panel-body">
-        <div class="breadcrumb col-sm-12">
-            <p class="visible-xs">
-                De
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
-                hasta
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}</b>
-            </p>
-            <p class="hidden-xs">
-                Tarea  del
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
-                hasta
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}.</b>
-                <b > Los campos con (*) son obligatorios </b>
-            </p>
-        </div>
-
-      @include('partials/alert/error')
 
       {!! Form::open(['route'=>'tareas.tareaProgramadas.store', 'method'=>'POST']) !!}
-{{--      {!! Form::hidden('estimados', \Usuario::get('preferencias')->get('verFechasEstimadas') ) !!}--}}
      {{-- Descripcion --}}
       <div class="form-group">
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4
             @if ($errors->has('descripcion')) has-error @endif">
-            <label>Descripcion *</label>
-            <input type="text" minlength="5" value="{{ old('descripcion') }}" style="margin-bottom: 15px;"
-                   maxlength="120" name="descripcion" placeholder="Descripcion" diainicio="{{ \Cache::get('diaInicio') }}"
-                   class="form-control" required>
+            <label>Descripcion *:</label>
+            <input type="text" minlength="5" value="{{ old('descripcion') }}"
+                   maxlength="120" name="descripcion" placeholder="Descripcion" class="form-control stylDescripcion" required>
             @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
           </div>
       </div>
-
-
 
 {{-- Fechas de Inicio y Fin --}}
 <div class="form-group col-xs-12 row" >
@@ -55,12 +23,12 @@
             has-error
         @endif">
 
-        <label>Fecha de Comienzo *: </label>
-
+        <label>Fecha Inicio *: </label>
         <input-date tipo="text" nombre="fechaInicioEstimado"
-                    valor="{{ old('fechaInicioEstimado') }}" placeholder="Comienzo"  diainicio="{{ \Cache::get('diaInicio') }}"
-                    fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
-                    fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+                    valor="{{ old('fechaInicioEstimado') }}"
+                    placeholder="dd/mm/aaaa"  diaInicio="{{ \Cache::get('diainicio') }}"
+                    fechainicio="{{  $semanas->fechaInicio }}"
+                    fechafin='{{ $semanas->fechaFin }}' >
         </input-date>
         @if ($errors->has('fechaInicioEstimado'))
             <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p>
@@ -72,39 +40,31 @@
             has-error
         @endif">
 
-        <label>Fecha Finalizacion *: </label>
+        <label>Fecha Fin *: </label>
 
-        <input-date tipo="text" nombre="fechaFinEstimado"  diainicio="{{ \Cache::get('diaInicio') }}"
-                    valor="{{ old('fechaFinEstimado') }}" placeholder="Finalizacion"
-                    fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
-                    fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+        <input-date tipo="text" nombre="fechaFinEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
+                    valor="{{ old('fechaFinEstimado') }}"
+                    placeholder="dd/mm/aaaa"
+                    fechainicio="{{  $semanas->fechaInicio }}"
+                    fechafin='{{ $semanas->fechaFin }}' >
 
         </input-date>
         @if ($errors->has('fechaFinEstimado'))
             <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p>
         @endif
     </div>
-    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
-        <span id="observacion" style="color: green; font-weight: bold;"></span>
-    </div>
-    <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" v-if="false">
-        <div class="checkbox">
-            <label>
-                <input  type="checkbox" name="todasemana"  id="default-fechaEstimadas">
-                Utilizar fechas de la semana
-            </label>
-        </div>
-    </div>
+
 </div>
 
 
   {{-- Tiempo estimado --}}
   <div class="col-sm-12 row" >
-      <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
+      <label class="form-group col-sm-12 col-xs-12">Duracion *:</label>
       <div class="form-group  col-xs-12 col-sm-3 col-md-3 col-lg-2 @if ($errors->has('hora')) has-error @endif">
           Horas:
-          <input type="number" min="0"  name="hora" max="999" placeholder="Horas"
-                 value="{{ old('hora') }}" class="form-control"  diainicio="{{ \Cache::get('diaInicio') }}"
+          <input type="number" min="0"  name="hora" max="150" placeholder="Horas"
+                 id="hora" v-model="tarea.hora"
+                 value="0" class="form-control"  diainicio="{{ \Cache::get('diaInicio') }}"
                  required >
           @if ($errors->has('hora'))
               <p class="help-block">{{ $errors->first('hora') }}</p>
@@ -113,8 +73,8 @@
 
       <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 @if ($errors->has('minuto')) has-error @endif">
           Minutos:
-          <input type="number" min="0" name="minuto" max="999"
-                 class="form-control" value="{{ old('minuto') }}"  placeholder="Minutos"
+          <input type="number" min="0" name="minuto" max="999"     id="minuto" v-model="tarea.minuto"
+                 class="form-control" value="0"  placeholder="Minutos"
                  required>
 
           @if ($errors->has('minuto'))
@@ -126,38 +86,63 @@
 {{-- Fin body  model --}}
 </div>
   <div class="panel-footer text-right">
-      <a  id="cancelar"
-          href="{{route('tareas.tareaProgramadas.index')}}"
-          class="btn btn-danger" @click="mostrarModalLoading()"
+      <a  id="cancelar" @click="hideNuevaTarea($event)"
+          class="btn btn-danger"
           type="reset"><span class="fa fa-times">
           </span> Cancelar</a>
 
-      <button type="submit" name="guardar"  class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
+      <button type="submit" name="guardar"
+              class="btn btn-success"><span
+                  class="fa fa-save"></span>  Guardar</button>
   </div>
 {!! Form::close()!!}
 </div>
 
+<style type="text/css">
+    .stylDescripcion {
+        margin-bottom: 15px;
+    }
+</style>
 
 <script>
-    $('#default-fechaEstimadas').click(function () {
-        var fechaInicio = $('input[name=fechaInicioEstimado]');
-        var fechaFin = $('input[name=fechaFinEstimado]');
-        var mensaje = $('#observacion');
 
-
-        if(this.checked){
-            fechaInicio.attr('disabled', true);
-            fechaFin.attr('disabled', true);
-
-            mensaje.html('La tarea esta programada para toda la semana.');
-        }else{
-            fechaInicio.attr('disabled', false);
-            fechaFin.attr('disabled', false);
-
-            mensaje.html('');
+    $('#hora').change(function () {
+        if($(this).val() > 0){
+            $('#minuto').removeAttr('required');
+        } else {
+            $('#minuto').attr('required', true);
         }
     });
 
+    $('#hora').keyup(function () {
+        if ($(this).val() > 0) {
+
+            $('#minuto').removeAttr('required');
+        }
+        else
+        {
+            $('#minuto').attr('required');
+        }
+    });
+
+
+    $('#minuto').change(function () {
+        if($(this).val() > 0){
+            $('#hora').removeAttr('required');
+        }else{
+            $('#hora').attr('required');
+        }
+    });
+
+    $('#minuto').keyup(function () {
+        if($(this).val() > 0){
+            $('#hora').removeAttr('required');
+        }else{
+            $('#hora').attr('required');
+        }
+    });
+
+
+
 </script>
-@endsection
 

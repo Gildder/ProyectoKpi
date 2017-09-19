@@ -15,6 +15,7 @@ class CalcularSemana
     {
     }
     // /* Metodos */
+
     /**
      * retorna un arreglos de fecha de inicio y fin de la semana
      */
@@ -23,19 +24,19 @@ class CalcularSemana
         $strFecha = strtotime($fecha);
 
         // Asignamos los dias de inicio y fin de la semana
-        $diaInicio ="Monday";
-        $diaFin    ="Sunday";
+        $diaInicio = "Monday";
+        $diaFin = "Sunday";
 
-        $fechaInicio = date('Y-m-d', strtotime('last '.$diaInicio, $strFecha));
-        $fechaFin    = date('Y-m-d', strtotime('next '.$diaFin, $strFecha));
+        $fechaInicio = date('Y-m-d', strtotime('last ' . $diaInicio, $strFecha));
+        $fechaFin = date('Y-m-d', strtotime('next ' . $diaFin, $strFecha));
 
-        if (date("l", $strFecha)== $diaInicio) {
+        if (date("l", $strFecha) == $diaInicio) {
             $fechaInicio = date("Y-m-d", $strFecha);
         }
-        if (date("l", $strFecha)== $diaFin) {
-            $fechaFin= date("Y-m-d", $strFecha);
+        if (date("l", $strFecha) == $diaFin) {
+            $fechaFin = date("Y-m-d", $strFecha);
         }
-        return array("fechaInicio"=>$fechaInicio,"fechaFin"=>$fechaFin);
+        return array("fechaInicio" => $fechaInicio, "fechaFin" => $fechaFin);
     }
 
 
@@ -46,19 +47,19 @@ class CalcularSemana
     {
         $Month = date('n', strtotime($fecha));
         $Year = date('Y', strtotime($fecha));
-       //Si la extensión que mencioné está instalada, usamos esa.
-       if (is_callable("cal_days_in_month")) {
-           return cal_days_in_month(CAL_GREGORIAN, $Month, $Year);
-       } else {
-           //Lo hacemos a mi manera.
-          return date("d", mktime(0, 0, 0, $Month+1, 0, $Year));
-       }
+        //Si la extensión que mencioné está instalada, usamos esa.
+        if (is_callable("cal_days_in_month")) {
+            return cal_days_in_month(CAL_GREGORIAN, $Month, $Year);
+        } else {
+            //Lo hacemos a mi manera.
+            return date("d", mktime(0, 0, 0, $Month + 1, 0, $Year));
+        }
     }
 
 
     /**
      * Retorna la semana de Tarea una fecha
-     * @param fecha: fecha de interes
+     * @param fecha : fecha de interes
      */
     public function getSemanaTarea($fecha)
     {
@@ -96,8 +97,8 @@ class CalcularSemana
     public function numeroSemanaFecha($fecha)
     {
         // Calculamos la semana del mes
-        $semanaInicioMes =  date("W", strtotime(date("Y-m-01", strtotime($fecha))));
-        $semanaActualFecha =  date("W", strtotime($fecha)) ;
+        $semanaInicioMes = date("W", strtotime(date("Y-m-01", strtotime($fecha))));
+        $semanaActualFecha = date("W", strtotime($fecha));
 
         $result = $semanaActualFecha - $semanaInicioMes;
 
@@ -106,33 +107,33 @@ class CalcularSemana
                 return $result + 1;
             }
         }
-        
+
         return $result;
     }
 
     /**
      * Sumar dias a una fecha particular
-     * @param $fecha: tipo date
-     * @param $dias: tipo integer
+     * @param $fecha : tipo date
+     * @param $dias : tipo integer
      * @return date
      */
     public function sumarDias($fecha, $dias)
     {
-        $nuevafecha = strtotime('+'.$dias.' day', strtotime($fecha)) ;
+        $nuevafecha = strtotime('+' . $dias . ' day', strtotime($fecha));
         $nuevafecha = date('Y-m-d', $nuevafecha);
         return $nuevafecha;
     }
 
     public function restarDias($fecha, $dias)
     {
-        $nuevafecha = strtotime('-'.$dias.' day', strtotime($fecha)) ;
+        $nuevafecha = strtotime('-' . $dias . ' day', strtotime($fecha));
         $nuevafecha = date('Y-m-d', $nuevafecha);
         return $nuevafecha;
     }
 
     /**
      * Retorna la semanas habilitadas
-     * @param fecha: fecha de interes
+     * @param fecha : fecha de interes
      */
     public function getSemanasProgramadas($fecha)
     {
@@ -200,11 +201,11 @@ class CalcularSemana
      */
     public static function cambiarFormatoEuropeo($fecha)
     {
-        if($fecha == null){
+        if ($fecha == null) {
             return '00/00/0000';
         }
-        $partes=explode('-',$fecha);//se parte la fecha
-        $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];//se cambia para que quede formato d-m-Y
+        $partes = explode('-', $fecha);//se parte la fecha
+        $fecha = $partes[2] . '/' . $partes[1] . '/' . $partes[0];//se cambia para que quede formato d-m-Y
         return trim($fecha);
     }
 
@@ -216,11 +217,11 @@ class CalcularSemana
      */
     public static function cambiarFormatoDB($fecha)
     {
-        if($fecha == null){
+        if ($fecha == null) {
             return '0000-00-00';
         }
-        $partes=explode('/',$fecha);//se parte la fecha
-        $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];//se cambia para que quede formato d-m-Y
+        $partes = explode('/', $fecha);//se parte la fecha
+        $fecha = $partes[2] . '-' . $partes[1] . '-' . $partes[0];//se cambia para que quede formato d-m-Y
 
         return trim($fecha);
     }
@@ -235,9 +236,9 @@ class CalcularSemana
     {
         $mes = str_split(self::getNombreMes($nro));
 
-        $abr =  array_slice($mes, 0, 3);
+        $abr = array_slice($mes, 0, 3);
 
-        return $abr[0].$abr[1].$abr[2];
+        return $abr[0] . $abr[1] . $abr[2];
     }
 
     public static function getNombreSemana($num_semana)
@@ -263,27 +264,68 @@ class CalcularSemana
                 break;
         }
     }
-
-    function compararFechas($primera, $segunda)
-    {
-        $valoresPrimera = explode ("/", $primera);
-        $valoresSegunda = explode ("/", $segunda);
-        $diaPrimera    = $valoresPrimera[0];
-        $mesPrimera  = $valoresPrimera[1];
-        $anyoPrimera   = $valoresPrimera[2];
-        $diaSegunda   = $valoresSegunda[0];
-        $mesSegunda = $valoresSegunda[1];
-        $anyoSegunda  = $valoresSegunda[2];
-        $diasPrimeraJuliano = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);
-        $diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);
-        if(!checkdate($mesPrimera, $diaPrimera, $anyoPrimera)){
-            // "La fecha ".$primera." no es válida";
-            return 0;
-        }elseif(!checkdate($mesSegunda, $diaSegunda, $anyoSegunda)){
-            // "La fecha ".$segunda." no es válida";
-            return 0;
-        }else{
-            return  $diasPrimeraJuliano - $diasSegundaJuliano;
+    function validar_fecha($fecha){
+        if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $fecha)) {
+            return true;
+        } else {
+            return false;
         }
     }
+    function compararFechas($primera, $segunda)
+    {
+        if($this->validar_fecha($primera) == false || $this->validar_fecha($primera)== false ){
+            return 0;
+        }
+        $valoresPrimera = explode("/", $primera);
+        $valoresSegunda = explode("/", $segunda);
+        $diaPrimera = $valoresPrimera[0];
+        $mesPrimera = $valoresPrimera[1];
+        $anyoPrimera = $valoresPrimera[2];
+        $diaSegunda = $valoresSegunda[0];
+        $mesSegunda = $valoresSegunda[1];
+        $anyoSegunda = $valoresSegunda[2];
+        $diasPrimeraJuliano = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);
+        $diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);
+        if (!checkdate($mesPrimera, $diaPrimera, $anyoPrimera)) {
+            // "La fecha ".$primera." no es válida";
+            return 0;
+        } elseif (!checkdate($mesSegunda, $diaSegunda, $anyoSegunda)) {
+            // "La fecha ".$segunda." no es válida";
+            return 0;
+        } else {
+            return $diasPrimeraJuliano - $diasSegundaJuliano;
+        }
+    }
+
+
+    // lista de ubidadciones Ocupadas para una tarea
+    public static function ubicacionTarea($tarea_id)
+    {
+        return
+            \DB::table('localizaciones')
+                ->join('tarea_localizacion', 'tarea_localizacion.localizacion_id', '=', 'localizaciones.id')
+                ->where('tarea_localizacion.tarea_id', $tarea_id)
+                ->select('localizaciones.id', 'localizaciones.nombre')->get();
+
+
+    }
+
+    public static function sacarHoras($hora)
+    {
+        if($hora == null){
+            return 0;
+        }
+        $partes=explode(':',$hora);//se parte la fecha
+        return $partes[0];
+    }
+
+    public static function sacarMinutos($hora)
+    {
+        if($hora == null){
+            return 0;
+        }
+        $partes=explode(':',$hora);//se parte la fecha
+        return $partes[1];
+    }
+
 }

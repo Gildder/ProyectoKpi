@@ -10,30 +10,129 @@ use Mockery\CountValidator\Exception;
 use ProyectoKpi\Http\Requests\Request;
 use ProyectoKpi\Models\Tareas\Tarea;
 
-class TareaRepository
+trait TareaRepository
 {
 
-    /*contructores */
-    public function __construct()
-    {
-    }
-
     /* Metodos */
-    public static function getTareasProgramadas()
+    public static function getTodasTareas()
     {
         // Obtenemos las semanas de tareas
         $semanaActual = TareaRepository::getSemanasTareas(date('Y-m-d'));
 
-        $tareas = Tarea::select('tareas.id','tareas.numero', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
-            'tareas.observaciones', 'tareas.estadoTarea_id', 'tareas.isError', 'tarea_tipos.nombre as tipo', 'tareas.proyecto_id')
-            ->leftjoin('tarea_tipos', 'tarea_tipos.id','=', 'tareas.tipoTarea_id')
-            ->where('user_id', '=', \Usuario::get('id'))
-            ->where('fechaInicioEstimado', '>=', $semanaActual->fechaInicio)
-            ->whereNull('tareas.deleted_at')
-            ->orderBy('tareas.fechaInicioEstimado', 'desc')
+        $tareas = \DB::table('vw_tareas_para_usuarios')
+            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
+            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaInicio, \'%d/%m/%Y\')') ,'>=', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaInicio.'\', \'%d/%m/%Y\')'))
+            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaFin, \'%d/%m/%Y\')') ,'<=', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaFin.'\', \'%d/%m/%Y\')'))
+            ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
             ->get();
 
-        return $tareas;
+        $lista = self::agregarUbicacionTareas($tareas);
+        // agregamos la semana actual
+        array_push($lista, $semanaActual);
+
+        return $lista;
+    }
+
+    public static function getTareasArchivados()
+    {
+        // Obtenemos las semanas de tareas
+        $semanaActual = TareaRepository::getSemanasTareas(date('Y-m-d'));
+
+        $tareas = \DB::table('vw_tareas_para_usuarios')
+            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
+            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaInicio, \'%d/%m/%Y\')') ,'<', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaInicio.'\', \'%d/%m/%Y\')'))
+            ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
+            ->get();
+
+        $lista = self::agregarUbicacionTareas($tareas);
+        // agregamos la semana actual
+        array_push($lista, $semanaActual);
+
+        return $lista;
+
+    }
+
+    public static function getTareasAgendadas()
+    {
+        // Obtenemos las semanas de tareas
+        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+
+        // Semana siguiente a la actual
+        $semanaSiguiente = TareaRepository::getSemanasTareas(date(date('Y-m-d', strtotime('now +7 day'))));
+
+        $tareas = \DB::table('vw_tareas_para_usuarios')
+            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
+            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaInicio, \'%d/%m/%Y\')') ,'>', DB::Raw('STR_TO_DATE(\''.$semanas->fechaFin.'\', \'%d/%m/%Y\')'))
+            ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
+            ->get();
+
+        $lista = self::agregarUbicacionTareas($tareas);
+        // agregamos la semana actual
+        array_push($lista, $semanaSiguiente);
+
+        return $lista;
+    }
+
+    private static function agregarUbicacionTareas($tareas){
+        $lista = array();
+
+        foreach ($tareas as $tarea){
+            $aux = $tarea;
+
+            $aux->ubicaciones = self::getLocalizacionTarea($tarea->id);
+            array_push($lista, $aux);
+        }
+
+        return $lista;
+    }
+
+    public static function getLocalizacionTarea($tarea_id)
+    {
+        $localizacion = \DB::select('call pa_ubicaciones_tareas('.$tarea_id.')');
+
+        return $localizacion;
+    }
+
+    public static function getTarea($tarea_id)
+    {
+
+        $tarea = \DB::table('vw_tareas_para_usuarios')
+            ->where('user_id', '=', \Usuario::get('id'))
+            ->where('id', '>=', $tarea_id)
+            ->first();
+
+        return $tarea;
+    }
+
+    public static function guardar(Request $request)
+    {
+        if(!self::validarFechasTarea($request->fechaInicioEstimado) && !self::validarFechasTarea($request->fechaFinEstimado)){
+            return ['error' => 'Las fechas de la tarea estan fuera del rango permitido'];
+        }
+
+        if(!self::validarDuracion($request->fechaInicioEstimado) && !self::validarDuracion($request->fechaFinEstimado)){
+            return ['error' => 'La duracion de una tarea no puede ser cero "0"'];
+        }
+
+        $tarea = new Tarea;
+        $tarea->numero = self::getMayorNumeroTarea();
+        $tarea->descripcion = trim($request->descripcion);
+        $tarea->fechaInicioEstimado = $tarea->validarFechaInicioEstimacion(\Request::input('fechaInicioEstimado'), \Request::input('todasemana'));
+        $tarea->fechaFinEstimado = $tarea->validarFechaFinEstimacion(\Request::input('fechaFinEstimado'), \Request::input('todasemana'));
+        $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
+        $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
+        $tarea->tipoTarea_id = '1';
+        $tarea->estadoTarea_id = '1';
+        $tarea->user_id = \Usuario::get('id');
+
+
+    }
+
+
+    /* Validaciones de Tareas */
+    public static function validarFechasTarea($fecha)
+    {
+
     }
 
 
@@ -120,23 +219,9 @@ class TareaRepository
         return $fechaDescrip;
     }
 
-    public static function getTareasArchivados()
-    {
-        try{
 
-            // Obtenemos las semanas de tareas
-            $semanaActual = \Calcana::getSemanasProgramadas(date('Y-m-d'));
 
-            $tareas = Tarea::where('user_id', '=', \Usuario::get('id'))
-                ->where('fechaFinEstimado', '<', $semanaActual->getDateDB('fechaInicio'))
-                ->whereOr('fechaFinEstimado', '>', $semanaActual->getDateDB('fechaInicio'))
-                ->whereNull('tareas.deleted_at')
-                ->get();
-            return $tareas;
-        }catch (Exception $e){
-            DebugBar::error('Error: '.$e.', getTareasArchivadas');
-        }
-    }
+
 
     public static function getDiaLimiteEliminar()
     {
@@ -174,7 +259,7 @@ class TareaRepository
         return $lista;
     }
 
-    public static function getNumero()
+    public static function getMayorNumeroTarea()
     {
         $nro =  \DB::table('tareas')
             ->where('user_id', '=', \Usuario::get('id'))
@@ -192,6 +277,7 @@ class TareaRepository
         return \DB::table('estado_tareas')
             ->whereNull('estado_tareas.deleted_at')
             ->where('estado_tareas.id', '<>', '3')
+            ->select('estado_tareas.id', 'estado_tareas.nombre')
             ->get();
     }
 
@@ -199,7 +285,6 @@ class TareaRepository
     {
         try
         {
-            dd($tarea);
             \DB::table('tareas')
                 ->where('id', $tarea->id)
                 ->update([
@@ -207,11 +292,11 @@ class TareaRepository
                     'estadoTarea_id'=> "'".$tarea->estadoTarea_id."'",
                     'fechaInicioEstimado'=> "'".$tarea->fechaInicioEstimado."'",
                     'fechaFinEstimado'=> "'".$tarea->fechaFinEstimado."'",
-                    'tiempoEstimado'=> "'".$tarea->tiempoEstimad."'"
+                    'tiempoEstimado'=> "'".$tarea->tiempoEstimado."'"
                 ]);
             return true;
         }catch (\Exception $errr){
-            Log::info($errr);
+
             return false;
         }
     }
@@ -311,9 +396,10 @@ class TareaRepository
      */
     public static function getSemanasTareas($fecha)
     {
-        $fechas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+//        dd(\GuzzleHttp\json_encode($fecha));
+        $fechas =  \DB::select('call pa_obtenerFechaSemanaAnual('.json_encode($fecha).');');
 
-        if(isset($fechas)){
+        if(isset($fechas[0])){
             return $fechas[0];
         }else{
             Log::info('Error al obtener los datos de la fecha de las semana del año');
@@ -424,4 +510,19 @@ class TareaRepository
             return false;
         }
     }
+
+    /**
+     * Las localizaciones de disponibles para un empleado particular
+     *
+     */
+    public static function getLocalizaciones()
+    {
+        $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion'))->first();
+
+
+        $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
+
+        return $localizaciones;
+    }
+
 }

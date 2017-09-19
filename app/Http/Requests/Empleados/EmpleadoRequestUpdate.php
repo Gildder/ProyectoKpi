@@ -30,19 +30,28 @@ class EmpleadoRequestUpdate extends Request
      */
     public function rules()
     {
+        if ($this->method() == 'PUT')
+        {
+            $tecnico_id = 'unique:users,tecnico_id,'. $this->get('id');
+        }
+        else
+        {
+            $tecnico_id = 'unique:users,tecnico_id';
+        }
+
         return [
             'codigo'=>'required|max:10',
-            'tecnico_id'=>'unique:users',
+            'tecnico_id'=> $tecnico_id,
             'name'=>'required|max:20',
             'email'=>'required|max:50',
             'nombres'=>'required|max:50',
             'apellidos'=>'required|max:50',
-            'departamento_id'=>'required',
-            'localizacion_id'=>'required',
             'cargo_id'=>'required',
             'type'=>'required',
             'grdepartamento_id'=>'required',
             'grlocalizacion_id'=>'required',
+            'departamento_id'=>'required',
+            'localizacion_id'=>'required',
         ];
     }
 

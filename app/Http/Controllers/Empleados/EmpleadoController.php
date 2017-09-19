@@ -98,7 +98,6 @@ class EmpleadoController extends Controller
 
     public function update(EmpleadoRequestUpdate $request, $id)
     {
-
         $usuario = User::where('id', $id)->first();
         $usuario->active = $request->has('active')? 1 : 0;
         $usuario->vacacion = $request->has('vacacion')? 1 : 0;

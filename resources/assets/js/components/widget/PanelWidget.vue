@@ -177,7 +177,7 @@
 <script>
     /* jshint esnext:true */
 
-    var utils = require('./../../utils.js');
+    var utils = require('../../helper/utils.js');
     var Notificion = new Alert('#notificacion');
     var Vue = require('vue');
     Vue.use(require('vue-resource'));

@@ -17,7 +17,7 @@
   <div class="panel-body">
 
       {!!Form::model($empleado, ['route'=>['empleados.empleado.update', $empleado->id], 'method'=>'PUT'])!!}
-
+        {!! Form::hidden('id', $empleado->id) !!}
         @include('empleados/empleado/partials/actualizar_atributos')
       
   </div>

@@ -1,39 +1,15 @@
-@extends('layouts.app')
-
-@section('titulo')
-  Nueva Tarea
-@endsection
-
-@section('content')
-
 <div class="panel panel-default" id="formNuevaTarea">
 
   <div class="panel-heading">
-    <a  href="{{route('tareas.tareaProgramadas.index')}}" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
-    <p class="titulo-panel">Nueva Tarea - Proxima Semana</p>
+    <p class="titulo-panel">Tarea Agenda</p>
   </div>
 
   <div class="panel-body">
-        <div class="breadcrumb col-sm-12">
-            <p class="visible-xs">
-                De
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}</b>
-                hasta
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}</b>
-            </p>
-            <p class="hidden-xs">
-                Tarea programadas del
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}</b>
-                hasta
-                <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}.</b>
-                <b > Los campos con (*) son obligatorios </b>
-            </p>
-        </div>
 
-      @include('partials/alert/error')
+      <b > Los campos con (*) son obligatorios </b>
 
       {!! Form::open(['route'=>'tareas.tareaProgramadas.store', 'method'=>'POST']) !!}
-      {!! Form::hidden('estimados', \Usuario::get('preferencias')->get('verFechasEstimadas') ) !!}
+      <input type="number" name="estimados" value="0" hidden>
 
      {{-- Descripcion --}}
       <div class="form-group">
@@ -41,7 +17,7 @@
             @if ($errors->has('descripcion')) has-error @endif">
             <label>Descripcion *</label>
               <input type="text" minlength="5" value="{{ old('descripcion') }}" style="margin-bottom: 15px;"
-                   maxlength="60" name="descripcion" placeholder="Descripcion"  diaInicio="{{ \Cache::get('diainicio') }}"
+                   maxlength="60" name="descripcion" placeholder="Descripcion"  diaInicio="{{ \Cache::get('diaInicio') }}"
                    class="form-control" required>
           @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
           </div>
@@ -54,12 +30,12 @@
             has-error
         @endif">
 
-        <label>Fecha de Comienzo *: </label>
+        <label>Fecha Inicio *: </label>
 
         <input-date tipo="text" nombre="fechaInicioEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
-                    valor="{{ old('fechaInicioEstimado') }}" placeholder="Comienzo"
-                    fechainicio="{{  \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}"
-                    fechafin='{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}' >
+                    valor="{{ old('fechaInicioEstimado') }}" placeholder="dd/mm/aaaa"
+                    fechainicio="{{  $semanas->fechaInicio }}"
+                    fechafin='{{ $semanas->fechaFin }}' >
         </input-date>
         @if ($errors->has('fechaInicioEstimado'))
             <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p>
@@ -71,12 +47,12 @@
             has-error
         @endif">
 
-        <label>Fecha Finalizacion *: </label>
+        <label>Fecha Fin *: </label>
 
         <input-date tipo="text" nombre="fechaFinEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
-                    valor="{{ old('fechaFinEstimado') }}" placeholder="Finalizacion"
-                    fechainicio="{{  \Calcana::cambiarFormatoEuropeo($semanas->fechaInicio) }}"
-                    fechafin='{{ \Calcana::cambiarFormatoEuropeo($semanas->fechaFin) }}' >
+                    valor="{{ old('fechaFinEstimado') }}" placeholder="dd/mm/aaaa"
+                    fechainicio="{{  $semanas->fechaInicio }}"
+                    fechafin='{{ $semanas->fechaFin }}' >
 
         </input-date>
         @if ($errors->has('fechaFinEstimado'))
@@ -102,8 +78,8 @@
       <label class="form-group col-sm-12 col-xs-12">Tiempo Estimado *</label>
       <div class="form-group  col-xs-12 col-sm-3 col-md-3 col-lg-2 @if ($errors->has('hora')) has-error @endif">
           Horas:
-          <input type="number" min="0"  name="hora" max="999" placeholder="Horas"
-                 value="{{ old('hora') }}" class="form-control"   diaInicio="{{ \Cache::get('diainicio') }}"
+          <input type="number" min="0"  name="hora" max="150" placeholder="Horas" v-model="tarea.hora"
+                 value="{{ old('hora') }}" class="form-control"
                  required >
           @if ($errors->has('hora'))
               <p class="help-block">{{ $errors->first('hora') }}</p>
@@ -112,9 +88,9 @@
 
       <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2 @if ($errors->has('minuto')) has-error @endif">
           Minutos:
-          <input type="number" min="0" name="minuto" max="999"   diaInicio="{{ \Cache::get('diainicio') }}"
+          <input type="number" min="0" name="minuto" max="999"
                  class="form-control" value="{{ old('minuto') }}"  placeholder="Minutos"
-                 required>
+                 v-model="tarea.minuto" required>
 
           @if ($errors->has('minuto'))
               <p class="help-block">{{ $errors->first('minuto') }}</p>
@@ -126,8 +102,8 @@
 </div>
   <div class="panel-footer text-right">
       <a  id="cancelar"
-          href="{{route('tareas.tareaProgramadas.index')}}"
-          class="btn btn-danger" @click="mostrarModalLoading()"
+          @click="hideNuevaTareaAgenda($event)"
+          class="btn btn-danger"
           type="reset"><span class="fa fa-times">
           </span> Cancelar</a>
 
@@ -159,4 +135,4 @@
 
 </script>
 
-@endsection
+

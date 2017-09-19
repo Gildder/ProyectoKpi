@@ -452,15 +452,24 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
 
+
+    // tareas siguiente semana
+    Route::get('tareas/tareaProgramadas/listaTareas',
+        array('as' => 'tareas.tareaProgramadas.listaTareas', 'uses' => 'Tareas\TareaProgramadaController@listaTareas') );
+
+
     // tareas siguiente semana
     Route::get('tareas/tareaProgramadas/createnext',
         array('as' => 'tareas.tareaProgramadas.createnext', 'uses' => 'Tareas\TareaProgramadaController@createnext') );
 
     // tareas programadas
-	Route::get('tareas/tareaProgramadas/archivados',
-		array('as' => 'tareas.tareaProgramadas.archivados', 'uses' => 'Tareas\TareaProgramadaController@archivados') );
+	Route::get('tareas/tareaProgramadas/archivadas',
+		array('as' => 'tareas.tareaProgramadas.archivadas', 'uses' => 'Tareas\TareaProgramadaController@archivadas') );
 
-	Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController',
+    Route::get('tareas/tareaProgramadas/agendadas',
+        array('as' => 'tareas.tareaProgramadas.agendadas', 'uses' => 'Tareas\TareaProgramadaController@agendadas') );
+
+    Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController',
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
 	Route::get('tareas/tareaProgramadas/resolver/{tarea}',

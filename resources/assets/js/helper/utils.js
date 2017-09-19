@@ -88,11 +88,59 @@ module.exports = {
     },
     mostrarCargando: function (opcion) {
         if(opcion){
-            $('#modal-loading').modal('show');
+            $('#loading').modal('show');
         }else{
-            $('#modal-loading').modal('hide');
+            $('#loading').modal('hide');
         }
     },
 
+    DisableDays: function (date) {
+        var isd = RangeDatesIsDisable;
+        var rd = RangeDates;
+
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+
+        for (var i = 0; i < rd.length; i++) {
+            var ds = rd[i].split(',');
+
+            var di, df;
+            var m1, d1, y1, m2, d2, y2;
+
+
+            if (ds.length == 1) {
+                di = ds[0].split('/');
+
+                m1 = parseInt(di[0]);
+                d1 = parseInt(di[1]);
+                y1 = parseInt(di[2]);
+                if (y1 == y && m1 == (m + 1) && d1 == d) return [!isd];
+            } else if (ds.length > 1) {
+                di = ds[0].split('/');
+                df = ds[1].split('/');
+                m1 = parseInt(di[0]);
+                d1 = parseInt(di[1]);
+                y1 = parseInt(di[2]);
+                m2 = parseInt(df[0]);
+                d2 = parseInt(df[1]);
+                y2 = parseInt(df[2]);
+
+                if (y1 >= y || y <= y2) {
+                    if ((m + 1) >= m1 && (m + 1) <= m2) {
+                        if (m1 == m2) {
+                            if (d >= d1 && d <= d2) return [!isd];
+                        } else if (m1 == (m + 1)) {
+                            if (d >= d1) return [!isd];
+                        } else if (m2 == (m + 1)) {
+                            if (d <= d2) return [!isd];
+                        } else return [!isd];
+                    }
+                }
+            }
+        }
+        console.log([isd]);
+        return [isd];
+    },
 
 }

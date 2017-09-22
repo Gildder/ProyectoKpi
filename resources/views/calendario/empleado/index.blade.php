@@ -21,6 +21,9 @@
     {{-- Moment --}}
     <script src="{{URL::asset('plugins/moment/moment.min.js')}}"></script>
 
+
+    @include('Calendario/empleado/tareaComun/delete')
+
     <div class="row">
         <div class="col-md-3">
             <div class="box box-solid">
@@ -29,17 +32,103 @@
                 </div>
                 <div class="box-body">
                     <!-- the events -->
-                    <div id="external-events" >
+                    <div id="external row" >
                         @foreach($estados as $estado)
-                            <div class="external-event col-xs-4 col-sm-3 col-md-3 col-lg-12"
-                             style="background-color: {{ $estado->color }};
-                                     color: {{ $estado->texto }}">{{ $estado->nombre }}</div>
+                            <div class="external-state col-xs-4 col-sm-2 col-md-5 col-lg-5"
+                                 style="background-color: {{ $estado->color }};
+                                         color: {{ $estado->texto }}; margin: 1px;">{{ $estado->nombre }}
+                            </div>
                         @endforeach
                     </div>
                 </div>
                 <!-- /.box-body -->
             </div>
+
+
+            {{-- Modal para Nueva Tarea--}}
+            @include('tareas/tareaProgramadas/modal/create')
+
+        @verbatim
+
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h4 class="box-title">Tareas</h4>
+                </div>
+
+                <div class="box-body">
+                    <!-- the events -->
+                    <div hidden>
+                        {{ getTareasComunes() }}
+                    </div>
+
+
+                    <div id="external-events">
+                        <div class="external-event" id="tarea-{{tarea.id }}"
+                             :style="{ 'background': tarea.color, color: tarea.textoColor }"
+                                v-for="tarea in listaTareaComunes">
+                            {{ tarea.titulo }}
+                            <div class="btn-group" style="float: right; margin-right: -10px; margin-top: -5px;" id="pnTareaComun">
+                                <a href="#" class="btn btn-default btn-sm" @click="agregarTareaComun($event, tarea)"
+                                   title="Agregar">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                                <a href="#" class="btn btn-default btn-sm"
+                                   @click="mostrarModalElimnarTareaComun($event, tarea)"
+                                   title="Eliminar">
+                                    <i class="fa fa-trash" ></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Crear Tarea</h3>
+                </div>
+                <div class="box-body">
+                    <form>
+                    <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
+                        <ul class="fc-color-picker" id="color-chooser">
+                            <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
+                            <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- /btn-group -->
+                    <div class="input-group">
+
+                        <input id="nuevaTarea"
+                               v-model="tituloNuevoTareaComun"
+                               maxlength="30"
+                               type="text" class="form-control" placeholder="Descripcion Tarea">
+
+                        <div class="input-group-btn">
+                            <button id="btnAddTarea" :disabled="tituloTareaComunVacio == false"
+                                    type="button" @click.prevent="guardarTareaComunes()"
+                                    class="btn btn-primary btn-flat">Agregar</button>
+                        </div>
+                        <!-- /btn-group -->
+                    </div>
+                    </form>
+                    <!-- /input-group -->
+                </div>
+            </div>
+        @endverbatim
         </div>
+
         <!-- /.col -->
         <div class="col-md-9">
             <div class="box box-primary">
@@ -93,8 +182,18 @@
                 m = date.getMonth(),
                 y = date.getFullYear();
             $('#calendar').fullCalendar({
+                theme: true,
+                // botones customer
+                customButtons: {
+                    btnNuevaTarea: {
+                        text: 'Nueva Tarea +',
+                        click: function() {
+                            $('#modal-nueva-tarea').modal('toggle');
+                        }
+                    }
+                },
                 header: {
-                    left: 'prev,next today, listMonth',
+                    left: 'prev,next today,  listMonth, btnNuevaTarea',
                     center: 'title',
                     right: 'month, basicWeek, basicDay',
                 },
@@ -102,22 +201,23 @@
                     today: 'Hoy',
                     month: 'Mes',
                     week: 'Semana',
-                    day: 'Dia',
+                    day:  'Dia',
                     list: 'Lista'
                 },
 
-                /* traduccion de los textos */
+                    /* traduccion de los textos */
                 monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
                 dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
                 dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
 
-                allDaySlot: false,
                 displayEventTime : false,
                 firstDay: 1,
                 businessHours: true, // display business hours
                 navLinks: true, // can click day/week names to navigate views
+                editable: false,
                 eventLimit: true, // allow "more" link when too many events
+                eventOverlap: false,
                 //Obteniendo las tareas
                 events: { url: 'cargarTareas'},
 
@@ -125,11 +225,12 @@
                     var start = data.start.format('DD/MM/YYYY');
                     var back = LightenDarkenColor(data.backgroundColor, 90);
                     var hora = data.hora;
-                    var end = convertDateFormat(data.fin);
+//                    var end = convertDateFormat(data.end);
+                    var end = data.end.format('DD/MM/YYYY');
 
                     tooltip =
-                        "<div id='tooltip' class=\'tooltipevent\' style=\'width:200px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:"+data.backgroundColor +"; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>"+data.nro +"</span></label></center>" +
-                        "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" +
+                        "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:"+data.backgroundColor +"; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>"+data.nro +"</span></label></center>" +
+                        "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" +
                         "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" +
                         "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
 
@@ -156,9 +257,7 @@
                     var start = data.start.format('DD/MM/YYYY');
                     var back = LightenDarkenColor(data.backgroundColor, 90);
                     var hora = data.hora;
-                    var end = convertDateFormat(data.fin);
-
-                    console.log(data);
+                    var end =  data.end.format('DD/MM/YYYY');
 
                     $('#modal-tarea-Calendario').modal("show");
                     $('#modalTareaTitle').html(data.title);
@@ -215,8 +314,34 @@
 
         }
 
+        /* ADDING EVENTS */
+        var currColor = "#3c8dbc"; //Red by default
+        //Color chooser button
+        var colorChooser = $("#color-chooser-btn");
+        $("#color-chooser > li > a").click(function (e) {
+            e.preventDefault();
+            //Save color
+            currColor = $(this).css("color");
+            //Add color effect to button
+            $('#btnAddTarea').css({"background-color": currColor, "border-color": currColor});
+        });
+
     });
 
+//    // eliminar taera
+//    $('#eliminarTareaComun').on('click',function () {
+//        let divBtnGr = $(this).parents('div');
+//        let divBtn = divBtnGr.parents('div');
+//
+//
+//        let idTarea = divBtn.data('tareaComunId');
+//        let tituloTarea = divBtn.data('tareaComunTitulo');
+//
+//        console.log('Hola '+ idTarea);
+//    });
+
     </script>
+
+
 @endsection
 

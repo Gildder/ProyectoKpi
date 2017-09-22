@@ -482,6 +482,12 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::get('tareas/tareaProgramadas/{id}/obtenerEstadoBtnEliminarTarea',
         array('as' => 'tareas.tareaProgramadas.obtenerEstadoBtnEliminarTarea',
             'uses'=> 'Tareas\TareaProgramadaController@obtenerEstadoBtnEliminarTarea'));
+    /* consulta ajax */
+
+
+    Route::post('tareas/tareaProgramadas/fechaInicioFinSemamal',
+            array('as' => 'tareas.tareaProgramadas.fechaInicioFinSemamal', 'uses' => 'Tareas\TareaProgramadaController@fechaInicioFinSemamal') );
+
 
     /* calendario de Tareas*/
     Route::get('calendario/empleado/index',
@@ -491,8 +497,12 @@ route::group(['middleware'=>['auth', 'estandard']], function()
             array('as' => 'calendario.empleado.cargarTareas', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@cargarTareas') );
 
 
-	Route::post('calendario/empleado/guardarTarea',
-        array('as' => 'calendario.empleado.guardarTarea', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@guardarTarea') );
+	Route::post('calendario/empleado/guardarTareaComun',
+        array('as' => 'calendario.empleado.guardarTareaComun', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@guardarTareaComun') );
+
+
+	Route::post('calendario/empleado/eliminarTareaComun',
+        array('as' => 'calendario.empleado.eliminarTareaComun', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@eliminarTareaComun') );
 
 
 	Route::post('calendario/empleado/actualizarTareaHora',
@@ -500,6 +510,10 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 
 	Route::get('calendario/empleado/obtenerEstadosTareas',
 		array('as' => 'calendario.empleado.obtenerEstadosTareas', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@obtenerEstadosTareas') );
+
+    /* consulta ajax */
+    Route::get('calendario/empleado/getTareaComunes',
+        array('as' => 'calendario.empleado.getTareaComunes', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@getTareaComunes') );
 
 });
 

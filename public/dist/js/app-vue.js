@@ -12363,119 +12363,6 @@ $(document).ready(function () {
     Vue.component('tabla-tarea', require('./components/tareas/tabla/tabla.vue'));
 
     //noinspection JSAnnotator
-    /**
-     * Creacion de VueJS
-     */
-
-    var vmTarea = new Vue({
-        el: '#tareaNormales',
-        data: {
-            showTarea: false,
-            showTareaAgenda: false,
-            tareas: [],
-            tarea: {
-                descripcion: '',
-                fechaInicio: '',
-                fechaFin: '',
-                hora: '',
-                minuto: ''
-            },
-            tareasAgenda: [],
-            tareasArchivo: [],
-            semanas: ''
-        },
-        computed: {
-            cmpShowTarea: function cmpShowTarea() {
-                return this.showTarea;
-            }
-        },
-        ready: function ready() {
-            this.hasNuevaTarea();
-        },
-        methods: {
-            obtenerTareas: function obtenerTareas() {
-                $.ajax({
-                    url: 'tareas/tareaProgramadas/listaTareas',
-                    method: 'POST',
-                    dataType: 'json',
-                    success: function success(data) {
-                        vmTarea.tareas = data.tareas;
-
-                        vmTarea.semanas = data.semanas;
-                    }
-                });
-            },
-            guardarTarea: function guardarTarea() {
-                alert('Hola');
-            },
-            /******************** Metodos de la Vista **********************/
-            evenNuevaTarea: function evenNuevaTarea() {
-                $('#submenu').toggle(300);
-                $('#nuevaTarea').toggle(500);
-
-                this.showTarea = !this.showTarea;
-            },
-            evenNuevaTareaAgenda: function evenNuevaTareaAgenda() {
-                $('#submenuagenda').toggle(300);
-                $('#nuevaTareaAgenda').toggle(500);
-
-                this.showTareaAgenda = !this.showTareaAgenda;
-            },
-            newTarea: function newTarea() {
-                this.tarea.descripcion = '';
-                this.tarea.fechaInicio = '';
-                this.tarea.fechaFin = '';
-                this.tarea.hora = '0';
-                this.tarea.minuto = '0';
-            },
-            hasNuevaTarea: function hasNuevaTarea() {
-                var cache = localStorage.getItem('showTarea');
-                var cacheAgenda = localStorage.getItem('showTarea');
-
-                if (cache !== undefined || cache !== null) {
-                    this.showTarea = cache;
-                } else {
-                    this.showTarea = false;
-                }
-
-                if (cacheAgenda !== undefined || cacheAgenda !== null) {
-                    this.showTareaAgenda = cacheAgenda;
-                } else {
-                    this.showTareaAgenda = false;
-                }
-            },
-            /* Permite mostra la vista de Nueva Tarea */
-            showNuevaTarea: function showNuevaTarea($event) {
-                $event.preventDefault();
-
-                this.evenNuevaTarea();
-                this.newTarea();
-            },
-            /* Permite mostra la vista de Nueva Tarea */
-            showNuevaTareaAgenda: function showNuevaTareaAgenda($event) {
-                $event.preventDefault();
-
-                this.evenNuevaTareaAgenda();
-                this.newTarea();
-            },
-
-            hideNuevaTarea: function hideNuevaTarea($event) {
-                $event.preventDefault();
-                localStorage.removeItem('showTarea');
-
-                this.evenNuevaTarea();
-                this.evenNuevaTareaAgenda();
-            },
-
-            hideNuevaTareaAgenda: function hideNuevaTareaAgenda($event) {
-                $event.preventDefault();
-                localStorage.removeItem('showTarea');
-
-                this.evenNuevaTareaAgenda();
-            }
-
-        }
-    });
     vm = new Vue({
         el: 'body',
         data: {
@@ -12503,11 +12390,34 @@ $(document).ready(function () {
             // Login
             type_pass: true,
 
-            //Tarea
+            //******* Tarea ********
             btnResultado: 0,
             btnEditar: 0,
             btnEliminar: 0,
             utilizarfechasestimadas: true,
+            tareaNueva: {
+                id: '',
+                descripcion: '',
+                fechaInicio: '',
+                fechaFin: '',
+                hora: '',
+                minuto: ''
+            },
+
+            /**************** Tarea Comunes ****************/
+            listaTareaComunes: {
+                id: 0,
+                titulo: '',
+                color: '',
+                textoColor: ''
+            },
+            tareaComun: {
+                id: 0,
+                titulo: '',
+                color: '',
+                textoColor: ''
+            },
+            tituloNuevoTareaComun: '',
 
             // Empelados
             isTecnico: 0,
@@ -12523,6 +12433,23 @@ $(document).ready(function () {
             // corregir este filtro
             if (window.location.pathname === '/evaluadores/evaluados/dashboard') {
                 this.obtenerListaWidget();
+            }
+        },
+        computed: {
+            listaVacia: function listaVacia() {
+                if (this.listaTareaComunes.length == 0) {
+                    return true;
+                }
+
+                return false;
+            },
+
+            tituloTareaComunVacio: function tituloTareaComunVacio() {
+                if (this.tituloNuevoTareaComun.length > 0) {
+                    return true;
+                }
+
+                return false;
             }
         },
         events: {
@@ -12651,6 +12578,115 @@ $(document).ready(function () {
             /* buscar tareas de supervisores */
             buscarTareasSupervisores: function buscarTareasSupervisores() {
                 alert('Hola Mundo');
+            },
+            /******************** Metodos del modulo de Tareas *******************/
+            mostrarNuevaTarea: function mostrarNuevaTarea($event) {
+                $event.preventDefault();
+
+                // mostrar la ventana de modal de nueva tarea
+                $('#modal-nueva-tarea').modal('toggle');
+
+                sessionStorage.setItem('sntu', true);
+            },
+            cancelarNuevaTarea: function cancelarNuevaTarea($event) {
+                $event.preventDefault();
+
+                $('#formNuevaTarea')[0].reset();
+                $('#hora').val(0);
+                $('#minuto').val(0);
+
+                $('#modal-nueva-tarea').modal('toggle');
+
+                // eliminamos el estado del modal de nueva tarea
+                sessionStorage.removeItem('sntu');
+
+                console.log('evento de cancaelar nueva tarea');
+            },
+            guardarTarea: function guardarTarea() {},
+            /********************************** Tarea Comunes *****************************************/
+            guardarTareaComunes: function guardarTareaComunes() {
+                var color = $('#btnAddTarea').css("backgroundColor");
+                $.ajax({
+                    url: 'guardarTareaComun',
+                    method: 'POST',
+                    data: { titulo: this.tituloNuevoTareaComun, color: color },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data.tareas);
+
+                        Notificion.success('Se guardo correctamente.', 1000);
+
+                        this.listaTareaComunes = data.tareas;
+                        this.tituloNuevoTareaComun = '';
+                    }.bind(this), error: function (data) {
+                        alert('Uppps, Existen problemas en servidor consulte al Administrador');
+                    }.bind(this)
+                });
+            },
+            getTareasComunes: function getTareasComunes() {
+                $.ajax({
+                    url: 'getTareaComunes',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        this.listaTareaComunes = data.tareas;
+                    }.bind(this), error: function (data) {
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                    }.bind(this)
+                });
+            },
+            eliminarTareasComunes: function eliminarTareasComunes($event) {
+                $event.preventDefault();
+
+                $.ajax({
+                    url: 'eliminarTareaComun',
+                    method: 'POST',
+                    data: { id: this.tareaComun.id },
+                    dataType: 'json',
+                    success: function (data) {
+                        this.listaTareaComunes = data.tareas;
+
+                        // quitamos div de la vista
+                        $('tarea-' + this.tareaComun.id).remove();
+
+                        this.limpiarTareaComun();
+
+                        $('#modal-delete-tarea-comun').modal('toggle');
+
+                        Notificion.success('Se elimino correcntamente', 1000);
+                    }.bind(this), error: function (data) {
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                    }.bind(this)
+                });
+            },
+            mostrarModalElimnarTareaComun: function mostrarModalElimnarTareaComun($event, tarea) {
+
+                $event.preventDefault();
+
+                this.tareaComun = tarea;
+
+                $('#modal-delete-tarea-comun').modal('toggle');
+            },
+            cancelarElimnarTareaComun: function cancelarElimnarTareaComun($event) {
+                $event.preventDefault();
+
+                this.limpiarTareaComun();
+
+                $('#modal-delete-tarea-comun').modal('toggle');
+            },
+            limpiarTareaComun: function limpiarTareaComun() {
+                this.tareaComun.id = 0;
+                this.tareaComun.titulo = '';
+                this.tareaComun.color = '';
+                this.tareaComun.textoColor = '';
+            },
+            agregarTareaComun: function agregarTareaComun($event, tarea) {
+
+                this.tareaComun = tarea;
+
+                $('#modal-nueva-tarea').modal('toggle');
+
+                $('#nuevaTareaDescripcion').val(this.tareaComun.titulo);
             }
 
         }
@@ -12658,13 +12694,12 @@ $(document).ready(function () {
 });
 
 },{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/tareas/estados.vue":15,"./components/tareas/tabla/tabla.vue":16,"./components/widget/PanelWidget.vue":17,"./components/widget/grafica.vue":18,"./helper/utils.js":19,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var Vue = require('vue');
 
@@ -12672,7 +12707,7 @@ var RangeDates = ["12/8/2017, 13/8/2017"];
 var RangeDatesIsDisable = true;
 
 exports.default = {
-    props: _defineProperty({
+    props: {
         tipo: { type: String, required: true },
         nombre: { type: String, required: true },
         fechainicio: { type: String, required: true },
@@ -12680,26 +12715,28 @@ exports.default = {
         placeholder: { type: String, required: true },
         readonly: { type: String, default: false },
         valor: { type: String, required: true },
-        diainicio: { type: String, required: true }
-    }, "diainicio", { type: String, required: true }),
+        diainicio: { type: String, required: true },
+        agendar: { type: String, required: true }
+    },
+    computed: {
+        cambioFecha: function cambioFecha() {
+            console.log('fuera');
+            if (this.valor !== '') {
+                console.log('dentro');
+                this.cambioFechaTarea();
+                this.cargarDate();
+            }
+        }
+    },
     ready: function ready() {
-        $("#inputdate-" + this.nombre).datepicker({
-            format: 'dd/mm/yyyy',
-            changeMonth: true,
-            showWeek: false,
-            numberOfMonths: this.isSemanaTieneFinMes(),
-            firstDay: this.diainicio,
-            showButtonPanel: true,
-            //                beforeShowDay: $.datepicker.noWeekends,php artis
-            minDate: this.fechainicio,
-            maxDate: this.fechafin,
-            selectOtherMonths: true,
-            showAnim: 'fadeIn',
-            beforeShowDay: false
-        });
+        this.obtenerFechaFin();
+
+        this.cargarDate();
+
         this.DisableDays(new Date());
     },
     methods: {
+
         DisableDays: function DisableDays(date) {
             var isd = RangeDatesIsDisable;
             var rd = RangeDates;
@@ -12758,21 +12795,67 @@ exports.default = {
                 return 1;
             }
         },
-        validarFecha: function validarFecha() {}
+        obtenerFechaFin: function obtenerFechaFin() {
+            if (parseInt(this.agendar) === 0) {
+                return this.fechafin;
+            } else {
+                var fecha = new Date();
+                var ano = fecha.getFullYear();
+
+                this.fechafin = '31/12/' + ano;
+            }
+        },
+        cambioFechaTarea: function cambioFechaTarea() {
+            if (parseInt(this.agendar) === 1 && this.agendar !== undefined) {
+
+                $.ajax({
+                    url: 'fechaInicioFinSemamal',
+                    method: 'POST',
+                    data: { fecha: this.valor },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data.semanas);
+                        this.fechafin = data.semanas.fechaFin;
+                        this.fechainicio = data.semanas.fechaInicio;
+                    }.bind(this), error: function (data) {
+                        console.log('Error: No se obtuvo las cantidad de semanas');
+                    }.bind(this)
+                });
+            }
+        },
+        cargarDate: function cargarDate() {
+
+            console.log(this.fechafin);
+            console.log("#inputdate-" + this.nombre);
+
+            $("#inputdate-" + this.nombre).datepicker({
+                format: 'dd/mm/yyyy',
+                changeMonth: true,
+                showWeek: false,
+                numberOfMonths: this.isSemanaTieneFinMes(),
+                firstDay: this.diainicio,
+                showButtonPanel: true,
+                minDate: this.fechainicio,
+                maxDate: this.fechafin,
+                selectOtherMonths: true,
+                showAnim: 'fadeIn',
+                beforeShowDay: false
+            });
+        }
 
     }
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" readonly=\"{{ readonly}}\" placeholder=\"{{ placeholder }}\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" style=\"z-index: 3000\" readonly=\"{{ readonly}}\" agendar=\"{{ agendar }}\" v-model=\"valor\" v-bind:key=\"cambioFecha\" placeholder=\"{{ placeholder }}\" pattern=\"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-76821412", module.exports)
+    hotAPI.createRecord("_v-ffeacd1c", module.exports)
   } else {
-    hotAPI.update("_v-76821412", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ffeacd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
@@ -12805,9 +12888,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d44d905e", module.exports)
+    hotAPI.createRecord("_v-82870a68", module.exports)
   } else {
-    hotAPI.update("_v-d44d905e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-82870a68", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
@@ -12823,9 +12906,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6ab16542", module.exports)
+    hotAPI.createRecord("_v-78d01944", module.exports)
   } else {
-    hotAPI.update("_v-6ab16542", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-78d01944", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],11:[function(require,module,exports){
@@ -12857,9 +12940,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-389c7f28", module.exports)
+    hotAPI.createRecord("_v-8c4b763a", module.exports)
   } else {
-    hotAPI.update("_v-389c7f28", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-8c4b763a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
@@ -13073,9 +13156,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1454006e", module.exports)
+    hotAPI.createRecord("_v-d4dc73ae", module.exports)
   } else {
-    hotAPI.update("_v-1454006e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d4dc73ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
@@ -13097,9 +13180,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-79ad8920", module.exports)
+    hotAPI.createRecord("_v-6d32a585", module.exports)
   } else {
-    hotAPI.update("_v-79ad8920", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-6d32a585", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
@@ -13209,9 +13292,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-2f0ab4d9", module.exports)
+    hotAPI.createRecord("_v-57edf7d4", module.exports)
   } else {
-    hotAPI.update("_v-2f0ab4d9", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-57edf7d4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
@@ -13267,9 +13350,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-f08b9de0", module.exports)
+    hotAPI.createRecord("_v-4305d48b", module.exports)
   } else {
-    hotAPI.update("_v-f08b9de0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4305d48b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
@@ -13397,9 +13480,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1762590a", module.exports)
+    hotAPI.createRecord("_v-11d64176", module.exports)
   } else {
-    hotAPI.update("_v-1762590a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-11d64176", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
@@ -13887,9 +13970,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0c322c3d", module.exports)
+    hotAPI.createRecord("_v-29b99a38", module.exports)
   } else {
-    hotAPI.update("_v-0c322c3d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-29b99a38", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
@@ -13975,9 +14058,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5d4e982c", module.exports)
+    hotAPI.createRecord("_v-189a3ba7", module.exports)
   } else {
-    hotAPI.update("_v-5d4e982c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-189a3ba7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],19:[function(require,module,exports){

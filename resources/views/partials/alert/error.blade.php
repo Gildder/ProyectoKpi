@@ -1,16 +1,28 @@
 @if($errors->has())
     @foreach ($errors->all('<p>:message</p>') as $message)
-        <div  class="alert alert-danger notificaciones" role="alert" >
-        <button type="button" class="close pull-right" data-dismiss="alert">&times;</button>
+        <div class="alert alert-danger notificaciones" role="alert" >
+            <button type="button" class="close pull-right" data-dismiss="alert">&times;</button>
             {!! $message !!}
         </div>
     @endforeach
 @endif
 
 @if (Session::has('message'))
-    <div class="alert alert-success notificaciones" role="alert">{{ Session::get('message') }}
+    <div class="alert alert-success notificaciones" role="alert">
+        {{ Session::get('message') }}
 		<button type="button" class="close pull-right" data-dismiss="alert" >&times;</button>
     </div>
+
+    <script>
+        /* validacion de modal de tarea */
+        $(document).ready(function () {
+            let sntu = sessionStorage.getItem('sntu');
+
+            if(sntu !== undefined){
+                sessionStorage.removeItem('sntu');
+            }
+        });
+    </script>
 @endif
 {{--<script>--}}
     {{--$(document).ready(function () {--}}
@@ -54,4 +66,8 @@
         margin-left: -250px;
 
     }
+
+
 </style>
+
+

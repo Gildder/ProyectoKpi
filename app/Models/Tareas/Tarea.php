@@ -175,41 +175,6 @@ class Tarea extends Model
         }
     }
 
-    public function obtenerHora($horas, $minutos)
-    {
-        $tiempo = new Tiempo;
-
-        return $tiempo->obtenerHora($horas, $minutos);
-    }
-
-    public function validarLimiteFechaEstimadas()
-    {
-        $semanas = $this->obtnerSemanaDelAnio();
-
-        if((strtotime($this->fechaInicioEstimado) >= strtotime($semanas->fechaInicio))
-            && (strtotime($this->fechaFinEstimado) <= strtotime($semanas->fechaFin)))
-        {
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-
-    public function validarLimiteFechaSolucion()
-    {
-        $semanas = $this->obtnerSemanaDelAnio();
-
-        if((strtotime($this->fechaInicioSolucion) >= strtotime($semanas->fechaInicio))
-            && (strtotime($this->fechaFinsolucion) <= strtotime($semanas->fechaFin)))
-        {
-            return true;
-        }else{
-            return false;
-        }
-
-    }
-
 
     public function validarDuracionCeros()
     {
@@ -219,48 +184,4 @@ class Tarea extends Model
             return true;
         }
     }
-
-    public function validarFechaInicioEstimacion($fechaInicio, $todasemana)
-    {
-        if(isset($todasemana))
-        {
-            $semanas = $this->obtnerSemanaDelAnio();
-            return $semanas->fechaInicio;
-        }else{
-            return $this->cambiarFormatoDB($fechaInicio);
-
-        }
-    }
-
-    public function validarFechaFinEstimacion($fechaFin, $todasemana)
-    {
-        if(isset($todasemana))
-        {
-            $semanas = $this->obtnerSemanaDelAnio();
-            return $semanas->fechaFin;
-        }else{
-            return $this->cambiarFormatoDB($fechaFin);
-
-        }
-    }
-
-
-
-    /**
-     * @return mixed
-     */
-    public function obtnerSemanaDelAnio()
-    {
-        $fecha = date('Y-m-d');
-        if (Caches::obtener('proxSemana') == 1) {
-            $fecha = self::getSemanasTareas(date(date('Y-m-d', strtotime('now +7 day'))));
-        }else{
-            $fecha = self::getSemanasTareas($fecha);
-        }
-        return $fecha;
-    }
-
-
-
-
 }

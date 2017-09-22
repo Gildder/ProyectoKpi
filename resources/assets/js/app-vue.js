@@ -64,123 +64,6 @@ $(document).ready(function() {
     );
 
     //noinspection JSAnnotator
-    /**
-     * Creacion de VueJS
-     */
-
-    var vmTarea = new Vue({
-        el: '#tareaNormales',
-        data: {
-            showTarea: false,
-            showTareaAgenda: false,
-            tareas: [],
-            tarea: {
-                descripcion:'',
-                fechaInicio: '',
-                fechaFin: '',
-                hora: '',
-                minuto:''
-            },
-            tareasAgenda: [],
-            tareasArchivo: [],
-            semanas: '',
-        },
-        computed:{
-            cmpShowTarea: function () {
-                return this.showTarea;
-            }
-        },
-        ready: function() {
-            this.hasNuevaTarea();
-        },
-        methods: {
-            obtenerTareas: function () {
-                $.ajax({
-                    url: 'tareas/tareaProgramadas/listaTareas',
-                    method:'POST',
-                    dataType:'json',
-                    success: function (data) {
-                        vmTarea.tareas = data.tareas;
-
-                        vmTarea.semanas = data.semanas;
-                    }
-                })
-            },
-            guardarTarea: function () {
-                alert('Hola' );
-            },
-            /******************** Metodos de la Vista **********************/
-            evenNuevaTarea: function () {
-                $('#submenu').toggle(300);
-                $('#nuevaTarea').toggle(500);
-
-                this.showTarea= ! this.showTarea;
-            },
-            evenNuevaTareaAgenda: function () {
-                $('#submenuagenda').toggle(300);
-                $('#nuevaTareaAgenda').toggle(500);
-
-                this.showTareaAgenda= ! this.showTareaAgenda;
-            },
-            newTarea: function () {
-                this.tarea.descripcion = '';
-                this.tarea.fechaInicio = '';
-                this.tarea.fechaFin = '';
-                this.tarea.hora = '0';
-                this.tarea.minuto = '0';
-            },
-            hasNuevaTarea: function () {
-                let cache = localStorage.getItem('showTarea');
-                let cacheAgenda = localStorage.getItem('showTarea');
-
-                if(cache !== undefined || cache !== null){
-                    this.showTarea = cache;
-                }else {
-                    this.showTarea = false;
-                }
-
-                if(cacheAgenda !== undefined || cacheAgenda !== null){
-                    this.showTareaAgenda = cacheAgenda;
-                }else {
-                    this.showTareaAgenda = false;
-                }
-            },
-            /* Permite mostra la vista de Nueva Tarea */
-            showNuevaTarea: function ($event) {
-                $event.preventDefault();
-
-                this.evenNuevaTarea();
-                this.newTarea();
-
-
-            },
-            /* Permite mostra la vista de Nueva Tarea */
-            showNuevaTareaAgenda: function ($event) {
-                $event.preventDefault();
-
-                this.evenNuevaTareaAgenda();
-                this.newTarea();
-
-
-            },
-
-            hideNuevaTarea: function ($event) {
-                $event.preventDefault();
-                localStorage.removeItem('showTarea');
-
-                this.evenNuevaTarea();
-                this.evenNuevaTareaAgenda();
-            },
-
-            hideNuevaTareaAgenda: function ($event) {
-                $event.preventDefault();
-                localStorage.removeItem('showTarea');
-
-                this.evenNuevaTareaAgenda();
-            }
-
-        }
-    });
     vm = new Vue({
         el: 'body',
         data: {
@@ -209,11 +92,35 @@ $(document).ready(function() {
             // Login
             type_pass: true,
 
-            //Tarea
+            //******* Tarea ********
             btnResultado: 0,
             btnEditar: 0,
             btnEliminar: 0,
             utilizarfechasestimadas: true,
+            tareaNueva: {
+                id: '',
+                descripcion: '',
+                fechaInicio: '',
+                fechaFin: '',
+                hora: '',
+                minuto: '',
+            },
+
+            /**************** Tarea Comunes ****************/
+            listaTareaComunes: {
+                id: 0,
+                titulo: '',
+                color: '',
+                textoColor: ''
+            },
+            tareaComun:{
+                id: 0,
+                titulo: '',
+                color: '',
+                textoColor: ''
+            },
+            tituloNuevoTareaComun: '',
+
 
             // Empelados
             isTecnico: 0,
@@ -229,6 +136,23 @@ $(document).ready(function() {
             // corregir este filtro
             if (window.location.pathname === '/evaluadores/evaluados/dashboard' ){
                 this.obtenerListaWidget();
+            }
+        },
+        computed: {
+            listaVacia: function() {
+                if(this.listaTareaComunes.length == 0 ){
+                    return true;
+                }
+
+                return false;
+            },
+
+            tituloTareaComunVacio: function() {
+                if(this.tituloNuevoTareaComun.length > 0 ){
+                    return true;
+                }
+
+                return false;
             }
         },
         events: {
@@ -362,7 +286,124 @@ $(document).ready(function() {
             /* buscar tareas de supervisores */
             buscarTareasSupervisores: function () {
                 alert('Hola Mundo');
+            },
+            /******************** Metodos del modulo de Tareas *******************/
+            mostrarNuevaTarea: function ($event) {
+                $event.preventDefault();
+
+                // mostrar la ventana de modal de nueva tarea
+                $('#modal-nueva-tarea').modal('toggle');
+
+                sessionStorage.setItem('sntu', true);
+            },
+            cancelarNuevaTarea: function ($event) {
+                $event.preventDefault();
+
+                $('#formNuevaTarea')[0].reset();
+                $('#hora').val(0);
+                $('#minuto').val(0);
+
+
+                $('#modal-nueva-tarea').modal('toggle');
+
+                // eliminamos el estado del modal de nueva tarea
+                sessionStorage.removeItem('sntu');
+
+                console.log('evento de cancaelar nueva tarea')
+            },
+            guardarTarea: function () {
+
+            },
+            /********************************** Tarea Comunes *****************************************/
+            guardarTareaComunes: function(){
+                var color = $('#btnAddTarea').css("backgroundColor");
+                $.ajax({
+                    url: 'guardarTareaComun',
+                    method: 'POST',
+                    data: { titulo: this.tituloNuevoTareaComun, color: color },
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data.tareas);
+
+                        Notificion.success('Se guardo correctamente.', 1000);
+
+                        this.listaTareaComunes = data.tareas;
+                        this.tituloNuevoTareaComun = '';
+                    }.bind(this), error: function (data) {
+                        alert('Uppps, Existen problemas en servidor consulte al Administrador');
+                    }.bind(this)
+                })
+            },
+            getTareasComunes: function(){
+                $.ajax({
+                    url: 'getTareaComunes',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        this.listaTareaComunes = data.tareas;
+                    }.bind(this), error: function (data) {
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                    }.bind(this)
+                })
+            },
+            eliminarTareasComunes: function($event){
+                $event.preventDefault();
+
+                $.ajax({
+                    url: 'eliminarTareaComun',
+                    method: 'POST',
+                    data: { id: this.tareaComun.id },
+                    dataType: 'json',
+                    success: function (data) {
+                        this.listaTareaComunes = data.tareas;
+
+                        // quitamos div de la vista
+                        $('tarea-'+this.tareaComun.id).remove();
+
+                        this.limpiarTareaComun();
+
+                        $('#modal-delete-tarea-comun').modal('toggle');
+
+                        Notificion.success('Se elimino correcntamente', 1000);
+
+                    }.bind(this), error: function (data) {
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+
+                    }.bind(this)
+                })
+            },
+            mostrarModalElimnarTareaComun: function($event, tarea){
+
+                $event.preventDefault();
+
+                this.tareaComun = tarea;
+
+                $('#modal-delete-tarea-comun').modal('toggle');
+            },
+            cancelarElimnarTareaComun: function ($event) {
+                $event.preventDefault();
+
+                this.limpiarTareaComun();
+
+                $('#modal-delete-tarea-comun').modal('toggle');
+
+            },
+            limpiarTareaComun: function () {
+                this.tareaComun.id = 0;
+                this.tareaComun.titulo = '';
+                this.tareaComun.color = '';
+                this.tareaComun.textoColor = '';
+            },
+            agregarTareaComun: function ($event, tarea) {
+
+                this.tareaComun = tarea;
+
+                $('#modal-nueva-tarea').modal('toggle');
+
+                $('#nuevaTareaDescripcion').val(this.tareaComun.titulo);
             }
+
+
 
         }
     });

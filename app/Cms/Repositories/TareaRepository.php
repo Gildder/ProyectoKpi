@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
+use ProyectoKpi\Cms\Clases\Tiempo;
 use ProyectoKpi\Http\Requests\Request;
 use ProyectoKpi\Models\Tareas\Tarea;
 
@@ -17,7 +18,7 @@ trait TareaRepository
     public static function getTodasTareas()
     {
         // Obtenemos las semanas de tareas
-        $semanaActual = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        $semanaActual = self::obtenerSemanaDelAnio(0);
 
         $tareas = \DB::table('vw_tareas_para_usuarios')
             ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
@@ -36,7 +37,7 @@ trait TareaRepository
     public static function getTareasArchivados()
     {
         // Obtenemos las semanas de tareas
-        $semanaActual = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        $semanaActual = self::obtenerSemanaDelAnio(0);
 
         $tareas = \DB::table('vw_tareas_para_usuarios')
             ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
@@ -55,10 +56,10 @@ trait TareaRepository
     public static function getTareasAgendadas()
     {
         // Obtenemos las semanas de tareas
-        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        $semanas = self::obtenerSemanaDelAnio(0);
 
         // Semana siguiente a la actual
-        $semanaSiguiente = TareaRepository::getSemanasTareas(date(date('Y-m-d', strtotime('now +7 day'))));
+        $semanaSiguiente = self::obtenerSemanaDelAnio(1);
 
         $tareas = \DB::table('vw_tareas_para_usuarios')
             ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
@@ -79,8 +80,15 @@ trait TareaRepository
         foreach ($tareas as $tarea){
             $aux = $tarea;
 
-            $aux->ubicaciones = self::getLocalizacionTarea($tarea->id);
+            if($tarea->estado_id <> 1){
+                $aux->ubicaciones = self::getLocalizacionTarea($tarea->id);
+
+            }else{
+                $aux->ubicaciones = [];
+            }
+
             array_push($lista, $aux);
+
         }
 
         return $lista;
@@ -106,35 +114,123 @@ trait TareaRepository
 
     public static function guardar(Request $request)
     {
-        if(!self::validarFechasTarea($request->fechaInicioEstimado) && !self::validarFechasTarea($request->fechaFinEstimado)){
-            return ['error' => 'Las fechas de la tarea estan fuera del rango permitido'];
+        if(!self::validarFechaLimiteTarea($request->fechaInicioEstimado, $request->agenda) || !self::validarFechaLimiteTarea($request->fechaFinEstimado, $request->agenda)){
+            return [
+                'message' => 'Las fechas de la tarea estan fuera del rango permitido',
+                'success' => false
+            ];
         }
 
-        if(!self::validarDuracion($request->fechaInicioEstimado) && !self::validarDuracion($request->fechaFinEstimado)){
-            return ['error' => 'La duracion de una tarea no puede ser cero "0"'];
+        if(!self::validarMayorFechaTarea($request->fechaInicioEstimado, $request->fechaFinEstimado)){
+            return [
+                'message' => 'Las Fecha Inicio debe ser menor o igual a la Fecha Fin',
+                'success' => false
+            ];
+        }
+
+        if(!self::validarDuracionCero($request->hora, $request->minuto)){
+            return [
+                'message' => 'La duracion de una tarea no puede ser cero "0"',
+                'success' => false
+            ];
         }
 
         $tarea = new Tarea;
+
         $tarea->numero = self::getMayorNumeroTarea();
         $tarea->descripcion = trim($request->descripcion);
-        $tarea->fechaInicioEstimado = $tarea->validarFechaInicioEstimacion(\Request::input('fechaInicioEstimado'), \Request::input('todasemana'));
-        $tarea->fechaFinEstimado = $tarea->validarFechaFinEstimacion(\Request::input('fechaFinEstimado'), \Request::input('todasemana'));
-        $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
+        $tarea->fechaInicioEstimado = \Calcana::cambiarFormatoDB( $request->fechaInicioEstimado);
+        $tarea->fechaFinEstimado = \Calcana::cambiarFormatoDB($request->fechaFinEstimado);
+
+        // calculamos el tiempo de duracion de de la hora y minuto
+        $horaReal = self::obtenerHora($request->hora, $request->minuto);
         $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
-        $tarea->tipoTarea_id = '1';
-        $tarea->estadoTarea_id = '1';
+
+        $tarea->tipoTarea_id = 1;
+        $tarea->estadoTarea_id = 1;
         $tarea->user_id = \Usuario::get('id');
 
-
+        if($tarea->save()){
+            return [
+                'message' => 'La tarea Nro. '.$tarea->numero.' se guardo correctamente',
+                'success' => true
+            ];
+        }else{
+            return [
+                'message' => 'No se guardo, por favor consulte con su administrador',
+                'success' => false
+            ];
+        }
     }
 
 
     /* Validaciones de Tareas */
-    public static function validarFechasTarea($fecha)
+    public static function validarFechaLimiteTarea($fecha, $agenda)
     {
+        // validar que la fecha de inicio se menor o igual a la fecha fin
+        $semanas = self::obtenerSemanaDelAnio($agenda);
 
+        $resultado = true;
+
+        if((integer) $agenda === 0){
+            if( !(strtotime($fecha) >= strtotime($semanas->fechaInicio)) || !(strtotime($fecha) <= strtotime($semanas->fechaFin)) )
+            {
+                $resultado = false;
+            }
+        }else{
+            if( !(strtotime($fecha) > strtotime($semanas->fechaInicio))  )
+            {
+                $resultado = false;
+            }
+        }
+
+        return $resultado;
     }
 
+    public static function validarDuracionCero($hora, $minuto)
+    {
+        $resultado = true;
+        if((integer) $hora == 0 && (integer) $minuto == 0){
+            $resultado = false;
+        }
+
+        return $resultado;
+    }
+
+    public static function validarMayorFechaTarea($fechaInicio, $fechaFin)
+    {
+        $resultado = true;
+        if( strtotime($fechaInicio) > strtotime($fechaFin) )
+        {
+            $resultado = false;
+        }
+
+        return $resultado;
+    }
+
+    private static function obtenerHora($horas, $minutos)
+    {
+        $tiempo = new Tiempo;
+
+        return $tiempo->obtenerHora($horas, $minutos);
+    }
+
+    /**
+     * Devuelve las datos de semana 'anio, mes, seman, fecha inicio y fin' de tarea
+     *
+     * @return mixed
+     */
+    public static function obtenerSemanaDelAnio($agenda)
+    {
+        $fecha = date('Y-m-d');
+
+        if ((integer) $agenda === 1) {
+            $fecha = date(date('Y-m-d', strtotime('now +7 day')));
+        }
+        $semanas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+
+        return $semanas[0];
+    }
 
     public static function getTareasProgramadasUsuario($usuario_id, $fechaInicio, $fechaFin)
     {
@@ -191,6 +287,32 @@ trait TareaRepository
 
     }
 
+    public static function getTareasComunes($user_id)
+    {
+        $tarea_comun = \DB::table('tarea_comunes')
+            ->where('user_id', '=', $user_id)
+            ->select('tarea_comunes.id', 'tarea_comunes.titulo','tarea_comunes.color','tarea_comunes.textoColor')
+            ->get();
+
+        return $tarea_comun;
+    }
+
+    public static function storeTareaComunes($titulo, $color)
+    {
+        \DB::table('tarea_comunes')->insert([
+            ['titulo' => $titulo, 'color' => $color, 'user_id' => \Usuario::get('id')],
+        ]);
+
+        return self::getTareasComunes(\Usuario::get('id'));
+    }
+
+    public static function deleteTareaComunes($id)
+    {
+
+        \DB::table('tarea_comunes')->where('id', '=', $id)->delete();
+
+        return self::getTareasComunes(\Usuario::get('id'));
+    }
 
 
     /**
@@ -342,18 +464,29 @@ trait TareaRepository
 
         $data = array();
 
+//         cargamos los datos de las semanas
+        $semanas = Tarea::obtenerSemanaDelAnio(0);
+        $semana = new \stdClass();
+        $semana->start = \Calcana::cambiarFormatoDB($semanas->fechaInicio);
+        $semana->end = \Calcana::sumarDias(\Calcana::cambiarFormatoDB($semanas->fechaFin), 1);
+        $semana->overlap = false;
+        $semana->rendering = 'background';
+        $semana->color = '#ff9f89';
+
+        array_push($data, $semana);
+
         foreach ($tareas  as $tarea){
             $valor = new \stdClass();
 
             $valor->title = $tarea->numero.'. ' .$tarea->descripcion;
             $valor->descrip = $tarea->descripcion;
-            if($tarea->fechaInicioSolucion != '0000-00-00' || $tarea->fechaFinSolucion != '0000-00-00'){
+            if($tarea->estado === 3){
                 $valor->start = $tarea->fechaInicioSolucion;
-                $valor->fin = $tarea->fechaFinSolucion;
+                $valor->end = $tarea->fechaFinSolucion.'T23:59:59';
                 $valor->hora = $tarea->tiempoSolucion;
             }else{
-                $valor->start = $tarea->fechaInicioEstimado;
-                $valor->fin = $tarea->fechaFinEstimado;
+                $valor->start =  $tarea->fechaInicioEstimado ;
+                $valor->end =  $tarea->fechaFinEstimado.'T23:59:59';
                 $valor->hora = $tarea->tiempoEstimado;
             }
             $valor->backgroundColor = $tarea->color;
@@ -361,7 +494,8 @@ trait TareaRepository
             $valor->textColor = $tarea->texto;
             $valor->id = $tarea->id;
             $valor->nro = $tarea->numero;
-            $valor->allDay = true;
+            $semana->overlap = false;
+//            $valor->allDay = false;
             $valor->estado = $tarea->estado;
             $valor->numero = $tarea->numero;
 
@@ -386,27 +520,6 @@ trait TareaRepository
         return $tareas;
     }
 
-
-    /**
-     * Obtenemos datos de datos de la semana de la fecha buscada
-     * Anio, mes, semana, fecha Inicio, fecha Fin
-     *
-     * @param $fecha
-     * @return mixed
-     */
-    public static function getSemanasTareas($fecha)
-    {
-//        dd(\GuzzleHttp\json_encode($fecha));
-        $fechas =  \DB::select('call pa_obtenerFechaSemanaAnual('.json_encode($fecha).');');
-
-        if(isset($fechas[0])){
-            return $fechas[0];
-        }else{
-            Log::info('Error al obtener los datos de la fecha de las semana del año');
-
-            \DB::select('call pa_obtenerFechaSemanaAnual(\''.date('Y-m-d').'\');');
-        }
-    }
 
     public static  function importarTickets($fechaInicio, $fechaFin)
     {

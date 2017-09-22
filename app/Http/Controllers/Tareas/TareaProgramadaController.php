@@ -5,13 +5,14 @@ namespace ProyectoKpi\Http\Controllers\Tareas;
 use function array_push;
 use function date_add;
 use DateTime;
+use Illuminate\Support\Facades\Session;
 use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 
-use ProyectoKpi\Models\Evaluadores\Widget;
+use Illuminate\Http\Request;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
@@ -19,6 +20,7 @@ use ProyectoKpi\Cms\Repositories\TareaRepository;
 use function redirect;
 use function strtotime;
 use function strval;
+use Symfony\Component\HttpFoundation\Cookie;
 use const true;
 
 class TareaProgramadaController extends Controller
@@ -43,16 +45,13 @@ class TareaProgramadaController extends Controller
         // limpiamos el cache la variable proxSemana para trabajar con la semana actual
 //        Caches::borrar('proxSemana');
 
-        return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
+        return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas, 'agenda' => 0]);
     }
 
     public function archivadas()
     {
         $tareas = TareaRepository::getTareasArchivados();
         $semanas = array_pop($tareas);
-
-        // guardamos en cache la semana
-//        Caches::guardar('botones', 1);
 
         return view('tareas/tareaProgramadas/archivadas', ['tareas'=> $tareas, 'semanas' => $semanas]);
     }
@@ -62,11 +61,7 @@ class TareaProgramadaController extends Controller
         $tareas = TareaRepository::getTareasAgendadas();
         $semanas = array_pop($tareas);
 
-
-        // guardamos en cache la semana
-//        Caches::guardar('botones', 1);
-
-        return view('tareas/tareaProgramadas/agendadas', ['tareas'=> $tareas, 'semanas' => $semanas]);
+        return view('tareas/tareaProgramadas/agendadas', ['tareas'=> $tareas, 'semanas' => $semanas, 'agenda' => 1]);
     }
 
     public function show($id)
@@ -75,8 +70,6 @@ class TareaProgramadaController extends Controller
 
         return view('tareas/tareaProgramadas/show', ['tarea'=>$tareas]);
     }
-
-
 
     public function eliminados()
     {
@@ -97,52 +90,32 @@ class TareaProgramadaController extends Controller
         return view('tareas.tareaProgramadas.create');
     }
 
-    public function store(TareaProgramasFormRequest $Request)
+    public function store(TareaProgramasFormRequest $request)
     {
-        dd($Request->descripcion);
-        $tarea = new Tarea;
-//        $tarea->numero = $tarea->getMayorNumeroTarea();
-        $tarea->descripcion = trim(\Request::input('descripcion'));
-        $tarea->fechaInicioEstimado = $tarea->validarFechaInicioEstimacion(\Request::input('fechaInicioEstimado'), \Request::input('todasemana'));
-        $tarea->fechaFinEstimado = $tarea->validarFechaFinEstimacion(\Request::input('fechaFinEstimado'), \Request::input('todasemana'));
-        $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
-        $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
-        $tarea->tipoTarea_id = '1';
-        $tarea->estadoTarea_id = '1';
-        $tarea->user_id = \Usuario::get('id');
+        $result = Tarea::guardar($request);
 
-        $estimado = \Request::input('estimados');
+        if ($result['success']) {
+            return redirect()->back()
+                ->with('message', $result['message'])
+                ;
 
-        \Cache::forget('proxSemana');
-        if(isset($estimado)){
-
-            \Cache::forever('proxSemana', 1);
-        }else{
-            \Cache::forever('proxSemana', 0);
-        }
-
-
-        // validamos los limite de las fecha de inicio y fin de semana
-        if(!$tarea->validarLimiteFechaEstimadas()){
-            return redirect()->to($this->getRedirectUrl())
-                ->withErrors('Las fechas estan fuera del rango permitido.')
-                ->withInput();
-        }
-
-        if(!$tarea->validarDuracionCeros()){
-            return redirect()->to($this->getRedirectUrl())
-                ->withErrors('Las duracion de no puede ser 0')
-                ->withInput();
-        }
-
-        if ($tarea->save()) {
-            return redirect('tareas/tareaProgramadas')
-                    ->with('message', 'Se creo la tarea Nro.'.$tarea->numero.' correctamente');
         } else {
             return redirect()->to($this->getRedirectUrl())
-                ->withErrors('La tarea NO se guardo, por favor verifique los campos')
-                ->withInput();
+                ->withErrors($result['message'])
+                ->withInput()
+                ;
         }
+    }
+
+    /* Tarea de comunes para response de Ajax */
+    public function fechaInicioFinSemamal(Request $request)
+    {
+        $fecha = \Calcana::cambiarFormatoDB($request->fecha);
+        $semanas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+
+        return [
+            'semanas' => $semanas[0]
+        ];
     }
 
     public function createnext()

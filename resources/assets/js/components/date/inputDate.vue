@@ -3,9 +3,9 @@
         <div class="input-group-addon row">
             <i class="fa fa-calendar"></i>
         </div>
-        <input type="{{ tipo }}" id="inputdate-{{ nombre }}" value="{{ valor }}"
-               readonly="{{ readonly}}"
-               placeholder="{{ placeholder }}"
+        <input type="{{ tipo }}" id="inputdate-{{ nombre }}" value="{{ valor }}" style="z-index: 3000"
+               readonly="{{ readonly}}" agendar="{{ agendar }}" v-model="valor"  v-bind:key="cambioFecha"
+               placeholder="{{ placeholder }}" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
                class="form-control" name="{{ nombre }}" required>
     </div>
 </template>
@@ -26,26 +26,28 @@
             readonly:{type:String, default: false},
             valor:{type:String, required: true},
             diainicio:{type:String, required: true},
-            diainicio:{type:String, required: true},
+            agendar:{type:String, required: true},
+        },
+        computed: {
+            cambioFecha: function () {
+                   console.log('fuera');
+                   if(this.valor !== ''){
+                       console.log('dentro');
+                       this.cambioFechaTarea();
+                       this.cargarDate();
+                   }
+            }
         },
         ready: function () {
-            $("#inputdate-"+ this.nombre).datepicker({
-                format: 'dd/mm/yyyy',
-                changeMonth: true,
-                showWeek: false,
-                numberOfMonths: this.isSemanaTieneFinMes(),
-                firstDay:this.diainicio,
-                showButtonPanel: true,
-//                beforeShowDay: $.datepicker.noWeekends,php artis
-                minDate: this.fechainicio,
-                maxDate: this.fechafin,
-                selectOtherMonths: true,
-                showAnim: 'fadeIn',
-                beforeShowDay: false,
-            });
+            this.obtenerFechaFin();
+
+            this.cargarDate();
+
             this.DisableDays(new Date());
+
         },
         methods: {
+
             DisableDays: function (date) {
                 var isd = RangeDatesIsDisable;
                 var rd = RangeDates;
@@ -105,15 +107,57 @@
                     return 1;
                 }
             },
-            validarFecha: function () {
+            obtenerFechaFin: function () {
+                if( parseInt(this.agendar) === 0){
+                    return this.fechafin;
+                }else{
+                    var fecha = new Date();
+                    var ano = fecha.getFullYear();
 
-            }
+                    this.fechafin = '31/12/'+ ano;
+                }
+            },
+            cambioFechaTarea: function () {
+                if(parseInt(this.agendar) === 1 && this.agendar !== undefined)
+                {
+
+                    $.ajax({
+                        url: 'fechaInicioFinSemamal',
+                        method: 'POST',
+                        data: { fecha: this.valor },
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data.semanas);
+                            this.fechafin = data.semanas.fechaFin;
+                            this.fechainicio = data.semanas.fechaInicio;
+                        }.bind(this), error: function (data) {
+                            console.log('Error: No se obtuvo las cantidad de semanas');
+
+                        }.bind(this)
+                    })
+                }
+            },
+            cargarDate: function() {
+
+                console.log(this.fechafin);
+                console.log("#inputdate-"+ this.nombre);
+
+                $("#inputdate-"+ this.nombre).datepicker({
+                    format: 'dd/mm/yyyy',
+                    changeMonth: true,
+                    showWeek: false,
+                    numberOfMonths: this.isSemanaTieneFinMes(),
+                    firstDay:this.diainicio,
+                    showButtonPanel: true,
+                    minDate: this.fechainicio,
+                    maxDate: this.fechafin,
+                    selectOtherMonths: true,
+                    showAnim: 'fadeIn',
+                    beforeShowDay: false,
+                });
+            },
 
         },
 
     };
-
-
-
-
 </script>

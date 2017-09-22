@@ -35,6 +35,9 @@ class UsuarioActivo implements IClases
     private $indicadores;
     private $preferencias;
 
+    /* preferencias de Gerencias Evalaudores */
+    private $verFechaEstimadas;
+
     public function __construct(PreferenciasUsuario $preferencias)
     {
         $this->preferencias = $preferencias;
@@ -80,7 +83,7 @@ class UsuarioActivo implements IClases
         $this->isEvaluador = $this->isEvaluador();
         $this->isSupervisor = $this->isSupervisor();
         $this->isIndicadores = $this->isIndicadores();
-
+        $this->verFechaEstimadas = $this->getVerFechasEstimadas();
     }
 
     public function isAdmin()
@@ -170,7 +173,6 @@ class UsuarioActivo implements IClases
 
     }
 
-
     /**
      * Verificar si el usuario logueado esata asignado como supervisor de otro emplaedo
      *
@@ -210,6 +212,25 @@ class UsuarioActivo implements IClases
     public function getThis()
     {
         return $this;
+    }
+
+    public function getVerFechasEstimadas()
+    {
+        $user = \Auth::user();
+        $preferenciasGerencia = \DB::select('call pa_evaluador_preferencia_por_usuarios('.$user->id.')');
+
+//        dd($preferenciasGerencia[0]->verFechaEstimadas);
+
+        if(isset($preferenciasGerencia[0]->verFechaEstimadas )) {
+            if ($preferenciasGerencia[0]->verFechaEstimadas == 1 ) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
+            return false;
+        }
+
     }
 
 }

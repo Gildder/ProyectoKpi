@@ -98,7 +98,7 @@ $(document).ready(function() {
             btnEliminar: 0,
             utilizarfechasestimadas: true,
             tareaNueva: {
-                id: 0,
+                id: '',
                 descripcion: '',
                 fechaInicio: '',
                 fechaFin: '',

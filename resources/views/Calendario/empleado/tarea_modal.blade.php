@@ -11,6 +11,9 @@
       </div>
       <div class="modal-body modal-delete-body">
           <form action="" id="verDetalleTarea" method="post">
+      </div>
+      <div class="modal-body modal-delete-body">
+          <form action="" id="verDetalleTarea" method="post">
           <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">No. Tarea:</b>
               <p id="modalTareaNro"></p>

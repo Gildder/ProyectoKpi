@@ -98,12 +98,13 @@ $(document).ready(function() {
             btnEliminar: 0,
             utilizarfechasestimadas: true,
             tareaNueva: {
-                id: '',
+                id: 0,
                 descripcion: '',
                 fechaInicio: '',
                 fechaFin: '',
-                hora: '',
-                minuto: '',
+                hora: 0,
+                minuto: 0,
+                agenda: 0,
             },
 
             /**************** Tarea Comunes ****************/
@@ -288,32 +289,36 @@ $(document).ready(function() {
                 alert('Hola Mundo');
             },
             /******************** Metodos del modulo de Tareas *******************/
+            cargarDatosNuevaTarea: function () {
+                this.tareaNueva.agenda = $('input[name=agenda]').val();
+            },
             mostrarNuevaTarea: function ($event) {
                 $event.preventDefault();
 
                 // mostrar la ventana de modal de nueva tarea
                 $('#modal-nueva-tarea').modal('toggle');
 
+                this.limpiarTareaNueva();
+
                 sessionStorage.setItem('sntu', true);
             },
             cancelarNuevaTarea: function ($event) {
                 $event.preventDefault();
 
-                $('#formNuevaTarea')[0].reset();
-                $('#hora').val(0);
-                $('#minuto').val(0);
-
-
                 $('#modal-nueva-tarea').modal('toggle');
 
-                // eliminamos el estado del modal de nueva tarea
-                sessionStorage.removeItem('sntu');
-
-                console.log('evento de cancaelar nueva tarea')
+                this.limpiarTareaNueva();
             },
-            guardarTarea: function () {
-
+            limpiarTareaNueva: function () {
+                this.tareaNueva.id= 0;
+                this.tareaNueva.descripcion= '';
+                this.tareaNueva.fechaInicio = '';
+                this.tareaNueva.fechaFin= '';
+                this.tareaNueva.hora= 0;
+                this.tareaNueva.minuto= 0;
+                this.tareaNueva.agenda= 0;
             },
+
             /********************************** Tarea Comunes *****************************************/
             guardarTareaComunes: function(){
                 var color = $('#btnAddTarea').css("backgroundColor");
@@ -400,11 +405,14 @@ $(document).ready(function() {
 
                 $('#modal-nueva-tarea').modal('toggle');
 
-                $('#nuevaTareaDescripcion').val(this.tareaComun.titulo);
+                this.tareaNueva.descripcion = this.tareaComun.titulo;
             }
 
 
 
         }
     });
+    /* fin de vm de Vuejs */
+
+
 });

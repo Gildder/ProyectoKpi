@@ -260,7 +260,7 @@
                     var end =  data.end.format('DD/MM/YYYY');
 
                     $('#modal-tarea-Calendario').modal("show");
-                    $('#modalTareaTitle').html(data.title);
+                    $('#modalTareaTitle').html('Detalle de Tarea Nro.: ' + data.numero);
                     $('#modalTareaNro').html(data.numero);
                     $('#idTarea').html(data.id);
                     $('#modalTareaDesc').html(data.descrip);

@@ -16,39 +16,57 @@
 
             {!! Form::open(['method'=>'POST', 'id'=> 'formNuevaTarea']) !!}
             <input type="text" name="agenda" value="{{ $agenda }}" hidden>
+            <input type="text" name="fechaInicioParam" value="{{ $semanas->fechaInicio }}" hidden>
+            <input type="text" name="fechaFinParam" value="{{ $semanas->fechaFin }}" hidden>
 
+            @verbatim
+            <div hidden>
+                {{ cargarDatosNuevaTarea() }}
+            </div>
+            @endverbatim
 
             {{-- Descripcion --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group @if ($errors->has('descripcion')) has-error @endif">
                     <label>Descripcion *:</label>
-                    <input type="text" minlength="5" value="{{ old('descripcion') }}" style="margin-bottom: 15px;" id="nuevaTareaDescripcion"
-                           maxlength="60" name="descripcion" placeholder="Coloca tu tarea"  diaInicio="{{ \Cache::get('diaInicio') }}"
-                           class="form-control" required>
+                    <input type="text" class="form-control margenDescripcion"
+                           minlength="5"  id="nuevaTareaDescripcion" v-model="tareaNueva.descripcion"
+                           maxlength="60" name="descripcion" placeholder="Ingrese Tarea"
+                           required>
                 </div>
             </div>
 
             {{-- Fechas de Inicio y Fin --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row"  style="display:{{ (\Usuario::get('verFechaEstimadas')== true || $agenda === '1')?'block':'none'}}">
+                {{-- Fecha Inicio de Tarea --}}
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <div class="form-group @if ($errors->has('fechaInicioEstimado')) has-error @endif">
                         <label>Fecha Inicio *: </label>
-                        <input-date tipo="text" nombre="fechaInicioEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
-                                    valor="{{ old('fechaInicioEstimado') }}" placeholder="dd/mm/aaaa" agendar="{{ $agenda }}"
-                                    fechainicio="{{  $semanas->fechaInicio }}"
-                                    fechafin='{{ $semanas->fechaFin }}' >
-                        </input-date>
+                        <div class="input-group row margenFecha">
+                            <div class="input-group-addon row">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" id="fechaInicioTarea"  style="z-index: 3000"
+                                   v-model="tareaNueva.fechaInicio"   :key="cambioFecha"
+                                   placeholder="Fecha Inicio" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
+                                   class="form-control" name="fechaInicio" required>
+                        </div>
                     </div>
                 </div>
 
+                {{-- Fecha Fin de Tarea --}}
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <div class="form-group @if ($errors->has('fechaFinEstimado')) has-error @endif">
                         <label>Fecha Fin *: </label>
-                        <input-date tipo="text" nombre="fechaFinEstimado"  diaInicio="{{ \Cache::get('diainicio') }}"
-                                    valor="{{ old('fechaFinEstimado') }}" placeholder="dd/mm/aaaa" agendar="{{ $agenda }}"
-                                    fechainicio="{{  $semanas->fechaInicio }}"
-                                    fechafin='{{ $semanas->fechaFin }}' >
-                        </input-date>
+                        <div class="input-group row margenFecha">
+                            <div class="input-group-addon row">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" id="fechaFinTarea"  style="z-index: 3000"
+                                   v-model="tareaNueva.fechaFin"   :key="cambioFecha"
+                                   placeholder="Fecha Fin" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
+                                   class="form-control" name="fechaFin" required>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,7 +80,7 @@
                     <div class="form-group @if ($errors->has('hora')) has-error @endif">
                         Horas:
                         <input type="number" min="0"  name="hora" max="150" placeholder="Horas"
-                               value="{{ old('hora') }}" class="form-control" id="hora"
+                               v-model="tareaNueva.hora" class="form-control"
                                required >
                     </div>
                 </div>
@@ -71,8 +89,9 @@
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group @if ($errors->has('minuto')) has-error @endif">
                         Minutos:
-                        <input type="number" min="0" name="minuto" max="999" id="minuto"
-                               class="form-control" value="{{ old('minuto') }}"  placeholder="Minutos" required>
+                        <input type="number" min="0" name="minuto" max="999"
+                               v-model="tareaNueva.minuto"
+                               class="form-control"  placeholder="Minutos" required>
                     </div>
                 </div>
             </div>
@@ -95,22 +114,82 @@
     </div>
 </div>
 
+   <style>
+       .margenFecha {
+           margin: 10px 5px 15px 0px;
+       }
 
+       .margenDescripcion {
+           margin-bottom: 15px;
+       }
+   </style>
 <script>
+    var fechaInicioModal;
+    var fechaFinModal;
+
     $(document).ready(function () {
         /* eventos de las tareas */
         $("#modal-nueva-tarea").on('hidden.bs.modal', function () {
             $('#formNuevaTarea')[0].reset();
 
-            $('#hora').val(0);
-            $('#minuto').val(0);
+            $('input[name="hora"]').val(0);
+            $('input[name="minuto"]').val(0);
         });
 
+        fechaInicioModal = $('input[name="fechaInicioParam"]').val();
+        fechaFinModal = $('input[name="fechaFinParam"]').val();
 
-        $('#hora').val(0);
-        $('#minuto').val(0);
+        cargarFechaFinTarea(fechaInicioModal, fechaFinModal);
+        cargarFechaInicioTarea(fechaInicioModal, fechaFinModal);
     });
 
+    function cargarFechaInicioTarea(fechaInicioModal, fechaFinModal) {
+
+        $("#fechaInicioTarea").datepicker({
+            format: 'dd/mm/yyyy',
+            changeMonth: true,
+            showWeek: false,
+            numberOfMonths: verificarFinSiHayFinMes(),
+            firstDay: 1,
+            showButtonPanel: true,
+            minDate: fechaInicioModal,
+            maxDate: fechaFinModal,
+            selectOtherMonths: true,
+            showAnim: 'fadeIn',
+            beforeShowDay: false,
+        });
+    }
+
+    function cargarFechaFinTarea(fechaInicioModal, fechaFinModal) {
+
+        $("#fechaFinTarea").datepicker({
+            format: 'dd/mm/yyyy',
+            changeMonth: true,
+            showWeek: false,
+            numberOfMonths: verificarFinSiHayFinMes(),
+            firstDay:1,
+            showButtonPanel: true,
+            minDate: fechaInicioModal,
+            maxDate: fechaFinModal,
+            selectOtherMonths: true,
+            showAnim: 'fadeIn',
+            beforeShowDay: false,
+        });
+    }
+
+    /* retorna 1 o 2 para la candidad de mes a mostra por el datapícker*/
+    function verificarFinSiHayFinMes() {
+        var arrayFechaInicio = fechaInicioModal.split('/');
+        var arrayFechaFin = fechaFinModal.split('/');
+
+        var mesInicio = parseInt(arrayFechaInicio[1]);
+        var mesFin = parseInt(arrayFechaFin[1]);
+        if(mesInicio !== mesFin){
+            return 2;
+        }else{
+            return 1;
+        }
+    }
 
 
 

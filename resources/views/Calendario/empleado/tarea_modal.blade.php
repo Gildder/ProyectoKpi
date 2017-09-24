@@ -7,37 +7,37 @@
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <b id="modalTareaTitle"></b>
+        <b id="modalTareaTitle" class="modal-title"></b>
       </div>
       <div class="modal-body modal-delete-body">
           <form action="" id="verDetalleTarea" method="post">
-          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">No. Tarea:</b>
               <p id="modalTareaNro"></p>
               <p id="idTarea" hidden></p>
           </div>
 
-          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">Descripcion:</b>
               <p id="modalTareaDesc"></p>
           </div>
 
-          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">Fecha Inicio:</b>
               <p id="modalTareaFchIn"></p>
           </div>
 
-          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">Fecha Fin:</b>
               <p id="modalTareaFchFn"></p>
           </div>
 
-          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">Tiempo:</b>
               <p id="modalTareaTmp"></p>
           </div>
 
-          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
               <b class="text-right" style="width: 50%">Estado:</b>
               <label id="modalTareaStd" class="textEstado"></label>
           </div>

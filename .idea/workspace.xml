@@ -4,14 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/app/Cms/Repositories/TareaRepository.php" line="141" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="83297eaa-d87c-45a8-8b39-5929d78e42a6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Cms/Negocios/nDashboard.php" afterPath="$PROJECT_DIR$/app/Cms/Negocios/nDashboard.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/database/migrations/2016_10_27_171831_create_users_table.php" afterPath="$PROJECT_DIR$/database/migrations/2016_10_27_171831_create_users_table.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/assets/js/app-vue.js" afterPath="$PROJECT_DIR$/resources/assets/js/app-vue.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/Calendario/empleado/tarea_modal.blade.php" afterPath="$PROJECT_DIR$/resources/views/Calendario/empleado/tarea_modal.blade.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/views/supervisores/supervisor/partials/deleteDepartamento.blade.php" afterPath="$PROJECT_DIR$/resources/views/supervisores/supervisor/partials/deleteDepartamento.blade.php" />
-    </list>
+    <list default="true" id="83297eaa-d87c-45a8-8b39-5929d78e42a6" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -1465,12 +1458,12 @@
       <workItem from="1505995329245" duration="32862000" />
       <workItem from="1506060320446" duration="11045000" />
       <workItem from="1506083548503" duration="26419000" />
-      <workItem from="1506251071351" duration="4853000" />
+      <workItem from="1506251071351" duration="5015000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="598892000" />
+    <option name="totallyTimeSpent" value="599054000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">

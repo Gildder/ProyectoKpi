@@ -12,6 +12,7 @@
       <div class="modal-body modal-delete-body">
           <form action="" id="verDetalleTarea" method="post">
       </div>
+
       <div class="modal-body modal-delete-body">
           <form action="" id="verDetalleTarea" method="post">
           <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
@@ -47,7 +48,7 @@
 
           <div class="modal-footer modal-delete-footer">
               <a  data-dismiss="modal" class="btn btn-danger" >Cerrar   <span class="fa fa-times"></span> </a>
-              {{--<button type="submit"   name="ver" class="btn btn-success">Ver Tarea  <span class="fa fa-eye"></span> </button>--}}
+              <a href="/tareas/tareaProgramadas/"   name="ver" class="btn btn-success">Ver Tarea  <span class="fa fa-eye"></span> </a>
           </div>
           </form>
       </div>

@@ -445,7 +445,7 @@ route::group(['middleware'=>['auth', 'supervisores', 'estandard']], function()
 /*  TAREAS */
 route::group(['middleware'=>['auth', 'estandard']], function()
 {
-	// Proyectos
+    // Proyectos
 	Route::resource('tareas/proyecto', 'Tareas\ProyectoController', ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
 	// tareas cancelar programadas
@@ -469,10 +469,14 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::get('tareas/tareaProgramadas/agendadas',
         array('as' => 'tareas.tareaProgramadas.agendadas', 'uses' => 'Tareas\TareaProgramadaController@agendadas') );
 
+
+
+
     Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController',
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 
-	Route::get('tareas/tareaProgramadas/resolver/{tarea}',
+
+    Route::get('tareas/tareaProgramadas/resolver/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.resolver', 'uses' => 'Tareas\TareaProgramadaController@resolver') );
 
 	Route::put('tareas/tareaProgramadas/storeResolver/{tarea}',
@@ -488,7 +492,6 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::post('tareas/tareaProgramadas/fechaInicioFinSemamal',
             array('as' => 'tareas.tareaProgramadas.fechaInicioFinSemamal', 'uses' => 'Tareas\TareaProgramadaController@fechaInicioFinSemamal') );
 
-
     /* calendario de Tareas*/
     Route::get('calendario/empleado/index',
         array('as' => 'calendario.empleado.index', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@listaMiTareas') );
@@ -496,10 +499,11 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::get('calendario/empleado/cargarTareas',
             array('as' => 'calendario.empleado.cargarTareas', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@cargarTareas') );
 
-
 	Route::post('calendario/empleado/guardarTareaComun',
         array('as' => 'calendario.empleado.guardarTareaComun', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@guardarTareaComun') );
 
+    Route::post('calendario/empleado/guardarTarea',
+            array('as' => 'calendario.empleado.guardarTarea', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@guardarTarea') );
 
 	Route::post('calendario/empleado/eliminarTareaComun',
         array('as' => 'calendario.empleado.eliminarTareaComun', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@eliminarTareaComun') );

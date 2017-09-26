@@ -12396,7 +12396,7 @@ $(document).ready(function () {
             btnEliminar: 0,
             utilizarfechasestimadas: true,
             tareaNueva: {
-                id: 0,
+                id: '',
                 descripcion: '',
                 fechaInicio: '',
                 fechaFin: '',
@@ -12404,6 +12404,8 @@ $(document).ready(function () {
                 minuto: 0,
                 agenda: 0
             },
+            /**************** Tareas de Calendario ********************/
+            listaTareasCalendario: [],
 
             /**************** Tarea Comunes ****************/
             listaTareaComunes: {
@@ -12451,6 +12453,13 @@ $(document).ready(function () {
                 }
 
                 return false;
+            },
+            verificarValidarTareanueva: function verificarValidarTareanueva() {
+                if (this.tareaNueva.descripcion !== '' && this.tareaNueva.fechaInicio !== '' && this.tareaNueva.fechaFin !== '' && this.tareaNueva.hora !== '' && this.tareaNueva.minuto !== '') {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         },
         events: {
@@ -12608,10 +12617,193 @@ $(document).ready(function () {
                 this.tareaNueva.fechaFin = '';
                 this.tareaNueva.hora = 0;
                 this.tareaNueva.minuto = 0;
-                this.tareaNueva.agenda = 0;
+                this.tareaNueva.agenda = sessionStorage.getItem('agendas');;
+            },
+            guardarTareaNueva: function guardarTareaNueva($event) {
+                $event.preventDefault();
+                utils.mostrarCargando(true);
+
+                var token = $('input[name=_token]').val();
+                var path = window.location.href;
+                path = path.split("/");
+
+                // actualizar el tipo de agenda
+                var ag = sessionStorage.getItem('agendas');
+                if (ag !== undefined) {
+                    this.tareaNueva.agenda = sessionStorage.getItem('agendas');
+                }
+
+                $.ajax({
+                    url: '/calendario/empleado/guardarTarea',
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': token },
+                    data: this.tareaNueva,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success === true) {
+                            console.log(path);
+                            if (path[path.length - 1] === 'index' && path[path.length - 2] === 'empleado') {
+                                $('#calendarTareaUsuario').fullCalendar('refetchEventSources', { url: 'cargarTareas' });
+                            } else {
+                                this.$broadcast('actuliza-tareas', data.tareas);
+                            }
+
+                            Notificion.success('Se guardo correctamente', 10000);
+                            $('#modal-nueva-tarea').modal('hide');
+
+                            this.limpiarTareaNueva();
+                        } else {
+                            Notificion.error(data.message, 10000);
+                        }
+                        utils.mostrarCargando(false);
+                    }.bind(this), error: function (data) {
+                        utils.mostrarCargando(false);
+                        $('#modal-nueva-tarea').modal('show');
+
+                        var errors = data.responseJSON;
+                        $.each(errors, function (key, value) {
+                            console.log(data.value);
+                            Notificion.error(value, 10000);
+                        });
+                    }.bind(this)
+                });
             },
 
-            /********************************** Tarea Comunes *****************************************/
+            /********************************** Full Calendario  *****************************************/
+            cargarTareasCalendario: function cargarTareasCalendario() {
+
+                $.ajax({
+                    url: 'cargarTareas',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        this.listaTareasCalendario = data;
+                    }.bind(this), error: function (data) {
+                        console.log('Uppps, Existen problemas en cargar tareas en servidor consulte al Administrador');
+                    }.bind(this)
+                });
+            },
+            cargarFullCalendarioTareas: function cargarFullCalendarioTareas() {
+                this.cargarTareasCalendario();
+
+                var tooltip = '';
+                var modal = '';
+
+                /* initialize the calendar
+                 -----------------------------------------------------------------*/
+                //Date for the calendar events (dummy data)
+                var date = new Date();
+                var d = date.getDate(),
+                    m = date.getMonth(),
+                    y = date.getFullYear();
+
+                $('#calendarTareaUsuario').fullCalendar({
+                    theme: true,
+                    // botones customer
+                    customButtons: {
+                        btnNuevaTarea: {
+                            text: 'Nueva Tarea +',
+                            click: function click() {
+                                $('#modal-nueva-tarea').modal('toggle');
+                            }
+                        }
+                    },
+                    header: {
+                        left: 'prev,next today,  listMonth, btnNuevaTarea',
+                        center: 'title',
+                        right: 'month, basicWeek, basicDay'
+                    },
+                    buttonText: {
+                        today: 'Hoy',
+                        month: 'Mes',
+                        week: 'Semana',
+                        day: 'Dia',
+                        list: 'Lista'
+                    },
+
+                    /* traduccion de los textos */
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+
+                    displayEventTime: false,
+                    firstDay: 1,
+                    businessHours: true, // display business hours
+                    navLinks: true, // can click day/week names to navigate views
+                    editable: false,
+                    eventLimit: true, // allow "more" link when too many events
+                    eventOverlap: false,
+                    //Obteniendo las tareas
+                    events: {
+                        url: 'cargarTareas',
+                        cache: true
+                    },
+
+                    eventMouseover: function eventMouseover(data, event, view) {
+                        var start = data.start.format('DD/MM/YYYY');
+                        var back = data.backgroundColor;
+                        var hora = data.hora;
+                        var end = data.end.format('DD/MM/YYYY');
+
+                        tooltip = "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:" + data.backgroundColor + "; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>" + data.nro + "</span></label></center>" + "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
+
+                        $('body').append(tooltip);
+                        $(this).mouseover(function (e) {
+                            $(this).css('z-index', 10000);
+                            $('.tooltipevent').fadeIn('500');
+                            $('.tooltipevent').fadeTo('10', 1.9);
+                        }).mousemove(function (e) {
+                            $('.tooltipevent').css('top', e.pageY + 10);
+                            $('.tooltipevent').css('left', e.pageX + 20);
+                        });
+                    },
+                    eventMouseout: function eventMouseout(data, event, view) {
+                        $(this).css('z-index', 8);
+                        $('.tooltipevent').remove();
+                    },
+                    dayClick: function dayClick(date, allDay, jsEvent, view) {
+                        $('#tooltip').hide();
+                    },
+
+                    eventClick: function eventClick(data, jsEvent, view) {
+                        var start = data.start.format('DD/MM/YYYY');
+                        var back = data.backgroundColor;
+                        var hora = data.hora;
+                        var end = data.end.format('DD/MM/YYYY');
+
+                        $('#modal-tarea-Calendario').modal("show");
+                        $('#modalTareaTitle').html('Detalle de Tarea Nro.: ' + data.numero);
+                        $('#modalTareaNro').html(data.numero);
+                        $('#idTarea').html(data.id);
+                        $('#modalTareaDesc').html(data.descrip);
+                        $('#modalTareaFchIn').html(start);
+                        $('#modalTareaFchFn').html(end);
+                        $('#modalTareaTmp').html(data.hora);
+                        $('#modalTareaStd').html(data.estado);
+                        $('#modalTareaStd').css('background', data.backgroundColor);
+                        $('#modalTareaStd').css('color', data.textColor);
+
+                        var pathname = window.location.host + '/tareas/tareaProgramadas/' + data.id;
+                        $('#verDetalleTarea').attr('action', '');
+                        $('#verDetalleTarea').attr('action', pathname);
+
+                        var href = '/tareas/tareaProgramadas/' + data.id;
+                        $('a[name=ver]').attr('href', href);
+                    }
+
+                });
+            },
+            cambiarColorBtnAgregar: function cambiarColorBtnAgregar($event) {
+                $event.preventDefault();
+
+                //Cambiamos el color del boton Agregar
+                var currColor = $("#color-chooser-btn").css("color");
+
+                //Colocamos el color al button
+                $('#btnAddTarea').css({ "background-color": currColor, "border-color": currColor });
+            },
+            /************************************************* Tarea Comunes *****************************************/
             guardarTareaComunes: function guardarTareaComunes() {
                 var color = $('#btnAddTarea').css("backgroundColor");
                 $.ajax({
@@ -12622,12 +12814,12 @@ $(document).ready(function () {
                     success: function (data) {
                         console.log(data.tareas);
 
-                        Notificion.success('Se guardo correctamente.', 1000);
+                        Notificion.success('Se guardo correctamente', 10000);
 
                         this.listaTareaComunes = data.tareas;
                         this.tituloNuevoTareaComun = '';
                     }.bind(this), error: function (data) {
-                        alert('Uppps, Existen problemas en servidor consulte al Administrador');
+                        Notificion.error('Uppps, Existen problemas en servidor consulte al Administrador', 10000);
                     }.bind(this)
                 });
             },
@@ -12639,7 +12831,7 @@ $(document).ready(function () {
                     success: function (data) {
                         this.listaTareaComunes = data.tareas;
                     }.bind(this), error: function (data) {
-                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 10000);
                     }.bind(this)
                 });
             },
@@ -12661,17 +12853,18 @@ $(document).ready(function () {
 
                         $('#modal-delete-tarea-comun').modal('toggle');
 
-                        Notificion.success('Se elimino correcntamente', 1000);
+                        Notificion.success('Se elimino correcntamente', 10000);
                     }.bind(this), error: function (data) {
-                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 10000);
                     }.bind(this)
                 });
             },
-            mostrarModalElimnarTareaComun: function mostrarModalElimnarTareaComun($event, tarea) {
+            mostrarModalElimnarTareaComun: function mostrarModalElimnarTareaComun($event, id, titulo) {
 
                 $event.preventDefault();
 
-                this.tareaComun = tarea;
+                this.tareaComun.id = id;
+                this.tareaComun.titulo = titulo;
 
                 $('#modal-delete-tarea-comun').modal('toggle');
             },
@@ -12724,7 +12917,6 @@ exports.default = {
         placeholder: { type: String, required: true },
         readonly: { type: String, default: false },
         valor: { type: String, required: true },
-        diainicio: { type: String, required: true },
         agendar: { type: String, required: true }
     },
     computed: {
@@ -12842,7 +13034,7 @@ exports.default = {
                 changeMonth: true,
                 showWeek: false,
                 numberOfMonths: this.isSemanaTieneFinMes(),
-                firstDay: this.diainicio,
+                firstDay: 1,
                 showButtonPanel: true,
                 minDate: this.fechainicio,
                 maxDate: this.fechafin,
@@ -12862,9 +13054,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-ffeacd1c", module.exports)
+    hotAPI.createRecord("_v-453ea944", module.exports)
   } else {
-    hotAPI.update("_v-ffeacd1c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-453ea944", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
@@ -12897,27 +13089,27 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-82870a68", module.exports)
+    hotAPI.createRecord("_v-aa6540c4", module.exports)
   } else {
-    hotAPI.update("_v-82870a68", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-aa6540c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n    top:20%;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n")
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"static\" data-keyboard=\"false\" role=\"dialog\" id=\"loading\">\n\n    <div class=\"modal-dialog modal-sm\">\n    <div class=\"modal-content modal-load-content\">\n        <div class=\"modal-heading modal-load-header\">\n            <h4 class=\"modal-title\" style=\"padding: 10px;\">Espere por favor..</h4>\n        </div>\n        <div class=\"modal-body modal-load-body\">\n\n            <p>Estamos procesando su solicitud...</p>\n\n<div id=\"Gen\" class=\"marginLeft\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n</div>\n        </div>\n    </div>\n</div>\n"
+var __vueify_style__ = __vueify_insert__.insert("\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n#modalLoading {\n    top: 20%;\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n")
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"static\" data-keyboard=\"false\" role=\"dialog\" id=\"loading\">\n\n    <div class=\"modal-dialog modal-sm\" id=\"modalLoading\">\n    <div class=\"modal-content modal-load-content\">\n        <div class=\"modal-heading modal-load-header\">\n            <h4 class=\"modal-title\" style=\"padding: 10px;\">Espere por favor..</h4>\n        </div>\n        <div class=\"modal-body modal-load-body\">\n\n            <p>Estamos procesando su solicitud...</p>\n\n<div id=\"Gen\" class=\"marginLeft\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n</div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n    top:20%;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n"] = false
+    __vueify_insert__.cache["\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n#modalLoading {\n    top: 20%;\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-78d01944", module.exports)
+    hotAPI.createRecord("_v-5a1e03b2", module.exports)
   } else {
-    hotAPI.update("_v-78d01944", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-5a1e03b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],11:[function(require,module,exports){
@@ -12949,9 +13141,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-8c4b763a", module.exports)
+    hotAPI.createRecord("_v-18223635", module.exports)
   } else {
-    hotAPI.update("_v-8c4b763a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-18223635", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
@@ -13165,9 +13357,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d4dc73ae", module.exports)
+    hotAPI.createRecord("_v-184c910a", module.exports)
   } else {
-    hotAPI.update("_v-d4dc73ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-184c910a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
@@ -13189,9 +13381,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-6d32a585", module.exports)
+    hotAPI.createRecord("_v-033e5af3", module.exports)
   } else {
-    hotAPI.update("_v-6d32a585", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-033e5af3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
@@ -13301,9 +13493,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-57edf7d4", module.exports)
+    hotAPI.createRecord("_v-43fedca6", module.exports)
   } else {
-    hotAPI.update("_v-57edf7d4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-43fedca6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
@@ -13359,9 +13551,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4305d48b", module.exports)
+    hotAPI.createRecord("_v-0839e45d", module.exports)
   } else {
-    hotAPI.update("_v-4305d48b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-0839e45d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
@@ -13388,6 +13580,11 @@ exports.default = {
             textoFiltro: 'Mostrar'
         };
     },
+    events: {
+        'actuliza-tareas': function actulizaTareas(tareas) {
+            this.tareas = tareas;
+        }
+    },
     computed: {
         cmpFiltroHide: function cmpFiltroHide() {
             if (this.textoFiltro === 'Mostrar') {
@@ -13410,21 +13607,11 @@ exports.default = {
                 this.textoFiltro = 'Mostrar';
             }
         },
-        verDetalle: function verDetalle($event) {
+        verDetalle: function verDetalle($event, id) {
             $event.preventDefault();
 
-            alert('Funciono click' + $('#nro').html());
-            $.ajax({
-                url: 'tareas/tareaProgramadas/show/' + $('#nro').html(),
-                method: 'POST',
-                dataType: 'json',
-                success: function (data) {
-
-                    console.log(JSON.stringify(data));
-                }.bind(this), error: function (data) {
-                    console.log('Error: en el metodo show');
-                }.bind(this)
-            });
+            //                window.location.assign('/tareas/tareaProgramadas/'+ id+'/edit');
+            $.get('/tareas/tareaProgramadas/' + id);
         }
     }
 
@@ -13439,7 +13626,7 @@ function cargarTabla() {
 
     $('#tablaTareasNormal tbody').on('dblclick', 'tr', function () {
         var data = table.row(this).data();
-        alert('You clicked on ' + data[0]);
+        //            alert( 'You clicked on '+data[0] );
     });
 
     // agregamos texto al input de busqueda
@@ -13479,7 +13666,7 @@ function mostraModaLading() {
     }
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"@\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Ubicaciones</th>\n        <th>Observacion</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Ubicaciones</th>\n        <th>Observacion</th>\n    </tr>\n    </tfoot>\n\n\n    <tbody>\n\n    <tr v-for=\"tarea in tareas\">\n        <td style=\"display: none\">{{ tarea.id }}</td>\n        <td>\n            <a href=\"#\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\" @click=\"verDetalle($event)\">\n                <span id=\"nro\">{{ tarea.numero }}</span>\n            </a>\n        </td>\n        <td>{{ tarea.descripcion }}</td>\n        <td> {{ tarea.fechaInicio }} </td>\n        <td>{{ tarea.fechaFin }}</td>\n        <td>{{ tarea.tiempo }}</td>\n        <td> <label :style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\" class=\"estado\">\n            {{ tarea.estado }}\n            </label>\n        </td>\n        <td>\n            <ul style=\"padding: 1px;\">\n                <li v-for=\"ubicacion in tarea.ubicaciones\">\n                    {{ ubicacion.nombre }}\n                </li>\n            </ul>\n        </td>\n        <td>{{ tarea.observaciones }}</td>\n    </tr>\n\n\n    </tbody>\n\n</table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"@\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Ubicaciones</th>\n        <th>Observacion</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Ubicaciones</th>\n        <th>Observacion</th>\n    </tr>\n    </tfoot>\n\n\n    <tbody>\n\n    <tr v-for=\"tarea in tareas\">\n        <td style=\"display: none\" id=\"idtarea\">{{ tarea.id }}</td>\n        <td>\n            <a href=\"/tareas/tareaProgramadas/{{ tarea.id }}\" id=\"lnkShow\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\">\n                <span id=\"nro\">{{ tarea.numero }}</span>\n            </a>\n        </td>\n        <td>{{ tarea.descripcion }}</td>\n        <td> {{ tarea.fechaInicio }} </td>\n        <td>{{ tarea.fechaFin }}</td>\n        <td>{{ tarea.tiempo }}</td>\n        <td> <label :style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\" class=\"estado\">\n            {{ tarea.estado }}\n            </label>\n        </td>\n        <td>\n            <ul style=\"padding: 1px;\">\n                <li v-for=\"ubicacion in tarea.ubicaciones\">\n                    {{ ubicacion.nombre }}\n                </li>\n            </ul>\n        </td>\n        <td>{{ tarea.observaciones }}</td>\n    </tr>\n\n\n    </tbody>\n\n</table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -13489,9 +13676,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-11d64176", module.exports)
+    hotAPI.createRecord("_v-080bcf70", module.exports)
   } else {
-    hotAPI.update("_v-11d64176", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-080bcf70", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
@@ -13979,9 +14166,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-29b99a38", module.exports)
+    hotAPI.createRecord("_v-13dd710a", module.exports)
   } else {
-    hotAPI.update("_v-29b99a38", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-13dd710a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
@@ -14067,9 +14254,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-189a3ba7", module.exports)
+    hotAPI.createRecord("_v-4463690e", module.exports)
   } else {
-    hotAPI.update("_v-189a3ba7", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-4463690e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],19:[function(require,module,exports){
@@ -14168,6 +14355,31 @@ module.exports = {
         } else {
             $('#loading').modal('hide');
         }
+    },
+    LightenDarkenColor: function LightenDarkenColor(col, amt) {
+
+        var usePound = false;
+
+        if (col[0] == "#") {
+            col = col.slice(1);
+            usePound = true;
+        }
+
+        var num = parseInt(col, 16);
+
+        var r = (num >> 16) + amt;
+
+        if (r > 255) r = 255;else if (r < 0) r = 0;
+
+        var b = (num >> 8 & 0x00FF) + amt;
+
+        if (b > 255) b = 255;else if (b < 0) b = 0;
+
+        var g = (num & 0x0000FF) + amt;
+
+        if (g > 255) g = 255;else if (g < 0) g = 0;
+
+        return (usePound ? "#" : "") + (g | b << 8 | r << 16).toString(16);
     },
 
     DisableDays: function DisableDays(date) {

@@ -3,13 +3,12 @@
 namespace ProyectoKpi\Http\Controllers\Calendario;
 
 use Carbon\Carbon;
-use function count;
-use function date;
 
+use Httpful\Response;
 use Illuminate\Http\Request;
-use function json_encode;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Http\Controllers\Controller;
+use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Models\Tareas\Tarea;
 
 
@@ -35,6 +34,7 @@ class EmpleadoTareaCalendarioController extends Controller
     {
         ini_set('max_execution_time', 300);
 
+
 		return Tarea::getTareasCalendar(\Usuario::get('id'));
     }
 
@@ -58,5 +58,18 @@ class EmpleadoTareaCalendarioController extends Controller
         $tareas = Tarea::deleteTareaComunes($request->id);
 
         return ['tareas' => $tareas ];
+    }
+
+    public function guardarTarea(TareaProgramasFormRequest $request)
+    {
+        if($request->ajax()){
+            $result = Tarea::guardar($request);
+
+            if ($result['success']){
+                return response()->json($result);
+            }else{
+                return response()->json($result);
+            }
+        }
     }
 }

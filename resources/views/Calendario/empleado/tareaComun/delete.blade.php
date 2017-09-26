@@ -7,7 +7,7 @@
     <div class="modal-content modal-delete-content ">
         <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Nueva Tarea</h4>
+            <h4 class="modal-title">Eliminar Tarea Comun</h4>
         </div>
 
         <form>

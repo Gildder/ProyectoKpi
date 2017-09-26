@@ -42,10 +42,10 @@
         <tbody>
 
         <tr v-for="tarea in tareas">
-            <td style="display: none">{{ tarea.id }}</td>
+            <td style="display: none" id="idtarea">{{ tarea.id }}</td>
             <td>
-                <a href="#" class="btn btn-warning btn-sm" title="click  Ver"
-                    @click="verDetalle($event)">
+                <a href="/tareas/tareaProgramadas/{{ tarea.id }}" id="lnkShow" class="btn btn-warning btn-sm" title="click  Ver"
+                    >
                     <span id="nro" >{{ tarea.numero }}</span>
                 </a>
             </td>
@@ -100,6 +100,12 @@
                 textoFiltro: 'Mostrar',
             }
         },
+        events:
+        {
+            'actuliza-tareas': function (tareas) {
+                this.tareas = tareas;
+            },
+        },
         computed: {
             cmpFiltroHide: function () {
                 if(this.textoFiltro === 'Mostrar'){
@@ -122,22 +128,13 @@
                     this.textoFiltro = 'Mostrar';
                 }
             },
-            verDetalle: function ($event) {
+            verDetalle: function ($event, id) {
                 $event.preventDefault();
 
-                alert('Funciono click'+ $('#nro').html());
-                $.ajax({
-                    url: 'tareas/tareaProgramadas/show/'+ $('#nro').html(),
-                    method: 'POST',
-                    dataType: 'json',
-                    success: function (data) {
 
-                        console.log(JSON.stringify(data));
-                    }.bind(this), error: function (data) {
-                        console.log('Error: en el metodo show');
+//                window.location.assign('/tareas/tareaProgramadas/'+ id+'/edit');
+                $.get('/tareas/tareaProgramadas/'+ id);
 
-                    }.bind(this)
-                })
             }
         }
 
@@ -157,7 +154,7 @@
 
         $('#tablaTareasNormal tbody').on('dblclick', 'tr', function () {
             var data = table.row( this ).data();
-            alert( 'You clicked on '+data[0] );
+//            alert( 'You clicked on '+data[0] );
         } );
 
         // agregamos texto al input de busqueda

@@ -106,6 +106,8 @@ $(document).ready(function() {
                 minuto: 0,
                 agenda: 0,
             },
+            /**************** Tareas de Calendario ********************/
+            listaTareasCalendario: [],
 
             /**************** Tarea Comunes ****************/
             listaTareaComunes: {
@@ -154,6 +156,19 @@ $(document).ready(function() {
                 }
 
                 return false;
+            },
+            verificarValidarTareanueva: function () {
+                if(
+                    this.tareaNueva.descripcion !== '' &&
+                    this.tareaNueva.fechaInicio !== '' &&
+                    this.tareaNueva.fechaFin !== '' &&
+                    this.tareaNueva.hora !== '' &&
+                    this.tareaNueva.minuto !== ''
+                ){
+                    return false;
+                }else{
+                        return true;
+                }
             }
         },
         events: {
@@ -316,10 +331,205 @@ $(document).ready(function() {
                 this.tareaNueva.fechaFin= '';
                 this.tareaNueva.hora= 0;
                 this.tareaNueva.minuto= 0;
-                this.tareaNueva.agenda= 0;
+                this.tareaNueva.agenda= sessionStorage.getItem('agendas');;
+            },
+            guardarTareaNueva: function ($event) {
+                $event.preventDefault();
+                    utils.mostrarCargando(true);
+
+                let token = $('input[name=_token]').val();
+                let path = window.location.href;
+                path = path.split("/");
+
+                // actualizar el tipo de agenda
+                let ag = sessionStorage.getItem('agendas');
+                if(ag !== undefined){
+                    this.tareaNueva.agenda = sessionStorage.getItem('agendas');
+                }
+
+                $.ajax({
+                    url: '/calendario/empleado/guardarTarea',
+                    method: 'POST',
+                    headers: {'X-CSRF-TOKEN': token },
+                    data: this.tareaNueva,
+                    dataType: 'json',
+                    success: function (data) {
+                        if(data.success === true){
+                            console.log(path);
+                            if(path[path.length - 1] === 'index' && (path[path.length - 2] === 'empleado')){
+                                $('#calendarTareaUsuario').fullCalendar( 'refetchEventSources', { url: 'cargarTareas'} );
+                            }else{
+                               this.$broadcast('actuliza-tareas', data.tareas);
+                            }
+
+                            Notificion.success('Se guardo correctamente', 10000);
+                            $('#modal-nueva-tarea').modal('hide');
+
+
+                            this.limpiarTareaNueva();
+                        }else{
+                            Notificion.error(data.message, 10000);
+                        }
+                        utils.mostrarCargando(false);
+                    }.bind(this), error: function (data){
+                        utils.mostrarCargando(false);
+                        $('#modal-nueva-tarea').modal('show');
+
+                        var errors = data.responseJSON;
+                        $.each(errors, function (key, value) {
+                            console.log(data.value);
+                            Notificion.error(value, 10000);
+
+                        });
+                    }.bind(this)
+                })
+
             },
 
-            /********************************** Tarea Comunes *****************************************/
+            /********************************** Full Calendario  *****************************************/
+            cargarTareasCalendario: function () {
+
+                $.ajax({
+                    url: 'cargarTareas',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        this.listaTareasCalendario = data;
+                    }.bind(this), error: function (data) {
+                        console.log('Uppps, Existen problemas en cargar tareas en servidor consulte al Administrador');
+                    }.bind(this)
+                })
+            },
+            cargarFullCalendarioTareas: function () {
+                this.cargarTareasCalendario();
+
+                var tooltip = '';
+                var modal = '';
+
+                /* initialize the calendar
+                 -----------------------------------------------------------------*/
+                //Date for the calendar events (dummy data)
+                var date = new Date();
+                var d = date.getDate(),
+                    m = date.getMonth(),
+                    y = date.getFullYear();
+
+
+                $('#calendarTareaUsuario').fullCalendar({
+                    theme: true,
+                    // botones customer
+                    customButtons: {
+                        btnNuevaTarea: {
+                            text: 'Nueva Tarea +',
+                            click: function() {
+                                $('#modal-nueva-tarea').modal('toggle');
+                            }
+                        }
+                    },
+                    header: {
+                        left: 'prev,next today,  listMonth, btnNuevaTarea',
+                        center: 'title',
+                        right: 'month, basicWeek, basicDay',
+                    },
+                    buttonText: {
+                        today: 'Hoy',
+                        month: 'Mes',
+                        week: 'Semana',
+                        day:  'Dia',
+                        list: 'Lista'
+                    },
+
+                    /* traduccion de los textos */
+                    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+
+                    displayEventTime : false,
+                    firstDay: 1,
+                    businessHours: true, // display business hours
+                    navLinks: true, // can click day/week names to navigate views
+                    editable: false,
+                    eventLimit: true, // allow "more" link when too many events
+                    eventOverlap: false,
+                    //Obteniendo las tareas
+                    events: {
+                        url: 'cargarTareas',
+                        cache: true
+                    },
+
+                    eventMouseover: function (data, event, view) {
+                        var start = data.start.format('DD/MM/YYYY');
+                        var back = data.backgroundColor;
+                        var hora = data.hora;
+                        var end = data.end.format('DD/MM/YYYY');
+
+                        tooltip =
+                            "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:"+data.backgroundColor +"; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>"+data.nro +"</span></label></center>" +
+                            "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" +
+                            "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" +
+                            "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
+
+                        $('body').append(tooltip);
+                        $(this).mouseover(function (e) {
+                            $(this).css('z-index', 10000);
+                            $('.tooltipevent').fadeIn('500');
+                            $('.tooltipevent').fadeTo('10', 1.9);
+                        }).mousemove(function (e) {
+                            $('.tooltipevent').css('top', e.pageY + 10);
+                            $('.tooltipevent').css('left', e.pageX + 20);
+                        });
+                    },
+                    eventMouseout: function (data, event, view) {
+                        $(this).css('z-index', 8);
+                        $('.tooltipevent').remove();
+                    },
+                    dayClick: function (date, allDay, jsEvent, view) {
+                        $('#tooltip').hide();
+                    },
+
+                    eventClick: function(data, jsEvent, view) {
+                        var start = data.start.format('DD/MM/YYYY');
+                        var back = data.backgroundColor;
+                        var hora = data.hora;
+                        var end =  data.end.format('DD/MM/YYYY');
+
+                        $('#modal-tarea-Calendario').modal("show");
+                        $('#modalTareaTitle').html('Detalle de Tarea Nro.: ' + data.numero);
+                        $('#modalTareaNro').html(data.numero);
+                        $('#idTarea').html(data.id);
+                        $('#modalTareaDesc').html(data.descrip);
+                        $('#modalTareaFchIn').html(start);
+                        $('#modalTareaFchFn').html(end);
+                        $('#modalTareaTmp').html(data.hora);
+                        $('#modalTareaStd').html(data.estado);
+                        $('#modalTareaStd').css('background',data.backgroundColor );
+                        $('#modalTareaStd').css('color',data.textColor );
+
+                        var pathname = window.location.host+'/tareas/tareaProgramadas/' + data.id;
+                        $('#verDetalleTarea').attr('action','');
+                        $('#verDetalleTarea').attr('action',pathname);
+
+                        let href = '/tareas/tareaProgramadas/' + data.id;
+                        $('a[name=ver]').attr('href', href );
+
+                    }
+
+                });
+
+
+
+            },
+            cambiarColorBtnAgregar: function($event) {
+                $event.preventDefault();
+
+                //Cambiamos el color del boton Agregar
+                var currColor = $("#color-chooser-btn").css("color");
+
+                //Colocamos el color al button
+                $('#btnAddTarea').css({"background-color": currColor, "border-color": currColor});
+            },
+            /************************************************* Tarea Comunes *****************************************/
             guardarTareaComunes: function(){
                 var color = $('#btnAddTarea').css("backgroundColor");
                 $.ajax({
@@ -330,12 +540,12 @@ $(document).ready(function() {
                     success: function (data) {
                         console.log(data.tareas);
 
-                        Notificion.success('Se guardo correctamente.', 1000);
+                        Notificion.success('Se guardo correctamente', 10000);
 
                         this.listaTareaComunes = data.tareas;
                         this.tituloNuevoTareaComun = '';
                     }.bind(this), error: function (data) {
-                        alert('Uppps, Existen problemas en servidor consulte al Administrador');
+                        Notificion.error('Uppps, Existen problemas en servidor consulte al Administrador', 10000);
                     }.bind(this)
                 })
             },
@@ -347,7 +557,7 @@ $(document).ready(function() {
                     success: function (data) {
                         this.listaTareaComunes = data.tareas;
                     }.bind(this), error: function (data) {
-                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 10000);
                     }.bind(this)
                 })
             },
@@ -369,19 +579,20 @@ $(document).ready(function() {
 
                         $('#modal-delete-tarea-comun').modal('toggle');
 
-                        Notificion.success('Se elimino correcntamente', 1000);
+                        Notificion.success('Se elimino correcntamente', 10000);
 
                     }.bind(this), error: function (data) {
-                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 1000);
+                        Notificion.success('Uppps, Existen problemas en servidor consulte al Administrador', 10000);
 
                     }.bind(this)
                 })
             },
-            mostrarModalElimnarTareaComun: function($event, tarea){
+            mostrarModalElimnarTareaComun: function($event, id, titulo){
 
                 $event.preventDefault();
 
-                this.tareaComun = tarea;
+                this.tareaComun.id = id;
+                this.tareaComun.titulo = titulo;
 
                 $('#modal-delete-tarea-comun').modal('toggle');
             },

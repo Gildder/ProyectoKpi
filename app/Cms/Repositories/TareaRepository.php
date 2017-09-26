@@ -15,10 +15,10 @@ trait TareaRepository
 {
 
     /* Metodos */
-    public static function getTodasTareas()
+    public static function getTodasTareas($agenda)
     {
         // Obtenemos las semanas de tareas
-        $semanaActual = self::obtenerSemanaDelAnio(0);
+        $semanaActual = self::obtenerSemanaDelAnio($agenda);
 
         $tareas = \DB::table('vw_tareas_para_usuarios')
             ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
@@ -28,6 +28,23 @@ trait TareaRepository
             ->get();
 
         $lista = self::agregarUbicacionTareas($tareas);
+        // agregamos la semana actual
+        array_push($lista, $semanaActual);
+
+        return $lista;
+    }
+
+    public static function findTarea($id)
+    {
+        // Obtenemos las semanas de tareas
+        $semanaActual = self::obtenerSemanaDelAnio(0);
+
+        $tarea = \DB::table('vw_tareas_para_usuarios')
+            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
+            ->where('vw_tareas_para_usuarios.id', '=',$id )
+            ->first();
+
+        $lista = self::agregarUbicacionTareas($tarea);
         // agregamos la semana actual
         array_push($lista, $semanaActual);
 
@@ -77,18 +94,31 @@ trait TareaRepository
     private static function agregarUbicacionTareas($tareas){
         $lista = array();
 
-        foreach ($tareas as $tarea){
-            $aux = $tarea;
+        if(! is_array($tareas)){
+            $aux = $tareas;
 
-            if($tarea->estado_id <> 1){
-                $aux->ubicaciones = self::getLocalizacionTarea($tarea->id);
+            if($tareas->estado_id <> 1){
+                $aux->ubicaciones = self::getLocalizacionTarea($tareas->id);
 
             }else{
                 $aux->ubicaciones = [];
             }
 
             array_push($lista, $aux);
+        }else{
+            foreach ($tareas as $tarea){
+                $aux = $tarea;
 
+                if($tarea->estado_id <> 1){
+                    $aux->ubicaciones = self::getLocalizacionTarea($tarea->id);
+
+                }else{
+                    $aux->ubicaciones = [];
+                }
+
+                array_push($lista, $aux);
+
+            }
         }
 
         return $lista;
@@ -106,27 +136,44 @@ trait TareaRepository
 
         $tarea = \DB::table('vw_tareas_para_usuarios')
             ->where('user_id', '=', \Usuario::get('id'))
-            ->where('id', '>=', $tarea_id)
+            ->where('id', '=', $tarea_id)
             ->first();
 
         return $tarea;
     }
 
+    function validar_fecha($fecha){
+        if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $fecha)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public static function guardar(Request $request)
     {
-        if(!self::validarFechaLimiteTarea($request->fechaInicioEstimado, $request->agenda) || !self::validarFechaLimiteTarea($request->fechaFinEstimado, $request->agenda)){
+        if (!preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaInicio) || !preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaFin)) {
+            return [
+                'message' => 'Las fechas no tiene formato fecha dd/mm/yyyy',
+                'success' => false
+            ];
+        }
+
+        if(!self::validarFechaLimiteTarea($request->fechaInicio, $request->agenda) || !self::validarFechaLimiteTarea($request->fechaFin, $request->agenda)){
             return [
                 'message' => 'Las fechas de la tarea estan fuera del rango permitido',
                 'success' => false
             ];
         }
 
-        if(!self::validarMayorFechaTarea($request->fechaInicioEstimado, $request->fechaFinEstimado)){
+
+        if(\Calcana::verificarMayorIgual($request->fechaFin, $request->fechaInicio)== false){
             return [
                 'message' => 'Las Fecha Inicio debe ser menor o igual a la Fecha Fin',
                 'success' => false
             ];
         }
+
+        $semanas = self::obtenerSemanaDelAnio($request->agenda);
 
         if(!self::validarDuracionCero($request->hora, $request->minuto)){
             return [
@@ -139,8 +186,8 @@ trait TareaRepository
 
         $tarea->numero = self::getMayorNumeroTarea();
         $tarea->descripcion = trim($request->descripcion);
-        $tarea->fechaInicioEstimado = \Calcana::cambiarFormatoDB( $request->fechaInicioEstimado);
-        $tarea->fechaFinEstimado = \Calcana::cambiarFormatoDB($request->fechaFinEstimado);
+        $tarea->fechaInicioEstimado = \Calcana::cambiarFormatoDB( $request->fechaInicio);
+        $tarea->fechaFinEstimado = \Calcana::cambiarFormatoDB($request->fechaFin);
 
         // calculamos el tiempo de duracion de de la hora y minuto
         $horaReal = self::obtenerHora($request->hora, $request->minuto);
@@ -151,8 +198,83 @@ trait TareaRepository
         $tarea->user_id = \Usuario::get('id');
 
         if($tarea->save()){
+            $tareas = self::getTodasTareas($request->agenda);
+            $semanas = array_pop($tareas);
             return [
                 'message' => 'La tarea Nro. '.$tarea->numero.' se guardo correctamente',
+                'success' => true,
+                'tareas'=> $tareas
+            ];
+        }else{
+            return [
+                'message' => 'No se guardo, por favor consulte con su administrador',
+                'success' => false
+            ];
+        }
+    }
+
+    public static function resolver(Request $request, $id)
+    {
+        if (!preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaInicioSolucion) || !preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaFinSolucion)) {
+            return [
+                'message' => 'Las fechas no tiene formato fecha dd/mm/yyyy',
+                'success' => false
+            ];
+        }
+
+        if(!self::validarFechaLimiteTarea($request->fechaInicioSolucion, $request->agenda) || !self::validarFechaLimiteTarea($request->fechaFinSolucion, $request->agenda)){
+            return [
+                'message' => 'Las fechas de la tarea estan fuera del rango permitido',
+                'success' => false
+            ];
+        }
+
+
+        if(\Calcana::verificarMayorIgual($request->fechaFinSolucion, $request->fechaInicioSolucion)== false){
+            return [
+                'message' => 'Las Fecha Inicio debe ser menor o igual a la Fecha Fin',
+                'success' => false
+            ];
+        }
+
+        $semanas = self::obtenerSemanaDelAnio($request->agenda);
+
+        if(!self::validarDuracionCero($request->hora, $request->minuto)){
+            return [
+                'message' => 'La duracion de una tarea no puede ser cero "0"',
+                'success' => false
+            ];
+        }
+
+        $tarea = Tarea::findOrFail($id);
+        $tarea->fechaInicioSolucion = \Calcana::cambiarFormatoDB( $request->fechaInicioSolucion);
+        $tarea->fechaFinSolucion = \Calcana::cambiarFormatoDB($request->fechaFinSolucion);
+
+        // calculamos el tiempo de duracion de de la hora y minuto
+        $horaReal = self::obtenerHora($request->hora, $request->minuto);
+        $tarea->tiempoSolucion = $horaReal[0].':'.$horaReal[1];
+
+        $tarea->tipoTarea_id = 1;
+        $tarea->estadoTarea_id = 3;
+        $tarea->observaciones = $request->observaciones;
+        $tarea->user_id = \Usuario::get('id');
+//dd($tarea, $request);
+        $tarea->save();
+        if($tarea->save()){
+
+            //  guardamos la localizacion de la tarea
+            $localizaciones = $request->input('prov', []);
+            DB::table('tarea_localizacion')->where('tarea_id', '=', $id)->delete();
+
+            for ($i = 0; $i < count($localizaciones); $i++) {
+                DB::table('tarea_localizacion')->insert(
+                    ['tarea_id' => $id, 'localizacion_id' => $localizaciones[$i] ]
+                );
+            }
+
+
+            return [
+                'message' => 'La tarea se guardo correctamente',
                 'success' => true
             ];
         }else{
@@ -163,6 +285,76 @@ trait TareaRepository
         }
     }
 
+    public static function actualizar(Request $request, $id)
+    {
+        if (!preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaInicioEstimado) || !preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaFinEstimado)) {
+            return [
+                'message' => 'Las fechas no tiene formato fecha dd/mm/yyyy',
+                'success' => false
+            ];
+        }
+
+        if(!self::validarFechaLimiteTarea($request->fechaInicioEstimado, $request->agenda) || !self::validarFechaLimiteTarea($request->fechaFinEstimado, $request->agenda)){
+            return [
+                'message' => 'Las fechas de la tarea estan fuera del rango permitido',
+                'success' => false
+            ];
+        }
+
+
+        if(\Calcana::verificarMayorIgual($request->fechaFinEstimado, $request->fechaInicioEstimado)== false){
+            return [
+                'message' => 'Las Fecha Inicio debe ser menor o igual a la Fecha Fin',
+                'success' => false
+            ];
+        }
+
+        $semanas = self::obtenerSemanaDelAnio($request->agenda);
+
+        if(!self::validarDuracionCero($request->hora, $request->minuto)){
+            return [
+                'message' => 'La duracion de una tarea no puede ser cero "0"',
+                'success' => false
+            ];
+        }
+
+        $tarea = Tarea::findOrFail($id);
+        $tarea->fechaInicioEstimado = \Calcana::cambiarFormatoDB( $request->fechaInicioEstimado);
+        $tarea->fechaFinEstimado = \Calcana::cambiarFormatoDB($request->fechaFinEstimado);
+
+        // calculamos el tiempo de duracion de de la hora y minuto
+        $horaReal = self::obtenerHora($request->hora, $request->minuto);
+        $tarea->tiempoEstimado = '\''.$horaReal[0].':'.$horaReal[1].'\'';
+
+        $tarea->estadoTarea_id = $request->estado;
+        $tarea->observaciones = '\''. $request->observaciones.'\'';
+        $tarea->user_id = \Usuario::get('id');
+//dd($tarea, $request);
+        $tarea->save();
+        if($tarea->save()){
+
+            //  guardamos la localizacion de la tarea
+            $localizaciones = $request->input('prov', []);
+            DB::table('tarea_localizacion')->where('tarea_id', '=', $id)->delete();
+
+            for ($i = 0; $i < count($localizaciones); $i++) {
+                DB::table('tarea_localizacion')->insert(
+                    ['tarea_id' => $id, 'localizacion_id' => $localizaciones[$i] ]
+                );
+            }
+
+
+            return [
+                'message' => 'La tarea se guardo correctamente',
+                'success' => true
+            ];
+        }else{
+            return [
+                'message' => 'No se guardo, por favor consulte con su administrador',
+                'success' => false
+            ];
+        }
+    }
 
     /* Validaciones de Tareas */
     public static function validarFechaLimiteTarea($fecha, $agenda)
@@ -170,17 +362,17 @@ trait TareaRepository
         // validar que la fecha de inicio se menor o igual a la fecha fin
         $semanas = self::obtenerSemanaDelAnio($agenda);
 
-        $resultado = true;
+        $resultado = false;
 
         if((integer) $agenda === 0){
-            if( !(strtotime($fecha) >= strtotime($semanas->fechaInicio)) || !(strtotime($fecha) <= strtotime($semanas->fechaFin)) )
+            if( \Calcana::verificarMayorIgual($fecha, $semanas->fechaInicio) && \Calcana::verificarMenorIgual($fecha, $semanas->fechaFin))
             {
-                $resultado = false;
+                $resultado = true;
             }
         }else{
-            if( !(strtotime($fecha) > strtotime($semanas->fechaInicio))  )
+            if( \Calcana::verificarMayorIgual($fecha, $semanas->fechaInicio) )
             {
-                $resultado = false;
+                $resultado = true;
             }
         }
 
@@ -191,17 +383,6 @@ trait TareaRepository
     {
         $resultado = true;
         if((integer) $hora == 0 && (integer) $minuto == 0){
-            $resultado = false;
-        }
-
-        return $resultado;
-    }
-
-    public static function validarMayorFechaTarea($fechaInicio, $fechaFin)
-    {
-        $resultado = true;
-        if( strtotime($fechaInicio) > strtotime($fechaFin) )
-        {
             $resultado = false;
         }
 
@@ -243,7 +424,7 @@ trait TareaRepository
             ->join('localizaciones', 'localizaciones.id','=', 'users.localizacion_id')
             ->join('cargos', 'cargos.id','=', 'users.cargo_id')
             ->where('user_id', '=', $usuario_id)
-            ->where('fechaInicioEstimado', '>=', $fechaInicio)
+            ->where('fechaInicioEstimado', '>=', \Calcana::cambiarFormatoDB( $fechaInicio))
             ->whereNull('tareas.deleted_at')
             ->orderBy('tareas.fechaInicioEstimado', 'desc')
             ->get();
@@ -403,30 +584,26 @@ trait TareaRepository
             ->get();
     }
 
-    public static function Actualizar($tarea)
-    {
-        try
-        {
-            \DB::table('tareas')
-                ->where('id', $tarea->id)
-                ->update([
-                    'descripcion'=> "'".$tarea->descripcion."'",
-                    'estadoTarea_id'=> "'".$tarea->estadoTarea_id."'",
-                    'fechaInicioEstimado'=> "'".$tarea->fechaInicioEstimado."'",
-                    'fechaFinEstimado'=> "'".$tarea->fechaFinEstimado."'",
-                    'tiempoEstimado'=> "'".$tarea->tiempoEstimado."'"
-                ]);
-            return true;
-        }catch (\Exception $errr){
+//    public static function Actualizar($tarea)
+//    {
+//        try
+//        {
+//            \DB::table('tareas')
+//                ->where('id', $tarea->id)
+//                ->update([
+//                    'descripcion'=> "'".$tarea->descripcion."'",
+//                    'estadoTarea_id'=> "'".$tarea->estadoTarea_id."'",
+//                    'fechaInicioEstimado'=> "'".$tarea->fechaInicioEstimado."'",
+//                    'fechaFinEstimado'=> "'".$tarea->fechaFinEstimado."'",
+//                    'tiempoEstimado'=> "'".$tarea->tiempoEstimado."'"
+//                ]);
+//            return true;
+//        }catch (\Exception $errr){
+//
+//            return false;
+//        }
+//    }
 
-            return false;
-        }
-    }
-
-    public static function Resolver( $tarea)
-    {
-
-    }
 
     public static function getEstados()
     {

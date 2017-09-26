@@ -25,7 +25,6 @@
             placeholder:{type:String, required: true},
             readonly:{type:String, default: false},
             valor:{type:String, required: true},
-            diainicio:{type:String, required: true},
             agendar:{type:String, required: true},
         },
         computed: {
@@ -147,7 +146,7 @@
                     changeMonth: true,
                     showWeek: false,
                     numberOfMonths: this.isSemanaTieneFinMes(),
-                    firstDay:this.diainicio,
+                    firstDay: 1,
                     showButtonPanel: true,
                     minDate: this.fechainicio,
                     maxDate: this.fechafin,

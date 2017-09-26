@@ -1,4 +1,10 @@
+@extends('layouts.app')
 
+@section('titulo')
+    Tarea Nro. {{$tarea->numero}}
+@endsection
+
+@section('content')
 
 <!-- Nuevo -->
 <div class="panel panel-default"  id="formEditarTarea">
@@ -8,9 +14,9 @@
 
   <div class="panel-body">
 
-      {{--{!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT'])!!}--}}
-      {{--{!! Form::hidden('id' ) !!}--}}
+      {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.update', $tarea->id], 'method'=>'PUT'])!!}
 
+      @include('partials/alert/error')
 {{-- Descripcion --}}
 <div class="">
   <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-5
@@ -21,7 +27,7 @@
     <label class="form-group">Descripcion *</label>
     <input  type="text" minlength="5"
             maxlength="120" name="descripcion" placeholder="Descripcion"
-            placeholder="Descripcion" class="form-control" value=""
+            placeholder="Descripcion" class="form-control" value="{{ $tarea->descripcion }}"
             required>
     @if ($errors->has('descripcion'))
       <p class="help-block">{{ $errors->first('descripcion') }}</p>
@@ -32,36 +38,38 @@
 {{-- Fecha de Estimada --}}
 <div class="form-group col-xs-12 row">
     <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2
-        @if ($errors->has('fechaInicio'))
+        @if ($errors->has('fechaInicioEstimado'))
           has-error
         @endif">
 
         <label>Fecha de Inicio *: </label>
-        <div class="input-group row" style="margin: 10px 5px 15px 0px;">
-            <div class="input-group-addon row">
-                <i class="fa fa-calendar"></i>
-            </div>
-            <input type="text" id="fechaInicio" value="" placeholder="Fecha Inicio" class="form-control" name="fechaInicio" required>
-        </div>
-        @if ($errors->has('fechaInicio'))
-          <p class="help-block">{{ $errors->first('fechaInicio') }}</p>
+        <input-date tipo="text" nombre="fechaInicioEstimado"
+                    agendar="{{ $agendar }}"
+                    valor="{{  $tarea->fechaInicio}}" placeholder="Fecha Inicio"
+                    fechainicio="{{   $semanas->fechaInicio }}"
+                    fechafin='{{  $semanas->fechaFin }}' >
+        </input-date>
+
+        @if ($errors->has('fechaInicioEstimado'))
+          <p class="help-block">{{ $errors->first('fechaInicioEstimado') }}</p>
         @endif
     </div>
 
     <div class=" col-xs-12 col-sm-3 col-md-3 col-lg-2
-        @if ($errors->has('fechaFin'))
+        @if ($errors->has('fechaFinEstimado'))
                   has-error
         @endif">
-        <label >Fecha de Fin *: </label>
+        <label >Fecha Fin *: </label>
 
-        <div class="input-group row" style="margin: 10px 5px 15px 0px;">
-            <div class="input-group-addon row">
-                <i class="fa fa-calendar"></i>
-            </div>
-            <input type="text" id="fechaFin" value="" placeholder="Fecha Fin" class="form-control" name="fechaFin" required>
-        </div>
-        @if ($errors->has('fechaFin'))
-          <p class="help-block">{{ $errors->first('fechaFin') }}</p>
+        <input-date tipo="text" nombre="fechaFinEstimado"
+                    agendar="{{ $agendar }}"
+                    valor="{{$tarea->fechaFin }}" placeholder="Fecha Fin"
+                    fechainicio="{{   $semanas->fechaInicio }}"
+                    fechafin='{{  $semanas->fechaFin }}' >
+        </input-date>
+
+        @if ($errors->has('fechaFinEstimado'))
+          <p class="help-block">{{ $errors->first('fechaFinEstimado') }}</p>
         @endif
     </div>
     <div v-if="false" class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;">
@@ -83,6 +91,12 @@
       <label >Estado </label>
       <select class="form-control" name="estado">
           <option value="" >Seleccionar...</option>
+          @foreach($estados as  $estado)
+            @if($estado->id == $tarea->estado_id)
+                  <option value="{{ $estado->id }}" selected>{{ $estado->nombre }}</option>
+            @endif
+                <option value="{{ $estado->id }}" >{{ $estado->nombre }}</option>
+          @endforeach
       </select>
   </div>
 </div>
@@ -95,7 +109,7 @@
               has-error
         @endif">
         <p>Horas:<p>
-          <input type="number" name="hora" min="0" max="999" value="" placeholder="Horas" class="form-control" value="00"  required >
+          <input type="number" name="hora" min="0" max="999" value="{{ \Calcana::sacarHoras($tarea->tiempo) }}" placeholder="Horas" class="form-control" value="00"  required >
         @if ($errors->has('hora'))
           <p class="help-block">{{ $errors->first('hora') }}</p>
         @endif
@@ -107,9 +121,8 @@
       @endif">
       <p>Minutos:</p>
        <input type="number" name="minuto" min="0"
-              value=""
               placeholder="Minutos"
-              max="999" class="form-control" value="00"   required>
+              max="999" class="form-control" value="{{ \Calcana::sacarMinutos($tarea->tiempo) }}"   required>
       @if ($errors->has('minuto'))
         <p class="help-block">{{ $errors->first('minuto') }}</p>
       @endif
@@ -120,7 +133,7 @@
 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
   <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-5">
       <label>Observaciones</label>
-      <textarea type="textArea" name="observaciones"  maxlength="120" placeholder="Observaciones" class="form-control" rows="5" cols="9"></textarea>
+      <textarea type="textArea" name="observaciones"  maxlength="120" placeholder="Observaciones" class="form-control" rows="5" cols="9">{{ $tarea->observaciones }}</textarea>
   </div>
 </div>
 
@@ -129,141 +142,24 @@
 
     {{-- Footer de Panel --}}
     <div class="panel-footer text-right">
-        <a  id="cancelar"
+        <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}"
             class="btn btn-danger"
             type="reset"><span class="fa fa-times">
           </span> Cancelar</a>
 
-        <button type="submit" name="guardar"  class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
+        <button  href="#" type="submit"   class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
     </div>
+    {!! Form::hidden('id' ) !!}
 </div>
 
 <!-- Fin Nuevo -->
 
 <script>
-    $(document).ready(function () {
-        $("#fechaInicio").datepicker({
-            format: 'dd/mm/yyyy',
-            changeMonth: true,
-            showWeek: false,
-            numberOfMonths: isSemanaTieneFinMes(),
-            firstDay:this.diainicio,
-            showButtonPanel: true,
-            minDate: this.fechainicio,
-            maxDate: this.fechafin,
-            selectOtherMonths: true,
-            showAnim: 'fadeIn',
-            beforeShowDay: false,
-        });
 
-        $("#fechaFin").datepicker({
-            format: 'dd/mm/yyyy',
-            changeMonth: true,
-            showWeek: false,
-            numberOfMonths: isSemanaTieneFinMes(),
-            firstDay:this.diainicio,
-            showButtonPanel: true,
-            minDate: this.fechainicio,
-            maxDate: this.fechafin,
-            selectOtherMonths: true,
-            showAnim: 'fadeIn',
-            beforeShowDay: false,
-        });
-
-        DisableDays(new Date());
-    });
-
-    var RangeDates = ["12/8/2017, 13/8/2017"];
-    var RangeDatesIsDisable = true;
-    function DisableDays(date) {
-        var isd = RangeDatesIsDisable;
-        var rd = RangeDates;
-
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-
-        for (var i = 0; i < rd.length; i++) {
-            var ds = rd[i].split(',');
-
-            var di, df;
-            var m1, d1, y1, m2, d2, y2;
-
-
-            if (ds.length == 1) {
-                di = ds[0].split('/');
-
-                m1 = parseInt(di[0]);
-                d1 = parseInt(di[1]);
-                y1 = parseInt(di[2]);
-                if (y1 == y && m1 == (m + 1) && d1 == d) return [!isd];
-            } else if (ds.length > 1) {
-                di = ds[0].split('/');
-                df = ds[1].split('/');
-                m1 = parseInt(di[0]);
-                d1 = parseInt(di[1]);
-                y1 = parseInt(di[2]);
-                m2 = parseInt(df[0]);
-                d2 = parseInt(df[1]);
-                y2 = parseInt(df[2]);
-
-                if (y1 >= y || y <= y2) {
-                    if ((m + 1) >= m1 && (m + 1) <= m2) {
-                        if (m1 == m2) {
-                            if (d >= d1 && d <= d2) return [!isd];
-                        } else if (m1 == (m + 1)) {
-                            if (d >= d1) return [!isd];
-                        } else if (m2 == (m + 1)) {
-                            if (d <= d2) return [!isd];
-                        } else return [!isd];
-                    }
-                }
-            }
-        }
-        return [isd];
-    };
-
-    function isSemanaTieneFinMes() {
-        var fechaInicio = $('#fechaInicio').val();
-        var fechaFin =    $('#fechaFin').val();
-
-        var arrayFechaInicio = fechaInicio.split('/');
-        var arrayFechaFin = fechaFin.split('/');
-
-        var mesInicio = parseInt(arrayFechaInicio[1]);
-        var mesFin = parseInt(arrayFechaFin[1]);
-        if(mesInicio !== mesFin){
-            return 2;
-        }else{
-            return 1;
-        }
-    };
-
-
-
-
-    $('#default-fechaEstimadas').click(function () {
-        var fechaInicio = $('input[name=fechaInicioEstimado]');
-        var fechaFin = $('input[name=fechaFinEstimado]');
-        var mensaje = $('#observacion');
-
-
-        if(this.checked){
-            fechaInicio.attr('disabled', true);
-            fechaFin.attr('disabled', true);
-
-            mensaje.html('La tarea esta programada para toda la semana.');
-        }else{
-            fechaInicio.attr('disabled', false);
-            fechaFin.attr('disabled', false);
-
-            mensaje.html('');
-        }
-    });
 
 </script>
 
-
+@endsection
 
 
 

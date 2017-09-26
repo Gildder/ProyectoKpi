@@ -42,9 +42,9 @@
 
 <script>
     $(document).ready(function () {
-        if( sessionStorage.getItem('sntu')){
-            $('#modal-nueva-tarea').modal('show');
-        }
+
+        $('input[name=agenda]').val(1);
+        sessionStorage.setItem('agendas', 1);
     });
 </script>
 

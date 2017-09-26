@@ -12,12 +12,12 @@
 
       <tr>
          <td class="text-right"><b>Fecha Inicio:</b></td>
-         <td>{{ \Calcana::cambiarFormatoEuropeo($tarea->fechaInicio)}}</td>
+         <td>{{$tarea->fechaInicio}}</td>
       </tr>
 
       <tr>
          <td class="text-right"><b>Fecha Fin:</b></td>
-         <td>{{ \Calcana::cambiarFormatoEuropeo($tarea->fechaFin)}}</td>
+         <td>{{$tarea->fechaFin}}</td>
       </tr>
 
        <tr>

@@ -60,13 +60,12 @@
   </div>
 </div>
 
+
 <script>
     $(document).ready(function () {
-
-       if( sessionStorage.getItem('sntu')){
-           $('#modal-nueva-tarea').modal('show');
-       }
+        sessionStorage.setItem('agendas', 0);
     });
 </script>
+
 @endsection
 

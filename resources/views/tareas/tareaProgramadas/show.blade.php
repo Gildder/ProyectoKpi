@@ -9,7 +9,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="{{route('tareas.tareaProgramadas.index')}}" v-if="{{ \Cache::get('botones') }} == 0" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back"  title="Volver"><span class="fa fa-reply"></span></a>
-		<a href="{{route('tareas.tareaProgramadas.archivados')}}" v-if="{{ \Cache::get('botones') }} == 1" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back"  title="Volver"><span class="fa fa-reply"></span></a>
+		<a href="{{route('tareas.tareaProgramadas.archivadas')}}" v-if="{{ \Cache::get('botones') }} == 1" @click="mostrarModalLoading()"  class="btn btn-primary btn-xs pull-left btn-back"  title="Volver"><span class="fa fa-reply"></span></a>
 	  <p class="titulo-panel">Detalle - Tarea Nro. {{$tarea->numero}}</p>
 	</div>
 
@@ -40,7 +40,7 @@
 				 v-if="btnEditar === 1" @click="mostrarModalLoading()"
 				 class="btn btn-warning btn-sm"><span class="fa fa-edit text-left"></span><b> Editar</b> </a>
 
-			<a href="#" v-if="btnEliminar === 1"  style="margin-left: 10px;" data-toggle="modal"
+			<a href="#" v-if="btnEliminar === 1"  style="margin-left: 10px; float:left;" data-toggle="modal"
 			   data-target="#modal-delete-{{$tarea->id}}"
 			   class="btn btn-danger btn-sm"><span class="fa fa-trash"></span><b> Borrar</b> </a>
 

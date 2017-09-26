@@ -9,21 +9,22 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Nueva Tarea</h4>
         </div>
+        <form id="formNuevaTarea" class="form-group">
         <div class="modal-body">
 
             {{-- Contenido del Modal --}}
             <p> Los campos con (*) son obligatorios </p>
+            @verbatim
+                <div hidden>
+                    {{ cargarDatosNuevaTarea() }}
+                </div>
+            @endverbatim
 
-            {!! Form::open(['method'=>'POST', 'id'=> 'formNuevaTarea']) !!}
+
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="text" name="agenda" value="{{ $agenda }}" hidden>
             <input type="text" name="fechaInicioParam" value="{{ $semanas->fechaInicio }}" hidden>
             <input type="text" name="fechaFinParam" value="{{ $semanas->fechaFin }}" hidden>
-
-            @verbatim
-            <div hidden>
-                {{ cargarDatosNuevaTarea() }}
-            </div>
-            @endverbatim
 
             {{-- Descripcion --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -31,7 +32,7 @@
                     <label>Descripcion *:</label>
                     <input type="text" class="form-control margenDescripcion"
                            minlength="5"  id="nuevaTareaDescripcion" v-model="tareaNueva.descripcion"
-                           maxlength="60" name="descripcion" placeholder="Ingrese Tarea"
+                           maxlength="120" name="descripcion" placeholder="Ingrese Tarea"
                            required>
                 </div>
             </div>
@@ -73,12 +74,12 @@
 
             {{-- Duracion --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row" >
-                <label class="col-xs-12 col-sm-12 col-md-12 col-lg-12">Duracion*:</label>
+                <label class="col-xs-12 col-sm-12 col-md-12 col-lg-12">Duracion:</label>
 
                 {{-- Horas --}}
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group @if ($errors->has('hora')) has-error @endif">
-                        Horas:
+                        Horas *:
                         <input type="number" min="0"  name="hora" max="150" placeholder="Horas"
                                v-model="tareaNueva.hora" class="form-control"
                                required >
@@ -88,27 +89,33 @@
                 {{-- Minutos --}}
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                     <div class="form-group @if ($errors->has('minuto')) has-error @endif">
-                        Minutos:
+                        Minutos *:
                         <input type="number" min="0" name="minuto" max="999"
                                v-model="tareaNueva.minuto"
                                class="form-control"  placeholder="Minutos" required>
                     </div>
                 </div>
             </div>
-            {{-- Fin body  model --}}
+
 
         </div>
 
         {{-- Footer de Modal --}}
         <div class="modal-footer">
-            <button  @click="cancelarNuevaTarea($event)"
-                class="btn btn-danger"
-                type="reset"><span class="fa fa-times">
-                </span> Cancelar </button>
+            <button type="reset"  @click="cancelarNuevaTarea($event)"
+                class="btn btn-danger">
+                <span class="fa fa-times"></span>
+                Cancelar
+            </button>
 
-            <button type="submit" name="guardar"  class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
+            <button  class="btn btn-success" type="submit"
+                     :disabled="verificarValidarTareanueva"
+                    @click="guardarTareaNueva($event)">
+                <span class="fa fa-save"></span>
+                Guardar
+            </button>
         </div>
-        {!! Form::close()!!}
+        </form>
     </div>
 
     </div>
@@ -128,6 +135,8 @@
     var fechaFinModal;
 
     $(document).ready(function () {
+        $('input[name=agenda]').val(sessionStorage.getItem('agendas'));
+
         /* eventos de las tareas */
         $("#modal-nueva-tarea").on('hidden.bs.modal', function () {
             $('#formNuevaTarea')[0].reset();

@@ -18,20 +18,18 @@
 
   <div class="panel-body">
       <div class="breadcrumb col-sm-12">
-          <p class="visible-xs">
-              De
-              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
-              hasta
-              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}</b>
-          </p>
-          <p class="hidden-xs">
+          <p >
               Tarea  del
-              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}</b>
+              <b class="fechaTareas">{{ $semanas->fechaInicio }}</b>
               hasta
-              <b class="fechaTareas">{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}.</b>
-              <b > Los campos con (*) son obligatorios </b>
+              <b class="fechaTareas">{{ $semanas->fechaFin }}</b>
+
           </p>
+          <div class="col-xs-12">
+              <b > Los campos con (*) son obligatorios </b>
+          </div>
       </div>
+
 
       <div class="col-xs-12">
           <label>Descripcion:</label>
@@ -42,7 +40,7 @@
 
       @include('partials/alert/error')
 {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT'])!!}
-
+      <input type="text" name="agenda" hidden value="{{ $agendar }}">
     <div class="row col-xs-12 col-sm-6 col-md-6 col-lg-6">
         <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;"  v-if="utilizarfechasestimadas == true" >
             <p>
@@ -55,25 +53,21 @@
             has-error
         @endif">
 
-      <label>Fecha de Comienzo *: </label>
+      <label>Fecha Inicio *: </label>
 
         <input-date tipo="text" nombre="fechaInicioSolucion" v-if="utilizarfechasestimadas == false"
-            @if($tarea->fechaInicioSolucion != '0000-00-00')
-                valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioSolucion)}}"
-            @else
-                valor="{{ old('fechaInicioSolucion') }}"
-            @endif
-            placeholder="Fecha de inicio"   diaInicio="{{ \Cache::get('diainicio') }}"
-            fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
-            fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+
+                valor="{{ old('fechaInicio') }}"
+            placeholder="Fecha de inicio"    agendar="{{ $agendar }}"
+            fechainicio="{{  $semanas->fechaInicio }}"
+            fechafin='{{  $semanas->fechaFin }}' >
         </input-date>
 
         <input-date tipo="text" nombre="fechaInicioSolucion"  v-if="utilizarfechasestimadas == true" readonly="true"
-                    {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}"--}}
-                    diaInicio="{{ \Cache::get('diainicio') }}"
-                    valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}" placeholder="Comienzo"
-                    fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
-                    fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+                    agendar="{{ $agendar }}"
+                    valor="{{  $tarea->fechaInicio}}" placeholder="Fecha Inicio"
+                    fechainicio="{{   $semanas->fechaInicio }}"
+                    fechafin='{{  $semanas->fechaFin }}' >
         </input-date>
 
         @if ($errors->has('fechaInicioSolucion'))
@@ -87,25 +81,20 @@
              has-error
         @endif">
 
-        <label>Fecha de Finalizacion *:</label>
+        <label>Fecha Fin *:</label>
             <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == false"
-                {{--valor="{{ old('fechaInicioEstimado') }}"--}}
-                @if($tarea->fechaFinSolucion != '0000-00-00')
-                   valor="{{ \Calcana::cambiarFormatoEuropeo($tarea->fechaFinSolucion)}}"
-                @else
-                    valor="{{ old('fechaFinSolucion') }}"
-                @endif
-                placeholder="Fecha finalizacion"   diaInicio="{{ \Cache::get('diainicio') }}"
-                fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
-                fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+
+                    valor="{{ old('fechaFin') }}"
+                placeholder="Fecha finalizacion"    agendar="{{ $agendar }}"
+                fechainicio="{{   $semanas->fechaInicio }}"
+                fechafin='{{  $semanas->fechaFin }}' >
             </input-date>
 
             <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == true" readonly="true"
-                        {{--value="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}"--}}
-                        diaInicio="{{ \Cache::get('diainicio') }}"
-                        valor="{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}" placeholder="Comienzo"
-                        fechainicio="{{  \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaInicio) }}"
-                        fechafin='{{ \Calcana::cambiarFormatoEuropeo(\Cache::get('semanas')->fechaFin) }}' >
+                        agendar="{{ $agendar }}"
+                        valor="{{$tarea->fechaFin }}" placeholder="Fecha Fin"
+                        fechainicio="{{   $semanas->fechaInicio }}"
+                        fechafin='{{  $semanas->fechaFin }}' >
             </input-date>
 
         @if ($errors->has('fechaFinSolucion')) <p class="help-block">{{ $errors->first('fechaFinSolucion') }}</p> @endif
@@ -123,22 +112,21 @@
 
       {{-- Tiempo estimado --}}
       <div class="row col-sm-12">
-        <label class="form-group col-sm-12 col-xs-12" style="margin-top: 10px;">Tiempo de Duracion *:</label>
+        <label class="form-group col-sm-12 col-xs-12" style="margin-top: 10px;">Duracion *:</label>
           {{-- Horas --}}
           <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4
             @if ($errors->has('hora'))
                   has-error
             @endif ">
             <p>Horas:<p>
-             <input type="number" name="hora" min="0" max="999" placeholder="Horas" class="form-control"   required  v-if="utilizarfechasestimadas == false"
-                    @if($tarea->tiempoSolucion != "00:00:00")
-                    value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"
-                    @else valor="{{ old('minuto') }}"  @endif >
+             <input type="number" name="hora" min="0" max="150" placeholder="Horas" class="form-control"   required  v-if="utilizarfechasestimadas == false"
 
-              <input type="number" name="hora" min="0" max="999" v-if="utilizarfechasestimadas == true" readonly="true"
-                     value="{{$tarea->sacarHoras($tarea->tiempoEstimado)}}"
+                   valor="{{ old('minuto') }}">
+
+              <input type="number" name="hora" min="0" max="150" v-if="utilizarfechasestimadas == true" readonly="true"
+                     value="{{ \Calcana::sacarHoras($tarea->tiempo)}}"
                      placeholder="Horas"
-                     class="form-control" value="00"  required >
+                     class="form-control" value="0"  required >
 
             @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
@@ -154,15 +142,13 @@
             <input type="number" name="minuto" min="0"  max="999"
                    placeholder="Minutos"  class="form-control"
                    required  v-if="utilizarfechasestimadas == false"
-                   @if($tarea->tiempoSolucion != "00:00:00")
-                        value="{{$tarea->sacarMinutos($tarea->tiempoSolucion)}}"
-                   @else valor="{{ old('minuto') }}"
-                   @endif>
+                    valor="{{ old('minuto') }}"
+                   >
 
               <input type="number" name="minuto" min="0" v-if="utilizarfechasestimadas == true" readonly="true"
-                     value="{{$tarea->sacarMinutos($tarea->tiempoEstimado)}}"
+                     value="{{ \Calcana::sacarMinutos($tarea->tiempo)}}"
                      placeholder="Minutos"
-                     max="999" class="form-control" value="00"   required>
+                     max="999" class="form-control" value="0"   required>
 
             @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
           </div>
@@ -174,7 +160,7 @@
       <div class="row col-sm-12">
         <div class="form-group @if ($errors->has('observaciones')) has-error @endif  col-sm-12 col-md-10 col-lg-10">
             <label for="observaciones">Observaciones</label>
-            <textarea type="textArea" name="observaciones" value="{{ $tarea->observaciones }}"   maxlength="120" placeholder="Observaciones" class="form-control" rows="5" cols="9"></textarea>
+            <textarea type="textArea" id="observacion" name="observaciones"  maxlength="120" placeholder="Ingrese Observaciones" class="form-control" rows="5" cols="9">@if($tarea->observaciones != 'Ninguna'){{ $tarea->observaciones  }} @endif</textarea>
             @if ($errors->has('observaciones')) <p class="help-block">{{ $errors->first('observaciones') }}</p> @endif
         </div>
       </div>
@@ -186,7 +172,7 @@
       <div class="col-sm-12 @if ($errors->has('prov')) has-error @endif "></div>
       <p>Seleccione las localizaciones donde se realizaró la tarea.</p>
       <div class="col-sm-6">
-          @foreach($ubicacionesDis as $item)
+          @foreach($ubicaciones as $item)
               <label>{{ Form::checkbox('prov[]', $item->id, null, ['class'=>'micheckbox']) }} {{ $item->nombre }}</label><br>
           @endforeach
           @if ($errors->has('prov')) <p class="help-block" style="color: #9c3328">{{ $errors->first('prov') }}</p> @endif
@@ -201,7 +187,7 @@
             class="btn btn-danger" >
             <span class="fa fa-times"></span> Cancelar
         </a>
-        <button type="submit" name="guardar" class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
+        <button type="submit"  class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
 
     </div>
         {!! Form::close()!!}
@@ -212,39 +198,16 @@
    // function recorrerLocalizaciones(){
     $("input[type=checkbox]").each(function (index) { 
           var id = $(this).val();
-        @foreach($ubicacionesOcu as $ubicacion)
+        @foreach($tarea->ubicaciones as $ubicacion)
           if(id == {{$ubicacion->id}}){
             $(this).prop('checked', true); 
           }
         @endforeach
-          });
+    });
     // }
 $(document).ready(function(){
 
-
-  $(".InicioEjecucion").datepicker({
-    format: 'dd/mm/yyyy',
-    //defaultDate: "+1w",
-    changeMonth: true,
-    numberOfMonths: 1,
-    minDate: '{{$tarea->cambiarFormatoEuropeo($tarea->fechaInicioEstimado)}}',
-    onSelect: function(selectedDate) {
-      $(".FinEjecucion").datepicker("option", "minDate", selectedDate);
-    }
-  });
-
-  
-  $(".FinEjecucion").datepicker({
-    format: 'dd/mm/yyyy',
-    defaultDate: "+1w",
-    changeMonth: true,
-    numberOfMonths: 1,
-    maxDate: '{{$tarea->cambiarFormatoEuropeo($tarea->fechaFinEstimado)}}',
-
-    onSelect: function(selectedDate) {
-      $(".InicioEjecucion").datepicker( "option", "maxDate", selectedDate);
-    }
-  });
+    $.trim($("#observacion").val());
 
   var check = $('input [name="todasemana"]');
   var observacion = $('#observacion');

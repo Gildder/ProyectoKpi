@@ -5,6 +5,7 @@ namespace ProyectoKpi\Http\Controllers\Tareas;
 use function array_push;
 use function date_add;
 use DateTime;
+use Httpful\Response;
 use Illuminate\Support\Facades\Session;
 use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
@@ -36,14 +37,13 @@ class TareaProgramadaController extends Controller
     public function index()
     {
         // obtenemos las tareas programadas
-        $tareas = Tarea::getTodasTareas();
+        $tareas = Tarea::getTodasTareas(0);
         $semanas = array_pop($tareas);
 
-//        Caches::guardar('botones', 0);
-//        Caches::guardar('diainicio', ConfiguracionRepositorio::getDiaInicio());
+        Caches::guardar('botones', 0);
 
-        // limpiamos el cache la variable proxSemana para trabajar con la semana actual
-//        Caches::borrar('proxSemana');
+//         limpiamos el cache la variable proxSemana para trabajar con la semana actual
+        Caches::borrar('proxSemana');
 
         return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas, 'agenda' => 0]);
     }
@@ -52,6 +52,9 @@ class TareaProgramadaController extends Controller
     {
         $tareas = TareaRepository::getTareasArchivados();
         $semanas = array_pop($tareas);
+
+        Caches::guardar('botones', 1);
+
 
         return view('tareas/tareaProgramadas/archivadas', ['tareas'=> $tareas, 'semanas' => $semanas]);
     }
@@ -67,6 +70,8 @@ class TareaProgramadaController extends Controller
     public function show($id)
     {
         $tareas = Tarea::getTarea($id);
+
+//        dd($tareas, $id);
 
         return view('tareas/tareaProgramadas/show', ['tarea'=>$tareas]);
     }
@@ -93,7 +98,6 @@ class TareaProgramadaController extends Controller
     public function store(TareaProgramasFormRequest $request)
     {
         $result = Tarea::guardar($request);
-
         if ($result['success']) {
             return redirect()->back()
                 ->with('message', $result['message'])
@@ -129,89 +133,63 @@ class TareaProgramadaController extends Controller
     
     public function edit($id)
     {
-        $tarea = Tarea::getTarea($id);
+        $tarea = Tarea::findTarea($id);
+        $semanas = array_pop($tarea);
+//        dd($semanas);
         $estados = TareaRepository::getEstadosEditar();
 
+        return view('tareas.tareaProgramadas.edit', ['tarea'=> $tarea[0], 'semanas'=>$semanas, 'agendar'=> 0, 'estados'=>$estados]);
+        /*
         return [
             'tarea' => $tarea,
             'estados' => $estados
-        ];
+        ];*/
     }
 
-    public function update(TareaProgramasFormRequest $Request, $id)
+    public function update(TareaProgramasFormRequest $request, $id)
     {
-        $tarea = Tarea::findOrFail($id);
-
-        $tarea->descripcion = trim(\Request::input('descripcion'));
-        $tarea->estadoTarea_id = \Request::input('estado');
-        $tarea->fechaInicioEstimado = $tarea->validarFechaInicioEstimacion(\Request::input('fechaInicioEstimado'), \Request::input('todasemana'));
-        $tarea->fechaFinEstimado = $tarea->validarFechaFinEstimacion(\Request::input('fechaFinEstimado'), \Request::input('todasemana'));
-        $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
-        $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1].':00';
-        $tarea->observaciones = trim(\Request::input('observaciones'));
-
-        if(!$tarea->validarLimiteFechas() ){
-            return redirect()->to($this->getRedirectUrl())
-                ->withErrors('Las fechas estan fuera del rango permitido.')
-                ->withInput();
-        }
-
-        if($tarea->save()){
+//        dd($request);
+        $result = Tarea::actualizar($request, $id);
+        if ($result['success']) {
             return redirect('tareas/tareaProgramadas')
-                ->with('message', 'La tarea Nro. '.$tarea->nro.' se actualizo correctamente');
-        }else{
-            return redirect()->back()
-                ->withErrors('La tarea NO se guardo, por favor verifique los campos')
-                ->withInput();
-        }
+                ->with('message', $result['message']);
 
+        } else {
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors($result['message'])
+                ->withInput()
+                ;
+        }
     }
 
 
 
     public function resolver($id)
     {
-        $tareaProgramadas = Tarea::findOrFail($id);
+        $tareaProgramadas = Tarea::findTarea($id);
 
         $ubicacionesDis = Tarea::ubicacionesTodos($id);
-        $ubicacionesOcu = Tarea::ubicacionesOcupadas($id);
 
-        return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas,'ubicacionesDis'=> $ubicacionesDis, 'ubicacionesOcu'=> $ubicacionesOcu]);
+        $semanas = array_pop($tareaProgramadas);
+
+//        dd($tareaProgramadas);
+
+        return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas[0],'ubicaciones'=> $ubicacionesDis, 'agendar'=> 0, 'semanas' => $semanas]);
     }
 
-    public function storeResolver(TareaProgramasResolverRequest $Request, $id)
+    public function storeResolver(TareaProgramasResolverRequest $request, $id)
     {
-        $tarea = Tarea::find($id);
-        $tarea->fechaInicioSolucion = $tarea->validarFechaInicioEstimacion(\Request::input('fechaInicioSolucion'), null);
-        $tarea->fechaFinSolucion =  $tarea->validarFechaFinEstimacion(\Request::input('fechaFinSolucion'), null);
+        $result = Tarea::resolver($request, $id);
+        if ($result['success']) {
+            return redirect('tareas/tareaProgramadas')
+                ->with('message', $result['message']);
 
-        if(! $tarea->validarLimiteFechaSolucion() ){
+        } else {
             return redirect()->to($this->getRedirectUrl())
-                ->withErrors('Las fechas estan fuera del rango permitido.')
-                ->withInput();
+                ->withErrors($result['message'])
+                ->withInput()
+                ;
         }
-
-        $horaReal = $tarea->obtenerHora(trim(\Request::input('hora')), trim(\Request::input('minuto')));
-        $tarea->tiempoSolucion = $horaReal[0].':'.$horaReal[1];
-        $tarea->estadoTarea_id = 3;
-        $tarea->observaciones = trim(\Request::input('observaciones'));
-        $tarea->save();
-
-
-        //  guardamos la localizacion de la tarea
-        $localizaciones = $Request->input('prov', []);
-        DB::table('tarea_localizacion')->where('tarea_id', '=', $id)->delete();
-
-        for ($i = 0; $i < count($localizaciones); $i++) {
-            DB::table('tarea_localizacion')->insert(
-                ['tarea_id' => $id, 'localizacion_id' => $localizaciones[$i] ]
-            );
-        }
-
-
-        return redirect('tareas/tareaProgramadas')
-            ->with('message', 'La tarea Nro. '.$tarea->numero.' se finalizò correctamente');
-
     }
 
     public function destroy($id)

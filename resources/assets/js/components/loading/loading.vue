@@ -3,7 +3,7 @@
          tabindex="-1" data-backdrop="static" data-keyboard="false"
          role="dialog" id="loading">
 
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-sm" id="modalLoading">
         <div class="modal-content modal-load-content">
             <div class="modal-heading modal-load-header">
                 <h4 class="modal-title" style="padding: 10px;">Espere por favor..</h4>
@@ -76,7 +76,6 @@
 
     #loading{
         z-index: 99999;
-        top:20%;
     }
     .marginLeft{
         /*margin-right:30px;*/
@@ -323,6 +322,9 @@
         -webkit-animation-direction: linear;
     }
     #front-bar{
+    }
+    #modalLoading {
+        top: 20%;
     }
 
     @-webkit-keyframes bar-animation{

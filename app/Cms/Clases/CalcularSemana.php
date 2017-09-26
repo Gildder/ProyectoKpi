@@ -2,6 +2,7 @@
 
 namespace ProyectoKpi\Cms\Clases;
 
+use Carbon\Carbon;
 use \Illuminate\Support\Facades\Facade;
 
 use ProyectoKpi\Cms\Clases\SemanaTarea;
@@ -264,13 +265,7 @@ class CalcularSemana
                 break;
         }
     }
-    function validar_fecha($fecha){
-        if (preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $fecha)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
     function compararFechas($primera, $segunda)
     {
         if($this->validar_fecha($primera) == false || $this->validar_fecha($primera)== false ){
@@ -297,6 +292,45 @@ class CalcularSemana
         }
     }
 
+    /**
+     * verificara cual fecha es la mayor
+     *
+     * true = si la fecha Inicio mayor o igual a fecha Fin
+     */
+    public static function verificarMayorIgual($fechaInicio, $fechaFin)
+    {
+        $valoresPrimera = explode("/", $fechaInicio);
+        $valoresSegunda = explode("/", $fechaFin);
+
+        $fechaInicioParse = Carbon::create($valoresPrimera[2], $valoresPrimera[1], $valoresPrimera[0]);
+        $fechaFinParse = Carbon::create($valoresSegunda[2], $valoresSegunda[1], $valoresSegunda[0]);
+
+        if($fechaInicioParse->gte($fechaFinParse)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * verificara cual fecha es la mayor
+     *
+     * true = si la fecha Inicio manor o igual a fecha Fin
+     */
+    public static function verificarMenorIgual($fechaInicio, $fechaFin)
+    {
+        $valoresPrimera = explode("/", $fechaInicio);
+        $valoresSegunda = explode("/", $fechaFin);
+
+        $fechaInicioParse = Carbon::create($valoresPrimera[2], $valoresPrimera[1], $valoresPrimera[0]);
+        $fechaFinParse = Carbon::create($valoresSegunda[2], $valoresSegunda[1], $valoresSegunda[0]);
+
+        if($fechaInicioParse->lte($fechaFinParse)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     // lista de ubidadciones Ocupadas para una tarea
     public static function ubicacionTarea($tarea_id)

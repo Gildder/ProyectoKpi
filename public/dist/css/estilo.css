@@ -4,6 +4,8 @@
 }
 body {
   padding: 0px;
+  padding-right: 0px !important;
+
 }
 body a {
   color: #1c2529;

@@ -13,7 +13,6 @@
                 <th>Tiempo Ejecucion</th>
                 <th>Estado</th>
                 <th>Observaciones</th>
-                <th>Ubicaciones</th>
                 <th></th>
             </tr>
 		</thead>
@@ -36,16 +35,9 @@
                         <td>
                             <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label>
                         </td>
-        				<td>{{$tarea->getObservacion() }}</td>
+        				<td>{{$tarea->observaciones }}</td>
                         <td>
-                            <ul style="padding: 10px;">
-                                @foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
-                                    <li>{{ $ubicacion->nombre }} </li>
-                                @endforeach
-                            </ul>
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-google btn-xs" title="Agregar Error"> <span class=" fa fa-legal"></span></a>
+                            {{--<a href="#" class="btn btn-google btn-xs" title="Agregar Error"> <span class=" fa fa-legal"></span></a>--}}
                             <a class="btn btn-dropbox btn-xs"
                                href="javascript:void(0)"  data-toggle="modal" data-target="#modal-tareaDetalle-{{$tarea->tarea_id}}" title="Ver Tarea"> <span class=" fa fa-eye"></span></a>
                         </td>

@@ -56,20 +56,9 @@
                     <label  style="background: {{$tarea->estados->color}}; color:{{$tarea->estados->texto}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estados->nombre}} </label>
             </div>
 
-            <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
-                <b class="text-right" style="width: 50%">Ubicaciones:</b>
 
-                    <ul style="padding: 10px;">
-                        @foreach($tarea->ubicacionesOcupadas($tarea->id) as $ubicacion)
-                            <li>{{ $ubicacion->nombre }} </li>
-                        @endforeach
-                    </ul>
-            </div>
 
-            <div style="text-align: center;  padding: 10px;">
-                <b class="text-right" style="width: 50%">Observacion:</b>
-                {{$tarea->getObservacion() }}
-            </div>
+
         </div>
         <div class="modal-footer modal-delete-footer" >
           <a  data-dismiss="modal" class="btn btn-danger btn-xs" ><span class="fa fa-times"></span> Cerrar</a>

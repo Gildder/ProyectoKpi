@@ -32,7 +32,8 @@ class SupervisadosController extends Controller
     
     public function index()
     {
-        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        $semanas = TareaRepository::obtenerSemanaDelAnio(0);
+
 
         $tareas = TareaRepository::getTareasSupervisados($semanas->fechaInicio, $semanas->fechaFin);
 

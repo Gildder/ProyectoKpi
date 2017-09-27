@@ -37,12 +37,12 @@ class TareaProgramadaController extends Controller
     public function index()
     {
         // obtenemos las tareas programadas
-        $tareas = Tarea::getTodasTareas(0);
+        $tareas = Tarea::getTodasTareaSemana(0);
         $semanas = array_pop($tareas);
 
         Caches::guardar('botones', 0);
 
-//         limpiamos el cache la variable proxSemana para trabajar con la semana actual
+        // limpiamos el cache la variable proxSemana para trabajar con la semana actual
         Caches::borrar('proxSemana');
 
         return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas, 'agenda' => 0]);
@@ -217,11 +217,10 @@ class TareaProgramadaController extends Controller
         }
     }
 
-
     //verificar el estado de las tareas
     public function obtenerEstadoBtnEliminarTarea()
     {
-        $estado = TareaRepository::getDiaLimiteEliminar();
+        $estado = Tarea::getDiaLimiteEliminar();
         return $estado;
     }
 }

@@ -15,7 +15,11 @@ trait TareaRepository
 {
 
     /* Metodos */
-    public static function getTodasTareas($agenda)
+
+    /**
+     * Retorna la lista de tarea mas semana  utilizada para encontrar las tareas
+    */
+    public static function getTodasTareaSemana($agenda)
     {
         // Obtenemos las semanas de tareas
         $semanaActual = self::obtenerSemanaDelAnio($agenda);
@@ -30,6 +34,24 @@ trait TareaRepository
         $lista = self::agregarUbicacionTareas($tareas);
         // agregamos la semana actual
         array_push($lista, $semanaActual);
+
+        return $lista;
+    }
+
+    /**
+     * Retorna la lista de tarea del usuario utilizada para encontrar las tareas
+     */
+    public static function getTodasTareaUsuario()
+    {
+        // Obtenemos las semanas de tareas
+
+        $tareas = \DB::table('vw_tareas_para_usuarios')
+            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
+            ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
+            ->get();
+
+        $lista = self::agregarUbicacionTareas($tareas);
+        // agregamos la semana actual
 
         return $lista;
     }
@@ -198,7 +220,7 @@ trait TareaRepository
         $tarea->user_id = \Usuario::get('id');
 
         if($tarea->save()){
-            $tareas = self::getTodasTareas($request->agenda);
+            $tareas = self::getTodasTareaSemana($request->agenda);
             $semanas = array_pop($tareas);
             return [
                 'message' => 'La tarea Nro. '.$tarea->numero.' se guardo correctamente',
@@ -522,13 +544,10 @@ trait TareaRepository
         return $fechaDescrip;
     }
 
-
-
-
-
     public static function getDiaLimiteEliminar()
     {
         $dia = \DB::table('preferencias')->where('preferencias.id','=', 1)->select('preferencias.diaLimiteBorrarTarea')->first();
+
         $resultado = 0;
 
         if($dia->diaLimiteBorrarTarea >= date("N")){
@@ -620,29 +639,11 @@ trait TareaRepository
      */
     public static function getTareasCalendar($user_id)
     {
-        $tareas =  Tarea::where('user_id', $user_id)
-            ->join('estado_tareas', 'estado_tareas.id', '=', 'tareas.estadoTarea_id')
-            ->select(
-                'tareas.id',
-                'tareas.numero',
-                'tareas.descripcion',
-                'tareas.fechaInicioEstimado',
-                'tareas.fechaFinEstimado',
-                'tareas.tiempoEstimado',
-                'tareas.fechaInicioSolucion',
-                'tareas.fechaFinSolucion',
-                'tareas.tiempoSolucion',
-                'tareas.estadoTarea_id as estado_id',
-                'estado_tareas.nombre as estado',
-                'estado_tareas.color',
-                'estado_tareas.texto'
-            )
-            ->get();
+        $tareas =  Tarea::getTodasTareaUsuario();
 
-        $data = array();
+        $semanas = self::obtenerSemanaDelAnio(0);
 
-//         cargamos los datos de las semanas
-        $semanas = Tarea::obtenerSemanaDelAnio(0);
+        //  cargamos los datos de las semanas para marcar la semana actual en el calendario
         $semana = new \stdClass();
         $semana->start = \Calcana::cambiarFormatoDB($semanas->fechaInicio);
         $semana->end = \Calcana::sumarDias(\Calcana::cambiarFormatoDB($semanas->fechaFin), 1);
@@ -650,31 +651,30 @@ trait TareaRepository
         $semana->rendering = 'background';
         $semana->color = '#ff9f89';
 
+
+        $data = array();
         array_push($data, $semana);
 
         foreach ($tareas  as $tarea){
             $valor = new \stdClass();
 
+            $valor->id = $tarea->id;
             $valor->title = $tarea->numero.'. ' .$tarea->descripcion;
             $valor->descrip = $tarea->descripcion;
-            if($tarea->estado === 3){
-                $valor->start = $tarea->fechaInicioSolucion;
-                $valor->end = $tarea->fechaFinSolucion.'T23:59:59';
-                $valor->hora = $tarea->tiempoSolucion;
-            }else{
-                $valor->start =  $tarea->fechaInicioEstimado ;
-                $valor->end =  $tarea->fechaFinEstimado.'T23:59:59';
-                $valor->hora = $tarea->tiempoEstimado;
-            }
-            $valor->backgroundColor = $tarea->color;
-            $valor->borderColor = $tarea->color;
-            $valor->textColor = $tarea->texto;
-            $valor->id = $tarea->id;
+            $valor->start =  \Calcana::cambiarFormatoDB($tarea->fechaInicio);
+            $valor->end =  \Calcana::cambiarFormatoDB($tarea->fechaFin).'T23:59:59';
+            $valor->hora = $tarea->tiempo;
+            $valor->backgroundColor = $tarea->colorEstado;
+            $valor->borderColor = $tarea->colorEstado;
+            $valor->textColor = $tarea->textoColor;
             $valor->nro = $tarea->numero;
             $semana->overlap = false;
 //            $valor->allDay = false;
             $valor->estado = $tarea->estado;
             $valor->numero = $tarea->numero;
+            $valor->observaciones = $tarea->observaciones;
+            $valor->can_delete = $tarea->can_delete;
+            $valor->can_change = $tarea->can_change;
 
             array_push($data, $valor);
         }

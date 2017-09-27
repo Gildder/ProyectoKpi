@@ -21,12 +21,9 @@ class EmpleadoTareaCalendarioController extends Controller
 
     public function listaMiTareas()
     {
-		$estados = TareaRepository::getEstados();
-		$semanas = TareaRepository::obtenerSemanaDelAnio(0);
-//dd($this->getTareaComunes());
-//        dd(Tarea::getTareasCalendar(\Usuario::get('id')));
+		$estados = Tarea::getEstados();
+		$semanas = Tarea::obtenerSemanaDelAnio(0);
 
-//		dd(Carbon::now()->toDateString());
         return view('calendario.empleado.index', ['estados' => $estados, 'diaHoy'=> Carbon::now()->toDateString(), 'semanas' => $semanas, 'agenda' => 0 ]);
     }
 

@@ -505,10 +505,22 @@ $(document).ready(function() {
                         $('#modalTareaStd').html(data.estado);
                         $('#modalTareaStd').css('background',data.backgroundColor );
                         $('#modalTareaStd').css('color',data.textColor );
+                        $('#modalTareaObs').html(data.observaciones );
 
                         var pathname = window.location.host+'/tareas/tareaProgramadas/' + data.id;
                         $('#verDetalleTarea').attr('action','');
                         $('#verDetalleTarea').attr('action',pathname);
+
+                        console.log(data.can_change );
+                        /// verificamos si puede eliminar
+                        if(data.can_delete === 0){
+                            $('#borrarCalendar').remove();
+                        }
+
+                        if(data.can_change === 0){
+                            $('#finalizarCalendar').remove();
+                            $('#editarCalendar').remove();
+                        }
 
                         let href = '/tareas/tareaProgramadas/' + data.id;
                         $('a[name=ver]').attr('href', href );

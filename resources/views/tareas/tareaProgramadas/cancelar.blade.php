@@ -7,12 +7,12 @@
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <b>Cancelar Solución de Tarea</b>
+        <b>Reabrir la Tarea</b>
       </div>
       <div class="modal-body modal-delete-body">
            {!!Form::open(['action'=>['Tareas\TareaProgramadaController@cancelarSolucion', $tarea->id], 'method'=>'GET'])!!}
             <div class="modal-body">
-              <p>¿Estas seguro que deseas cancelar la solucion de la tarea <b>{{$tarea->descripcion}}?</b></p>
+              <p>¿Estas seguro que deseas Reabrir la tarea ?</p>
                  
             </div>
             <div class="modal-footer modal-delete-footer">

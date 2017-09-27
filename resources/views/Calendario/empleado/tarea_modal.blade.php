@@ -9,9 +9,6 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <b id="modalTareaTitle" class="modal-title"></b>
       </div>
-      <div class="modal-body modal-delete-body">
-          <form action="" id="verDetalleTarea" method="post">
-      </div>
 
       <div class="modal-body modal-delete-body">
           <form action="" id="verDetalleTarea" method="post">
@@ -46,9 +43,15 @@
               <label id="modalTareaStd" class="textEstado"></label>
           </div>
 
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 5px;">
+              <b class="text-right" style="width: 50%">Observaciones:</b>
+              <p id="modalTareaObs"></p>
+          </div>
+
           <div class="modal-footer modal-delete-footer">
-              <a  data-dismiss="modal" class="btn btn-danger" >Cerrar   <span class="fa fa-times"></span> </a>
-              <a href="/tareas/tareaProgramadas/"   name="ver" class="btn btn-success">Ver Tarea  <span class="fa fa-eye"></span> </a>
+              <a  data-dismiss="modal" class="btn btn-success btn-xs" id="finalizarCalendar" title="Finalizar" >Finalizar  <span class="fa fa-thumbs-up "></span> </a>
+              <a  data-dismiss="modal" class="btn btn-warning btn-xs" id="editarCalendar" title="Editar" >Editar  <span class="fa fa-edit "></span> </a>
+              <a  data-dismiss="modal" class="btn btn-danger btn-xs" id="borrarCalendar" title="Borrar" >Borrar   <span class="fa fa-trash "></span> </a>
           </div>
           </form>
       </div>

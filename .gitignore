@@ -2,8 +2,6 @@ vendor/
 node_modules/
 public/storage/
 .idea/
-storage/
+storage/framework/views/*.php
 Homestead.yaml
 Homestead.json
-.env
-

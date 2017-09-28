@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
+use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Clases\Tiempo;
 use ProyectoKpi\Http\Requests\Request;
 use ProyectoKpi\Models\Tareas\Tarea;
@@ -392,7 +393,9 @@ trait TareaRepository
                 $resultado = true;
             }
         }else{
-            if( \Calcana::verificarMayorIgual($fecha, $semanas->fechaInicio) )
+            $semanasAgenda = Caches::obtener('semana_buscada');
+
+            if( \Calcana::verificarMayorIgual($fecha, $semanasAgenda->fechaInicio) && \Calcana::verificarMenorIgual($fecha, $semanasAgenda->fechaFin))
             {
                 $resultado = true;
             }
@@ -431,6 +434,19 @@ trait TareaRepository
             $fecha = date(date('Y-m-d', strtotime('now +7 day')));
         }
         $semanas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.$fecha.'\');');
+
+        return $semanas[0];
+    }
+
+    /**
+     * Devuelve las datos de semana 'anio, mes, seman, fecha inicio y fin' de tarea
+     *
+     * @return mixed
+     */
+    public static function obtenerSemanaDelAnioFecha($fecha)
+    {
+        $semanas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.\Calcana::cambiarFormatoDB($fecha).'\');');
+        Caches::guardar('semana_buscada', $semanas[0]);
 
         return $semanas[0];
     }

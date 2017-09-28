@@ -122,11 +122,15 @@
 <!-- jvectormap -->
 <script src="{{URL::asset('plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script>
 <script src="{{URL::asset('plugins/jvectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+
 <!-- jQuery Knob Chart -->
 <script src="{{URL::asset('plugins/knob/jquery.knob.js')}}"></script>
+
 <!-- daterangepicker -->
-<script src="{{URL::asset('plugins/descargas/moment.min.js')}}"></script>
+<script src="{{URL::asset('plugins/moment/moment.min.js')}}"></script>
 <script src="{{URL::asset('plugins/moment/moment-with-locales.js')}}"></script>
+
+
 <script src="{{URL::asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- datepicker -->
 {{-- <script src="{{URL::asset('plugins/datepicker/bootstrap-datepicker-es.js')}}"></script> --}}

@@ -233,4 +233,13 @@ class TareaProgramadaController extends Controller
             'tarea' => $tarea
         ];
     }
+
+    public function getSemanaAnioFecha(Request $request)
+    {
+        $tarea = Tarea::obtenerSemanaDelAnioFecha($request->fecha);
+
+        return [
+            'tarea' => $tarea
+        ];
+    }
 }

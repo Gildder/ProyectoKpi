@@ -1,4 +1,4 @@
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
    <!-- Modal -->
 <div class="modal fade" aria-hidden="true" tabindex="-1" role="dialog" id="modal-nueva-tarea" style="z-index:2000">
     <div class="modal-dialog">
@@ -42,7 +42,7 @@
                             </div>
                             <input type="text" id="fechaInicioTarea"  style="z-index: 3000"
                                    v-model="tareaNueva.fechaInicio"   :key="cambioFecha"
-                                   placeholder="Fecha Inicio" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
+                                   placeholder="dd/mm/aaaa" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
                                    class="form-control" name="fechaInicio" required>
                         </div>
                     </div>
@@ -58,11 +58,12 @@
                             </div>
                             <input type="text" id="fechaFinTarea"  style="z-index: 3000"
                                    v-model="tareaNueva.fechaFin"   :key="cambioFecha"
-                                   placeholder="Fecha Fin" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
+                                   placeholder="dd/mm/aaaa" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
                                    class="form-control" name="fechaFin" required>
                         </div>
                     </div>
                 </div>
+                <a href="#" class="btn btn-primary btn-xs" id="actFecha" title="Limpiar Fechas" style="position: relative; float: right; top: -45px; right: -10px;"><i class="fa fa-repeat"></i></a>
             </div>
 
             {{-- Duracion --}}
@@ -102,8 +103,7 @@
             </button>
 
             <button  class="btn btn-success" type="submit"
-                     :disabled="verificarValidarTareanueva"
-                     >
+                     :disabled="verificarValidarTareanueva">
                 <span class="fa fa-save"></span>
                 Guardar
             </button>
@@ -126,6 +126,8 @@
 <script>
     var fechaInicioModal;
     var fechaFinModal;
+    var Notificion = new Alert('#notificacion');
+//    moment.locale('es');
 
     $(document).ready(function () {
         /* eventos de las tareas */
@@ -139,8 +141,16 @@
         fechaInicioModal = $('input[name="fechaInicioParam"]').val();
         fechaFinModal = $('input[name="fechaFinParam"]').val();
 
+        if(parseInt(sessionStorage.getItem('agendas')) === 1){
+            let date = new Date();
+            fechaFinModal = '31/12/' + date.getFullYear();
+        }
+
+        console.log(sessionStorage.getItem('agendas'));
+        console.log(fechaFinModal);
         cargarFechaFinTarea(fechaInicioModal, fechaFinModal);
         cargarFechaInicioTarea(fechaInicioModal, fechaFinModal);
+
 
     });
 
@@ -158,6 +168,12 @@
             selectOtherMonths: true,
             showAnim: 'fadeIn',
             beforeShowDay: false,
+        }).on('change', function () {
+
+            if(validarFecha($("#fechaInicioTarea").val())){
+                actualizarFechasCalendario(fechaInicio, fechaFin);
+            }
+
         });
     }
 
@@ -175,6 +191,9 @@
             selectOtherMonths: true,
             showAnim: 'fadeIn',
             beforeShowDay: false,
+        }).on('change', function () {
+            if(!validarFecha($("#fechaFinTarea").val())){
+            }
         });
     }
 
@@ -191,6 +210,78 @@
             return 1;
         }
     }
+
+    function validarFecha(fecha) {
+        try{
+            var dateFormat = new Date(fecha);
+
+                if(!validarLimiteFecha(fecha)){
+                    return false;
+                }
+
+                $.ajax({
+                    url: '/tareas/tareaProgramadas/getSemanaAnioFecha',
+                    method: 'GET',
+                    data: { fecha: fecha },
+                    dataType: 'json',
+                    success: function (data) {
+                        actualizarFechasCalendario(data.tarea.fechaInicio, data.tarea.fechaFin)
+                        return true;
+                    }.bind(this), error: function (data)
+                    {
+
+                    }.bind(this)
+                })
+        }catch(err){
+            console.log(err);
+            return false;
+        }
+    }
+
+    function validarLimiteFecha(fecha) {
+        var Fecha = moment(fecha.toString(),'DD/MM/YYYY').format('YYYY-M-D');
+        var FechaInicio = moment($("input[name=fechaInicioParam]").val(),'DD/MM/YYYY').format('YYYY-MM-DD')
+
+        console.log(moment(Fecha).isSameOrAfter(FechaInicio));
+        if(moment(Fecha).isSameOrAfter(FechaInicio)){
+            let date = new Date();
+            let fechaFinAnio = '31/12/' + date.getFullYear();
+            let FechaFin = moment(fechaFinAnio,'DD/MM/YYYY').format('YYYY-M-D');
+
+            if(moment(Fecha).isSameOrBefore(FechaFin)){
+                return true;
+            }else{
+                Notificion.error('Por favor solemente fecha dentro del año', 5000);
+                return false;
+            }
+        }else{
+            Notificion.error('Por favor solemente fecha superiores al inicio de semana', 5000);
+            return false;
+        }
+
+
+    }
+
+   function actualizarFechasCalendario(fechaInicio, fechaFin) {
+       $("#fechaInicioTarea").datepicker('option', 'minDate', fechaInicio);
+       $("#fechaInicioTarea").datepicker('option', 'maxDate', fechaFin);
+       $("#fechaFinTarea").datepicker('option', 'minDate', fechaInicio);
+       $("#fechaFinTarea").datepicker('option', 'maxDate', fechaFin);
+       $("#fechaInicioTarea" ).datepicker( "refresh" );
+       $("#fechaFinTarea" ).datepicker( "refresh" );
+   }
+
+
+   $('#actFecha').click(function () {
+       let fechaInicio = $('input[name="fechaInicioParam"]').val();
+       let date = new Date();
+       let fechaFinAnio = '31/12/' + date.getFullYear();
+
+       actualizarFechasCalendario(fechaInicio, fechaFinAnio);
+       $("#fechaInicioTarea").val('');
+       $("#fechaFinTarea").val('');
+
+   });
 
 
 

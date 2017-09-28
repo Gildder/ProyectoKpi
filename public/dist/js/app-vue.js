@@ -12632,8 +12632,6 @@ $(document).ready(function () {
                 $('#modal-nueva-tarea').modal('toggle');
 
                 this.limpiarTareaNueva();
-
-                sessionStorage.setItem('sntu', true);
             },
             cancelarNuevaTarea: function cancelarNuevaTarea($event) {
                 $event.preventDefault();

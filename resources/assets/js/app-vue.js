@@ -346,8 +346,6 @@ $(document).ready(function() {
                 $('#modal-nueva-tarea').modal('toggle');
 
                 this.limpiarTareaNueva();
-
-                sessionStorage.setItem('sntu', true);
             },
             cancelarNuevaTarea: function ($event) {
                 $event.preventDefault();
@@ -367,7 +365,7 @@ $(document).ready(function() {
             },
             guardarTareaNueva: function ($event) {
                 $event.preventDefault();
-                    utils.mostrarCargando(true);
+                utils.mostrarCargando(true);
 
                 let token = $('input[name=_token]').val();
                 let path = window.location.href;

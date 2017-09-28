@@ -461,6 +461,8 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::get('tareas/tareaProgramadas/getSemanaAnio',
         array('as' => 'tareas.tareaProgramadas.getSemanaAnio', 'uses' => 'Tareas\TareaProgramadaController@getSemanaAnio') );
 
+    Route::get('tareas/tareaProgramadas/getSemanaAnioFecha',
+        array('as' => 'tareas.tareaProgramadas.getSemanaAnioFecha', 'uses' => 'Tareas\TareaProgramadaController@getSemanaAnioFecha') );
 
     // tareas siguiente semana
     Route::get('tareas/tareaProgramadas/createnext',

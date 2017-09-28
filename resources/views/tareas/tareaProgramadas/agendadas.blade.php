@@ -21,7 +21,7 @@
         </a>
 
           {{-- Modal para Nueva Tarea --}}
-          @include('tareas/tareaProgramadas/modal/create')
+          @include('tareas/tareaProgramadas/modal/create_agenda')
       </div>
     </div>
 

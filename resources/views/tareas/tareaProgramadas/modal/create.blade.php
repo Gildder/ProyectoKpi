@@ -12,7 +12,7 @@
 
         <div class="modal-body">
 
-        <form id="formNuevaTarea" method="post" class="form-group">
+        <form id="formNuevaTarea" method="post" class="form-group" @submit="guardarTareaNueva($event)">
             {{-- Contenido del Modal --}}
             <p> Los campos con (*) son obligatorios </p>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+
 
         </div>
 
@@ -103,12 +103,12 @@
 
             <button  class="btn btn-success" type="submit"
                      :disabled="verificarValidarTareanueva"
-                    @click="guardarTareaNueva($event)">
+                     >
                 <span class="fa fa-save"></span>
                 Guardar
             </button>
         </div>
-
+        </form>
     </div>
 
     </div>
@@ -128,8 +128,6 @@
     var fechaFinModal;
 
     $(document).ready(function () {
-        $('input[name=agenda]').val(sessionStorage.getItem('agendas'));
-
         /* eventos de las tareas */
         $("#modal-nueva-tarea").on('hidden.bs.modal', function () {
             $('#formNuevaTarea')[0].reset();
@@ -143,6 +141,7 @@
 
         cargarFechaFinTarea(fechaInicioModal, fechaFinModal);
         cargarFechaInicioTarea(fechaInicioModal, fechaFinModal);
+
     });
 
     function cargarFechaInicioTarea(fechaInicioModal, fechaFinModal) {

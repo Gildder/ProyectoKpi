@@ -43,33 +43,29 @@
     <!-- animate.css vuesj  -->
     <link rel="stylesheet" href="{{URL::asset('plugins/animate/animate.css')}}">
 
+    <!-- Mi Datetables -->
+    <link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
+
+        <!-- jQuery 1.8.23 -->
+    {{--<script src="{{URL::asset('plugins/jQuery/jquery-ui-1.8.23.custom.min.js')}}"></script>--}}
+    <script src="{{URL::asset('plugins/jQuery/jquery-1.8.0.min.js')}}"></script>
+
+    <!-- jQuery 2.2.3 -->
+    <script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
+    <script src="{{URL::asset('plugins/jQuery/jquery-1.12.4.js')}}"></script>
+
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.min.js')}}"></script>
+    <script src="{{URL::asset('plugins/jQueryUI/jquery-ui.1.12.1.js')}}"></script>
+    <!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
 
 
-    <!-- jQuery 1.8.23 -->
-{{--<script src="{{URL::asset('plugins/jQuery/jquery-ui-1.8.23.custom.min.js')}}"></script>--}}
-<script src="{{URL::asset('plugins/jQuery/jquery-1.8.0.min.js')}}"></script>
+    <script src="{{URL::asset('dist/js/libs.js')}}"></script>
 
-<!-- jQuery 2.2.3 -->
-<script src="{{URL::asset('plugins/jQuery/jquery-2.2.3.min.js')}}"></script>
-<script src="{{URL::asset('plugins/jQuery/jquery-1.12.4.js')}}"></script>
+    <script src="{{URL::asset('dist/js/alert.js')}}"></script>
 
-
-<!-- jQuery UI 1.11.4 -->
-<script src="{{URL::asset('plugins/jQueryUI/jquery-ui.min.js')}}"></script>
-<script src="{{URL::asset('plugins/jQueryUI/jquery-ui.1.12.1.js')}}"></script>
-<!-- <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js')}}"></script>-->
-
-
-
- <!-- Mi Datetables -->
-<link rel="stylesheet" href="{{URL::asset('plugins/datatables/jquery.dataTables.min.css')}}">
-
-<script src="{{URL::asset('dist/js/libs.js')}}"></script>
-
-<script src="{{URL::asset('dist/js/alert.js')}}"></script>
-
-{{-- JS de gulp de resource->asseet->js --}}
-<script src="{{URL::asset('dist/js/app-vue.js')}}"></script>
+    {{-- JS de gulp de resource->asseet->js --}}
+    <script src="{{URL::asset('dist/js/app-vue.js')}}"></script>
 
 </head>
 <body class="hold-transition skin-yellow sidebar-mini"  >

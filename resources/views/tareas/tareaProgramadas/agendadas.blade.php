@@ -42,8 +42,7 @@
 
 <script>
     $(document).ready(function () {
-
-        $('input[name=agenda]').val(1);
+        sessionStorage.removeItem('agendas');
         sessionStorage.setItem('agendas', 1);
     });
 </script>

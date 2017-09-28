@@ -12365,6 +12365,7 @@ $(document).ready(function () {
     //noinspection JSAnnotator
     vm = new Vue({
         el: 'body',
+        /***************************************** DATA ***********************************************************/
         data: {
             filtroVista: {},
             cumplimiento: 0,
@@ -12389,6 +12390,15 @@ $(document).ready(function () {
 
             // Login
             type_pass: true,
+            /***************************** datos de la semana actual ******************************/
+            datoSemana: {
+                id: 0,
+                anio: 0,
+                mes: '',
+                semana: 0,
+                fechaInicio: '',
+                fechaFin: ''
+            },
 
             //******* Tarea ********
             btnResultado: 0,
@@ -12437,7 +12447,11 @@ $(document).ready(function () {
             if (window.location.pathname === '/evaluadores/evaluados/dashboard') {
                 this.obtenerListaWidget();
             }
+
+            // cargamos los fecha de inicio y fin de semana
+            // this.obtenerSemanaActual();
         },
+        /***************************************** COMPUTED ***********************************************************/
         computed: {
             listaVacia: function listaVacia() {
                 if (this.listaTareaComunes.length == 0) {
@@ -12462,6 +12476,7 @@ $(document).ready(function () {
                 }
             }
         },
+        /************************************************* EVENTS ******************************************************/
         events: {
             'agregarWidgetPanel': function agregarWidgetPanel(widget) {
                 this.obtenerListaWidget();
@@ -12485,12 +12500,32 @@ $(document).ready(function () {
                     alert(JSON.stringify(response));
                 });
             }
-
-            // 'editar-widget': function (widget) {
-            //     this.$dispatch('cargar-widget', widget);
-            // },
         },
+        /************************************************* METHODS *****************************************************/
         methods: {
+            /******************************* Obtener la semana ****************************************/
+            obtenerSemanaActual: function obtenerSemanaActual() {
+                var tipo = sessionStorage.getItem('agendas');
+
+                console.log(tipo);
+                $.ajax({
+                    url: '/tareas/tareaProgramadas/getSemanaAnio',
+                    methos: 'GET',
+                    data: { agenda: tipo },
+                    dataType: 'json',
+                    success: function (data) {
+                        this.datoSemana.id = data.tarea.id;
+                        this.datoSemana.anio = data.tarea.anio;
+                        this.datoSemana.mes = data.tarea.mes;
+                        this.datoSemana.semana = data.tarea.semana;
+                        this.datoSemana.fechaInicio = data.tarea.fechaInicio;
+                        this.datoSemana.fechaFin = data.tarea.fechaFin;
+                    }.bind(this),
+                    error: function (data) {
+                        console.log('Upps, no se ontemer los datos de la semana actual');
+                    }.bind(this)
+                });
+            },
             obtenerFechasEstimadasTareas: function obtenerFechasEstimadasTareas() {
                 if (localStorage.getItem('fechas-checked') != undefined) {
                     return localStorage.getItem('fechas-checked');
@@ -12590,9 +12625,6 @@ $(document).ready(function () {
                 alert('Hola Mundo');
             },
             /******************** Metodos del modulo de Tareas *******************/
-            cargarDatosNuevaTarea: function cargarDatosNuevaTarea() {
-                this.tareaNueva.agenda = $('input[name=agenda]').val();
-            },
             mostrarNuevaTarea: function mostrarNuevaTarea($event) {
                 $event.preventDefault();
 
@@ -12617,7 +12649,7 @@ $(document).ready(function () {
                 this.tareaNueva.fechaFin = '';
                 this.tareaNueva.hora = 0;
                 this.tareaNueva.minuto = 0;
-                this.tareaNueva.agenda = sessionStorage.getItem('agendas');;
+                this.tareaNueva.agenda = sessionStorage.getItem('agendas');
             },
             guardarTareaNueva: function guardarTareaNueva($event) {
                 $event.preventDefault();
@@ -12641,7 +12673,6 @@ $(document).ready(function () {
                     dataType: 'json',
                     success: function (data) {
                         if (data.success === true) {
-                            console.log(path);
                             if (path[path.length - 1] === 'index' && path[path.length - 2] === 'empleado') {
                                 $('#calendarTareaUsuario').fullCalendar('refetchEventSources', { url: 'cargarTareas' });
                             } else {
@@ -12792,18 +12823,33 @@ $(document).ready(function () {
                         console.log(data.can_change);
                         /// verificamos si puede eliminar
                         if (data.can_delete === 0) {
-                            $('#borrarCalendar').remove();
+                            $('#borrarCalendar').css('display', 'none');
+                        } else {
+                            $('#borrarCalendar').css('display', 'inline-block');
                         }
 
                         if (data.can_change === 0) {
-                            $('#finalizarCalendar').remove();
-                            $('#editarCalendar').remove();
+                            $('#finalizarCalendar').css('display', 'none');
+                            $('#editarCalendar').css('display', 'none');
+                        } else {
+                            $('#finalizarCalendar').css('display', 'inline-block');
+                            $('#editarCalendar').css('display', 'inline-block');
                         }
 
                         var href = '/tareas/tareaProgramadas/' + data.id;
                         $('a[name=ver]').attr('href', href);
                     }
 
+                });
+            },
+            borrarTareaNueva: function borrarTareaNueva($event, tarea_id) {
+                $.ajax({
+                    url: '/tareas/tareaProgramadas/' + tarea_id,
+                    method: 'DELETE',
+                    data: { id: tarea_id },
+                    dataType: 'json',
+                    success: function (data) {}.bind(this),
+                    error: function (data) {}.bind(this)
                 });
             },
             cambiarColorBtnAgregar: function cambiarColorBtnAgregar($event) {

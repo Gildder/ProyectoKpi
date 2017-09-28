@@ -63,6 +63,7 @@
 
 <script>
     $(document).ready(function () {
+        sessionStorage.removeItem('agendas');
         sessionStorage.setItem('agendas', 0);
     });
 </script>

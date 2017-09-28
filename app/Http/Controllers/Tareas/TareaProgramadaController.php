@@ -223,4 +223,14 @@ class TareaProgramadaController extends Controller
         $estado = Tarea::getDiaLimiteEliminar();
         return $estado;
     }
+
+
+    public function getSemanaAnio(Request $request)
+    {
+        $tarea = Tarea::obtenerSemanaDelAnio($request->agenda);
+
+        return [
+            'tarea' => $tarea
+        ];
+    }
 }

@@ -9,26 +9,19 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Nueva Tarea</h4>
         </div>
-        <form id="formNuevaTarea" class="form-group">
+
         <div class="modal-body">
 
+        <form id="formNuevaTarea" method="post" class="form-group">
             {{-- Contenido del Modal --}}
             <p> Los campos con (*) son obligatorios </p>
-            @verbatim
-                <div hidden>
-                    {{ cargarDatosNuevaTarea() }}
-                </div>
-            @endverbatim
-
-
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            <input type="text" name="agenda" value="{{ $agenda }}" hidden>
             <input type="text" name="fechaInicioParam" value="{{ $semanas->fechaInicio }}" hidden>
             <input type="text" name="fechaFinParam" value="{{ $semanas->fechaFin }}" hidden>
 
             {{-- Descripcion --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="form-group @if ($errors->has('descripcion')) has-error @endif">
+                <div class="form-group">
                     <label>Descripcion *:</label>
                     <input type="text" class="form-control margenDescripcion"
                            minlength="5"  id="nuevaTareaDescripcion" v-model="tareaNueva.descripcion"
@@ -41,7 +34,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row"  style="display:{{ (\Usuario::get('verFechaEstimadas')== true || $agenda === '1')?'block':'none'}}">
                 {{-- Fecha Inicio de Tarea --}}
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    <div class="form-group @if ($errors->has('fechaInicioEstimado')) has-error @endif">
+                    <div class="form-group">
                         <label>Fecha Inicio *: </label>
                         <div class="input-group row margenFecha">
                             <div class="input-group-addon row">
@@ -57,7 +50,7 @@
 
                 {{-- Fecha Fin de Tarea --}}
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    <div class="form-group @if ($errors->has('fechaFinEstimado')) has-error @endif">
+                    <div class="form-group">
                         <label>Fecha Fin *: </label>
                         <div class="input-group row margenFecha">
                             <div class="input-group-addon row">
@@ -78,7 +71,7 @@
 
                 {{-- Horas --}}
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group @if ($errors->has('hora')) has-error @endif">
+                    <div class="form-group">
                         Horas *:
                         <input type="number" min="0"  name="hora" max="150" placeholder="Horas"
                                v-model="tareaNueva.hora" class="form-control"
@@ -88,7 +81,7 @@
 
                 {{-- Minutos --}}
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-                    <div class="form-group @if ($errors->has('minuto')) has-error @endif">
+                    <div class="form-group">
                         Minutos *:
                         <input type="number" min="0" name="minuto" max="999"
                                v-model="tareaNueva.minuto"
@@ -96,7 +89,7 @@
                     </div>
                 </div>
             </div>
-
+        </form>
 
         </div>
 
@@ -115,7 +108,7 @@
                 Guardar
             </button>
         </div>
-        </form>
+
     </div>
 
     </div>

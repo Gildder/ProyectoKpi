@@ -453,11 +453,11 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
 
 
-    // tareas siguiente semana
     Route::get('tareas/tareaProgramadas/listaTareas',
         array('as' => 'tareas.tareaProgramadas.listaTareas', 'uses' => 'Tareas\TareaProgramadaController@listaTareas') );
 
-     // tareas siguiente semana
+
+
     Route::get('tareas/tareaProgramadas/getSemanaAnio',
         array('as' => 'tareas.tareaProgramadas.getSemanaAnio', 'uses' => 'Tareas\TareaProgramadaController@getSemanaAnio') );
 
@@ -524,6 +524,7 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     /* consulta ajax */
     Route::get('calendario/empleado/getTareaComunes',
         array('as' => 'calendario.empleado.getTareaComunes', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@getTareaComunes') );
+
 
 });
 

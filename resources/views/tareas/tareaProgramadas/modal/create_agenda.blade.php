@@ -219,6 +219,10 @@
                     return false;
                 }
 
+            $("#fechaInicioTarea").css('readonly', true);
+            $("#fechaFinTarea").css('readonly', true);
+
+
                 $.ajax({
                     url: '/tareas/tareaProgramadas/getSemanaAnioFecha',
                     method: 'GET',
@@ -226,10 +230,17 @@
                     dataType: 'json',
                     success: function (data) {
                         actualizarFechasCalendario(data.tarea.fechaInicio, data.tarea.fechaFin)
+
+                        $("#fechaInicioTarea").css('readonly', false);
+                        $("#fechaFinTarea").css('readonly', false);
                         return true;
                     }.bind(this), error: function (data)
                     {
+                        $("#fechaInicioTarea").css('readonly', false);
+                        $("#fechaFinTarea").css('readonly', false);
 
+
+                        return false;
                     }.bind(this)
                 })
         }catch(err){

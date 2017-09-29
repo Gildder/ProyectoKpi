@@ -39,6 +39,19 @@ trait TareaRepository
         return $lista;
     }
 
+    public static function getTareaDataTable($agenda)
+    {
+        // Obtenemos las semanas de tareas
+        $semanaActual = self::obtenerSemanaDelAnio($agenda);
+
+        return \DB::table('vw_tareas_para_usuarios')
+            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
+            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaInicio, \'%d/%m/%Y\')') ,'>=', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaInicio.'\', \'%d/%m/%Y\')'))
+            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaFin, \'%d/%m/%Y\')') ,'<=', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaFin.'\', \'%d/%m/%Y\')'))
+            ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
+            ->get();
+    }
+
     /**
      * Retorna la lista de tarea del usuario utilizada para encontrar las tareas
      */
@@ -645,7 +658,8 @@ trait TareaRepository
         return \DB::table('estado_tareas')
             ->whereNull('estado_tareas.deleted_at')
             ->select('estado_tareas.id', 'estado_tareas.nombre', 'estado_tareas.color', 'estado_tareas.texto')
-            ->get();
+            ->get()
+            ->take(10);
     }
 
 

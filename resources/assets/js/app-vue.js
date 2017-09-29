@@ -388,6 +388,7 @@ $(document).ready(function() {
                             if(path[path.length - 1] === 'index' && (path[path.length - 2] === 'empleado')){
                                 $('#calendarTareaUsuario').fullCalendar( 'refetchEventSources', { url: 'cargarTareas'} );
                             }else{
+                                console.log('si actualizo pagina ')
                                this.$broadcast('actuliza-tareas', data.tareas);
                             }
 
@@ -396,6 +397,8 @@ $(document).ready(function() {
 
 
                             this.limpiarTareaNueva();
+
+
                         }else{
                             Notificion.error(data.message, 10000);
                         }

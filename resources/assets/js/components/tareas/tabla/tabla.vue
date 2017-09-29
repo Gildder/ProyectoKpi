@@ -19,8 +19,8 @@
             <th>Fecha Fin</th>
             <th>Duracion</th>
             <th>Estado</th>
-            <th>Ubicaciones</th>
             <th>Observacion</th>
+            <th>Actualizacion</th>
         </tr>
         </thead>
 
@@ -33,8 +33,8 @@
             <th>Fecha Fin</th>
             <th>Duracion</th>
             <th>Estado</th>
-            <th>Ubicaciones</th>
             <th>Observacion</th>
+            <th></th>
         </tr>
         </tfoot>
 
@@ -59,14 +59,8 @@
                 {{ tarea.estado }}
                 </label>
             </td>
-            <td>
-                <ul style="padding: 1px;">
-                    <li v-for="ubicacion in tarea.ubicaciones">
-                        {{ ubicacion.nombre }}
-                    </li>
-                </ul>
-            </td>
             <td>{{ tarea.observaciones }}</td>
+            <td>{{ tarea.updated_at }}</td>
         </tr>
 
 
@@ -104,6 +98,7 @@
         {
             'actuliza-tareas': function (tareas) {
                 this.tareas = tareas;
+
             },
         },
         computed: {
@@ -145,12 +140,12 @@
 
         var table = $('#tablaTareasNormal').DataTable({
             dom: 'Blfrtip',
-            buttons: [
-                'colvis',
-                'excel',
-                'print'
-            ]
+            // guarmos los filtro de la tabla
+            stateSave: true,
         });
+
+
+//        $.fn.dataTable.ext.errMode = 'throw';
 
         $('#tablaTareasNormal tbody').on('dblclick', 'tr', function () {
             var data = table.row( this ).data();

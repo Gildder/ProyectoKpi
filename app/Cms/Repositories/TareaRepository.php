@@ -98,7 +98,9 @@ trait TareaRepository
             ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
             ->get();
 
-        $lista = self::agregarUbicacionTareas($tareas);
+        $lista = array();
+        // agregamos las tareas al arreglo
+        array_push($lista, $tareas);
         // agregamos la semana actual
         array_push($lista, $semanaActual);
 
@@ -571,26 +573,6 @@ trait TareaRepository
         }
 
         return $fechaDescrip;
-    }
-
-    public static function getDiaLimiteEliminar()
-    {
-        $dia = \DB::table('preferencias')->where('preferencias.id','=', 1)->select('preferencias.diaLimiteBorrarTarea')->first();
-
-        $resultado = 0;
-
-        if($dia->diaLimiteBorrarTarea >= date("N")){
-            $resultado = 1;
-        }else{
-            $resultado = 0;
-        }
-
-        // actualizamos opciones de borones
-        DB::table('opcion_botones')
-            ->where('id', 1)
-            ->update(['visible' => $resultado]);
-
-        return $resultado;
     }
 
     public static function getTareasSupervisados($fechaInicio, $fechaFin)

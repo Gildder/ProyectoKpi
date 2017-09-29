@@ -89,7 +89,6 @@ class UsuarioActivo implements IClases
     public function isAdmin()
     {
         $user = json_decode(json_encode(\Auth::user()));
-        $eliminarTarea = TareaRepository::getDiaLimiteEliminar();
 
         if (($user->name == 'admin') && ($user->type == 1)) {
             return true;

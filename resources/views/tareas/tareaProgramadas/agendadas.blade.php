@@ -5,7 +5,15 @@
 @endsection
 
 @section('content')
-	
+
+
+<script>
+    $(document).ready(function () {
+        sessionStorage.removeItem('agendas');
+        sessionStorage.setItem('agendas', 1);
+    });
+</script>
+
 <div class="panel panel-default" id="tareaNormales">
   <div class="panel-heading">
     <a  href="{{route('tareas.tareaProgramadas.index')}}" class="btn btn-primary btn-xs pull-left btn-back" title="Volver"><span class="fa fa-reply"></span></a>
@@ -40,12 +48,6 @@
   </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        sessionStorage.removeItem('agendas');
-        sessionStorage.setItem('agendas', 1);
-    });
-</script>
 
 @endsection
 

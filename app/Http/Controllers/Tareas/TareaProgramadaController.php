@@ -36,6 +36,7 @@ class TareaProgramadaController extends Controller
     
     public function index()
     {
+        $user = \Auth::user();
         // obtenemos las tareas programadas
         $tareas = Tarea::getTodasTareaSemana(0);
         $semanas = array_pop($tareas);

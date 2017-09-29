@@ -6,6 +6,14 @@
 
 @section('content')
 
+<script>
+    $(document).ready(function () {
+        sessionStorage.removeItem('agendas');
+        sessionStorage.setItem('agendas', 0);
+    });
+</script>
+
+
 <div class="panel panel-default" id="tareaNormales">
   <div class="panel-heading">
     <p class="titulo-panel">Tareas</p>
@@ -61,12 +69,6 @@
 </div>
 
 
-<script>
-    $(document).ready(function () {
-        sessionStorage.removeItem('agendas');
-        sessionStorage.setItem('agendas', 0);
-    });
-</script>
 
 @endsection
 

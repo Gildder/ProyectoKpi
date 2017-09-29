@@ -16,6 +16,7 @@
             {{-- Contenido del Modal --}}
             <p> Los campos con (*) son obligatorios </p>
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="text" name="agenda" value="{{ $agenda }}" hidden>
             <input type="text" name="fechaInicioParam" value="{{ $semanas->fechaInicio }}" hidden>
             <input type="text" name="fechaFinParam" value="{{ $semanas->fechaFin }}" hidden>
 
@@ -124,12 +125,16 @@
        }
    </style>
 <script>
+    var agenda;
     var fechaInicioModal;
     var fechaFinModal;
     var Notificion = new Alert('#notificacion');
-//    moment.locale('es');
 
     $(document).ready(function () {
+        agenda = $('input[name="agenda"]').val();
+        fechaInicioModal = $('input[name="fechaInicioParam"]').val();
+        fechaFinModal = $('input[name="fechaFinParam"]').val();
+
         /* eventos de las tareas */
         $("#modal-nueva-tarea").on('hidden.bs.modal', function () {
             $('#formNuevaTarea')[0].reset();
@@ -138,12 +143,13 @@
             $('input[name="minuto"]').val(0);
         });
 
-        fechaInicioModal = $('input[name="fechaInicioParam"]').val();
-        fechaFinModal = $('input[name="fechaFinParam"]').val();
-
-        if(parseInt(sessionStorage.getItem('agendas')) === 1){
+        console.log(sessionStorage.getItem('agendas') + '  '+ + agenda);
+        if((sessionStorage.getItem('agendas') == 1) && agenda == 1){
             let date = new Date();
             fechaFinModal = '31/12/' + date.getFullYear();
+
+        }else{
+            console.log('se encontraron prblemas en nro de agenda');
         }
 
         console.log(sessionStorage.getItem('agendas'));

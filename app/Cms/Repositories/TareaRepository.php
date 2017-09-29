@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 use Mockery\CountValidator\Exception;
-use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Clases\Tiempo;
 use ProyectoKpi\Http\Requests\Request;
 use ProyectoKpi\Models\Tareas\Tarea;
@@ -32,24 +31,10 @@ trait TareaRepository
             ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
             ->get();
 
-        $lista = self::agregarUbicacionTareas($tareas);
         // agregamos la semana actual
-        array_push($lista, $semanaActual);
+        array_push($tareas, $semanaActual);
 
-        return $lista;
-    }
-
-    public static function getTareaDataTable($agenda)
-    {
-        // Obtenemos las semanas de tareas
-        $semanaActual = self::obtenerSemanaDelAnio($agenda);
-
-        return \DB::table('vw_tareas_para_usuarios')
-            ->where('vw_tareas_para_usuarios.user_id', '=', \Usuario::get('id'))
-            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaInicio, \'%d/%m/%Y\')') ,'>=', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaInicio.'\', \'%d/%m/%Y\')'))
-            ->where(DB::raw('STR_TO_DATE(vw_tareas_para_usuarios.fechaFin, \'%d/%m/%Y\')') ,'<=', DB::Raw('STR_TO_DATE(\''.$semanaActual->fechaFin.'\', \'%d/%m/%Y\')'))
-            ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
-            ->get();
+        return $tareas;
     }
 
     /**
@@ -98,13 +83,10 @@ trait TareaRepository
             ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
             ->get();
 
-        $lista = array();
-        // agregamos las tareas al arreglo
-        array_push($lista, $tareas);
         // agregamos la semana actual
-        array_push($lista, $semanaActual);
+        array_push($tareas, $semanaActual);
 
-        return $lista;
+        return $tareas;
 
     }
 
@@ -122,11 +104,10 @@ trait TareaRepository
             ->orderBy('vw_tareas_para_usuarios.numero', 'desc')
             ->get();
 
-        $lista = self::agregarUbicacionTareas($tareas);
         // agregamos la semana actual
-        array_push($lista, $semanaSiguiente);
+        array_push($tareas, $semanaSiguiente);
 
-        return $lista;
+        return $tareas;
     }
 
     private static function agregarUbicacionTareas($tareas){
@@ -408,9 +389,7 @@ trait TareaRepository
                 $resultado = true;
             }
         }else{
-            $semanasAgenda = Caches::obtener('semana_buscada');
-
-            if( \Calcana::verificarMayorIgual($fecha, $semanasAgenda->fechaInicio) && \Calcana::verificarMenorIgual($fecha, $semanasAgenda->fechaFin))
+            if( \Calcana::verificarMayorIgual($fecha, $semanas->fechaInicio) )
             {
                 $resultado = true;
             }
@@ -453,37 +432,7 @@ trait TareaRepository
         return $semanas[0];
     }
 
-    /**
-     * Devuelve las datos de semana 'anio, mes, seman, fecha inicio y fin' de tarea
-     *
-     * @return mixed
-     */
-    public static function obtenerSemanaDelAnioFecha($fecha)
-    {
-        $semanas =  \DB::select('call pa_obtenerFechaSemanaAnual(\''.\Calcana::cambiarFormatoDB($fecha).'\');');
-        Caches::guardar('semana_buscada', $semanas[0]);
 
-        return $semanas[0];
-    }
-
-    public static function getTareasProgramadasUsuario($usuario_id, $fechaInicio, $fechaFin)
-    {
-        $tareas = Tarea::select('users.id as user_id','users.name as usuario','tareas.id as tarea_id','tareas.numero as nro','users.nombres','users.color','users.codigo', 'users.apellidos', 'users.email' ,'tareas.id', 'tareas.descripcion', 'tareas.fechaInicioEstimado', 'tareas.fechaFinEstimado', 'tareas.tiempoEstimado', 'tareas.fechaInicioSolucion', 'tareas.fechaFinSolucion', 'tareas.tiempoSolucion',
-            'departamentos.nombre as departamento', 'localizaciones.nombre as localizacion', 'cargos.nombre as cargo',
-            'tareas.observaciones', 'tareas.estadoTarea_id', 'tareas.isError', 'tarea_tipos.nombre as tipo', 'tareas.proyecto_id')
-            ->leftjoin('tarea_tipos', 'tarea_tipos.id','=', 'tareas.tipoTarea_id')
-            ->join('users', 'users.id','=', 'tareas.user_id')
-            ->join('departamentos', 'departamentos.id','=', 'users.departamento_id')
-            ->join('localizaciones', 'localizaciones.id','=', 'users.localizacion_id')
-            ->join('cargos', 'cargos.id','=', 'users.cargo_id')
-            ->where('user_id', '=', $usuario_id)
-            ->where('fechaInicioEstimado', '>=', \Calcana::cambiarFormatoDB( $fechaInicio))
-            ->whereNull('tareas.deleted_at')
-            ->orderBy('tareas.fechaInicioEstimado', 'desc')
-            ->get();
-
-        return $tareas;
-    }
 
 
     public static function getBuscarTareasProgramadasSupervisor(Request $tareas)
@@ -575,22 +524,27 @@ trait TareaRepository
         return $fechaDescrip;
     }
 
-    public static function getTareasSupervisados($fechaInicio, $fechaFin)
+    public static function getDiaLimiteEliminar()
     {
+        $dia = \DB::table('preferencias')->where('preferencias.id','=', 1)->select('preferencias.diaLimiteBorrarTarea')->first();
 
-        $usuarios = \DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('id').');');
+        $resultado = 0;
 
-        $lista = array();
-        foreach ($usuarios as $usuario){
-            $resultado = self::getTareasProgramadasUsuario($usuario->id, $fechaInicio, $fechaFin);
-
-            foreach ($resultado as $item) {
-                array_push($lista, $item);
-            }
+        if($dia->diaLimiteBorrarTarea >= date("N")){
+            $resultado = 1;
+        }else{
+            $resultado = 0;
         }
 
-        return $lista;
+        // actualizamos opciones de borones
+        DB::table('opcion_botones')
+            ->where('id', 1)
+            ->update(['visible' => $resultado]);
+
+        return $resultado;
     }
+
+
 
     public static function getMayorNumeroTarea()
     {
@@ -640,8 +594,7 @@ trait TareaRepository
         return \DB::table('estado_tareas')
             ->whereNull('estado_tareas.deleted_at')
             ->select('estado_tareas.id', 'estado_tareas.nombre', 'estado_tareas.color', 'estado_tareas.texto')
-            ->get()
-            ->take(10);
+            ->get();
     }
 
 

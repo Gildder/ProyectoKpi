@@ -12437,9 +12437,11 @@ $(document).ready(function () {
 
             // Buscar Tareas
             tareaBuscar: {},
-            id_usuario_buscar: 12
-
+            id_usuario_buscar: 12,
+            /******************* Busqueda de Usuarios ***************************/
+            btnFiltroTareaSupervisor: true
         },
+
         ready: function ready() {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
 
@@ -12945,9 +12947,22 @@ $(document).ready(function () {
                 $('#modal-nueva-tarea').modal('toggle');
 
                 this.tareaNueva.descripcion = this.tareaComun.titulo;
+            },
+            /************************************** TArea de Supervisores ******************************************/
+            mostrarFiltrosTareasSupervisores: function mostrarFiltrosTareasSupervisores() {
+                // console.log($event);
+                // $event.preventDefault();
+                if (this.textoFiltro === 'Mostrar') {
+                    this.textoFiltro = 'Ocultar';
+                    this.btnFiltroTareaSupervisor = false;
+                } else {
+                    this.textoFiltro = 'Mostrar';
+                    this.btnFiltroTareaSupervisor = true;
+                }
             }
 
         }
+
     });
     /* fin de vm de Vuejs */
 });
@@ -13726,7 +13741,7 @@ function mostraModaLading() {
     }
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"@\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizacion</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th></th>\n    </tr>\n    </tfoot>\n\n\n    <tbody>\n\n    <tr v-for=\"tarea in tareas\">\n        <td style=\"display: none\" id=\"idtarea\">{{ tarea.id }}</td>\n        <td>\n            <a href=\"/tareas/tareaProgramadas/{{ tarea.id }}\" id=\"lnkShow\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\">\n                <span id=\"nro\">{{ tarea.numero }}</span>\n            </a>\n        </td>\n        <td>{{ tarea.descripcion }}</td>\n        <td> {{ tarea.fechaInicio }} </td>\n        <td>{{ tarea.fechaFin }}</td>\n        <td>{{ tarea.tiempo }}</td>\n        <td> <label :style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\" class=\"estado\">\n            {{ tarea.estado }}\n            </label>\n        </td>\n        <td>{{ tarea.observaciones }}</td>\n        <td>{{ tarea.updated_at }}</td>\n    </tr>\n\n\n    </tbody>\n\n</table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"#\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizacion</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th></th>\n    </tr>\n    </tfoot>\n\n\n    <tbody>\n\n    <tr v-for=\"tarea in tareas\">\n        <td style=\"display: none\" id=\"idtarea\">{{ tarea.id }}</td>\n        <td>\n            <a href=\"/tareas/tareaProgramadas/{{ tarea.id }}\" id=\"lnkShow\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\">\n                <span id=\"nro\">{{ tarea.numero }}</span>\n            </a>\n        </td>\n        <td>{{ tarea.descripcion }}</td>\n        <td> {{ tarea.fechaInicio }} </td>\n        <td>{{ tarea.fechaFin }}</td>\n        <td>{{ tarea.tiempo }}</td>\n        <td> <label :style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\" class=\"estado\">\n            {{ tarea.estado }}\n            </label>\n        </td>\n        <td>{{ tarea.observaciones }}</td>\n        <td>{{ tarea.updated_at }}</td>\n    </tr>\n\n\n    </tbody>\n\n</table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

@@ -218,8 +218,6 @@ class UsuarioActivo implements IClases
         $user = \Auth::user();
         $preferenciasGerencia = \DB::select('call pa_evaluador_preferencia_por_usuarios('.$user->id.')');
 
-//        dd($preferenciasGerencia[0]->verFechaEstimadas);
-
         if(isset($preferenciasGerencia[0]->verFechaEstimadas )) {
             if ($preferenciasGerencia[0]->verFechaEstimadas == 1 ) {
                 return true;

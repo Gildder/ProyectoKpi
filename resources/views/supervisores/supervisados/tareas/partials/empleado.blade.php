@@ -28,12 +28,12 @@
 
           <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
             <b class="text-right" style="width: 50%">Nombre Completo:</b>
-            @if(! is_null( $tarea->nombres )) {{ $tarea->nombres  }} @else '' @endif    @if(! is_null( $tarea->apellidos )) {{ $tarea->apellidos  }} @else '' @endif
+            @if(! is_null( $tarea->nombres )) {{ $tarea->nombres  }} @else '' @endif
           </div>
 
           <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
             <b class="text-right" style="width: 50%">Correo Electronico:</b>
-            @if(! is_null( $tarea->email )) {{ $tarea->email  }} @else '' @endif
+            @if(! is_null( $tarea->correo )) {{ $tarea->correo  }} @else '' @endif
           </div>
 
           <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
@@ -55,7 +55,6 @@
 
         </div>
         <div class="modal-footer modal-delete-footer">
-          <a  data-dismiss="modal" class="btn btn-danger btn-xs" ><span class="fa fa-times"></span> Cerrar</a>
         </div>
       </div>
     </div>

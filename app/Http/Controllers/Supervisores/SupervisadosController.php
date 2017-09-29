@@ -17,7 +17,7 @@ use ProyectoKpi\Http\Controllers\Graficas\GraficasController;
 use ProyectoKpi\Models\Localizaciones\Departamento;
 use ProyectoKpi\Models\Empleados\Empleado;
 use ProyectoKpi\Models\Tareas\Tarea;
-use ProyectoKpi\Models\Empleados\SupervisorEmpleado;
+use ProyectoKpi\Models\Empleados\Supervisados;
 use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Requests\Indicadores\ErrorFormRequest;
@@ -32,25 +32,12 @@ class SupervisadosController extends Controller
     
     public function index()
     {
-        $semanas = Tarea::obtenerSemanaDelAnio(0);
+        $tareas = Supervisados::getTareasSupervisados(0);
 
+//        dd($tareas);
+        $semanas = array_pop($tareas);
 
-        $tareas = Tarea::getTareasSupervisados($semanas->fechaInicio, $semanas->fechaFin);
-
-//dd($tareas);
-
-//        foreach ($tareas as $item){
-//            dd($item);
-//        }
         return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
-
-
-//        // lista de empleados asignados para su supervison de su usuario
-//        $empleadosDisponibles = DB::select('call pa_supervisores_empleadosSupervisadosEmpleado('.\Usuario::get('id').');');
-//
-//        Caches::guardar('supervisados', $empleadosDisponibles);
-//
-//        return view('supervisores\supervisados\index', ['empleadosDisponibles'=>$empleadosDisponibles]);
     }
 
     public function show($user_id)

@@ -15,14 +15,13 @@ use function strtotime;
 class Tarea extends Model
 {
 
+    use SoftDeletes;
+    use TareaRepository;
+
     protected $table = "tareas";
     protected $primarykey = "id";
 
-    use SoftDeletes;
-
     /* agrego los datos del repositorio */
-    use TareaRepository;
-
     public $timestamps = true;
     
     /**
@@ -78,9 +77,6 @@ class Tarea extends Model
 
 
     /* ;Metodos de repositorio */
-
-
-
     // lista de ubidadciones Ocupadas para una tarea
     public static function ubicacionTarea($tarea_id)
     {
@@ -89,9 +85,6 @@ class Tarea extends Model
             ->join('tarea_localizacion','tarea_localizacion.localizacion_id','=', 'localizaciones.id')
             ->where('tarea_localizacion.tarea_id',$tarea_id)
             ->select('localizaciones.id','localizaciones.nombre')->get();
-
-
-
 
         /*
         if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion')))

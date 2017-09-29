@@ -20,9 +20,6 @@ use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
 use function redirect;
 use function strtotime;
-use function strval;
-use Symfony\Component\HttpFoundation\Cookie;
-use const true;
 
 class TareaProgramadaController extends Controller
 {
@@ -36,15 +33,9 @@ class TareaProgramadaController extends Controller
     
     public function index()
     {
-        $user = \Auth::user();
         // obtenemos las tareas programadas
         $tareas = Tarea::getTodasTareaSemana(0);
         $semanas = array_pop($tareas);
-
-        Caches::guardar('botones', 0);
-
-        // limpiamos el cache la variable proxSemana para trabajar con la semana actual
-        Caches::borrar('proxSemana');
 
         return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas, 'agenda' => 0]);
     }

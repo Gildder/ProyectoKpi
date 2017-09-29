@@ -7,7 +7,11 @@ $(document).ready(function(){
     $('#myTableIndicadores').DataTable();
     $('#myTableEvaluador').DataTable();
     $('#myTableGrDepartamento').DataTable();
-    $('.myDataTables').DataTable();
+    $('.myDataTables').DataTable({
+        dom: 'Blfrtip',
+        // guarmos los filtro de la tabla
+        stateSave: true,
+    });
     $('#tablaTareas').DataTable();
     $('#myTableIndicadorEvalaudor').DataTable({
     	"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -21,7 +25,8 @@ $(document).ready(function(){
     $('#myTable2').DataTable();
     $('#myTable3').DataTable();
     $('#myTable4').DataTable();
-    
+
+
     // DataTables con el dom editable
     $('#myTableDom').DataTable({
     	"dom": 'frtip'

@@ -141,8 +141,10 @@ $(document).ready(function() {
             // Buscar Tareas
             tareaBuscar: {},
             id_usuario_buscar: 12,
-
+            /******************* Busqueda de Usuarios ***************************/
+            btnFiltroTareaSupervisor: true,
         },
+
         ready: function () {
             resourceWidget = this.$resource('/evaluadores/evaluados/obtenerEvaluadorWidget{/id}');
 
@@ -676,11 +678,25 @@ $(document).ready(function() {
                 $('#modal-nueva-tarea').modal('toggle');
 
                 this.tareaNueva.descripcion = this.tareaComun.titulo;
+            },
+            /************************************** TArea de Supervisores ******************************************/
+            mostrarFiltrosTareasSupervisores: function () {
+                // console.log($event);
+                // $event.preventDefault();
+                if(this.textoFiltro === 'Mostrar'){
+                    this.textoFiltro = 'Ocultar';
+                    this.btnFiltroTareaSupervisor = false;
+                }else{
+                    this.textoFiltro = 'Mostrar';
+                    this.btnFiltroTareaSupervisor = true;
+                }
+
             }
 
 
+        },
 
-        }
+
     });
     /* fin de vm de Vuejs */
 

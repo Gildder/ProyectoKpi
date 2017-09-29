@@ -4,10 +4,12 @@ namespace ProyectoKpi\Models\Empleados;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Cms\Repositories\SupervisoresRepository;
 use ProyectoKpi\Models\Empleados\Empleado;
 
-class SupervisorEmpleado extends Model
+class Supervisados extends Model
 {
+    use SupervisoresRepository;
     //
     protected $table = "supervisor_empleados";
     protected $primarykey = ['supervisor_id', 'empleados_id'];
@@ -31,6 +33,4 @@ class SupervisorEmpleado extends Model
     {
         return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado','empleados_id');
     }
-
-   
 }

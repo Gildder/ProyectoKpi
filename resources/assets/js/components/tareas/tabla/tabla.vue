@@ -1,6 +1,6 @@
 <template>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 10px;">
-        <a href="@"
+        <a href="#"
            :class="{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}"
            @click="mostrarFiltro($event)">
             {{ textoFiltro }}  <i class="fa fa-filter"></i>

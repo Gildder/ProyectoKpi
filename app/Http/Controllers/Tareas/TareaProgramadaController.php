@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\Http\Request;
+use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormAgendaRequest;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
@@ -76,7 +77,7 @@ class TareaProgramadaController extends Controller
     public function create()
     {
 		// obtenemos la semana de tarea
-		$semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+		$semanas = Tarea::obtenerSemanaDelAnio(0);
 
 		// guardamos en cache las fechas de la semana
 		// las semanas dentran mes, semana, fechaInicio, fechaFin
@@ -90,6 +91,22 @@ class TareaProgramadaController extends Controller
     public function store(TareaProgramasFormRequest $request)
     {
         $result = Tarea::guardar($request);
+        if ($result['success']) {
+            return redirect()->back()
+                ->with('message', $result['message'])
+                ;
+
+        } else {
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors($result['message'])
+                ->withInput()
+                ;
+        }
+    }
+
+    public function storeAgenda(TareaProgramasFormAgendaRequest $request)
+    {
+        $result = Tarea::guardarAgenda($request);
         if ($result['success']) {
             return redirect()->back()
                 ->with('message', $result['message'])

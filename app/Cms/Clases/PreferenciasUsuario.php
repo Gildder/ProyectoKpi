@@ -41,9 +41,16 @@ class PreferenciasUsuario
 
 //            dd($preferencias);
 
-            $this->verFechasEstimadas = $preferencias->verFechasEstimadas;
-            $this->diaLimiteParaBorrarTareas = $preferencias->dialimiteParaBorrarTareas;
-            $this->diaInicioParaTareaSigSemana = $preferencias->diaInicioParaTareaSigSemana;
+            if(isset($preferencias)){
+
+                $this->verFechasEstimadas = $preferencias->verFechasEstimadas;
+                $this->diaLimiteParaBorrarTareas = $preferencias->dialimiteParaBorrarTareas;
+                $this->diaInicioParaTareaSigSemana = $preferencias->diaInicioParaTareaSigSemana;
+            }else{
+                $this->verFechasEstimadas = 1;
+                $this->diaLimiteParaBorrarTareas = 1;
+                $this->diaInicioParaTareaSigSemana = 1;
+            }
         }else{
             $this->verFechasEstimadas = 1;
         }

@@ -3,22 +3,16 @@
 namespace ProyectoKpi\Http\Controllers\Supervisores;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use ProyectoKpi\Cms\Clases\Caches;
-use ProyectoKpi\Cms\Repositories\TareaRepository;
-use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Khill\Lavacharts\Laravel\Lavacharts;
 
 
-use ProyectoKpi\Http\Controllers\Graficas\GraficasController;
-use ProyectoKpi\Models\Localizaciones\Departamento;
-use ProyectoKpi\Models\Empleados\Empleado;
+use ProyectoKpi\Models\Localizaciones\Localizacion;
+use ProyectoKpi\Models\Tareas\Estados;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Empleados\Supervisados;
-use ProyectoKpi\Cms\Repositories\EficaciaIndicadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Http\Requests\Indicadores\ErrorFormRequest;
 use ProyectoKpi\Models\User;
@@ -126,15 +120,81 @@ class SupervisadosController extends Controller
 
     public function verTareasSupervisados()
     {
-        $semanas = TareaRepository::getSemanasTareas(date('Y-m-d'));
+        $semanas = Tarea::getSemanasTareas(date('Y-m-d'));
 
-        $tareas = TareaRepository::getTareasSupervisados($semanas->fechaInicio, $semanas->fechaFin);
+        $tareas = Tarea::getTareasSupervisados($semanas->fechaInicio, $semanas->fechaFin);
 
-//dd($tareas);
-
-//        foreach ($tareas as $item){
-//            dd($item);
-//        }
         return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
+    }
+
+    /**
+     * Busquedas de tareas archivadas o de semanas anteriores de los empleados supervisados
+    */
+    public function busquedas()
+    {
+        $tareas = Cache::get('tareasSupervisadas');
+
+//        dd($tareas);
+        return view('supervisores\supervisados\tareas\busquedas', [
+            'id'=> \Auth::user()->id,
+            'usuarios' => Supervisados::usuariosSupervisados(\Auth::user()->id),
+            'cargos' => Supervisados::cargosSupervisados(\Auth::user()->id),
+            'departamentos' => Supervisados::departamentosSupervisados(\Auth::user()->id),
+            'estados'=> Estados::getEstados(),
+            'localizaciones'=>  Localizacion::getLocalizaciones(),
+            'tareas' => $tareas
+        ]);
+    }
+
+    public function buscar(Request $request)
+    {
+        $tareas= Supervisados::filtrarTareas($request);
+        if($tareas['success']){
+            Cache::forget('tareasSupervisadas');
+            Cache::forever('tareasSupervisadas',$tareas['tareas']);
+        }
+
+        if(sizeof($tareas['tareas'])>0){
+            return redirect()->back()->withInput();
+        }else{
+            return  redirect()->back()->withInput();
+        }
+
+    }
+
+    /* Metodos Ajax */
+    public function getUsuarioSupervisados(Request $request)
+    {
+            $usuarios = Supervisados::usuariosSupervisados($request->id);
+
+            return ['usuarios' => $usuarios];
+    }
+
+    public function getCargosSupervisados(Request $request)
+    {
+            $cargos = Supervisados::cargosSupervisados($request->id);
+
+            return ['cargos'=> $cargos];
+    }
+
+    public function getDepartamentosSupervisados(Request $request)
+    {
+        $departamentos = Supervisados::departamentosSupervisados($request->id);
+
+        return ['departamentos'=> $departamentos];
+    }
+
+    public function getEstados(Request $request)
+    {
+            $estados = Estados::getEstados();
+
+            return ['estados'=> $estados];
+    }
+
+    public static function getLocalizaciones(Request $request)
+    {
+            $localizaciones = Localizacion::getLocalizaciones();
+
+            return ['localizaciones'=> $localizaciones];
     }
 }

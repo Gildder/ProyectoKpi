@@ -58,6 +58,11 @@ $(document).ready(function() {
         require('./components/supervisores/tareas/filtro.vue')
     );
 
+    Vue.component('tarea-tabla-supervisores',
+        require('./components/supervisores/tareas/tabla.vue')
+    );
+
+
     /* tareas programadas */
     Vue.component('tabla-tarea',
         require('./components/tareas/tabla/tabla.vue')
@@ -116,6 +121,8 @@ $(document).ready(function() {
                 minuto: 0,
                 agenda: 0,
             },
+
+            tareasSupervisadas: [],
             /**************** Tareas de Calendario ********************/
             listaTareasCalendario: [],
 
@@ -211,9 +218,16 @@ $(document).ready(function() {
                     alert(JSON.stringify(response));
                 });
             },
+            'buscar-tarea-supervidor': function (tareas) {
+                this.tareasSupervisadas = tareas;
+                $('#tareaBuscadasSupervisadas').DataTable( {
+                    ajax: this.tareasSupervisadas
+                } );
+            }
         },
         /************************************************* METHODS *****************************************************/
         methods: {
+
             /******************************* Obtener la semana ****************************************/
             obtenerSemanaActual: function obtenerSemanaActual() {
                 let tipo = sessionStorage.getItem('agendas');

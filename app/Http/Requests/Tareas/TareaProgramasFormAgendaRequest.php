@@ -5,7 +5,7 @@ namespace ProyectoKpi\Http\Requests\Tareas;
 use ProyectoKpi\Http\Requests\Request;
 use Illuminate\Routing\Route;
 
-class TareaProgramasFormRequest extends Request
+class TareaProgramasFormAgendaRequest extends Request
 {
     function __construct(Route $route)
     {
@@ -47,6 +47,8 @@ class TareaProgramasFormRequest extends Request
 
         return [
                 'descripcion'=>'required|min:5|max:120',
+                'fechaInicioEstimado' => $fechaInicio,
+                'fechaFinEstimado' => $fechaFin,
                 'estado'=> $estado,
                 'hora'=> 'required',
                 'minuto'=> 'required',
@@ -60,6 +62,8 @@ class TareaProgramasFormRequest extends Request
             'descripcion.required' => 'La descripcion es requerida!',
             'descripcion.min' => 'Este campo no puede tener menos de 5 carácteres',
             'descripcion.max' => 'Este campo no puede tener más de 120 carácteres',
+            'fechaInicioEstimado.required' => 'Este campo Fecha Inicio es requerido!',
+            'fechaFinEstimado.required' => 'Este campo Fecha Fin es requerido!',
             'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El Minuto es requerido',
             'observaciones.max' => 'Este campo no puede tener mas de 120 carácteres',

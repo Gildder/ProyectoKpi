@@ -15,6 +15,9 @@
                 <div class="breadcrumb col-xs-12 col-sm-12 col-md-12 col-lg-12 estiloBreadcrumb" >
                     Tareas Programadas para la Semana {{ $semanas->semana }} del mes de <b>{{ $semanas->mes }}</b>, del <b class="fechaTareas">
                         {{ $semanas->fechaInicio }}</b> al <b class="fechaTareas">{{ $semanas->fechaFin }}</b>
+
+					{{--boton buscador--}}
+					<a href="{{ route('supervisores.supervisados.tareas.busquedas') }}" class="btn btn-primary btn-sm btnBusquedas">Busquedas   <i class="fa fa-search"></i></a>
                 </div>
 
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-responsive">
@@ -30,5 +33,11 @@
         .estiloBreadcrumb {
             margin-bottom: 10px;
         }
+		.btnBusquedas
+		{
+			float: right;
+			position: relative;
+			right: 10px;
+		}
     </style>
 @endsection

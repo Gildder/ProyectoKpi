@@ -3,9 +3,12 @@
 namespace ProyectoKpi\Models\Tareas;
 
 use Illuminate\Database\Eloquent\Model;
+use ProyectoKpi\Cms\Repositories\EstadoRepository;
 
 class Estados extends Model
 {
+    use EstadoRepository;
+
     protected $table = "estado_tareas";
     protected $primarykey = "id";
 

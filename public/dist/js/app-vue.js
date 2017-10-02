@@ -12359,6 +12359,8 @@ $(document).ready(function () {
     // componente de busquedas de ticket  supervisores
     Vue.component('tarea-filtro-supervisores', require('./components/supervisores/tareas/filtro.vue'));
 
+    Vue.component('tarea-tabla-supervisores', require('./components/supervisores/tareas/tabla.vue'));
+
     /* tareas programadas */
     Vue.component('tabla-tarea', require('./components/tareas/tabla/tabla.vue'));
 
@@ -12414,6 +12416,8 @@ $(document).ready(function () {
                 minuto: 0,
                 agenda: 0
             },
+
+            tareasSupervisadas: [],
             /**************** Tareas de Calendario ********************/
             listaTareasCalendario: [],
 
@@ -12501,10 +12505,17 @@ $(document).ready(function () {
                     Notificion.warning('El Widget No elimino, por favor verificar con su administrador!');
                     alert(JSON.stringify(response));
                 });
+            },
+            'buscar-tarea-supervidor': function buscarTareaSupervidor(tareas) {
+                this.tareasSupervisadas = tareas;
+                $('#tareaBuscadasSupervisadas').DataTable({
+                    ajax: this.tareasSupervisadas
+                });
             }
         },
         /************************************************* METHODS *****************************************************/
         methods: {
+
             /******************************* Obtener la semana ****************************************/
             obtenerSemanaActual: function obtenerSemanaActual() {
                 var tipo = sessionStorage.getItem('agendas');
@@ -12967,7 +12978,7 @@ $(document).ready(function () {
     /* fin de vm de Vuejs */
 });
 
-},{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/tareas/estados.vue":15,"./components/tareas/tabla/tabla.vue":16,"./components/widget/PanelWidget.vue":17,"./components/widget/grafica.vue":18,"./helper/utils.js":19,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
+},{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/supervisores/tareas/tabla.vue":15,"./components/tareas/estados.vue":16,"./components/tareas/tabla/tabla.vue":17,"./components/widget/PanelWidget.vue":18,"./components/widget/grafica.vue":19,"./helper/utils.js":20,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13126,9 +13137,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-453ea944", module.exports)
+    hotAPI.createRecord("_v-44b20e0d", module.exports)
   } else {
-    hotAPI.update("_v-453ea944", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-44b20e0d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
@@ -13161,9 +13172,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-aa6540c4", module.exports)
+    hotAPI.createRecord("_v-edaa4232", module.exports)
   } else {
-    hotAPI.update("_v-aa6540c4", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-edaa4232", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
@@ -13179,9 +13190,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-5a1e03b2", module.exports)
+    hotAPI.createRecord("_v-49173809", module.exports)
   } else {
-    hotAPI.update("_v-5a1e03b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-49173809", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],11:[function(require,module,exports){
@@ -13213,9 +13224,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-18223635", module.exports)
+    hotAPI.createRecord("_v-3d8e1884", module.exports)
   } else {
-    hotAPI.update("_v-18223635", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-3d8e1884", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
@@ -13429,12 +13440,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-184c910a", module.exports)
+    hotAPI.createRecord("_v-861f15f8", module.exports)
   } else {
-    hotAPI.update("_v-184c910a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-861f15f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
+},{"../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13453,9 +13464,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-033e5af3", module.exports)
+    hotAPI.createRecord("_v-1ede766c", module.exports)
   } else {
-    hotAPI.update("_v-033e5af3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-1ede766c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
@@ -13467,6 +13478,7 @@ Object.defineProperty(exports, "__esModule", {
 
 
 $(document).ready(function () {
+
     /*Calendarios */
     $(".fechas").datepicker({
         format: 'dd/mm/yyyy',
@@ -13480,97 +13492,201 @@ exports.default = {
         supervisorid: {
             type: Number,
             default: 0
-        },
-        cargos: {
-            type: Array,
-            default: function _default() {
-                return [];
-            }
-        },
-        departamentos: {
-            type: Array,
-            default: function _default() {
-                return [];
-            }
-        },
-        estados: {
-            type: Array,
-            default: function _default() {
-                return [];
-            }
-        },
-        ubicaciones: {
-            type: Array,
-            default: function _default() {
-                return [];
-            }
-        },
-        usuarios: {
-            type: Array,
-            default: function _default() {
-                return [];
-            }
         }
     },
     data: function data() {
         return {
-            //                //Tarea
+            token: $('input[name=_token]').val(),
+            // tareas
             param_filtro: {
                 usuario_id: '',
                 apellido: '',
                 cargo_id: '',
                 departamento_id: '',
-                tarea_nro: '',
+                tarea_id: '',
                 fechaInicio: '',
                 fechaFin: '',
-                fechaSeleccionada: 1,
-                ubicacion_id: '',
+                localizacion_id: '',
                 estado_id: ''
             },
-            mostrar_bar_botones: true
+            mostrar_bar_botones: true,
+            usuarios: {},
+            localizaciones: {},
+            cargos: {},
+            departamentos: {},
+            estados: {}
         };
     },
     ready: function ready() {
-        //            alert(this.cargos);
+        this.cargarUsuarios();
+        this.cargarLocalizaciones();
+        this.cargarCargos();
+        this.cargarDepartamentos();
+        this.cargarEstados();
     },
     methods: {
         buscarTarea: function buscarTarea() {
-            this.param_filtro.supervisorid = this.supervisorid,
-            //                    alert(JSON.stringify(this.param_filtro));
             $.ajax({
-                url: 'buscarTareasSupervisadas',
-                method: 'POST',
+                url: '/supervisores/supervisados/tareas/buscar',
+                method: 'GET',
                 data: this.param_filtro,
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data);
-                    localStorage.setItem('tarea_' + this.supervisorid, data);
-                }.bind(this), error: function (data) {
-                    console.log('Error: No puede obtener las tareas');
+                    if (data.success) {
+                        this.$dispatch('buscar-tarea-supervidor', data.tareas);
+                    }
+                }.bind(this),
+                error: function (data) {
+                    console.log('Error');
                 }.bind(this)
             });
         },
         ocultarFiltro: function ocultarFiltro() {
             this.mostrar_bar_botones = true;
             this.form_buscar_tareas = false;
+        },
+        cargarUsuarios: function cargarUsuarios() {
+            $.ajax({
+                url: '/supervisores/supervisados/getUsuarioSupervisados',
+                method: 'GET',
+                data: { id: this.supervisorid, csrf: this.token },
+                dataType: 'json',
+                success: function (data) {
+                    this.usuarios = data.usuarios;
+                }.bind(this),
+                error: function (data) {}.bind(this)
+
+            });
+        },
+        cargarCargos: function cargarCargos() {
+            $.ajax({
+                url: '/supervisores/supervisados/getCargosSupervisados',
+                method: 'GET',
+                data: { id: this.supervisorid, csrf: this.token },
+                dataType: 'json',
+                success: function (data) {
+                    this.cargos = data.cargos;
+                }.bind(this),
+                error: function (data) {}.bind(this)
+
+            });
+        },
+        cargarDepartamentos: function cargarDepartamentos() {
+            $.ajax({
+                url: '/supervisores/supervisados/getDepartamentosSupervisados',
+                method: 'GET',
+                data: { id: this.supervisorid, csrf: this.token },
+                dataType: 'json',
+                success: function (data) {
+                    this.departamentos = data.departamentos;
+                }.bind(this),
+                error: function (data) {}.bind(this)
+
+            });
+        },
+        cargarLocalizaciones: function cargarLocalizaciones() {
+            $.ajax({
+                url: '/supervisores/supervisados/getLocalizaciones',
+                method: 'GET',
+                data: { csrf: this.token },
+                dataType: 'json',
+                success: function (data) {
+                    this.localizaciones = data.localizaciones;
+                }.bind(this),
+                error: function (data) {}.bind(this)
+
+            });
+        },
+        cargarEstados: function cargarEstados() {
+            $.ajax({
+                url: '/supervisores/supervisados/getEstados',
+                method: 'GET',
+                data: { csrf: this.token },
+                dataType: 'json',
+                success: function (data) {
+                    this.estados = data.estados;
+                }.bind(this),
+                error: function (data) {}.bind(this)
+
+            });
         }
 
     }
 
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<script src=\"https://code.jquery.com/ui/1.12.1/jquery-ui.js\"></script>\n<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>\n\n<div v-show=\"mostrar_bar_botones\" class=\"breadcrumb col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n    <a @click=\"mostrar_bar_botones = !mostrar_bar_botones\" style=\"float: right\" class=\"btn btn-instagram btn-sm\" title=\"Tareas Archivadas\">Filtrar <span class=\"fa fa-filter\"></span></a>\n</div>\n\n<div v-show=\"mostrar_bar_botones == false\" transition=\"fade-filtro\" class=\"form-group col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n    <form @submit.prevent=\"buscarTarea()\">\n\n    <div class=\"col-xs-12\" style=\"border: 1px solid gray; border-radius: 20px; padding: 10px; border-shadow: 1px 1px 1px gray;\">\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <label style=\"color: gray; font-style: italic;\">Usuario</label>\n            <hr style=\"margin: 0px; margin-bottom: 10px;\">\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Usuarios</label>\n            <select class=\"form-control\" name=\"cargo_id\" v-model=\"param_filtro.usuario_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"usuario in usuarios\" value=\"{{ usuario.id }}\">{{ usuario.usuario }} {{ usuario.activo }} {{ usuario.vacacion }} {{ usuario.bloqueado }}  </option>\n            </select>\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-2 col-md-2 col-lg-2\">\n            <label>Apellidos</label>\n            <input type=\"text\" v-model=\"param_filtro.apellido\" name=\"apellido\" placeholder=\"Apellidos\" maxlength=\"40\" class=\"form-control\">\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Cargos</label>\n            <select class=\"form-control\" name=\"cargo_id\" v-model=\"param_filtro.cargo_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"cargo in cargos\" value=\"{{ cargo.id }}\">{{ cargo.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Departamentos</label>\n            <select class=\"form-control\" name=\"departamento_id\" v-model=\"param_filtro.departamento_id\">\n                <option value=\"\">Seleccionar...</option>\n                <option v-for=\"departamento in departamentos\" value=\"{{ departamento.id }}\">{{ departamento.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <label style=\"color: gray; font-style: italic;\">Tareas</label>\n            <hr style=\"margin: 0px; margin-bottom: 10px;\">\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-2 col-md-2 col-lg-1\">\n            <label>Nro. </label>\n            <input type=\"number\" v-model=\"param_filtro.tarea_nro\" name=\"tarea_nro\" placeholder=\"Nro. #\" min=\"1\" class=\"form-control\">\n        </div>\n        <div class=\"form-group col-xs-12 col-sm-3 col-md-3 col-lg-2\">\n            <label>Ubicaciones</label>\n            <select class=\"form-control\" name=\"ubicacion_id\" v-model=\"param_filtro.ubicacion_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"ubicacion in ubicaciones\" value=\"{{ ubicacion.id }}\">{{ ubicacion.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"row col-xs-12 col-sm-6 col-md-5 col-lg-4\">\n            <div class=\"form-group col-xs-12 col-sm-6 col-md-6 col-lg-6\" style=\"margin: 0px;\">\n                <label>Fecha Inicio</label>\n                <div class=\"input-group row\" style=\"margin: 0px;\">\n                    <input type=\"text\" v-model=\"fechaInicio\" placeholder=\"Fecha Inicio\" class=\"form-control fechas\" name=\"fechaInicio\">\n                    <div class=\"input-group-addon row\">\n                        <i class=\"fa fa-calendar\"></i>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"form-group col-xs-12 col-sm-6 col-md-6 col-lg-6\" style=\"margin: 0;\">\n                <label>Fecha Fin</label>\n                <div class=\"input-group row\" style=\"margin: 0px;\">\n                    <input type=\"text\" v-model=\"param_filtro.fechaFin\" placeholder=\"Fecha Fin\" class=\"form-control fechas\" name=\"fechaFin\">\n                    <div class=\"input-group-addon row\">\n                        <i class=\"fa fa-calendar\"></i>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"text-align: center; margin:  2px 0 0 0;\">\n                <label class=\"radio-inline\"><input type=\"radio\" checked=\"\" v-model=\"param_filtro.fechaSeleccionada\" value=\"1\">Fechas Estimadas</label>\n                <label class=\"radio-inline\"><input type=\"radio\" v-model=\"param_filtro.fechaSeleccionada\" value=\"0\">Fechas Soluciones</label>\n            </div>\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-3 col-md-3 col-lg-2\">\n            <label>Estados</label>\n            <select class=\"form-control\" name=\"estado_id\" v-model=\"param_filtro.estado_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"estado in estados\" value=\"{{ estado.id }}\">{{ estado.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n            <hr style=\"margin: 10px;\">\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <button type=\"reset\" @click=\"mostrar_bar_botones = !mostrar_bar_botones\" class=\"btn btn-danger   btn-sm\">Ocultar  <span class=\"fa  fa-filter\"></span> </button>\n            <button type=\"reset\" class=\"btn btn-primary btn-sm\">Limpiar  <span class=\"fa  fa-times\"></span> </button>\n            <button type=\"submit\" class=\"btn btn-success btn-sm\">Buscar  <span class=\"fa  fa-search\"></span> </button>\n        </div>\n    </div>\n    </form>\n</div>\n\n<style>\n    .fade-filtro-transition {\n        transition: all 1.5s ease;\n        opacity: 100;\n    }\n    .fade-filtro-enter, .fade-filtro-leave {\n        opacity: 0;\n        transition: all .2s ease;\n    }\n</style>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<div class=\"form-group col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n    <form @submit.prevent=\"buscarTarea()\">\n\n    <div class=\"col-xs-12\" style=\"border: 1px solid gray; border-radius: 20px; padding: 10px; border-shadow: 1px 1px 1px gray;\">\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <label style=\"color: gray; font-style: italic;\">Usuario</label>\n            <hr style=\"margin: 0px; margin-bottom: 10px;\">\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Usuarios</label>\n            <select class=\"form-control\" name=\"usuario_id\" v-model=\"param_filtro.usuario_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"usuario in usuarios\" value=\"{{ usuario.id }}\">\n                    {{ usuario.usuario }} {{ usuario.activo }} {{ usuario.vacacion }} {{ usuario.bloqueado }}\n                </option>\n            </select>\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-2 col-md-2 col-lg-2\">\n            <label>Apellidos</label>\n            <input type=\"text\" v-model=\"param_filtro.apellido\" name=\"apellido\" placeholder=\"Apellidos\" maxlength=\"40\" class=\"form-control\">\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Cargos</label>\n            <select class=\"form-control\" name=\"cargo_id\" v-model=\"param_filtro.cargo_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"cargo in cargos\" value=\"{{ cargo.id }}\">{{ cargo.nombre }}</option>\n            </select>\n        </div>\n\n        <div class=\"form-group col-xs-12 col-sm-4 col-md-4 col-lg-2\">\n            <label>Departamentos</label>\n            <select class=\"form-control\" name=\"departamento_id\" v-model=\"param_filtro.departamento_id\">\n                <option value=\"\">Seleccionar...</option>\n                <option v-for=\"departamento in departamentos\" value=\"{{ departamento.id }}\">{{ departamento.nombre }}\n                </option>\n            </select>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n            <label style=\"color: gray; font-style: italic;\">Tareas</label>\n            <hr style=\"margin: 0px; margin-bottom: 10px;\">\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-2 col-md-2 col-lg-1\">\n            <label>Nro. </label>\n            <input type=\"number\" v-model=\"param_filtro.tarea_id\" name=\"tarea_nro\" placeholder=\"Nro. #\" min=\"1\" class=\"form-control\">\n        </div>\n        <div class=\"form-group col-xs-12 col-sm-3 col-md-3 col-lg-2\">\n            <label>Localizaciones</label>\n            <select class=\"form-control\" name=\"ubicacion_id\" v-model=\"param_filtro.ubicacion_id\">\n                <option value=\"\" selected=\"\">Seleccionar</option>\n                <option v-for=\"localizacion in localizaciones\" value=\"{{ localizacion.id }}\">\n                    {{ localizacion.nombre }}\n                </option>\n            </select>\n        </div>\n\n        <div class=\"row col-xs-12 col-sm-6 col-md-5 col-lg-4\">\n            <div class=\"form-group col-xs-12 col-sm-6 col-md-6 col-lg-6\" style=\"margin: 0px;\">\n                <label>Fecha Inicio</label>\n                <div class=\"input-group row\" style=\"margin: 0px;\">\n                    <input type=\"text\" v-model=\"param_filtro.fechaInicio\" placeholder=\"dd/mm/aaaa\" pattern=\"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d\" class=\"form-control fechas\" name=\"fechaInicio\">\n                    <div class=\"input-group-addon row\">\n                        <i class=\"fa fa-calendar\"></i>\n                    </div>\n                </div>\n            </div>\n\n            <div class=\"form-group col-xs-12 col-sm-6 col-md-6 col-lg-6\" style=\"margin: 0;\">\n                <label>Fecha Fin</label>\n                <div class=\"input-group row\" style=\"margin: 0px;\">\n                    <input type=\"text\" v-model=\"param_filtro.fechaFin\" pattern=\"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d\" placeholder=\"dd/mm/aaaa\" class=\"form-control fechas\" name=\"fechaFin\">\n                    <div class=\"input-group-addon row\">\n                        <i class=\"fa fa-calendar\"></i>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"form-group  col-xs-12 col-sm-3 col-md-3 col-lg-2\">\n            <label>Estados</label>\n            <select class=\"form-control\" name=\"estado_id\" v-model=\"param_filtro.estado_id\">\n                <option value=\"\">Seleccionar</option>\n                <option v-for=\"estado in estados\" value=\"{{ estado.id }}\">\n                    {{ estado.nombre }}\n                </option>\n            </select>\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\">\n            <hr style=\"margin: 10px;\">\n        </div>\n\n        <div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 0;\">\n\n\n            <button type=\"submit\" style=\"float: right; margin-left: 10px;\" class=\"btn btn-success btn-sm\">Buscar  <span class=\"fa  fa-search\"></span>\n            </button>\n\n            <button type=\"reset\" style=\"float: right;\" class=\"btn btn-danger btn-sm\">Limpiar  <span class=\"fa  fa-times\"></span>\n            </button>\n        </div>\n    </div>\n    </form>\n</div>\n\n<style>\n    .fade-filtro-enter, .fade-filtro-leave {\n        opacity: 0;\n        transition: all .2s ease;\n    }\n</style>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-43fedca6", module.exports)
+    hotAPI.createRecord("_v-225c5bef", module.exports)
   } else {
-    hotAPI.update("_v-43fedca6", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-225c5bef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n.estado {\n    font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray;\n}\n.labelUser {\n    font-size: 12px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n    cursor: pointer;\n}\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    props: {
+        supervisorid: {
+            type: Number,
+            default: 0
+        }
+    },
+    data: function data() {
+        return {};
+    },
+    ready: function ready() {},
+    methods: {
+        redondear: function redondear(color, texto) {
+            if (color === '' || color === undefined) {
+                return '';
+            }
+
+            return { 'background': color, 'color': texto };
+        }
+    }
+    /* Fin componentes*/
+};
+$(document).ready(function () {
+    var table = $('#tareaBuscadasSupervisadas').DataTable({
+        dom: 'Blfrtip',
+        // guarmos los filtro de la tabla
+        stateSave: true
+    });
+
+    $('#tareaBuscadasSupervisadas tbody').on('dblclick', 'tr', function () {
+        var data = table.row(this).data();
+        console.log(data[0]);
+
+        //            alert( 'You clicked on '+data[0] );
+    });
+});
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"table-responsive\">\n    <table id=\"tareaBuscadasSupervisadas\" class=\"table table-striped table-bordered table-condensed table-hover\">\n        <thead>\n        <tr>\n            <th hidden=\"\"></th>\n            <th>Id</th>\n            <th>Tareas</th>\n            <th>Fechas Inicio</th>\n            <th>Fechas Fin</th>\n            <th>Tiempo</th>\n            <th>Usuario</th>\n            <th>Estado</th>\n            <th>Observaciones</th>\n        </tr>\n        </thead>\n\n        <tbody>\n        <tr v-for=\"tarea in $parent.tareasSupervisadas\">\n            <td hidden=\"\">{{ tarea.tarea_id }}</td>\n            <td>\n                <b class=\"btn btn-warning btn-xs\"> {{ tarea.tarea_id }}</b>\n            </td>\n            <td> {{ tarea.descripcion }}</td>\n            <td>{{ tarea.fechaInicio }}</td>\n            <td>{{ tarea.fechaFin }}</td>\n            <td>{{ tarea.tiempo }}</td>\n            <td>\n                <label :style=\"redondear(tarea.colorUser, tarea.textoUser)\" class=\"labelUser\" data-toggle=\"modal\" data-target=\"#modal-usuarioTarea-{{ tarea.user_id }}\">\n                {{ tarea.usuario }}  {{ tarea.activo }}\n                {{ tarea.vacacion }} {{ tarea.bloqueado }}\n                </label>\n            </td>\n            <td>\n                <label :style=\"{'background': tarea.colorEstado, 'color': tarea.textoEstado }\" class=\"estado\"> {{tarea.estado }} </label>\n            </td>\n            <td>{{tarea.observaciones }}</td>\n        </tr>\n        </tbody>\n    </table>\n</div>\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n.estado {\n    font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray;\n}\n.labelUser {\n    font-size: 12px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n    cursor: pointer;\n}\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-63489333", module.exports)
+  } else {
+    hotAPI.update("_v-63489333", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13623,12 +13739,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-0839e45d", module.exports)
+    hotAPI.createRecord("_v-07ad4926", module.exports)
   } else {
-    hotAPI.update("_v-0839e45d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-07ad4926", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],17:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.estado {\n    font-size: 10px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n}\n")
 'use strict';
@@ -13751,12 +13867,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-080bcf70", module.exports)
+    hotAPI.createRecord("_v-d3a81ede", module.exports)
   } else {
-    hotAPI.update("_v-080bcf70", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-d3a81ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
+},{"../../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.colProm {background-color: #ddffdd; font-weight: bold;}\n.colTarea {background-color: lightskyblue; font-weight: bold;}\n.colTicket {background-color: bisque; font-weight: bold;}\n")
 'use strict';
@@ -14241,12 +14357,12 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-13dd710a", module.exports)
+    hotAPI.createRecord("_v-a3e16d5a", module.exports)
   } else {
-    hotAPI.update("_v-13dd710a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a3e16d5a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
+},{"../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14329,12 +14445,12 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-4463690e", module.exports)
+    hotAPI.createRecord("_v-457c9f7c", module.exports)
   } else {
-    hotAPI.update("_v-4463690e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-457c9f7c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],19:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],20:[function(require,module,exports){
 'use strict';
 
 /**

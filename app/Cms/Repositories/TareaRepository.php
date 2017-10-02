@@ -232,6 +232,70 @@ trait TareaRepository
         }
     }
 
+    public static function guardarAgenda(Request $request)
+    {
+        if (!preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaInicio) || !preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaFin)) {
+            return [
+                'message' => 'Las fechas no tiene formato fecha dd/mm/yyyy',
+                'success' => false
+            ];
+        }
+
+        if(!self::validarFechaLimiteTarea($request->fechaInicio, $request->agenda) || !self::validarFechaLimiteTarea($request->fechaFin, $request->agenda)){
+            return [
+                'message' => 'Las fechas de la tarea estan fuera del rango permitido',
+                'success' => false
+            ];
+        }
+
+
+        if(\Calcana::verificarMayorIgual($request->fechaFin, $request->fechaInicio)== false){
+            return [
+                'message' => 'Las Fecha Inicio debe ser menor o igual a la Fecha Fin',
+                'success' => false
+            ];
+        }
+
+        $semanas = self::obtenerSemanaDelAnio($request->agenda);
+
+        if(!self::validarDuracionCero($request->hora, $request->minuto)){
+            return [
+                'message' => 'La duracion de una tarea no puede ser cero "0"',
+                'success' => false
+            ];
+        }
+
+        $tarea = new Tarea;
+
+        $tarea->numero = self::getMayorNumeroTarea();
+        $tarea->descripcion = trim($request->descripcion);
+        $tarea->fechaInicioEstimado = \Calcana::cambiarFormatoDB( $request->fechaInicio);
+        $tarea->fechaFinEstimado = \Calcana::cambiarFormatoDB($request->fechaFin);
+
+        // calculamos el tiempo de duracion de de la hora y minuto
+        $horaReal = self::obtenerHora($request->hora, $request->minuto);
+        $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
+
+        $tarea->tipoTarea_id = 1;
+        $tarea->estadoTarea_id = 1;
+        $tarea->user_id = \Usuario::get('id');
+
+        if($tarea->save()){
+            $tareas = self::getTodasTareaSemana($request->agenda);
+            $semanas = array_pop($tareas);
+            return [
+                'message' => 'La tarea Nro. '.$tarea->numero.' se guardo correctamente',
+                'success' => true,
+                'tareas'=> $tareas
+            ];
+        }else{
+            return [
+                'message' => 'No se guardo, por favor consulte con su administrador',
+                'success' => false
+            ];
+        }
+    }
+
     public static function resolver(Request $request, $id)
     {
         if (!preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaInicioSolucion) || !preg_match('/^\d{1,2}\/\d{1,2}\/\d{4}$/', $request->fechaFinSolucion)) {
@@ -343,13 +407,13 @@ trait TareaRepository
 
         // calculamos el tiempo de duracion de de la hora y minuto
         $horaReal = self::obtenerHora($request->hora, $request->minuto);
-        $tarea->tiempoEstimado = '\''.$horaReal[0].':'.$horaReal[1].'\'';
+        $tarea->tiempoEstimado = $horaReal[0].':'.$horaReal[1];
 
         $tarea->estadoTarea_id = $request->estado;
-        $tarea->observaciones = '\''. $request->observaciones.'\'';
+        $tarea->observaciones = $request->observaciones;
         $tarea->user_id = \Usuario::get('id');
-//dd($tarea, $request);
-        $tarea->save();
+
+//        $tarea->save();
         if($tarea->save()){
 
             //  guardamos la localizacion de la tarea

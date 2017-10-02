@@ -5,7 +5,8 @@ namespace ProyectoKpi\Models\Localizaciones;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use ProyectoKpi\Http\Controllers\Localizaciones\LocalizacionController;
+use ProyectoKpi\Cms\Repositories\LocalizacionRepository;
+
 
 
 class Localizacion extends Model
@@ -15,6 +16,7 @@ class Localizacion extends Model
     protected $primarykey = "id";
 
     use SoftDeletes;
+    use LocalizacionRepository;
     public $timestamps = true;
 
     /**
@@ -57,14 +59,6 @@ class Localizacion extends Model
     public function users()
     {
         return $this->hasMany('ProyectoKpi\Models\User', 'localizacion_id');
-    }
-
-
-    /* Metodos Repositorio */
-    public static function getLocalizaciones()
-    {
-
-        return Localizacion::select('localizaciones.id','localizaciones.nombre','localizaciones.direccion','localizaciones.telefono','grupo_localizaciones.nombre as grupo')->join('grupo_localizaciones','grupo_localizaciones.id','=','localizaciones.grupoloc_id')->get();
     }
 
 }

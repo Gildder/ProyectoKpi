@@ -43,7 +43,7 @@
         "psr-4": {
             "ProyectoKpi\\": "app/",
             "Clases\\": "app/Cms/Clases",
-            "Repositories\\": "app/Cms/Repositories"
+            "Repositories\\": "app/Cms/Repositories",
         }
     },
     "autoload-dev": {

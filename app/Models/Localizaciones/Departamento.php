@@ -3,18 +3,20 @@
 namespace ProyectoKpi\Models\Localizaciones;
 
 use Illuminate\Database\Eloquent\Model;
-use ProyectoKpi\Models\Localizaciones\GrupoDepartamento;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Cms\Repositories\DepartamentoRepository;
 
 
 class Departamento extends Model
 {
+    use SoftDeletes;
+    use DepartamentoRepository;
+
     //
     protected $table = "departamentos";
     protected $primarykey = "id";
 
-    use SoftDeletes;
+
     public $timestamps = true;
 
     /**
@@ -53,27 +55,4 @@ class Departamento extends Model
     {
         return $this->hasMany('ProyectoKpi\Models\User', 'departamento_id');
     }
-
-
-    /* Metodos Repositorio */
-
-    /**
-     * Retorna los departamentos perteneciente a un grupo departamento
-     *
-     * @var id del departamento
-     */
-    public static function getDepartamentos()
-    {
-        return Departamento::
-            select('departamentos.id','departamentos.nombre as nombre','grupo_departamentos.nombre as grupo')
-            ->join('grupo_departamentos','grupo_departamentos.id','=','departamentos.grupodep_id')->get();
-    }
-
-    public static function getsupervisores($id)
-    {
-        $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresDepartamento('.$id.')');
-
-        return $empleadossupervisores;
-    }
-
 }

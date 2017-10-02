@@ -422,11 +422,34 @@ route::group(['middleware'=>['auth', 'supervisores', 'estandard']], function()
 
 
     /* Metodo para Buscar tareas pasada SUPERVISORES por empleados */
-    Route::get('supervisores/supervisados/tareas/buscar',
-        array('as' => 'supervisores.supervisados.tareas.buscar', 'uses' => 'Tareas\BuscarTareaController@listaSupervidor') );
+    Route::get('supervisores/supervisados/busquedas',
+        array('as' => 'supervisores.supervisados.tareas.busquedas',
+            'uses' => 'Supervisores\SupervisadosController@busquedas') );
 
-    Route::post('supervisores/supervisados/tareas/buscarTareasSupervisadas',
-        array('as' => 'supervisores.supervisados.tareas.buscarTareasSupervisadas', 'uses' => 'Tareas\BuscarTareaController@buscarTareasSupervisadas') );
+    Route::post('supervisores/supervisados/tareas/buscar',
+        array('as' => 'supervisores.supervisados.tareas.buscar',
+            'uses' => 'Supervisores\SupervisadosController@buscar') );
+
+    /* Metodos Ajax */
+    Route::get('supervisores/supervisados/getUsuarioSupervisados',
+        array('as' => 'supervisores.supervisados.getUsuarioSupervisados',
+            'uses' => 'Supervisores\SupervisadosController@getUsuarioSupervisados') );
+
+    Route::get('supervisores/supervisados/getCargosSupervisados',
+        array('as' => 'supervisores.supervisados.getCargosSupervisados',
+            'uses' => 'Supervisores\SupervisadosController@getCargosSupervisados') );
+
+    Route::get('supervisores/supervisados/getDepartamentosSupervisados',
+        array('as' => 'supervisores.supervisados.getDepartamentosSupervisados',
+            'uses' => 'Supervisores\SupervisadosController@getDepartamentosSupervisados') );
+
+    Route::get('supervisores/supervisados/getEstados',
+        array('as' => 'supervisores.supervisados.getEstados',
+            'uses' => 'Supervisores\SupervisadosController@getEstados') );
+
+    Route::get('supervisores/supervisados/getLocalizaciones',
+        array('as' => 'supervisores.supervisados.getLocalizaciones',
+            'uses' => 'Supervisores\SupervisadosController@getLocalizaciones') );
 
     /* Metodos Genericos */
 	Route::resource('supervisores/supervisados', 'Supervisores\SupervisadosController', 

@@ -29,7 +29,7 @@
                            required>
                 </div>
             </div>
-
+    
             {{-- Fechas de Inicio y Fin --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row"  style="display:{{ (\Usuario::get('verFechaEstimadas')== true || $agenda === '1')?'block':'none'}}">
                 {{-- Fecha Inicio de Tarea --}}
@@ -42,12 +42,12 @@
                             </div>
                             <input type="text" id="fechaInicioTarea"  style="z-index: 3000"
                                    v-model="tareaNueva.fechaInicio"   :key="cambioFecha"
-                                   placeholder="Fecha Inicio" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
+                                   placeholder="dd/mm/aaaa" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
                                    class="form-control" name="fechaInicio" required>
                         </div>
                     </div>
                 </div>
-
+        
                 {{-- Fecha Fin de Tarea --}}
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                     <div class="form-group">
@@ -58,7 +58,7 @@
                             </div>
                             <input type="text" id="fechaFinTarea"  style="z-index: 3000"
                                    v-model="tareaNueva.fechaFin"   :key="cambioFecha"
-                                   placeholder="Fecha Fin" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
+                                   placeholder="dd/mm/aaaa" pattern="(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d"
                                    class="form-control" name="fechaFin" required>
                         </div>
                     </div>

@@ -95,57 +95,57 @@ class AuthController extends Controller
     }
 
 
-//    public function login(Request $request)
-//    {
-//        $con = new Conexion_LDAP();
-//
-//        /* obtnemos los parametros del formualario*/
-//        $data = [
-//            'username' => \Request::input('name'),
-//            'password' => \Request::input('password')
-//        ];
-//
-//        $result = $con->login_ldap($data['username'], $data['password']);
-//
-//        if ($data['username'] !== 'admin')
-//        {
-//            // todo: corregir esta validacion de login por AD
-//            if (is_string($result)) {
-//                /* obtnemos los parametros del formualario*/
-//                $request->request->set('password', '12345678');
-//            } else {
-//                $request->request->set('password', 'dfadfjfah!"#43SDF#$');
-//            }
-//        }
-//
-//        $this->validateLogin($request);
-//
-//
-//        // If the class is using the ThrottlesLogins trait, we can automatically throttle
-//        // the login attempts for this application. We'll key this by the username and
-//        // the IP address of the client making these requests into this application.
-//        $throttles = $this->isUsingThrottlesLoginsTrait();
-//
-//        if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
-//            $this->fireLockoutEvent($request);
-//
-//            return $this->sendLockoutResponse($request);
-//        }
-//
-//        $credentials = $this->getCredentials($request);
-//
-//        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
-//            return $this->handleUserWasAuthenticated($request, $throttles);
-//        }
-//
-//        // If the login attempt was unsuccessful we will increment the number of attempts
-//        // to login and redirect the user back to the login form. Of course, when this
-//        // user surpasses their maximum number of attempts they will get locked out.
-//        if ($throttles && ! $lockedOut) {
-//            $this->incrementLoginAttempts($request);
-//        }
-//
-//        return $this->sendFailedLoginResponse($request);
-//    }
+    public function login(Request $request)
+    {
+        $con = new Conexion_LDAP();
+
+        /* obtnemos los parametros del formualario*/
+        $data = [
+            'username' => \Request::input('name'),
+            'password' => \Request::input('password')
+        ];
+
+        $result = $con->login_ldap($data['username'], $data['password']);
+
+        if ($data['username'] !== 'admin')
+        {
+            // todo: corregir esta validacion de login por AD
+            if (is_string($result)) {
+                /* obtnemos los parametros del formualario*/
+                $request->request->set('password', '12345678');
+            } else {
+                $request->request->set('password', 'dfadfjfah!"#43SDF#$');
+            }
+        }
+
+        $this->validateLogin($request);
+
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        $throttles = $this->isUsingThrottlesLoginsTrait();
+
+        if ($throttles && $lockedOut = $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        $credentials = $this->getCredentials($request);
+
+        if (Auth::guard($this->getGuard())->attempt($credentials, $request->has('remember'))) {
+            return $this->handleUserWasAuthenticated($request, $throttles);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        if ($throttles && ! $lockedOut) {
+            $this->incrementLoginAttempts($request);
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
 
 }

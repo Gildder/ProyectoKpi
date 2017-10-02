@@ -35,7 +35,7 @@
             <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
                 <b class="text-right" style="width: 50%">Estado:</b>
 
-                    <label  style="background: {{$tarea->colorEstado}}; color:{{$tarea->textoColor}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estado}} </label>
+                    <label  style="background: {{$tarea->colorEstado}}; color:{{$tarea->textoEstado}}; font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray "> {{$tarea->estado}} </label>
             </div>
 
 

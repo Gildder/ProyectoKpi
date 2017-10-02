@@ -1,5 +1,3 @@
-
-   <!-- Modal -->
 <div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-usuarioTarea-{{$tarea->user_id}}">
   <div class="modal-dialog">
 
@@ -12,7 +10,7 @@
       <div class="modal-body modal-delete-body">
         <div class="modal-body">
           <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
-            <b class="text-right" style="width: 50%">No. Usuario:</b>
+            <b class="text-right" style="width: 50%">No.:</b>
             @if(! is_null($tarea->user_id)) {{ $tarea->user_id }}@else '' @endif
           </div>
 
@@ -48,10 +46,31 @@
           </div>
 
 
-          <div style="text-align: center;  padding: 10px;">
+          <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
             <b class="text-right" style="width: 50%">Localizacion:</b>
             @if(! is_null( $tarea->localizacion )) {{ $tarea->localizacion  }} @else '' @endif
           </div>
+
+          @if($tarea->vacacion != '')
+            <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+              <b class="text-right" style="width: 50%">Vacacion:</b>
+              <span class="badge bg-green-gradient"><i class="fa fa-check"></i>  Si</span>
+            </div>
+          @endif
+
+          @if($tarea->bloqueado != '')
+            <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+              <b class="text-right" style="width: 50%">Bloqueado:</b>
+              <span class="badge bg-green-gradient"><i class="fa fa-check"></i>  Si</span>
+            </div>
+          @endif
+
+          @if($tarea->activo != '')
+            <div style="text-align: center; border-bottom: 1px solid lightgrey; padding: 10px;">
+              <b class="text-right" style="width: 50%">Activo:</b>
+              <span class="badge bg-red-gradient"><i class="fa fa-check"></i>  No</span>
+            </div>
+          @endif
 
         </div>
         <div class="modal-footer modal-delete-footer">

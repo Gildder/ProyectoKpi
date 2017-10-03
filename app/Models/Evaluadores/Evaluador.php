@@ -4,6 +4,7 @@ namespace ProyectoKpi\Models\Evaluadores;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Models\Empleados\Cargo;
 use Illuminate\Support\Facades\DB;
 
@@ -11,10 +12,12 @@ use Illuminate\Support\Facades\DB;
 class Evaluador extends Model
 {
 
-    protected $table = "evaluadores";
-    protected $primarykey = "id";
-    
     use SoftDeletes;
+    use EvaluadorRepository;
+
+    protected $table = "evaluadores";
+
+    protected $primarykey = "id";
     public $timestamps = true;
     
     /**
@@ -45,9 +48,9 @@ class Evaluador extends Model
 
 
     /* Relaciones */
-    public function empleados()
+    public function users()
     {
-        return $this->belongsToMany('ProyectoKpi\Models\Empleados\Empleado','evaluador_empleados', 'evaluador_id', 'empleado_id');
+        return $this->belongsToMany('ProyectoKpi\Models\Users','evaluador_empleados', 'evaluador_id', 'user_id');
     }
 
     public function cargos(){
@@ -63,44 +66,4 @@ class Evaluador extends Model
         return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicador', 'evaluador_indicadores', 'indicador_id', 'evaluador_id', 'id');
     }
 
-
-
-    public static function getCargos($id)
-    {   
-        $cargosEvaluados = Cargo::select('cargos.*')
-                ->join('evaluador_cargos','evaluador_cargos.cargo_id','=', 'cargos.id')
-                ->join('evaluadores','evaluadores.id','=','evaluador_cargos.evaluador_id')
-                ->whereNull('evaluador_cargos.deleted_at')
-                ->where('evaluadores.id',$id)
-                ->get();
-
-
-        return $cargosEvaluados;
-    }
-
-    public static function getEmpleados($id)
-    {   
-        $Evaluadores = Empleado::select('empleados.*')
-                ->join('evaluador_empleados','evaluador_empleados.empleado_id','=', 'empleados.codigo')
-                ->join('evaluadores','evaluadores.id','=','evaluador_empleados.evaluador_id')
-                ->whereNull('evaluador_empleados.deleted_at')
-                ->where('evaluadores.id',$id)
-                ->get();
-
-
-        return $Evaluadores;
-    }
-
-     public static function isCargosAgregados($evaluador_id)
-    {
-        $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$evaluador_id.');');
-
-        if (isset($cargoAgregados)) {
-            return false;
-        } else {
-            return true;
-        }
-        
-    }
-   
 }

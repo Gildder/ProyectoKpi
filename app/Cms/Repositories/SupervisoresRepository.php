@@ -45,11 +45,11 @@ trait SupervisoresRepository
         $semanas = Tarea::obtenerSemanaDelAnio($agenda);
 
         // obtenemos los usuarios supervisados
-        $usuarios = self::usuariosSupervisados(\Usuario::get('id'));
+        $usuarios = self::usuariosSupervisados(\Auth::user()->id);
+
         $lista = array();
         foreach ($usuarios as $usuario){
             $tareas = self::getTareasProgramadasSupervisados($usuario->id, $semanas->fechaInicio, $semanas->fechaFin);
-
             // recorremos las tareas de los usuarios y los  tareas juntamos las tareas
             foreach ($tareas as $item) {
                 array_push($lista, $item);

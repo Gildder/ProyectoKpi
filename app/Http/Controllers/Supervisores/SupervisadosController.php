@@ -28,7 +28,6 @@ class SupervisadosController extends Controller
     {
         $tareas = Supervisados::getTareasSupervisados(0);
 
-//        dd($tareas);
         $semanas = array_pop($tareas);
 
         return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas]);

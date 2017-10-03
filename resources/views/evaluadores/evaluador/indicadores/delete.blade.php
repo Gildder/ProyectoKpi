@@ -1,6 +1,6 @@
 
    <!-- Modal -->
-<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-quitarindicador-{{$item->id}}">
+<div class="modal fade modal-slide-in-right" aria-hidden="true" tabindex="-1" role="dialog" id="modal-quitarIndicador-{{ $item->id }}">
   <div class="modal-dialog">
 
     <!-- Modal content-->

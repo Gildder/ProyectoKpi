@@ -59,7 +59,7 @@ class UserRepository
         $admin = UserRepository::isAdmin();
 
         if (!$admin) {
-            $result = EvaluadoresRepository::cnVerificarsEvaluador($user->empleado->codigo);
+            $result = EvaluadorRepository::cnVerificarsEvaluador($user->empleado->codigo);
         }
 
         // dd(isset($result), $result);

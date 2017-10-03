@@ -4,7 +4,7 @@ namespace ProyectoKpi\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Cms\Repositories\UsuarioVacacionRepositorio;
 use ProyectoKpi\Models\User;

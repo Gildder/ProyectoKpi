@@ -42,6 +42,7 @@ class SupervisorController extends Controller
         }
 
 
+
         return view('supervisores\supervisor\show', ['lista'=>$lista,'empleadosdis'=>$empleadosDisponibles,'empleadosup'=>$empleadossupervisores,'tipo'=>$tipo]);
     }
 

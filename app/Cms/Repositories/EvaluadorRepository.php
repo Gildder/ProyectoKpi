@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cache;
 use PhpParser\Node\Expr\Cast\Object_;
 use ProyectoKpi\Cms\Clases\TablaMes;
 use ProyectoKpi\Cms\Clases\TablaSemana;
+use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Cms\Clases\IndicadorReporte;
 use ProyectoKpi\Models\Empleados\Empleado;
@@ -16,15 +17,11 @@ use ProyectoKpi\Models\Evaluadores\Widget;
 use ProyectoKpi\Models\User;
 use stdClass;
 
-class EvaluadoresRepository
+trait EvaluadorRepository
 {
 
     /*contructores */
     private static $evaluador;
-
-    public function __construct()
-    {
-    }
 
     /**
      * Obtenemos la lista de los empleados que son evaludor por una gerencia
@@ -286,4 +283,72 @@ class EvaluadoresRepository
     }
 
 
+
+    public static function getCargos($id)
+    {
+        $cargosEvaluados = Cargo::select('cargos.*')
+            ->join('evaluador_cargos','evaluador_cargos.cargo_id','=', 'cargos.id')
+            ->join('evaluadores','evaluadores.id','=','evaluador_cargos.evaluador_id')
+            ->whereNull('evaluador_cargos.deleted_at')
+            ->where('evaluadores.id',$id)
+            ->get();
+
+
+        return $cargosEvaluados;
+    }
+
+    public static function getEmpleados($id)
+    {
+        $Evaluadores = Empleado::select('empleados.*')
+            ->join('evaluador_empleados','evaluador_empleados.empleado_id','=', 'empleados.codigo')
+            ->join('evaluadores','evaluadores.id','=','evaluador_empleados.evaluador_id')
+            ->whereNull('evaluador_empleados.deleted_at')
+            ->where('evaluadores.id',$id)
+            ->get();
+
+
+        return $Evaluadores;
+    }
+
+    public static function isCargosAgregados($evaluador_id)
+    {
+        $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$evaluador_id.');');
+
+        if (isset($cargoAgregados)) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+    /**
+     * Retorna los usuario/empleado que no son evaluadores
+    */
+    public static function usuariosNoEvalaudores($id)
+    {
+        return DB::select('call pa_evaluadores_empleadosDisponibles('.$id.');');
+    }
+
+    /**
+     * Retorna usuarios que son evalaudores
+     *
+    */
+    public static function usuariosEvalaudores($id)
+    {
+        return DB::select('call pa_evaluadores_empleadosEvaluadores('.$id.');');
+    }
+
+    /**
+     * Retorna las gerencia evalaudores que tiene asignado un empleado
+    */
+    public static function evaluadorasEmpleado($user_id)
+    {
+        return  DB::table('evaluador_empleados')
+            ->join('evaluadores', 'evaluadores.id', '=', 'evaluador_empleados.evaluador_id')
+            ->select('evaluadores.id', 'evaluadores.abreviatura', 'evaluadores.descripcion')
+            ->where('evaluador_empleados.user_id', '=', $user_id)
+            ->get();
+    }
 }

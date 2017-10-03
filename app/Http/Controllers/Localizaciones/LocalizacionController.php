@@ -25,6 +25,9 @@ class LocalizacionController extends Controller
     {
         $localizaciones = Localizacion::getLocalizaciones();
 
+        dd($localizaciones);
+
+
         return view('localizaciones/localizacion/index')->with('localizaciones', $localizaciones);
     }
 

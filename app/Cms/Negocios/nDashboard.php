@@ -12,7 +12,7 @@ namespace ProyectoKpi\Cms\Negocios;
 use Illuminate\Http\Response;
 use ProyectoKpi\Cms\Clases\FiltroTabla;
 use ProyectoKpi\Cms\Clases\Tabla;
-use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Models\Evaluadores\Widget;
 
 class nDashboard
@@ -75,7 +75,7 @@ class nDashboard
      */
     public function obtenerPondTiposIndicadores()
     {
-        return EvaluadoresRepository::cnGetPonderacionTipoIndicadores($this->evaluador->id);
+        return EvaluadorRepository::cnGetPonderacionTipoIndicadores($this->evaluador->id);
     }
 
     /**
@@ -83,7 +83,7 @@ class nDashboard
     */
     public function obtenerPondEscalas()
     {
-        return EvaluadoresRepository::cnGetLimitesEscalas($this->evaluador->id);
+        return EvaluadorRepository::cnGetLimitesEscalas($this->evaluador->id);
     }
 
     /**
@@ -154,33 +154,33 @@ class nDashboard
 
     public function obtenerTiposIndicadores()
     {
-        return EvaluadoresRepository::getListaTiposIndicadores($this->evaluador->id);
+        return EvaluadorRepository::getListaTiposIndicadores($this->evaluador->id);
     }
 
     public function obtenerIndicadores()
     {
-        return EvaluadoresRepository::getListaIndicadores($this->evaluador->id);
+        return EvaluadorRepository::getListaIndicadores($this->evaluador->id);
     }
 
     public function obtenerEvaluadorWidget()
     {
-        return EvaluadoresRepository::getEvaluadorWidget( \Cache::get('evadores')->id, \Usuario::get('id') );
+        return EvaluadorRepository::getEvaluadorWidget( \Cache::get('evadores')->id, \Usuario::get('id') );
     }
 
     public function obtenerCantidadSemana($mes)
     {
-        return EvaluadoresRepository::getObtenerCantidadSemanas($mes);
+        return EvaluadorRepository::getObtenerCantidadSemanas($mes);
     }
 
     public function obtenerfechasSemana($mes)
     {
         // imcompleto repositorio
-        return EvaluadoresRepository::getObtenerFechasemanas($mes);
+        return EvaluadorRepository::getObtenerFechasemanas($mes);
     }
 
     public function eliminarEvaluadorWidget($id)
     {
-        return EvaluadoresRepository::deleteEvaluadorWidget($id);
+        return EvaluadorRepository::deleteEvaluadorWidget($id);
     }
 
 

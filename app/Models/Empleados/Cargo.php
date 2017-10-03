@@ -5,11 +5,14 @@ namespace ProyectoKpi\Models\Empleados;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Cms\Repositories\CargoRepository;
 
 
 class Cargo extends Model
 {
     use SoftDeletes;
+    use CargoRepository;
+
     public $timestamps = false;
 
     /**
@@ -58,16 +61,6 @@ class Cargo extends Model
         return $this->belongsToMany('ProyectoKpi\Models\User', 'supervisor_cargos', 'supervisor_id', 'cargo_id', 'id');
     }
 
-
-
-
-    /* Metodos Repsoitorios */
-    public static function getsupervisores($id)
-    {
-        $empleadossupervisores = DB::select('call pa_supervisores_empleadosSupervisadoresCargo('.$id.')');
-
-        return $empleadossupervisores;
-    }
 
     
 }

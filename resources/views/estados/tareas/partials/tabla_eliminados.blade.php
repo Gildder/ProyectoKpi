@@ -3,17 +3,21 @@
 		<thead>
 			<th>Nro</th>
 			<th>Nombre</th>	
-			<th></th>	
+			<th>Descripcion</th>
+			<th></th>
 		</thead>
 
 		<tbody>
-		@foreach($cargos as $item)
+		@foreach($estados as $estado)
 			<tr>
-				<td>{{$item->id}}</td>
-				<td>{{$item->nombre}}</td>
-				<td><a  href="#"  data-toggle="modal" data-target="#modal-restaurar-{{$item->id}}"  class="btn btn-success btn-xs" ><span class="fa fa-check"  title="Restaurar"></span><span >  Restaurar</span></a></td>
+				<td>{{$estado->id}}</td>
+				<td>
+                    <input class="estiloEstado" style="background-color: {!! $estado->color !!}; color: {!! $estado->texto !!};" value="{!! $estado->nombre !!}" readonly="true">
+                </td>
+				<td>{{$estado->descripcion}}</td>
+				<td><a  href="#"  data-toggle="modal" data-target="#modal-restaurar-{{$estado->id}}"  class="@lang('labels.stylbtns.btnRestaurar')" ><span class="@lang('labels.icons.icoBtnRestaurar')"  title="Restaurar"></span><span >  @lang('labels.buttons.btnRestaurar')</span></a></td>
 			</tr>
-			@include("empleados/cargo/restaurar")
+			@include("estados/tareas/restaurar")
 
 		@endforeach
 		</tbody>

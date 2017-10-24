@@ -18,9 +18,11 @@ class CreateEstadoTareasTable extends Migration
             $table->string('nombre', 20);
             $table->string('descripcion',120);
             $table->string('color', 7);
-            $table->integer('habilitarCalendario')->default(0);
-            $table->integer('visiblePorEmpleado')->default(0);
-            $table->integer('solucion')->default(0);
+            $table->string('texto', 7);
+            $table->integer('visibleCalendario')->default(0);
+            $table->integer('visibleEmpleado')->default(0);
+            $table->integer('isDeleted')->default(1);
+            $table->integer('isEdit')->default(1);
             $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->softDeletes();

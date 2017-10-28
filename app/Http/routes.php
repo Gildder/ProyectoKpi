@@ -22,6 +22,7 @@
 /**************************** LOGIN ******************************************++*/
 
 
+
 Route::auth();
 
 Route::get('/', 'HomeController@index');
@@ -335,6 +336,22 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 
 });
 
+/**
+ * Estados de la Aplicacion
+*/
+Route::group(['middleware' => ['auth', 'administrador']], function () {
+
+    Route::get('estados/tareas/eliminados',
+        array('as' => 'estados.tareas.eliminados', 'uses' => 'Estados\EstadoTareaController@eliminados') );
+
+        Route::put('estados/tareas/restaurar/{estado}',
+        array('as' => 'estados.tareas.restaurar', 'uses' => 'Estados\EstadoTareaController@restaurar') );
+
+    Route::resource('estados/tareas', 'Estados\EstadoTareaController',
+        ['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
+
+});
+
 
 
 // **********************  MODULO INDICADORES *****************************************
@@ -475,14 +492,28 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
 
+	Route::get('tareas/tareaProgramadas/tareaSemanaJson',
+		array('as' => 'tareas.tareaProgramadas.tareaSemanaJson', 'uses' => 'Tareas\TareaProgramadaController@tareaSemanaJson') );
+
+	Route::post('tareas/tareaProgramadas/buscarArchivadas',
+		array('as' => 'tareas.tareaProgramadas.buscarArchivadas', 'uses' => 'Tareas\TareaProgramadaController@buscarArchivadas') );
+
+
+    Route::get('tareas/tareaProgramadas/tareaArchivadasJson',
+        array('as' => 'tareas.tareaProgramadas.tareaArchivadasJson', 'uses' => 'Tareas\TareaProgramadaController@tareaArchivadasJson') );
+
+
+    Route::get('tareas/tareaProgramadas/getAgendadasJson',
+        array('as' => 'tareas.tareaProgramadas.getAgendadasJson', 'uses' => 'Tareas\TareaProgramadaController@getAgendadasJson') );
+
 
     Route::get('tareas/tareaProgramadas/listaTareas',
         array('as' => 'tareas.tareaProgramadas.listaTareas', 'uses' => 'Tareas\TareaProgramadaController@listaTareas') );
 
 
 
-    Route::get('tareas/tareaProgramadas/getSemanaAnio',
-        array('as' => 'tareas.tareaProgramadas.getSemanaAnio', 'uses' => 'Tareas\TareaProgramadaController@getSemanaAnio') );
+    Route::get('tareas/tareaProgramadas/getSemanaAnioFecha',
+        array('as' => 'tareas.tareaProgramadas.getSemanaAnioFecha', 'uses' => 'Tareas\TareaProgramadaController@getSemanaAnioFecha') );
 
     Route::get('tareas/tareaProgramadas/getSemanaAnioFecha',
         array('as' => 'tareas.tareaProgramadas.getSemanaAnioFecha', 'uses' => 'Tareas\TareaProgramadaController@getSemanaAnioFecha') );
@@ -499,6 +530,8 @@ route::group(['middleware'=>['auth', 'estandard']], function()
         array('as' => 'tareas.tareaProgramadas.agendadas', 'uses' => 'Tareas\TareaProgramadaController@agendadas') );
 
 
+    Route::post('tareas/tareaProgramadas/buscarArchivos',
+        array('as' => 'tareas.tareaProgramadas.buscarArchivos', 'uses' => 'Tareas\TareaProgramadaController@buscarArchivos') );
 
 
     Route::resource('tareas/tareaProgramadas', 'Tareas\TareaProgramadaController',
@@ -548,8 +581,74 @@ route::group(['middleware'=>['auth', 'estandard']], function()
     Route::get('calendario/empleado/getTareaComunes',
         array('as' => 'calendario.empleado.getTareaComunes', 'uses' => 'Calendario\EmpleadoTareaCalendarioController@getTareaComunes') );
 
+});
+
+/**
+ * Grupo de route para el API
+ */
+Route::group(['middleware' => ['cors']], function () {
+    Route::post('api/userAuth', [
+        'as' => 'api.userAuth',
+        'uses' => 'Auth\ApiAuthController@userAuth'
+    ]);
+
+
+
+    /**
+     * Devuelve las tareas de la semana de un usuarios
+     */
+    Route::post('api/getTareas', [
+        'as' => 'api.getTareas',
+        'uses' => 'Api\ApiController@getTareas'
+    ]);
+
+
+    /**
+     * Insertar las fecha de procesos en el estado
+     */
+    Route::post('api/setTarea', [
+        'as' => 'api.setTarea',
+        'uses' => 'Api\ApiController@setTarea'
+    ]);
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

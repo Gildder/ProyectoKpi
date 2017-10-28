@@ -14,7 +14,6 @@
         <ul class="nav navbar-nav">
 
           @if(\Auth::user()->is_evaluador == 1)
-          <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados/dashboard') }}" >
               <i class="fa fa-line-chart"></i>

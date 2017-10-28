@@ -6,7 +6,9 @@ use Carbon\Carbon;
 
 use Httpful\Response;
 use Illuminate\Http\Request;
+use Mockery\Exception;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
+use ProyectoKpi\Cms\Semanas\SemanaTarea;
 use ProyectoKpi\Http\Controllers\Controller;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Models\Tareas\Tarea;
@@ -22,22 +24,27 @@ class EmpleadoTareaCalendarioController extends Controller
     public function listaMiTareas()
     {
 		$estados = Tarea::getEstados();
-		$semanas = Tarea::obtenerSemanaDelAnio(0);
+		$semanas = new SemanaTarea();
 
-        return view('calendario.empleado.index', ['estados' => $estados, 'diaHoy'=> Carbon::now()->toDateString(), 'semanas' => $semanas, 'agenda' => 0 ]);
+        return view('calendario.empleado.index', [
+            'estados' => $estados,
+            'diaHoy'=> Carbon::now()->toDateString(),
+            'semanas' => $semanas->getSemana(),
+            'agenda' => 0
+        ]);
     }
 
     public function cargarTareas()
     {
         ini_set('max_execution_time', 300);
 
-		return Tarea::getTareasCalendar(\Usuario::get('id'));
+		return Tarea::getTareasCalendar(new SemanaTarea());
     }
 
     /* Tarea de comunes para response de Ajax */
     public function getTareaComunes()
     {
-        $tareas = Tarea::getTareasComunes(\Usuario::get('id'));
+        $tareas = Tarea::getTareasComunes();
 
         return ['tareas' => $tareas ];
     }
@@ -58,14 +65,13 @@ class EmpleadoTareaCalendarioController extends Controller
 
     public function guardarTarea(TareaProgramasFormRequest $request)
     {
-        if($request->ajax()){
-            $result = Tarea::guardar($request);
+        $resultado = Tarea::validarTarea($request);
 
-            if ($result['success']){
-                return response()->json($result);
-            }else{
-                return response()->json($result);
-            }
+        if($resultado['success'])
+        {
+                return Tarea::guardar($request);
+        }else{
+            return $resultado;
         }
     }
 }

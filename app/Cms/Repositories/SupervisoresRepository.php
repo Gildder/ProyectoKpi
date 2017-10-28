@@ -4,6 +4,7 @@ namespace ProyectoKpi\Cms\Repositories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use ProyectoKpi\Cms\Semanas\SemanaTarea;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Models\Empleados\Empleado;
 use Psy\Exception\ErrorException;
@@ -40,23 +41,25 @@ trait SupervisoresRepository
     /**
      * obtenemos las tareas de los supervisores
     */
-    public static function getTareasSupervisados($agenda)
+    public static function getTareasSupervisados(SemanaTarea $semanaTarea)
     {
-        $semanas = Tarea::obtenerSemanaDelAnio($agenda);
 
         // obtenemos los usuarios supervisados
         $usuarios = self::usuariosSupervisados(\Auth::user()->id);
 
         $lista = array();
         foreach ($usuarios as $usuario){
-            $tareas = self::getTareasProgramadasSupervisados($usuario->id, $semanas->fechaInicio, $semanas->fechaFin);
+            $tareas = self::getTareasProgramadasSupervisados(
+                $usuario->id,
+                $semanaTarea->getSemana()->fechaInicio,
+                $semanaTarea->getSemana()->fechaFin
+            );
+
             // recorremos las tareas de los usuarios y los  tareas juntamos las tareas
             foreach ($tareas as $item) {
                 array_push($lista, $item);
             }
         }
-
-        array_push($lista, $semanas);
 
         return $lista;
     }
@@ -90,7 +93,6 @@ trait SupervisoresRepository
         $user_id = (String) \Auth::user()->id;
         $arQuery =  "(vw_filtro_tarea_supervisadas.sup_car = ".$user_id." OR vw_filtro_tarea_supervisadas.sup_dep = ".$user_id.") ". $query;
 
-//        dd($arQuery);
 
         try{
             $tareas = DB::table('vw_filtro_tarea_supervisadas')

@@ -24,6 +24,7 @@
 		  <li><a data-toggle="tab" href="#evaluadores">Evaluadores</a></li>
 		  <li><a data-toggle="tab" href="#cargos">Cargos</a></li>
 		  <li><a data-toggle="tab" href="#indicadores">Indicadores</a></li>
+		  <li><a data-toggle="tab" href="#preferencias">Preferencias</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -96,7 +97,13 @@
 				</div>
 			</div>
 			{{-- Fin cargos --}}
-		
+
+            {{-- Preferencias --}}
+            <div id="preferencias" class="tab-pane">
+                @include('evaluadores/evaluador/indicadores/tabla_indicadores')
+            </div>
+			{{-- Fin Preferencias --}}
+
 		</div>
 		<!-- Fin Panel Tab -->
 

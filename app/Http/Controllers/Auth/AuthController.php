@@ -105,7 +105,9 @@ class AuthController extends Controller
 //            'password' => \Request::input('password')
 //        ];
 //
-//        $result = $con->login_ldap($data['username'], $data['password']);
+//        $result = $con->login_ldapas($data['username'], $data['password']);
+//
+//        dd(\GuzzleHttp\json_encode($result));
 //
 //        if ($data['username'] !== 'admin')
 //        {

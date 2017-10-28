@@ -150,6 +150,10 @@ $(document).ready(function() {
             id_usuario_buscar: 12,
             /******************* Busqueda de Usuarios ***************************/
             btnFiltroTareaSupervisor: true,
+
+
+            /***Edita tareas agenda **/
+            tipolistatarea: sessionStorage.getItem('tipoListado'),
         },
 
         ready: function () {
@@ -165,6 +169,19 @@ $(document).ready(function() {
         },
         /***************************************** COMPUTED ***********************************************************/
         computed: {
+            validarCheckFechasEstimadas: function () {
+                if (this.utilizarfechasestimadas){
+                    if($('input[name=hora]') === ''){
+                        $('input[name=hora]').val(0);
+                    }
+
+                    if($('input[name=minuto]') === ''){
+                        $('input[name=minuto]').val(0);
+                    }
+
+                    console.log('gol');
+                }
+            },
             listaVacia: function() {
                 if(this.listaTareaComunes.length == 0 ){
                     return true;
@@ -232,9 +249,8 @@ $(document).ready(function() {
             obtenerSemanaActual: function obtenerSemanaActual() {
                 let tipo = sessionStorage.getItem('agendas');
 
-                console.log(tipo);
                 $.ajax({
-                    url: '/tareas/tareaProgramadas/getSemanaAnio',
+                    url: '/tareas/tareaProgramadas/getSemanaAnioFecha',
                     methos: 'GET',
                     data: { agenda: tipo },
                     dataType: 'json',
@@ -379,8 +395,10 @@ $(document).ready(function() {
                 this.tareaNueva.minuto= 0;
                 this.tareaNueva.agenda= sessionStorage.getItem('agendas');
             },
+
             guardarTareaNueva: function ($event) {
                 $event.preventDefault();
+
                 utils.mostrarCargando(true);
 
                 let token = $('input[name=_token]').val();
@@ -388,8 +406,8 @@ $(document).ready(function() {
                 path = path.split("/");
 
                 // actualizar el tipo de agenda
-                let ag = sessionStorage.getItem('agendas');
-                if(ag !== undefined){
+                let agenda = sessionStorage.getItem('agendas');
+                if(agenda !== undefined){
                     this.tareaNueva.agenda = sessionStorage.getItem('agendas');
                 }
 
@@ -404,7 +422,6 @@ $(document).ready(function() {
                             if(path[path.length - 1] === 'index' && (path[path.length - 2] === 'empleado')){
                                 $('#calendarTareaUsuario').fullCalendar( 'refetchEventSources', { url: 'cargarTareas'} );
                             }else{
-                                console.log('si actualizo pagina ')
                                this.$broadcast('actuliza-tareas', data.tareas);
                             }
 
@@ -419,13 +436,13 @@ $(document).ready(function() {
                             Notificion.error(data.message, 10000);
                         }
                         utils.mostrarCargando(false);
-                    }.bind(this), error: function (data){
+                    }.bind(this),
+                    error: function (data){
                         utils.mostrarCargando(false);
                         $('#modal-nueva-tarea').modal('show');
 
                         var errors = data.responseJSON;
                         $.each(errors, function (key, value) {
-                            console.log(data.value);
                             Notificion.error(value, 10000);
 
                         });
@@ -559,7 +576,6 @@ $(document).ready(function() {
                         $('#verDetalleTarea').attr('action','');
                         $('#verDetalleTarea').attr('action',pathname);
 
-                        console.log(data.can_change );
                         /// verificamos si puede eliminar
                         if(data.can_delete === 0){
                             $('#borrarCalendar').css('display', 'none');
@@ -613,8 +629,6 @@ $(document).ready(function() {
                     data: { titulo: this.tituloNuevoTareaComun, color: color },
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data.tareas);
-
                         Notificion.success('Se guardo correctamente', 10000);
 
                         this.listaTareaComunes = data.tareas;

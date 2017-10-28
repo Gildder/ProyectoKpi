@@ -4,17 +4,16 @@ namespace ProyectoKpi\Http\Controllers\Tareas;
 
 use function array_push;
 use function date_add;
-use DateTime;
-use Httpful\Response;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Input;
 use ProyectoKpi\Cms\Clases\Caches;
-use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
+use ProyectoKpi\Cms\Semanas\SemanaTarea;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\Http\Request;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormAgendaRequest;
+use ProyectoKpi\Models\Localizaciones\Localizacion;
 use ProyectoKpi\Models\Tareas\Tarea;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasFormRequest;
 use ProyectoKpi\Http\Requests\Tareas\TareaProgramasResolverRequest;
@@ -34,37 +33,55 @@ class TareaProgramadaController extends Controller
     
     public function index()
     {
-        // obtenemos las tareas programadas
-        $tareas = Tarea::getTodasTareaSemana(0);
-        $semanas = array_pop($tareas);
+        $semana = new SemanaTarea();
+        $tareas = Tarea::getTareaDeLaSemana($semana);
 
-        return view('tareas/tareaProgramadas/index', ['tareas'=> $tareas, 'semanas'=> $semanas, 'agenda' => 0]);
+        Caches::guardar('inicioSemana', $semana->getSemana()->fechaInicio);
+        Caches::guardar('finSemana', $semana->getSemana()->fechaFin);
+        // utilizamos esta variable para boton de volver de show
+        Caches::guardar('tipoAgenda', 0);
+
+
+        return view('tareas/tareaProgramadas/index', [
+            'tareas'=> $tareas,
+            'semanas'=> $semana->getSemana(),
+            'agenda' => 0
+        ]);
     }
 
     public function archivadas()
     {
-        $tareas = TareaRepository::getTareasArchivados();
-        $semanas = array_pop($tareas);
+        $semana = new SemanaTarea();
+//        $tareas = Tarea::getTareasArchivados($semana);
 
-        Caches::guardar('botones', 1);
+        // utilizamos esta variable para boton de volver de show
+        Caches::guardar('tipoAgenda', 1);
 
-
-        return view('tareas/tareaProgramadas/archivadas', ['tareas'=> $tareas, 'semanas' => $semanas]);
+        return view('tareas/tareaProgramadas/archivadas', [
+            'semanas' => $semana->getSemana(),
+            'estados'=> Tarea::getEstados(),
+            'localizaciones'=>  Localizacion::getLocalizaciones(),
+            'agenda' => 1
+        ]);
     }
 
     public function agendadas()
     {
-        $tareas = TareaRepository::getTareasAgendadas();
-        $semanas = array_pop($tareas);
+        $semana = new SemanaTarea();
+        $tareas = Tarea::getTareasAgendadas($semana->getSemanaSigte());
+        // utilizamos esta variable para boton de volver de show
+        Caches::guardar('tipoAgenda', 2);
 
-        return view('tareas/tareaProgramadas/agendadas', ['tareas'=> $tareas, 'semanas' => $semanas, 'agenda' => 1]);
+        return view('tareas/tareaProgramadas/agendadas', [
+            'tareas'=> $tareas,
+            'semanas' => $semana->getSemana(),
+            'agenda' => 2
+        ]);
     }
 
     public function show($id)
     {
         $tareas = Tarea::getTarea($id);
-
-//        dd($tareas, $id);
 
         return view('tareas/tareaProgramadas/show', ['tarea'=>$tareas]);
     }
@@ -74,33 +91,90 @@ class TareaProgramadaController extends Controller
         return view('tareas/tareaProgramadas/eliminados');
     }
 
-    public function create()
-    {
-		// obtenemos la semana de tarea
-		$semanas = Tarea::obtenerSemanaDelAnio(0);
-
-		// guardamos en cache las fechas de la semana
-		// las semanas dentran mes, semana, fechaInicio, fechaFin
-		Caches::guardar('semanas', $semanas);
-        // guardamos la cache de tipo de semana
-        Caches::guardar('proxSemana', 0);
-
-        return view('tareas.tareaProgramadas.create');
-    }
-
     public function store(TareaProgramasFormRequest $request)
     {
-        $result = Tarea::guardar($request);
-        if ($result['success']) {
-            return redirect()->back()
-                ->with('message', $result['message'])
-                ;
+        $resultado = Tarea::validarTarea($request);
+
+        if($resultado['success'])
+        {
+            $result = Tarea::guardar($request);
+
+            if ($result['success']) {
+                return redirect()->back()
+                    ->with('message', $result['message']);
+
+            } else {
+                return redirect()->to($this->getRedirectUrl())
+                    ->withErrors($result['message'])
+                    ->withInput();
+            }
+        }else{
+            return $resultado;
+        }
+    }
+
+    public function resolver($id)
+    {
+        $tareaProgramadas = Tarea::findTarea($id);
+
+        $ubicacionesDis = Tarea::ubicacionesTodos($id);
+
+        $semanas = new SemanaTarea();
+
+        return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas,'ubicaciones'=> $ubicacionesDis, 'agendar'=> 0, 'semanas' => $semanas->getSemana()]);
+    }
+
+    public function storeResolver(TareaProgramasResolverRequest $request, $id)
+    {
+        $resultado = Tarea::validarTarea($request);
+
+
+        if ($resultado['success']) {
+
+            $result = Tarea::resolver($request, $id);
+
+            if ($result['success']) {
+                return redirect('tareas/tareaProgramadas')
+                    ->with('message', $result['message']);
+
+            } else {
+                return redirect()->to($this->getRedirectUrl())
+                    ->withErrors($result['message'])
+                    ->withInput()
+                    ;
+            }
 
         } else {
             return redirect()->to($this->getRedirectUrl())
-                ->withErrors($result['message'])
+                ->withErrors($resultado['message'])
                 ->withInput()
                 ;
+        }
+    }
+
+    public function update(TareaProgramasFormRequest $request, $id)
+    {
+        $resultado = Tarea::validarTarea($request);
+
+        if($resultado['success'])
+        {
+            $result = Tarea::actualizar($request, $id);
+            if ($result['success']) {
+                $url = \Calcana::getHrefIndex();
+
+                return redirect($url)
+                    ->with('message', $result['message']);
+
+            } else {
+                return redirect()->to($this->getRedirectUrl())
+                    ->withErrors($result['message'])
+                    ->withInput()
+                    ;
+            }
+        }else{
+            return redirect()->to($this->getRedirectUrl())
+                ->withErrors($resultado['message'])
+                ->withInput();
         }
     }
 
@@ -111,7 +185,6 @@ class TareaProgramadaController extends Controller
             return redirect()->back()
                 ->with('message', $result['message'])
                 ;
-
         } else {
             return redirect()->to($this->getRedirectUrl())
                 ->withErrors($result['message'])
@@ -134,7 +207,6 @@ class TareaProgramadaController extends Controller
     public function createnext()
     {
         Caches::guardar('proxSemana', 1);
-
         $semanas = TareaRepository::getSemanasTareas(date(date('Y-m-d', strtotime('now +7 day'))));
 
         return view('tareas.tareaProgramadas.create_next', ['semanas'=> $semanas]);
@@ -142,63 +214,11 @@ class TareaProgramadaController extends Controller
     
     public function edit($id)
     {
+        $semanas = new SemanaTarea();
         $tarea = Tarea::findTarea($id);
-        $semanas = array_pop($tarea);
-//        dd($semanas);
         $estados = TareaRepository::getEstadosEditar();
 
-        return view('tareas.tareaProgramadas.edit', ['tarea'=> $tarea[0], 'semanas'=>$semanas, 'agendar'=> 0, 'estados'=>$estados]);
-        /*
-        return [
-            'tarea' => $tarea,
-            'estados' => $estados
-        ];*/
-    }
-
-    public function update(TareaProgramasFormRequest $request, $id)
-    {
-//        dd($request);
-        $result = Tarea::actualizar($request, $id);
-        if ($result['success']) {
-            return redirect('tareas/tareaProgramadas')
-                ->with('message', $result['message']);
-
-        } else {
-            return redirect()->to($this->getRedirectUrl())
-                ->withErrors($result['message'])
-                ->withInput()
-                ;
-        }
-    }
-
-
-
-    public function resolver($id)
-    {
-        $tareaProgramadas = Tarea::findTarea($id);
-
-        $ubicacionesDis = Tarea::ubicacionesTodos($id);
-
-        $semanas = array_pop($tareaProgramadas);
-
-//        dd($tareaProgramadas);
-
-        return view('tareas/tareaProgramadas/resolver', ['tarea'=>$tareaProgramadas[0],'ubicaciones'=> $ubicacionesDis, 'agendar'=> 0, 'semanas' => $semanas]);
-    }
-
-    public function storeResolver(TareaProgramasResolverRequest $request, $id)
-    {
-        $result = Tarea::resolver($request, $id);
-        if ($result['success']) {
-            return redirect('tareas/tareaProgramadas')
-                ->with('message', $result['message']);
-
-        } else {
-            return redirect()->to($this->getRedirectUrl())
-                ->withErrors($result['message'])
-                ->withInput()
-                ;
-        }
+        return view('tareas.tareaProgramadas.edit', ['tarea'=> $tarea, 'semanas'=>$semanas->getSemana(), 'agendar'=> 0, 'estados'=>$estados]);
     }
 
     public function destroy($id)
@@ -234,21 +254,67 @@ class TareaProgramadaController extends Controller
     }
 
 
-    public function getSemanaAnio(Request $request)
+    /**
+     * Devuelve los datos de la semana actual del Año
+     * Solemente ocupar la actualizar el cache del a semana de registro de la Tarea
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getSemanaAnioFecha(Request $request)
     {
-        $tarea = Tarea::obtenerSemanaDelAnio($request->agenda);
+        $semana = new SemanaTarea();
+        $result = $semana->buscarSemana($request->fecha);
+
+        // Cacheamos la semana habilitada para registrar tareas
+        Caches::guardar('inicioSemana', \Calcana::cambiarFormatoDB($result->fechaInicio));
+        Caches::guardar('finSemana', \Calcana::cambiarFormatoDB($result->fechaFin));
 
         return [
-            'tarea' => $tarea
+            'tarea' => $result
         ];
     }
 
-    public function getSemanaAnioFecha(Request $request)
+    public function buscarArchivadas(Request $request)
     {
-        $tarea = Tarea::obtenerSemanaDelAnioFecha($request->fecha);
 
-        return [
-            'tarea' => $tarea
-        ];
+        $semana = new SemanaTarea();
+        $resultado = Tarea::validarVacio($request);
+
+        if(!$resultado['success']){
+            $tareas= Tarea::filtrarTareas($request);
+        }else{
+            $tareas = Tarea::getTareasArchivados($semana);
+        }
+
+        if($tareas['success']){
+            \Cache::forget('tareasSupervisadas');
+            \Cache::forever('tareasSupervisadas', $tareas['tareas']);
+        }
+
+        return redirect()->to($this->getRedirectUrl())
+            ->withInput();
+    }
+
+    public function tareaSemanaJson()
+    {
+        $semana = new SemanaTarea();
+        return Tarea::getTareaDeLaSemanaJson($semana);
+    }
+
+    public function tareaArchivadasJson()
+    {
+        $semana = new SemanaTarea();
+//        return Tarea::getTareasArchivadosJson($semana);
+        $tarea = \Cache::get('tareasSupervisadas');
+        return response()->json($tarea);
+    }
+
+    public function getAgendadasJson()
+    {
+        $semana = new SemanaTarea();
+        $semanas = $semana->getSemanaSigte();
+
+        return Tarea::getTareasAgendadasJson($semanas);
     }
 }

@@ -7,9 +7,9 @@
     <div class="modal-delete-content modal-content ">
       <div class="modal-header modal-delete-header" >
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        Eliminar Tarea
+        <b>@lang('labels.panels.pnsEliminar')</b>
       </div>
-      <div class="modal-body modal-delete-body">
+      <div class="modal-body modal-delete-body" style="padding: 0px;">
            {!!Form::open(['action'=>['Tareas\TareaProgramadaController@destroy', $tarea->id], 'method'=>'DELETE'])!!}
             <div class="modal-body">
               <p>¿Estas seguro que deseas eliminar a <b>{{$tarea->descripcion}}?</b></p>
@@ -17,7 +17,7 @@
             </div>
             <div class="modal-footer modal-delete-footer">
               <a  data-dismiss="modal" class="btn btn-danger" ><span class="fa fa-times"></span> Cancelar</a>
-            <button type="submit" name="guardar" @click="mostrarModalLoading()" class="btn btn-success"><span class="fa fa-check"></span> Guardar</button>
+            <button type="submit" name="guardar" @click="mostrarModalLoading()" class="btn btn-success"><span class="fa fa-check"></span> @lang('labels.buttons.btnAceptar')</button>
 
 
             </div>

@@ -40,14 +40,16 @@ class TareaProgramasFormRequest extends Request
             $fechaFin = 'required';
             $estado = 'required';
         }else{
-            $fechaInicio = '';
-            $fechaFin = '';
+            $fechaInicio = 'required';
+            $fechaFin = 'required';
             $estado = '';
         }
 
         return [
                 'descripcion'=>'required|min:5|max:120',
                 'estado'=> $estado,
+                'fechaInicio'=> $fechaInicio,
+                'fechaFin'=> $fechaFin,
                 'hora'=> 'required',
                 'minuto'=> 'required',
                 'observaciones'=>'max:120',
@@ -58,10 +60,13 @@ class TareaProgramasFormRequest extends Request
     {
         return [
             'descripcion.required' => 'La descripcion es requerida!',
+            'fechaInicio.required' => 'La descripcion es requerida!',
+            'fechaFin.required' => 'La descripcion es requerida!',
             'descripcion.min' => 'Este campo no puede tener menos de 5 carácteres',
             'descripcion.max' => 'Este campo no puede tener más de 120 carácteres',
             'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El Minuto es requerido',
+            'estado.required' => 'El estado es requerido',
             'observaciones.max' => 'Este campo no puede tener mas de 120 carácteres',
         ];
     }

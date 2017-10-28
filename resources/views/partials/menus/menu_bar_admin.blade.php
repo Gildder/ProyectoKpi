@@ -104,6 +104,8 @@
             <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i>Indicador</a></li>
           <li><a href="{{url('evaluadores/ponderacion')}}"><i class="fa fa-circle-o"></i>Ponderacion</a></li>
             <li><a href="{{url('evaluadores/escala')}}"><i class="fa fa-circle-o"></i>Escalas</a></li>
+            <li><a href="{{url('estados/tareas')}}">
+                <i class="fa fa-circle-o"></i>Estados</a></li>
           </ul>
         </li>
          <li class="treeview">

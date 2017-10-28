@@ -29,9 +29,7 @@
         },
         computed: {
             cambioFecha: function () {
-                   console.log('fuera');
                    if(this.valor !== ''){
-                       console.log('dentro');
                        this.cambioFechaTarea();
                        this.cargarDate();
                    }
@@ -126,20 +124,16 @@
                         data: { fecha: this.valor },
                         dataType: 'json',
                         success: function (data) {
-                            console.log(data.semanas);
                             this.fechafin = data.semanas.fechaFin;
                             this.fechainicio = data.semanas.fechaInicio;
                         }.bind(this), error: function (data) {
-                            console.log('Error: No se obtuvo las cantidad de semanas');
+//                            console.log('Error: No se obtuvo las cantidad de semanas');
 
                         }.bind(this)
                     })
                 }
             },
             cargarDate: function() {
-
-                console.log(this.fechafin);
-                console.log("#inputdate-"+ this.nombre);
 
                 $("#inputdate-"+ this.nombre).datepicker({
                     format: 'dd/mm/yyyy',

@@ -9,8 +9,9 @@
 
 <script>
     $(document).ready(function () {
-        sessionStorage.removeItem('agendas');
-        sessionStorage.setItem('agendas', 1);
+        sessionStorage.setItem('tipoListado', {{ $agenda }});
+        sessionStorage.setItem('inicioSemanaFija', '{!! $semanas->fechaInicio !!}');
+        sessionStorage.setItem('finSemanaFija', '{!! $semanas->fechaFin !!}');
     });
 </script>
 
@@ -41,13 +42,12 @@
 
       @include('partials/alert/error')
 
-      <tabla-tarea :tareas="{{ json_encode($tareas) }}"></tabla-tarea>
+      <tabla-tarea url="/tareas/tareaProgramadas/getAgendadasJson" ></tabla-tarea>
 
   </div>
   <div class="panel-footer">
   </div>
 </div>
-
 
 @endsection
 

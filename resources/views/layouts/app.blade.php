@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{URL::asset('dist/css/AdminLTE.css')}}">
 
     <!-- My style -->
-    <link rel="stylesheet" href="{{URL::asset('dist/css/estilo.css')}}">
+    <link rel="stylesheet" href="{{URL::asset('dist/css/app.css')}}">
 
     <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{URL::asset('dist/css/skins/_all-skins.min.css')}}">
@@ -66,7 +66,8 @@
 
     {{-- JS de gulp de resource->asseet->js --}}
     <script src="{{URL::asset('dist/js/app-vue.js')}}"></script>
-
+    <script src="{{URL::asset('dist/js/app-main.js')}}"></script>
+    
 </head>
 <body class="hold-transition skin-yellow sidebar-mini"  >
 

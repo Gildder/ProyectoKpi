@@ -18,6 +18,7 @@ require('laravel-elixir-livereload');
 elixir(function(mix) {
     mix.browserify('app-vue.js', 'public/dist/js/app-vue.js');
     mix.livereload();
+    mix.sass('app.scss', 'public/dist/css');
     // mix.babel("app-vue.js", {
     //     srcDir: "resources/assets/js",
     //     output: "public/dist/js/app-babel.js",

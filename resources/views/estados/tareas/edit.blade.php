@@ -21,22 +21,21 @@
 
       {!!Form::model($estado, ['route'=>['estados.tareas.update', $estado->id], 'method'=>'PUT'])!!}
         {!! Form::hidden('id', $estado->id) !!}
+      @include('partials/alert/error')
 
-      @if($estado->isEdit == 1)
-      <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-3">
+      <div class="form-group @if ($errors->has('nombre')) has-error @endif col-sm-3" >
           <label for="nombre" >Nombre *:</label>
           {!! form::text('nombre',null, ['id'=>'nombre', 'class'=>'form-control', 'placeholder'=>'Ingresa el Nombre']) !!}
           @if ($errors->has('nombre')) <p class="help-block">{{ $errors->first('nombre') }}</p> @endif
       </div>
 
-      <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12" >
           <div class="form-group @if ($errors->has('descripcion')) has-error @endif  col-sm-6">
               <label for="descripcion" >@lang('labels.labels.lbsDescripcion')</label>
               {!! form::textArea('descripcion',null, ['id'=>'descripcion', 'class'=>'form-control', 'placeholder'=>'Ingrese la Descripcion', 'size' => '30x5']) !!}
               @if ($errors->has('descripcion')) <p class="help-block">{{ $errors->first('descripcion') }}</p> @endif
           </div>
       </div>
-@endif
 
       {{-- Color --}}
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

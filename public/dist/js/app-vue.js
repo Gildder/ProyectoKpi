@@ -12443,7 +12443,10 @@ $(document).ready(function () {
             tareaBuscar: {},
             id_usuario_buscar: 12,
             /******************* Busqueda de Usuarios ***************************/
-            btnFiltroTareaSupervisor: true
+            btnFiltroTareaSupervisor: true,
+
+            /***Edita tareas agenda **/
+            tipolistatarea: sessionStorage.getItem('tipoListado')
         },
 
         ready: function ready() {
@@ -12459,6 +12462,19 @@ $(document).ready(function () {
         },
         /***************************************** COMPUTED ***********************************************************/
         computed: {
+            validarCheckFechasEstimadas: function validarCheckFechasEstimadas() {
+                if (this.utilizarfechasestimadas) {
+                    if ($('input[name=hora]') === '') {
+                        $('input[name=hora]').val(0);
+                    }
+
+                    if ($('input[name=minuto]') === '') {
+                        $('input[name=minuto]').val(0);
+                    }
+
+                    console.log('gol');
+                }
+            },
             listaVacia: function listaVacia() {
                 if (this.listaTareaComunes.length == 0) {
                     return true;
@@ -12520,9 +12536,8 @@ $(document).ready(function () {
             obtenerSemanaActual: function obtenerSemanaActual() {
                 var tipo = sessionStorage.getItem('agendas');
 
-                console.log(tipo);
                 $.ajax({
-                    url: '/tareas/tareaProgramadas/getSemanaAnio',
+                    url: '/tareas/tareaProgramadas/getSemanaAnioFecha',
                     methos: 'GET',
                     data: { agenda: tipo },
                     dataType: 'json',
@@ -12662,8 +12677,10 @@ $(document).ready(function () {
                 this.tareaNueva.minuto = 0;
                 this.tareaNueva.agenda = sessionStorage.getItem('agendas');
             },
+
             guardarTareaNueva: function guardarTareaNueva($event) {
                 $event.preventDefault();
+
                 utils.mostrarCargando(true);
 
                 var token = $('input[name=_token]').val();
@@ -12671,8 +12688,8 @@ $(document).ready(function () {
                 path = path.split("/");
 
                 // actualizar el tipo de agenda
-                var ag = sessionStorage.getItem('agendas');
-                if (ag !== undefined) {
+                var agenda = sessionStorage.getItem('agendas');
+                if (agenda !== undefined) {
                     this.tareaNueva.agenda = sessionStorage.getItem('agendas');
                 }
 
@@ -12687,7 +12704,6 @@ $(document).ready(function () {
                             if (path[path.length - 1] === 'index' && path[path.length - 2] === 'empleado') {
                                 $('#calendarTareaUsuario').fullCalendar('refetchEventSources', { url: 'cargarTareas' });
                             } else {
-                                console.log('si actualizo pagina ');
                                 this.$broadcast('actuliza-tareas', data.tareas);
                             }
 
@@ -12699,13 +12715,13 @@ $(document).ready(function () {
                             Notificion.error(data.message, 10000);
                         }
                         utils.mostrarCargando(false);
-                    }.bind(this), error: function (data) {
+                    }.bind(this),
+                    error: function (data) {
                         utils.mostrarCargando(false);
                         $('#modal-nueva-tarea').modal('show');
 
                         var errors = data.responseJSON;
                         $.each(errors, function (key, value) {
-                            console.log(data.value);
                             Notificion.error(value, 10000);
                         });
                     }.bind(this)
@@ -12832,7 +12848,6 @@ $(document).ready(function () {
                         $('#verDetalleTarea').attr('action', '');
                         $('#verDetalleTarea').attr('action', pathname);
 
-                        console.log(data.can_change);
                         /// verificamos si puede eliminar
                         if (data.can_delete === 0) {
                             $('#borrarCalendar').css('display', 'none');
@@ -12882,8 +12897,6 @@ $(document).ready(function () {
                     data: { titulo: this.tituloNuevoTareaComun, color: color },
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data.tareas);
-
                         Notificion.success('Se guardo correctamente', 10000);
 
                         this.listaTareaComunes = data.tareas;
@@ -13004,9 +13017,7 @@ exports.default = {
     },
     computed: {
         cambioFecha: function cambioFecha() {
-            console.log('fuera');
             if (this.valor !== '') {
-                console.log('dentro');
                 this.cambioFechaTarea();
                 this.cargarDate();
             }
@@ -13098,19 +13109,16 @@ exports.default = {
                     data: { fecha: this.valor },
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data.semanas);
                         this.fechafin = data.semanas.fechaFin;
                         this.fechainicio = data.semanas.fechaInicio;
                     }.bind(this), error: function (data) {
-                        console.log('Error: No se obtuvo las cantidad de semanas');
+                        //                            console.log('Error: No se obtuvo las cantidad de semanas');
+
                     }.bind(this)
                 });
             }
         },
         cargarDate: function cargarDate() {
-
-            console.log(this.fechafin);
-            console.log("#inputdate-" + this.nombre);
 
             $("#inputdate-" + this.nombre).datepicker({
                 format: 'dd/mm/yyyy',
@@ -13137,9 +13145,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-44b20e0d", module.exports)
+    hotAPI.createRecord("_v-26d64d38", module.exports)
   } else {
-    hotAPI.update("_v-44b20e0d", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-26d64d38", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
@@ -13172,9 +13180,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-edaa4232", module.exports)
+    hotAPI.createRecord("_v-62bc5fbe", module.exports)
   } else {
-    hotAPI.update("_v-edaa4232", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-62bc5fbe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
@@ -13190,9 +13198,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-49173809", module.exports)
+    hotAPI.createRecord("_v-c4e450dc", module.exports)
   } else {
-    hotAPI.update("_v-49173809", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-c4e450dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],11:[function(require,module,exports){
@@ -13224,9 +13232,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-3d8e1884", module.exports)
+    hotAPI.createRecord("_v-ebda8356", module.exports)
   } else {
-    hotAPI.update("_v-3d8e1884", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-ebda8356", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
@@ -13440,9 +13448,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-861f15f8", module.exports)
+    hotAPI.createRecord("_v-65ca3f9b", module.exports)
   } else {
-    hotAPI.update("_v-861f15f8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-65ca3f9b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
@@ -13464,9 +13472,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-1ede766c", module.exports)
+    hotAPI.createRecord("_v-492f5ed3", module.exports)
   } else {
-    hotAPI.update("_v-1ede766c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-492f5ed3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
@@ -13621,9 +13629,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-225c5bef", module.exports)
+    hotAPI.createRecord("_v-08244674", module.exports)
   } else {
-    hotAPI.update("_v-225c5bef", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-08244674", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
@@ -13681,9 +13689,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-63489333", module.exports)
+    hotAPI.createRecord("_v-54afc908", module.exports)
   } else {
-    hotAPI.update("_v-63489333", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-54afc908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],16:[function(require,module,exports){
@@ -13739,9 +13747,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-07ad4926", module.exports)
+    hotAPI.createRecord("_v-a0dfd706", module.exports)
   } else {
-    hotAPI.update("_v-07ad4926", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a0dfd706", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],17:[function(require,module,exports){
@@ -13755,12 +13763,13 @@ Object.defineProperty(exports, "__esModule", {
 
 
 var utils = require('../../../helper/utils.js');
+var table;
 
 exports.default = {
     props: {
-        tareas: {
-            type: Array,
-            default: []
+        url: {
+            type: String,
+            default: ''
         }
     },
     data: function data() {
@@ -13771,6 +13780,8 @@ exports.default = {
     events: {
         'actuliza-tareas': function actulizaTareas(tareas) {
             this.tareas = tareas;
+
+            cargarTabla();
         }
     },
     computed: {
@@ -13783,7 +13794,8 @@ exports.default = {
         }
     },
     ready: function ready() {
-        cargarTabla();
+        console.log(this.url);
+        cargarTabla(this.url);
     },
     methods: {
         mostrarFiltro: function mostrarFiltro($event) {
@@ -13793,6 +13805,8 @@ exports.default = {
                 this.textoFiltro = 'Ocultar';
             } else {
                 this.textoFiltro = 'Mostrar';
+
+                table.search('').columns().search('').draw();
             }
         },
         verDetalle: function verDetalle($event, id) {
@@ -13800,30 +13814,66 @@ exports.default = {
 
             //                window.location.assign('/tareas/tareaProgramadas/'+ id+'/edit');
             $.get('/tareas/tareaProgramadas/' + id);
+        },
+        limpiarFiltro: function limpiarFiltro($event) {
+            $event.preventDefault();
+
+            table.search('').columns().search('').draw();
+
+            $('#tablaTareasNormal tfoot input').val('');
         }
+
     }
 
     // funcion para cargar la tabla
 };
-function cargarTabla() {
+function cargarTabla(urlString) {
 
-    var table = $('#tablaTareasNormal').DataTable({
+    table = $('#tablaTareasNormal').DataTable({
         dom: 'Blfrtip',
         // guarmos los filtro de la tabla
-        stateSave: true
+        stateSave: true,
+        destroy: true,
+        searching: true,
+
+        ajax: {
+            url: urlString,
+            dataSrc: ''
+        },
+
+        columns: [{
+            sortable: false,
+            render: function render(data, type, full, meta) {
+                var numero = full.numero;
+                var id = full.id;
+                return '<a href="/tareas/tareaProgramadas/' + id + '" data-num="5" class="btn btn-warning btn-xs" title="Ver"><span id="nro" >' + numero + '</span>';
+            }
+        }, { data: 'descripcion' }, { data: 'fechaInicio' }, { data: 'fechaFin' }, { data: 'tiempo' }, {
+            sortable: false,
+            render: function render(data, type, full, meta) {
+                console.log(full);
+                var estado = full.estado;
+                var colorEstado = full.colorEstado;
+                var textoEstado = full.textoColor;
+                return '<label style="background-color: ' + colorEstado + '; color:' + textoEstado + ';" class="estiloEstado" >' + estado + '</label>';
+            }
+        }, { data: 'observaciones' }, { data: 'updated_at' }]
     });
+
+    table.search('').columns().search('').draw();
 
     //        $.fn.dataTable.ext.errMode = 'throw';
 
     $('#tablaTareasNormal tbody').on('dblclick', 'tr', function () {
         var data = table.row(this).data();
-        //            alert( 'You clicked on '+data[0] );
+        window.location.href = "/tareas/tareaProgramadas/" + data.id;
+        mostraModaLading();
     });
 
     // agregamos texto al input de busqueda
     $('#tablaTareasNormal tfoot th').each(function () {
         var title = $(this).text();
-        $(this).html('<input type="text" placeholder="busq. ' + title + '" />');
+        $(this).html('<input type="text" placeholder="' + title + '" />');
     });
 
     // Aplicamos la Busquedas
@@ -13857,7 +13907,7 @@ function mostraModaLading() {
     }
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"#\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizacion</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th style=\"display: none\">Id</th>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th></th>\n    </tr>\n    </tfoot>\n\n\n    <tbody>\n\n    <tr v-for=\"tarea in tareas\">\n        <td style=\"display: none\" id=\"idtarea\">{{ tarea.id }}</td>\n        <td>\n            <a href=\"/tareas/tareaProgramadas/{{ tarea.id }}\" id=\"lnkShow\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\">\n                <span id=\"nro\">{{ tarea.numero }}</span>\n            </a>\n        </td>\n        <td>{{ tarea.descripcion }}</td>\n        <td> {{ tarea.fechaInicio }} </td>\n        <td>{{ tarea.fechaFin }}</td>\n        <td>{{ tarea.tiempo }}</td>\n        <td> <label :style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\" class=\"estado\">\n            {{ tarea.estado }}\n            </label>\n        </td>\n        <td>{{ tarea.observaciones }}</td>\n        <td>{{ tarea.updated_at }}</td>\n    </tr>\n\n\n    </tbody>\n\n</table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"#\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n\n    <a href=\"#\" id=\"btnLimpiar\" @click=\"limpiarFiltro($event)\" :style=\"{'display':  cmpFiltroHide?'none':'inline-block'}\" class=\"btn btn-info btn-sm\">\n        Limpiar  <i class=\"fa fa-paint-brush\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion (hrs:min)</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizado</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizado</th>\n    </tr>\n    </tfoot>\n\n\n    <!--<tbody>-->\n\n    <!--<tr v-for=\"tarea in tareas\">-->\n        <!--<td style=\"display: none\" id=\"idtarea\">{{ tarea.id }}</td>-->\n        <!--<td>-->\n            <!--<a href=\"/tareas/tareaProgramadas/{{ tarea.id }}\" id=\"lnkShow\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\">\n                <!--<span id=\"nro\" >{{ tarea.numero }}</span>-->\n            <!--</a>-->\n        <!--</td>-->\n        <!--<td>{{ tarea.descripcion }}</td>-->\n        <!--<td> {{ tarea.fechaInicio }} </td>-->\n        <!--<td>{{ tarea.fechaFin }}</td>-->\n        <!--<td>{{ tarea.tiempo }}</td>-->\n        <!--<td>-->\n            <!--<label-->\n                <!--:style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\"-->\n                <!--class=\"estado\">-->\n            <!--{{ tarea.estado }}-->\n            <!--</label>-->\n        <!--</td>-->\n        <!--<td>{{ tarea.observaciones }}</td>-->\n        <!--<td>{{ tarea.updated_at }}</td>-->\n    <!--</tr>-->\n\n\n    <!--</tbody>-->\n\n</table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -13867,9 +13917,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-d3a81ede", module.exports)
+    hotAPI.createRecord("_v-a3098f30", module.exports)
   } else {
-    hotAPI.update("_v-d3a81ede", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-a3098f30", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
@@ -14357,9 +14407,9 @@ if (module.hot) {(function () {  module.hot.accept()
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-a3e16d5a", module.exports)
+    hotAPI.createRecord("_v-7342ddac", module.exports)
   } else {
-    hotAPI.update("_v-a3e16d5a", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-7342ddac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],19:[function(require,module,exports){
@@ -14445,9 +14495,9 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   if (!module.hot.data) {
-    hotAPI.createRecord("_v-457c9f7c", module.exports)
+    hotAPI.createRecord("_v-f5b708ce", module.exports)
   } else {
-    hotAPI.update("_v-457c9f7c", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+    hotAPI.update("_v-f5b708ce", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
 },{"vue":5,"vue-hot-reload-api":3}],20:[function(require,module,exports){

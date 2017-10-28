@@ -48,15 +48,43 @@ class Conexion_LDAP
         $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
         if ($ldapbind){
             $filter="(|(SAMAccountName=".trim($user)."))";
-            $fields = array("SAMAccountName", "cn", "userPassword");
+            $fields = array("SAMAccountName", "cn","mail","ou", "userPassword");
             $sr = @ldap_search($ldapconn, $dn, $filter, $fields);
             $info = @ldap_get_entries($ldapconn, $sr);
-            $array = $info[0]["cn"][0];
+//            $array = $info[0]["cn"][0];
+            $array = $info;
         }else{
             $array=0;
         }
         ldap_close($ldapconn);
         return $array;
     }
+
+    function login_ldapas($user, $pass){
+        $ldaprdn = trim($user).'@'.$this->DOMINIO;
+        $ldappass = trim($pass);
+        $ds = $this->DOMINIO;
+        $dn = $this->DN;
+        $puertoldap = 389;
+        $ldapconn = ldap_connect($ds,$puertoldap);
+        ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION,3);
+        ldap_set_option($ldapconn, LDAP_OPT_REFERRALS,0);
+        $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
+        if ($ldapbind){
+            $filter="(|(SAMAccountName=*))";
+            $fields = array("SAMAccountName", "cn","mail","ou", "userPassword");
+            $sr = @ldap_search($ldapconn, $dn, $filter, $fields);
+//            $sr = @ldap_read($ldapconn, $dn, null,$fields);
+            $info = @ldap_get_entries($ldapconn, $sr);
+//            $array = $info[0]["cn"][0];
+            $array = $info;
+        }else{
+            $array=0;
+        }
+        ldap_close($ldapconn);
+        return $array;
+    }
+
+
 
 }

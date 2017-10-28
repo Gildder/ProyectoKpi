@@ -34,15 +34,25 @@ class EstadoTareaFormRequest extends Request
         {
             // Update operation, exclude the record with id from the validation:
             $nombre = 'required|min:5|max:20|unique:estado_tareas,nombre,'. $this->get('id');
+            $descripcion = 'required|max:120';
+            if($this->get('id') == 1  || $this->get('id') == 3){
+                $nombre = '';
+                $descripcion = '';
+            }
         }
         else
         {
             // Create operation. There is no id yet.
             $nombre = 'required|min:5|max:20|unique:estado_tareas,nombre';
+            $descripcion = 'required|max:120';
         }
         return [
             'nombre'=>$nombre,
-            'descripcion' => 'required|max:120',
+            'descripcion' => $descripcion,
+            'color' => 'required',
+            'texto' => 'required',
+            'visibleCalendario' => 'required',
+            'visibleEmpleado' => 'required',
         ];
     }
 
@@ -55,6 +65,10 @@ class EstadoTareaFormRequest extends Request
             'nombre.unique' => 'El nombre ya existe',
             'descripcion.required' => 'La descripcion es requerido!',
             'descripcion.max' => 'La descripcion no puede tener más de 120 carácteres',
+            'color.required' => 'El campo es requerido!',
+            'texto.required' => 'El campo es requerido!',
+            'visibleCalendario.required' => 'El campo es requerido!',
+            'visibleEmpleado.required' => 'El campo es requerido!',
         ];
     }
 }

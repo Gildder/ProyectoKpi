@@ -1,144 +1,127 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-
 * {
-  padding: 0px;
-}
+  padding: 0px; }
 
 body {
   padding: 0px;
-  padding-right: 0 !important;
-}
+  padding-right: 0 !important; }
+
 body a {
-  color: #1c2529;
-}
+  color: #1c2529; }
+
 .estiloEstado {
   font-size: 10px;
   padding: 1.5px 5px;
   border-radius: 10px;
   box-shadow: 1px 1px gray;
-  text-align: center;
-}
+  text-align: center; }
 
 .busquedasTareas {
   border: 0px solid gray;
   border-radius: 10px;
   padding: 10px;
-  -moz-box-shadow: 0 0 2px #888;
-  -webkit-box-shadow: 0 0 2px#888;
-  box-shadow: 0 0 2px #888;
-}
+  box-shadow: 0 0 2px #888; }
 
 .margenFecha {
-  margin: 10px 5px 15px 0px;
-}
+  margin: 10px 5px 15px 0px; }
 
 .margenDescripcion {
-  margin-bottom: 15px;
-}
+  margin-bottom: 15px; }
 
 .fechaTareas {
   font-size: 14px;
   color: #b22222;
   padding: 0.2em;
   background: #fafad2;
-  font-family: "verdana", "sans-serif";
-}
+  font-family: "verdana", "sans-serif"; }
+
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-  padding: 0;
-}
+  padding: 0; }
+
 #notificacion {
   z-index: 99999;
   position: fixed;
   top: 54px;
   left: 50%;
   width: 500px;
-  margin-left: -250px;
-}
+  margin-left: -250px; }
+
 /* Elemento Notificacion */
 #notificacion div {
   position: relative;
   margin: 5px 0px;
-  opacity: 0.9;
-}
+  opacity: 0.9; }
+
 .notificacion {
   z-index: 99999;
   position: fixed;
   top: 54px;
   left: 50%;
   width: 500px;
-  margin-left: -250px;
-}
+  margin-left: -250px; }
+
 .barraEvaluador {
   margin-top: 5px;
-  border-bottom: 1px solid #a9a9a9;
-}
+  border-bottom: 1px solid #a9a9a9; }
+
 .headerTable {
   background: #4f81bd;
-  color: #fff;
-}
+  color: #fff; }
+
 .btn-back {
-  margin-right: 10px;
-}
+  margin-right: 10px; }
+
 .titulo-panel {
   margin: 0;
-  font-weight: bold;
-}
+  font-weight: bold; }
+
 .modal-delete-content {
-  border-radius: 10px;
-}
+  border-radius: 10px; }
+
 .modal-delete-header {
   border-radius: 10px 10px 0px 0px;
   background: #3c8dbc;
-  color: white;
-}
-.modal-delete-header>h4{
-  font-weight: bold;
-  color: white;
-}
+  color: white; }
 
+.modal-delete-header > h4 {
+  font-weight: bold;
+  color: white; }
 
 #nuevo {
   position: relative;
   display: inline-block;
   margin: 0;
-  rigth: 0px;
-}
+  rigth: 0px; }
 
 #tituloNuevo {
-  display: inline-block;
-}
+  display: inline-block; }
+
 #contenedor {
   background: #fff;
   border-radius: 10px 10px 10px 10px;
-  padding: 10px;
-}
+  padding: 10px; }
+
 #contenedor #formNuevo {
   background: #e8e8e8;
-  padding: 10px;
-}
+  padding: 10px; }
+
 #contenedor #formNuevo button {
-  margin: 5px;
-}
+  margin: 5px; }
+
 #contenedor #formNuevo input {
-  margin: 5px;
-}
+  margin: 5px; }
+
 @media (max-width: 768px) and (min-width: 540px) {
   section {
-    padding: 0;
-  }
+    padding: 0; }
   section .subtitulo {
-    display: inline-block;
-  }
+    display: inline-block; }
   section .input-group {
-    width: 70%;
-  }
-}
+    width: 70%; } }
+
 @media screen and (min-width: 768px) {
   section {
-    padding: 0;
-  }
+    padding: 0; }
   section .subtitulo {
-    display: inline-block;
-  }
-}
+    display: inline-block; } }
 
+/*# sourceMappingURL=app.css.map */

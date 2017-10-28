@@ -41,7 +41,7 @@ class EvaluadosController extends Controller
         $this->tablaMes = new nTablaMes();
 
         // Obtenemos el Id del Evaluador
-        $evaluados = EvaluadorRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Usuario::get('id'));
+        $evaluados = EvaluadorRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Auth::user()->id);
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
     }
 

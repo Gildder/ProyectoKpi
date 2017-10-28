@@ -16,9 +16,6 @@ class ConfiguracionController extends Controller
 
     public function cargarIndicadorEficaciaPorGerenciaEvaluadora($evaluador_id, $anio, $mes_inicio, $mes_fin)
     {
-        // importar semanas obtener semana
-
-
 
     }
 

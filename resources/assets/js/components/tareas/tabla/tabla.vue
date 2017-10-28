@@ -5,28 +5,33 @@
            @click="mostrarFiltro($event)">
             {{ textoFiltro }}  <i class="fa fa-filter"></i>
         </a>
+
+        <a href="#" id="btnLimpiar"
+           @click="limpiarFiltro($event)"
+           :style="{'display':  cmpFiltroHide?'none':'inline-block'}"
+           class="btn btn-info btn-sm">
+            Limpiar  <i class="fa fa-paint-brush"></i>
+        </a>
     </div>
-    <div class="table table-responsive">
+    <div class="table table-responsive" >
     <table id="tablaTareasNormal"
         class="table table-responsive table-striped table-bordered table-condensed table-hover display"
         cellspacing="0" width="100%">
         <thead>
         <tr>
-            <th style="display: none">Id</th>
             <th>Nro</th>
             <th>Descripcion</th>
             <th>Fecha Inicio </th>
             <th>Fecha Fin</th>
-            <th>Duracion</th>
+            <th>Duracion (hrs:min)</th>
             <th>Estado</th>
             <th>Observacion</th>
-            <th>Actualizacion</th>
+            <th>Actualizado</th>
         </tr>
         </thead>
 
         <tfoot :style="{'display':  cmpFiltroHide?'none':'table-header-group'}">
         <tr>
-            <th style="display: none">Id</th>
             <th>Nro</th>
             <th>Descripcion</th>
             <th>Fecha Inicio </th>
@@ -34,37 +39,37 @@
             <th>Duracion</th>
             <th>Estado</th>
             <th>Observacion</th>
-            <th></th>
+            <th>Actualizado</th>
         </tr>
         </tfoot>
 
 
-        <tbody>
+        <!--<tbody>-->
 
-        <tr v-for="tarea in tareas">
-            <td style="display: none" id="idtarea">{{ tarea.id }}</td>
-            <td>
-                <a href="/tareas/tareaProgramadas/{{ tarea.id }}" id="lnkShow" class="btn btn-warning btn-sm" title="click  Ver"
-                    >
-                    <span id="nro" >{{ tarea.numero }}</span>
-                </a>
-            </td>
-            <td>{{ tarea.descripcion }}</td>
-            <td> {{ tarea.fechaInicio }} </td>
-            <td>{{ tarea.fechaFin }}</td>
-            <td>{{ tarea.tiempo }}</td>
-            <td> <label
-                    :style="{ 'background': tarea.colorEstado, 'color':tarea.textoColor }"
-                    class="estado">
-                {{ tarea.estado }}
-                </label>
-            </td>
-            <td>{{ tarea.observaciones }}</td>
-            <td>{{ tarea.updated_at }}</td>
-        </tr>
+        <!--<tr v-for="tarea in tareas">-->
+            <!--<td style="display: none" id="idtarea">{{ tarea.id }}</td>-->
+            <!--<td>-->
+                <!--<a href="/tareas/tareaProgramadas/{{ tarea.id }}" id="lnkShow" class="btn btn-warning btn-sm" title="click  Ver">
+                    <!--<span id="nro" >{{ tarea.numero }}</span>-->
+                <!--</a>-->
+            <!--</td>-->
+            <!--<td>{{ tarea.descripcion }}</td>-->
+            <!--<td> {{ tarea.fechaInicio }} </td>-->
+            <!--<td>{{ tarea.fechaFin }}</td>-->
+            <!--<td>{{ tarea.tiempo }}</td>-->
+            <!--<td>-->
+                <!--<label-->
+                    <!--:style="{ 'background': tarea.colorEstado, 'color':tarea.textoColor }"-->
+                    <!--class="estado">-->
+                <!--{{ tarea.estado }}-->
+                <!--</label>-->
+            <!--</td>-->
+            <!--<td>{{ tarea.observaciones }}</td>-->
+            <!--<td>{{ tarea.updated_at }}</td>-->
+        <!--</tr>-->
 
 
-        </tbody>
+        <!--</tbody>-->
 
     </table>
     </div>
@@ -80,13 +85,13 @@
 </style>
 <script>
     var utils = require('../../../helper/utils.js');
-
+    var table;
 
     export default {
         props: {
-            tareas: {
-                type: Array,
-                default: []
+            url: {
+                type:String,
+                default: ''
             }
         },
         data: function(){
@@ -98,6 +103,8 @@
         {
             'actuliza-tareas': function (tareas) {
                 this.tareas = tareas;
+
+                cargarTabla();
 
             },
         },
@@ -111,7 +118,8 @@
             }
         },
         ready: function () {
-            cargarTabla();
+            console.log(this.url);
+            cargarTabla(this.url);
         },
         methods: {
             mostrarFiltro: function ($event) {
@@ -121,6 +129,10 @@
                     this.textoFiltro = 'Ocultar';
                 }else{
                     this.textoFiltro = 'Mostrar';
+
+                    table.search( '' )
+                        .columns().search( '' )
+                        .draw();
                 }
             },
             verDetalle: function ($event, id) {
@@ -130,39 +142,91 @@
 //                window.location.assign('/tareas/tareaProgramadas/'+ id+'/edit');
                 $.get('/tareas/tareaProgramadas/'+ id);
 
+            },
+            limpiarFiltro: function ($event) {
+                $event.preventDefault();
+
+                table.search( '' )
+                    .columns().search( '' )
+                    .draw();
+
+
+                $('#tablaTareasNormal tfoot input').val('');
             }
+
         }
 
     }
 
     // funcion para cargar la tabla
-    function cargarTabla() {
+    function cargarTabla(urlString) {
 
-        var table = $('#tablaTareasNormal').DataTable({
+         table = $('#tablaTareasNormal').DataTable({
             dom: 'Blfrtip',
             // guarmos los filtro de la tabla
             stateSave: true,
+            destroy: true,
+            searching: true,
+
+             ajax:  {
+                url: urlString,
+                 dataSrc: ''
+             },
+
+             columns: [
+                 {
+                     sortable: false,
+                     render: function ( data, type, full, meta ) {
+                         var numero = full.numero;
+                         var id = full.id;
+                         return '<a href="/tareas/tareaProgramadas/'+id+'" data-num="5" class="btn btn-warning btn-xs" title="Ver"><span id="nro" >'+numero+'</span>';
+                     }
+                 },
+                 { data: 'descripcion' },
+                 { data: 'fechaInicio' },
+                 { data: 'fechaFin' },
+                 { data: 'tiempo' },
+                 {
+                     sortable: false,
+                     render: function ( data, type, full, meta ) {
+                         console.log(full   );
+                         var estado = full.estado;
+                         var colorEstado = full.colorEstado;
+                         var textoEstado = full.textoColor;
+                         return '<label style="background-color: '+colorEstado+'; color:'+textoEstado+';" class="estiloEstado" >'+estado+'</label>';
+                     }
+                 },
+                 { data: 'observaciones' },
+                 { data: 'updated_at' },
+             ]
         });
 
+
+        table.search( '' )
+            .columns().search( '' )
+            .draw();
 
 //        $.fn.dataTable.ext.errMode = 'throw';
 
         $('#tablaTareasNormal tbody').on('dblclick', 'tr', function () {
             var data = table.row( this ).data();
-//            alert( 'You clicked on '+data[0] );
+            window.location.href = "/tareas/tareaProgramadas/"+data.id;
+            mostraModaLading();
         } );
+
 
         // agregamos texto al input de busqueda
         $('#tablaTareasNormal tfoot th').each( function () {
             var title = $(this).text();
-            $(this).html( '<input type="text" placeholder="busq. '+title+'" />' );
+            $(this).html( '<input type="text" placeholder="'+title+'" />' );
         } );
+
 
         // Aplicamos la Busquedas
         table.columns().every( function () {
             var that = this;
 
-            $( 'input', this.footer() ).on( 'keyup change', function () {
+            $('input', this.footer() ).on( 'keyup change', function () {
                 if ( that.search() !== this.value ) {
                     that
                         .search( this.value )
@@ -176,11 +240,7 @@
             .on( 'page.dt',   function () {
                 mostraModaLading();
         });
-
-
-
     };
-
 
     function mostraModaLading() {
         utils.mostrarCargando(true);

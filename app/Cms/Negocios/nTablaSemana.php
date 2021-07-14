@@ -10,7 +10,7 @@ namespace ProyectoKpi\Cms\Negocios;
 
 use ProyectoKpi\Cms\Clases\TablaSemana;
 use ProyectoKpi\Cms\Clases\Tabla;
-use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Models\Evaluadores\Widget;
 
@@ -72,7 +72,7 @@ class nTablaSemana  extends Tabla
     public function datosTareasTabla()
     {
         // obtenemos la lista de empleados para la gerencia evaluadora deñ widget
-        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+        $usuarios = EvaluadorRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
 
         $lista = array();
 
@@ -136,7 +136,7 @@ class nTablaSemana  extends Tabla
     public function datosEmpleadoTabla()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+        $usuarios = EvaluadorRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
 
         $lista = array();
 
@@ -197,7 +197,7 @@ class nTablaSemana  extends Tabla
     public function datosEmpleadoChart()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+        $usuarios = EvaluadorRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
 
         $lista = array();
         $datos = array();
@@ -219,7 +219,7 @@ class nTablaSemana  extends Tabla
     public function datosTareaChart()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+        $usuarios = EvaluadorRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
 
         $lista = array();
         $resultado = array();
@@ -463,7 +463,7 @@ class nTablaSemana  extends Tabla
 
     private function ValoresIndicadoresPorSemanaPorEmpleados($usuario_id)
     {
-        return EvaluadoresRepository::cnGetIndicadoresEmpeladosSemana(
+        return EvaluadorRepository::cnGetIndicadoresEmpeladosSemana(
             $this->widget->indicador_id,
             $usuario_id,
             $this->widget->anio,
@@ -474,7 +474,7 @@ class nTablaSemana  extends Tabla
     private function ValoresIndicadoresPorSemanaPorTipoIndicadores($indicador_id)
     {
 
-        return EvaluadoresRepository::cnGetIndicadoresSemana(
+        return EvaluadorRepository::cnGetIndicadoresSemana(
             $this->widget->evaluador_id,
             $indicador_id,
             $this->widget->anio,
@@ -486,7 +486,7 @@ class nTablaSemana  extends Tabla
     private function ValoresIndicadoresPorTarea($usuario_id)
     {
 
-        return EvaluadoresRepository::cnGetIndicadoresTareasSemana(
+        return EvaluadorRepository::cnGetIndicadoresTareasSemana(
             $usuario_id,
             $this->widget->anio,
             $this->widget->mesTarea,
@@ -543,7 +543,7 @@ class nTablaSemana  extends Tabla
     private function categoriasPorEmpleado()
     {
         // obtenemos la lista de indicadores para la gerencia evaluadora deñ widget
-        $usuarios = EvaluadoresRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
+        $usuarios = EvaluadorRepository::cnGetEmpleadosEvaluados($this->widget->indicador_id, $this->widget->evaluador_id);
 
 
         $lista = array();

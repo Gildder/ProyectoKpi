@@ -32,7 +32,6 @@ class EmpleadoController extends Controller
     {
         $empleados = EmpleadoRepository::obtenerLista();
 
-
         return view('empleados/empleado/index')->with('empleados', $empleados);
     }
 

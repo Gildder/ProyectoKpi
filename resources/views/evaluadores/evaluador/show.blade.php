@@ -7,21 +7,6 @@
 
 @section('content')
 
-<script type="text/javascript">
-$(document).ready(function(){
-	$('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
-		localStorage.setItem('activeTab', $(e.target).attr('href'));
-	});
-
-	
-	var activeTab = localStorage.getItem('activeTab');
-	if(activeTab){
-		$('#myTab a[href="' + activeTab + '"]').tab('show');
-	}else{
-	    $('#datos').tab('show');
-	}
-});
-</script>
 
 
 <div class="panel panel-default">
@@ -35,10 +20,11 @@ $(document).ready(function(){
   		@include('partials/alert/error')
 		<!--panelTab -->
 		<ul class="nav nav-tabs" id="myTab">
-		  <li class="active"><a data-toggle="tab" href="#datos">Datos</a></li>
-		  <li ><a data-toggle="tab" href="#evaluadores">Evaluadores</a></li>
-		  <li ><a data-toggle="tab" href="#cargos">Cargos</a></li>
-		  <li ><a data-toggle="tab" href="#indicadores">Indicadores</a></li>
+		  <li><a data-toggle="tab" href="#datos">Datos</a></li>
+		  <li><a data-toggle="tab" href="#evaluadores">Evaluadores</a></li>
+		  <li><a data-toggle="tab" href="#cargos">Cargos</a></li>
+		  <li><a data-toggle="tab" href="#indicadores">Indicadores</a></li>
+		  <li><a data-toggle="tab" href="#preferencias">Preferencias</a></li>
 		</ul>
 
 		<div class="tab-content">
@@ -70,7 +56,8 @@ $(document).ready(function(){
 						<div class="panel-body">
 							@include('evaluadores/evaluador/empleados/tabla_empleados')
 						</div>
-					</div>
+                        <p>[e]=> Empleado ya es Evaluador de una Gerencia.</p>
+                    </div>
 				</div>
 
 				{{-- Capa de empleados Agregados --}}
@@ -111,7 +98,13 @@ $(document).ready(function(){
 				</div>
 			</div>
 			{{-- Fin cargos --}}
-		
+
+            {{-- Preferencias --}}
+            <div id="preferencias" class="tab-pane">
+                @include('evaluadores/evaluador/indicadores/tabla_indicadores')
+            </div>
+			{{-- Fin Preferencias --}}
+
 		</div>
 		<!-- Fin Panel Tab -->
 
@@ -120,6 +113,22 @@ $(document).ready(function(){
 	</div>
 		
 </div>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var activeTab = sessionStorage.getItem('activeTab');
+        if(activeTab != null){
+            $('#myTab a[href="' + activeTab + '"]').tab('show');
+        }else{
+            $('#myTab a[href="#datos"]').tab('show');
+        }
+
+        $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+            sessionStorage.setItem('activeTab', $(e.target).attr('href'));
+        });
+    });
+</script>
 @endsection
 
 

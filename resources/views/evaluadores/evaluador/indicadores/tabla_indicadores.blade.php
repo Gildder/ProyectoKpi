@@ -32,7 +32,7 @@
 				<td>
 					<a href="{{route('evaluadores.evaluador.asignarcargo', array($item->id, $evaluador->id)) }}" @click="mostrarModalLoading()" class="btn btn-warning btn-xs" title="Indicadores por Cargos"> <span class="fa fa-sitemap"></span>  <b></b> </a>
 					
-					<a href="javascript:void(0)"  data-toggle="modal" data-target="#modal-quitarindicador-{{$item->id}}" class="btn btn-danger btn-xs" title="Quitar Indicador"> <span class="fa fa-trash"></span>  <b></b> </a>
+					<a href="#"  data-toggle="modal" data-target="#modal-quitarIndicador-{{$item->id}}" class="btn btn-danger btn-xs" title="Quitar Indicador"> <span class="fa fa-trash"></span>  <b></b> </a>
 				</td>
 			</tr>
      		@include('evaluadores/evaluador/indicadores/delete')

@@ -3,11 +3,16 @@
 namespace ProyectoKpi\Models\Tareas;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Cms\Repositories\Entity;
 use ProyectoKpi\Cms\Repositories\EstadoRepository;
+use ProyectoKpi\Models\Api\TareaEstadoTiempo;
 
 class Estados extends Model
 {
     use EstadoRepository;
+    use Entity;
+    use SoftDeletes;
 
     protected $table = "estado_tareas";
     protected $primarykey = "id";
@@ -29,7 +34,7 @@ class Estados extends Model
      * @var array
      */
     protected $fillable = [
-        'id','nombre','descripcion', 'color', 'texto', 'habilitarCalendario', 'visiblePorEmpleado', 'solucion'
+        'id','nombre','descripcion', 'color', 'texto', 'visibleCalendario', 'visibleEmpleado' //, 'isDeleted', 'isEdit'
     ];
 
     /**
@@ -46,6 +51,11 @@ class Estados extends Model
     public function tareas()
     {
         return $this->hasMany('ProyectoKpi\Models\Tareas\Tarea', 'estadoTarea_id', 'id');
+    }
+
+    public function estadoTiempo()
+    {
+        return $this->hasMany(TareaEstadoTiempo::getClass());
     }
 
 }

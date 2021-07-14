@@ -95,23 +95,51 @@ class AuthController extends Controller
     }
 
 
-    public function login(Request $request)
+   public function login(Request $request)
     {
         $con = new Conexion_LDAP();
 
-        /* obtnemos los parametros del formualario*/
         $data = [
             'username' => \Request::input('name'),
             'password' => \Request::input('password')
         ];
 
         $result = $con->login_ldap($data['username'], $data['password']);
+        //        dd($lis);
+
+
+//        $lis = array();
+//        foreach ($result as $item){
+//            $elem = new \stdClass();
+//
+//            $elem = $item['0']['samaccountname'][0];
+//            $elem = $item['0']['mail'][0];
+//
+//            array_push($lis, $elem);
+//        }
+//        dd($lis);
+//        dd($result, $result[0]['samaccountname'][0], $result[0]['mail'][0], json_encode($result));
+
+/*        $lis = array();
+        for ($in = 0; $in < $result['count']; $in++){
+            $elem = new \stdClass();
+
+            $elem->usuario =  (isset($result[$in]['samaccountname'][0]))? $result[$in]['samaccountname'][0] :null;
+            $elem->nombres =  (isset($result[$in]['givenname'][0]))? $result[$in]['givenname'][0] :null;
+            $elem->apellidos =  (isset($result[$in]['sn'][0]))? $result[$in]['sn'][0] :null;
+            $elem->email =  (isset($result[$in]['mail'][0]))? $result[$in]['mail'][0] :null;
+            $elem->dn =  (isset($result[$in]['dn'][0]))? $result[$in]['dn'][0] :null;
+
+            array_push($lis, $elem);
+        }
+
+        dd($lis);*/
 
         if ($data['username'] !== 'admin')
         {
             // todo: corregir esta validacion de login por AD
-            if (is_string($result)) {
-                /* obtnemos los parametros del formualario*/
+            if (is_string($result['0']['samaccountname'][0]) && (isset($result['0']['samaccountname'][0]))) {
+                //* obtnemos los parametros del formualario
                 $request->request->set('password', '12345678');
             } else {
                 $request->request->set('password', 'dfadfjfah!"#43SDF#$');

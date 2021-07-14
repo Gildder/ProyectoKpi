@@ -6,11 +6,18 @@
 
 @section('content')
 
+
 <script>
-    $(document).ready(function () {
-        sessionStorage.removeItem('agendas');
-        sessionStorage.setItem('agendas', 0);
-    });
+$(document).ready(function () {
+    sessionStorage.setItem('inicioSemana', convertDateFormatDB('{!! $semanas->fechaInicio !!}'));
+    sessionStorage.setItem('finSemana', convertDateFormatDB('{!! $semanas->fechaFin !!}'));
+
+    sessionStorage.setItem('tipoListado', {{ $agenda }});
+    sessionStorage.setItem('inicioSemanaFija', '{!! $semanas->fechaInicio !!}');
+    sessionStorage.setItem('finSemanaFija', '{!! $semanas->fechaFin !!}');
+    sessionStorage.setItem('calendario', 0);
+
+});
 </script>
 
 
@@ -57,17 +64,15 @@
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="col-sm-12">Tareas Programadas para la Semana {{ $semanas->semana }} del mes de <b>{{ $semanas->mes }}</b>, del <b class="fechaTareas">{{ $semanas->fechaInicio }}</b> al <b class="fechaTareas">{{ $semanas->fechaFin }}</b>
           </div>
-          <div class="table-responsive" style="padding: 8px 5px 8px 5px;">
-{{--            @include('tareas/tareaProgramadas/partials/tabla_tareaProgramadas')--}}
-              <tabla-tarea :tareas="{{ json_encode($tareas) }}"></tabla-tarea>
-          </div>
+            @verbatim
+              <tabla-tarea :url="/tareas/tareaProgramadas/tareaSemanaJson"></tabla-tarea>
+                @endverbatim
       </div>
     </div>
   </div>
   <div class="panel-footer">
   </div>
 </div>
-
 
 
 @endsection

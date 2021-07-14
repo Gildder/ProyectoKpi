@@ -13,8 +13,7 @@
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
-          @if( \Usuario::get('isEvaluador'))
-          <!-- Messages: style can be found in dropdown.less-->
+          @if(\Auth::user()->is_evaluador == 1)
           <li class="dropdown messages-menu">
           <a href="{{url('evaluadores/evaluados/dashboard') }}" >
               <i class="fa fa-line-chart"></i>
@@ -23,7 +22,7 @@
           </li>
           @endif
 
-          @if(\Usuario::get('isSupervisor'))
+          @if(isset(\Auth::user()->is_supervisor))
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
           <a href="{{url('supervisores/supervisados')}}" >

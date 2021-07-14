@@ -96,7 +96,6 @@ class IndicadorCargoController extends Controller
 		return redirect('evaluadores/evaluador/indicadorcargos/'.$ind_id)
 			->with('message', 'Se quito el cargo '.$ind_id.' correctamente.');
 
-
 	}
 
 	/* Cargos Evaluados*/
@@ -107,7 +106,6 @@ class IndicadorCargoController extends Controller
 
 		return view('empleados/evaluador/index', ['evaluadores'=> $evaluadores]);
 	}
-
 
 	public function agregarcargo($cargo_id, $indicador_id)
     {
@@ -124,6 +122,5 @@ class IndicadorCargoController extends Controller
         DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('indicador_id', $indicador_id)->delete();
 
 		return redirect()->back()->with('message', 'Se agrego el cargo '.$cargo_id.' correctamente.');
-
     }
 }

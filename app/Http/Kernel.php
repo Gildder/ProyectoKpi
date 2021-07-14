@@ -49,7 +49,9 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest' => \ProyectoKpi\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-
+        'cors' => \Barryvdh\Cors\HandleCors::class,
+        'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        'jwt.resfres' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
 
         'administrador' => \ProyectoKpi\Http\Middleware\AdministradorMiddleware::class,
         'estandard' => \ProyectoKpi\Http\Middleware\EstandarMiddleware::class,

@@ -30,8 +30,8 @@ class TareaProgramasResolverRequest extends Request
     public function rules()
     {
         return [
-            'fechaInicioSolucion' => 'required',
-            'fechaFinSolucion' => 'required|date_format:d/m/Y',
+            'fechaInicio' => 'required',
+            'fechaFin' => 'required|date_format:d/m/Y',
             'hora'=> 'required',
             'minuto'=> 'required|min:1',
 //            'estado'=> 'required',
@@ -43,10 +43,10 @@ class TareaProgramasResolverRequest extends Request
     public function messages()
     {
         return [
-            'fechaInicioSolucion.required' => 'La fecha de Inicio es requerido!',
-            'fechaFinSolucion.required' => 'La fecha de Fin es requerido!',
-            //'fechaInicioSolucion.date_format' => 'El formato es dd/mm/aaaa',
-            'fechaFinSolucion.date_format' => 'El formato es dd/mm/aaaa',
+            'fechaInicio.required' => 'La fecha de Inicio es requerido!',
+            'fechaFin.required' => 'La fecha de Fin es requerido!',
+            //'fechaInicio.date_format' => 'El formato es dd/mm/aaaa',
+            'fechaFin.date_format' => 'El formato es dd/mm/aaaa',
 //            'estado.required' => 'El estado es requerido!',
             'hora.required' => 'La Hora es requerido',
             'minuto.required' => 'El minuto es requerido',

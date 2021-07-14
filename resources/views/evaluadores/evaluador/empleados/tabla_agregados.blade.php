@@ -11,7 +11,13 @@
 		<tbody>
 			@foreach($empleadosAgregados as $item)
 			<tr>
-				<td>{{$item->id}}</td>
+                <td>
+                    <a href="#"
+                       data-toggle="modal" data-target="#modal-usuarioTarea-{{ $item->id }}"
+                       class="btn btn-warning btn-xs">
+                        {{$item->id}}
+                    </a>
+                </td>
 				<td>{{$item->usuario}}</td>
 				<td>{{$item->codigo}}</td>
 				<td>{{$item->nombres}} {{$item->apellidos}}</td>
@@ -20,7 +26,8 @@
 				</td>
 			</tr>
 			@include('evaluadores/evaluador/empleados/delete')
-			@endforeach
+            @include('evaluadores/evaluador/empleados/modal/empleado')
+            @endforeach
 		</tbody>
 	</table>
 </div>

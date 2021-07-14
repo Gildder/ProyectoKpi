@@ -6,6 +6,19 @@
 
 @section('content')
 
+    <script>
+        $(document).ready(function () {
+            sessionStorage.setItem('inicioSemana', convertDateFormatDB('{!! $semanas->fechaInicio !!}'));
+            sessionStorage.setItem('finSemana', convertDateFormatDB('{!! $semanas->fechaFin !!}'));
+
+            sessionStorage.setItem('tipoListado', {{ $agenda }});
+            sessionStorage.setItem('inicioSemanaFija', '{!! $semanas->fechaInicio !!}');
+            sessionStorage.setItem('finSemanaFija', '{!! $semanas->fechaFin !!}');
+            sessionStorage.setItem('calendario', 1);
+        });
+    </script>
+
+
     <link rel="stylesheet" href="{{URL::asset('plugins/colorpicker/bootstrap-colorpicker.css')}}">
     <script src="{{URL::asset('plugins/colorpicker/bootstrap-colorpicker.js')}}"></script>
 

@@ -350,7 +350,7 @@ class CalcularSemana
             return 0;
         }
         $partes=explode(':',$hora);//se parte la fecha
-        return $partes[0];
+        return (int) $partes[0];
     }
 
     public static function sacarMinutos($hora)
@@ -360,6 +360,51 @@ class CalcularSemana
         }
         $partes=explode(':',$hora);//se parte la fecha
         return $partes[1];
+    }
+
+    public static function  validarFormatoEuropeo($fecha){
+        $valores = explode('/', $fecha);
+        // bool checkdate ( int $month , int $day , int $year )
+        if(sizeof($valores) == 3 && checkdate($valores[1], $valores[0], $valores[2])){
+            return true;
+        }
+        return false;
+    }
+
+    public static function  validarFormatoDB($fecha){
+        $valores = explode('-', $fecha);
+        // bool checkdate ( int $month , int $day , int $year )
+        if(sizeof($valores) == 3 && checkdate($valores[1], $valores[2], $valores[0])){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function getHrefShow()
+    {
+        $hrefLocalizacion = Caches::obtener('tipoAgenda');
+
+        if($hrefLocalizacion === 0){
+            return 'tareas.tareaProgramadas.index';
+        }else if($hrefLocalizacion === 1){
+            return 'tareas.tareaProgramadas.archivadas';
+        }else{
+            return 'tareas.tareaProgramadas.agendadas';
+        }
+    }
+
+    public static function getHrefIndex()
+    {
+        $hrefLocalizacion = Caches::obtener('tipoAgenda');
+
+        if($hrefLocalizacion === 0){
+            return 'tareas/tareaProgramadas';
+        }else if($hrefLocalizacion === 1){
+            return 'tareas/tareaProgramadas/archivadas';
+        }else{
+            return 'tareas/tareaProgramadas/agendadas';
+        }
     }
 
 }

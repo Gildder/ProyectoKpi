@@ -16,7 +16,7 @@ use ProyectoKpi\Cms\Repositories\TareaRepository;
 use ProyectoKpi\Http\Controllers\Controller;
 
 
-use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Models\Evaluadores\Evaluador;
 use ProyectoKpi\Models\Indicadores\Indicador;
@@ -41,7 +41,7 @@ class EvaluadosController extends Controller
         $this->tablaMes = new nTablaMes();
 
         // Obtenemos el Id del Evaluador
-        $evaluados = EvaluadoresRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Usuario::get('id'));
+        $evaluados = EvaluadorRepository::cnGetEvaluados(\Cache::get('evadores')->id, \Auth::user()->id);
         return view('evaluadores/evaluados/index', ['evaluados'=> $evaluados]);
     }
 
@@ -240,7 +240,7 @@ class EvaluadosController extends Controller
      */
     public function empleadosEvaluados($indicador_id, $evaluador_id)
     {
-        $empleados = EvaluadoresRepository::cnGetEmpleadosEvaluados($indicador_id, $evaluador_id);
+        $empleados = EvaluadorRepository::cnGetEmpleadosEvaluados($indicador_id, $evaluador_id);
         $indicador = Indicador::findOrFail($indicador_id);
         $evaluador = Evaluador::findOrFail($evaluador_id);
 

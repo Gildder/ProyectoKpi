@@ -2,8 +2,12 @@
 
 namespace ProyectoKpi\Http\Controllers;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Clases\Conexion_LDAP;
 use ProyectoKpi\Cms\Repositories\ConfiguracionRepositorio;
+use ProyectoKpi\Cms\Semanas\SemanaTarea;
 use ProyectoKpi\Http\Requests;
 use Illuminate\Http\Request;
 use ProyectoKpi\Models\Empleados\Empleado;
@@ -34,13 +38,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        dd(\Usuario::get('isIndicadores'), \Usuario::get('isEvaluador'), \Usuario::get('isSupervisor'));
+
+        $this->iniciaDatos();
 
         $rutaPrincipal = 'empleados.perfil.index';
         if (! Auth::guest()) {
             if (\Usuario::get('isAdmin')) {
                 return redirect()->route('administrador.index');
             } else {
+//                dd(\Auth::user()->is_evaluador);
                 // tiene indicadores asignado
                 if (\Usuario::get('isIndicadores')) {
                     $rutaPrincipal = 'tareas.tareaProgramadas.index';
@@ -59,5 +65,15 @@ class HomeController extends Controller
                 return redirect()->route($rutaPrincipal);
             }
         }
+    }
+
+
+    public function iniciaDatos()
+    {
+        $semana = new SemanaTarea();
+        $semanaDB = $semana->buscarSemanaDB(Carbon::now());
+
+        Caches::guardar('inicioSemana', $semanaDB->fechaInicio);
+        Caches::guardar('finSemana', $semanaDB->fechaFin);
     }
 }

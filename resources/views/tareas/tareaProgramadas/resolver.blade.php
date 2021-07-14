@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo')
-   Tarea Programada
+   @lang('labels.titlesPage.tareaFinalizar')
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">
       <a  href="{{route('tareas.tareaProgramadas.index')}}" @click="mostrarModalLoading()" class="btn btn-primary btn-xs  pull-left btn-back"><span class="fa fa-reply"></span></a>
-      <strong>Finalizar - Tarea Nro. {{$tarea->numero}}</strong>
+      <strong>@lang('labels.panels.pnsTareaFinalizar'){{$tarea->numero}}</strong>
   </div>
 
 
@@ -26,151 +26,165 @@
 
           </p>
           <div class="col-xs-12">
-              <b > Los campos con (*) son obligatorios </b>
+              <b > @lang('labels.comments.obligatorioAttr')</b>
           </div>
       </div>
 
 
-      <div class="col-xs-12">
-          <label>Descripcion:</label>
-          <p>{{ $tarea->descripcion }}</p>
-          <hr>
-      </div>
 
 
       @include('partials/alert/error')
 {!!Form::model($tarea, ['route'=>['tareas.tareaProgramadas.storeResolver', $tarea->id], 'method'=>'PUT'])!!}
       <input type="text" name="agenda" hidden value="{{ $agendar }}">
-    <div class="row col-xs-12 col-sm-6 col-md-6 col-lg-6">
-        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin: 0;"  v-if="utilizarfechasestimadas == true" >
-            <p>
-            <span id="observacion" >Las fechas de inicio, finalizacion y el tiempo estimado son los estimados</span>
-            </p>
-        </div>
+
+      {{-- Descripcion --}}
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-5
+            @if ($errors->has('descripcion'))
+                  has-error
+            @endif">
+
+              <label class="form-group">@lang('labels.labels.lbsDescripcion')</label>
+              <input  type="text" minlength="5"
+                      maxlength="120"
+                      name="descripcion"
+                      placeholder="@lang('labels.pladers.phsDescripcion')"
+                      class="form-control" value="{{ $tarea->descripcion }}"
+                      required>
+              <span></span>
+              @if ($errors->has('descripcion'))
+                  <p class="help-block">{{ $errors->first('descripcion') }}</p>
+              @endif
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <hr>
+          </div>
+      </div>
+
+
+
+      <div class="row col-xs-12 col-sm-6 col-md-6 col-lg-6">
     {{-- Fecha de Inicio --}}
-    <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-5
-        @if ($errors->has('fechaInicioSolucion'))
+    <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-4
+        @if ($errors->has('fechaInicio'))
             has-error
         @endif">
 
-      <label>Fecha Inicio *: </label>
+      <label>@lang('labels.labels.lbsFechaInicio') </label>
 
-        <input-date tipo="text" nombre="fechaInicioSolucion" v-if="utilizarfechasestimadas == false"
 
-                valor="{{ old('fechaInicio') }}"
-            placeholder="Fecha de inicio"    agendar="{{ $agendar }}"
-            fechainicio="{{  $semanas->fechaInicio }}"
-            fechafin='{{  $semanas->fechaFin }}' >
-        </input-date>
+        <div class="input-group row margenFecha">
+            <div class="input-group-addon row">
+                <i class="fa fa-calendar"></i>
+            </div>
+            <input type="text" id="fechaInicioTarea"  style="z-index: 3000"
+                   name="fechaInicio"
+                   @if(old('fechaInicio') == null)
+                   value="{{ $tarea->fechaInicio }}"
+                   @else
+                   value="{{ old('fechaInicio') }}"
+                   @endif
+                   placeholder="@lang('labels.pladers.phsFechaInicio')"
+                   class="form-control"  required>
+        </div>
 
-        <input-date tipo="text" nombre="fechaInicioSolucion"  v-if="utilizarfechasestimadas == true" readonly="true"
-                    agendar="{{ $agendar }}"
-                    valor="{{  $tarea->fechaInicio}}" placeholder="Fecha Inicio"
-                    fechainicio="{{   $semanas->fechaInicio }}"
-                    fechafin='{{  $semanas->fechaFin }}' >
-        </input-date>
-
-        @if ($errors->has('fechaInicioSolucion'))
-            <p class="help-block">{{ $errors->first('fechaInicioSolucion') }}</p>
+        @if ($errors->has('fechaInicio'))
+            <p class="help-block">{{ $errors->first('fechaInicio') }}</p>
         @endif
      </div>
 
         {{-- Fecha Fin --}}
-        <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-5
-        @if ($errors->has('fechaFinSolucion'))
+        <div class="form-group col-xs-12 col-sm-12 col-md-5 col-lg-4
+        @if ($errors->has('fechaFin'))
              has-error
         @endif">
 
-        <label>Fecha Fin *:</label>
-            <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == false"
-
-                    valor="{{ old('fechaFin') }}"
-                placeholder="Fecha finalizacion"    agendar="{{ $agendar }}"
-                fechainicio="{{   $semanas->fechaInicio }}"
-                fechafin='{{  $semanas->fechaFin }}' >
-            </input-date>
-
-            <input-date tipo="text" nombre="fechaFinSolucion" v-if="utilizarfechasestimadas == true" readonly="true"
-                        agendar="{{ $agendar }}"
-                        valor="{{$tarea->fechaFin }}" placeholder="Fecha Fin"
-                        fechainicio="{{   $semanas->fechaInicio }}"
-                        fechafin='{{  $semanas->fechaFin }}' >
-            </input-date>
-
-        @if ($errors->has('fechaFinSolucion')) <p class="help-block">{{ $errors->first('fechaFinSolucion') }}</p> @endif
-        </div>
-
-
-        <div class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <div class="checkbox">
-                <label>
-                    <input  type="checkbox" name="todasemana" v-model="utilizarfechasestimadas" id="default-fechaEstimadas">
-                    Utilizar fechas y tiempo estimados
-                </label>
+        <label>@lang('labels.labels.lbsFechaFin')</label>
+            <div class="input-group row margenFecha">
+                <div class="input-group-addon row">
+                    <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" id="fechaFinTarea"  style="z-index: 3000"
+                       name="fechaFin"
+                       @if(old('fechaFin') == null)
+                            value="{{ $tarea->fechaFin }}"
+                       @else
+                       value="{{ old('fechaFin') }}"
+                       @endif
+                       placeholder="@lang('labels.pladers.phsFechaFin')"
+                       class="form-control"  required>
             </div>
+
+        @if ($errors->has('fechaFin')) <p class="help-block">{{ $errors->first('fechaFin') }}</p> @endif
         </div>
 
-      {{-- Tiempo estimado --}}
+      {{-- Duracion --}}
       <div class="row col-sm-12">
-        <label class="form-group col-sm-12 col-xs-12" style="margin-top: 10px;">Duracion *:</label>
           {{-- Horas --}}
-          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-4
+          <div class="form-group col-xs-12 col-sm-6 col-md-6 col-lg-2
             @if ($errors->has('hora'))
-                  has-error
-            @endif ">
-            <p>Horas:<p>
-             <input type="number" name="hora" min="0" max="150" placeholder="Horas" class="form-control"   required  v-if="utilizarfechasestimadas == false"
+              has-error
+            @endif">
 
-                   valor="{{ old('minuto') }}">
+             <label for="hora">@lang('labels.labels.lbsHora')</label>
 
-              <input type="number" name="hora" min="0" max="150" v-if="utilizarfechasestimadas == true" readonly="true"
+
+              <input type="number" name="hora"
+                     min="0"
+                     max="150"
+                     @if(old('fechaFin') == null)
                      value="{{ \Calcana::sacarHoras($tarea->tiempo)}}"
-                     placeholder="Horas"
-                     class="form-control" value="0"  required >
-
-            @if ($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
+                     @else
+                     value="{{ old('hora') }}"
+                     @endif
+                     placeholder="@lang('labels.pladers.phsHora')"
+                     class="form-control" required >
+            <span></span>
+            @if($errors->has('hora')) <p class="help-block">{{ $errors->first('hora') }}</p> @endif
 
           </div>
 
             {{-- Minutos --}}
-          <div class="form-group  col-xs-12 col-sm-6 col-md-6 col-lg-4
-                @if ($errors->has('minuto'))
-                  has-error
-                @endif">
+          <div class="form-group  col-xs-12 col-sm-6 col-md-6 col-lg-2
+            @if ($errors->has('minuto'))
+              has-error
+            @endif">
 
-            <p>Minutos:</p>
-            <input type="number" name="minuto" min="0"  max="999"
-                   placeholder="Minutos"  class="form-control"
-                   required  v-if="utilizarfechasestimadas == false"
-                    valor="{{ old('minuto') }}"
-                   >
-
-              <input type="number" name="minuto" min="0" v-if="utilizarfechasestimadas == true" readonly="true"
+            <label for="minuto">@lang('labels.labels.lbsMinuto')</label>
+              <input type="number" name="minuto"
+                     min="0"
+                     max="9999"
+                     @if(old('fechaFin') == null)
                      value="{{ \Calcana::sacarMinutos($tarea->tiempo)}}"
-                     placeholder="Minutos"
-                     max="999" class="form-control" value="0"   required>
-
-            @if ($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
+                     @else
+                     value="{{ old('minuto') }}"
+                     @endif
+                     placeholder="@lang('labels.pladers.phsMinuto')"
+                     class="form-control" required>
+            <span></span>
+            @if($errors->has('minuto')) <p class="help-block">{{ $errors->first('minuto') }}</p> @endif
           </div>
       </div>
 
 
 
-      {{-- Observaciones --}}
-      <div class="row col-sm-12">
+        {{-- Observaciones --}}
+        <div class="row col-sm-12">
         <div class="form-group @if ($errors->has('observaciones')) has-error @endif  col-sm-12 col-md-10 col-lg-10">
-            <label for="observaciones">Observaciones</label>
-            <textarea type="textArea" id="observacion" name="observaciones"  maxlength="120" placeholder="Ingrese Observaciones" class="form-control" rows="5" cols="9">@if($tarea->observaciones != 'Ninguna'){{ $tarea->observaciones  }} @endif</textarea>
+            <label for="observaciones">@lang('labels.labels.lbsObservaciones')</label>
+            <textarea type="textArea" id="observacion" name="observaciones"  maxlength="120"
+                      placeholder="@lang('labels.pladers.phsObservaciones')"
+                      class="form-control" rows="5" cols="9">@if($tarea->observaciones != 'Ninguna'){{ $tarea->observaciones  }} @endif</textarea>
             @if ($errors->has('observaciones')) <p class="help-block">{{ $errors->first('observaciones') }}</p> @endif
         </div>
-      </div>
+        </div>
   </div>
 
   {{-- Panel de Localizaciones --}}
   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-      <b>Localizacion</b><hr class="col-sm-12" style="margin-top: 5px;">
+      <p><b>@lang('labels.labels.lbsLocalizaciones')</b></p>
       <div class="col-sm-12 @if ($errors->has('prov')) has-error @endif "></div>
-      <p>Seleccione las localizaciones donde se realizaró la tarea.</p>
+      <p>@lang('labels.comments.cmtSelecLocalizacion')</p>
       <div class="col-sm-6">
           @foreach($ubicaciones as $item)
               <label>{{ Form::checkbox('prov[]', $item->id, null, ['class'=>'micheckbox']) }} {{ $item->nombre }}</label><br>
@@ -185,9 +199,9 @@
     <div class="panel-footer text-right">
         <a  id="cancelar" href="{{route('tareas.tareaProgramadas.show', $tarea->id)}}" @click="mostrarModalLoading()"
             class="btn btn-danger" >
-            <span class="fa fa-times"></span> Cancelar
+            <span class="fa fa-times"></span> @lang('labels.buttons.btnCancelar')
         </a>
-        <button type="submit"  class="btn btn-success"><span class="fa fa-save"></span> Guardar</button>
+        <button type="submit"  class="btn btn-success"><span class="fa fa-save"></span> @lang('labels.buttons.btnGuardar')</button>
 
     </div>
         {!! Form::close()!!}
@@ -205,30 +219,64 @@
         @endforeach
     });
     // }
+
 $(document).ready(function(){
 
     $.trim($("#observacion").val());
 
-  var check = $('input [name="todasemana"]');
-  var observacion = $('#observacion');
+    if(localStorage.getItem('fechas-checked') != undefined){
+        $('input [name="todasemana"]').attr('checked', true);
+    }
 
-  if(localStorage.getItem('fechas-checked') != undefined){
-      check.attr('checked', true);
-  }
+    cargarFechasDataPicker("fechaFinTarea");
+    cargarFechasDataPicker("fechaInicioTarea");
 
-  check.click(function () {
-      if(check.checked){
-          localStorage.setItem('fechas-checked', this.checked);
-
-          observacion.html('Las fechas de inicion, finalizacion y tiempo de duracion son las estimadas.')
-      }else{
-          localStorage.removeItem('fechas-checked');
-          observacion.html('')
-
-      }
-  });
 
 });
+
+   $('input [name="todasemana"]').click(function () {
+       // colocamos las hora y minutos a ceros
+       if( $('input[name="hora"]').val() === ''){
+           $('input[name="hora"]').val(0);
+       }
+
+       console.log($('input[name=minuto]').val());
+
+       if($('input[name="minuto"]').val() === ''){
+           $('input[name="minuto"]').val(0);
+       }
+   });
+
+
+   $('input[name="descripcion"]').blur(function(){
+       if(validarCampoVacio($(this).val())){
+           validarLimitesString(5, 120, $(this));
+       }else{
+           mostrarErrorForm($(this), 'La descripcion es requerida');
+       }
+   });
+
+
+   $('input[name="hora"]').blur(function(){
+       if(validarCampoVacio($(this).val())){
+           ocultarErrorForm($(this));
+       }else{
+
+//            mostrarErrorForm($(this), 'La hora no puede esta vacio');
+           $(this).val('0');
+       }
+   });
+
+   $('input[name="minuto"]').blur(function(){
+       if(validarCampoVacio($(this).val())){
+           ocultarErrorForm($(this));
+       }else{
+
+//            mostrarErrorForm($(this), 'El minuto es requerida');
+           $(this).val('0');
+       }
+   });
+
 </script>
 
 @endsection

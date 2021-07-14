@@ -5,6 +5,7 @@ namespace ProyectoKpi\Http\Controllers\Supervisores;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use ProyectoKpi\Cms\Clases\Caches;
+use ProyectoKpi\Cms\Semanas\SemanaTarea;
 use ProyectoKpi\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
@@ -26,12 +27,11 @@ class SupervisadosController extends Controller
     
     public function index()
     {
-        $tareas = Supervisados::getTareasSupervisados(0);
+        $semanas = new SemanaTarea();
 
-//        dd($tareas);
-        $semanas = array_pop($tareas);
+        $tareas = Supervisados::getTareasSupervisados($semanas);
 
-        return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas]);
+        return view('supervisores\supervisados\tareas\index', ['tareas'=> $tareas, 'semanas'=> $semanas->getSemana()]);
     }
 
     public function show($user_id)
@@ -150,8 +150,8 @@ class SupervisadosController extends Controller
     {
         $tareas= Supervisados::filtrarTareas($request);
         if($tareas['success']){
-            Cache::forget('tareasSupervisadas');
-            Cache::forever('tareasSupervisadas',$tareas['tareas']);
+            \Cache::forget('tareasSupervisadas');
+            \Cache::forever('tareasSupervisadas',$tareas['tareas']);
         }
 
         if(sizeof($tareas['tareas'])>0){

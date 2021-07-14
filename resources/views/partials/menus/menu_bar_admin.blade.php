@@ -69,7 +69,6 @@
           <ul class="treeview-menu">
             <li><a href="#"><i class="fa fa-circle-o"></i>Opciones</a></li>
             <li><a href="#"><i class="fa fa-circle-o"></i> Permisos</a></li>
-            <li><a @click.prevent="importarLdap" ><i class="fa fa-circle-o"></i> Importar AD</a></li>
             {{--<li><a href="{{url('administrador/importarldap')}}" ><i class="fa fa-circle-o"></i> Importar AD</a></li>--}}
             <li><a href="{{url('empleados/empleado')}}"><i class="fa fa-circle-o"></i>Empleado</a></li>
             <li><a href="{{url('empleados/cargo')}}"><i class="fa fa-circle-o"></i>Cargo</a></li>
@@ -104,8 +103,34 @@
             <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i>Indicador</a></li>
           <li><a href="{{url('evaluadores/ponderacion')}}"><i class="fa fa-circle-o"></i>Ponderacion</a></li>
             <li><a href="{{url('evaluadores/escala')}}"><i class="fa fa-circle-o"></i>Escalas</a></li>
+            <li><a href="{{url('estados/tareas')}}">
+                <i class="fa fa-circle-o"></i>Estados</a></li>
           </ul>
         </li>
+          {{-- Aprobaciones --}}
+          <li class="treeview">
+              <a href="#">
+                  <i class="fa fa-building"></i>
+                  <span>Procesos</span>
+                  <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+              </a>
+              <ul class="treeview-menu">
+                  <li>
+                    <a href="{{url('procesos/opciones')}}"><i class="fa fa-circle-o"></i>Opciones</a>
+                  </li>
+                  <li>
+                    <a href="{{url('procesos/aprobaciones')}}"><i class="fa fa-circle-o"></i>Aprobaciones</a>
+                  </li>
+                  <li>
+                    <a href="{{url('evaluadores/escala')}}"><i class="fa fa-circle-o"></i>Escalas</a>
+                  </li>
+                  <li>
+                    <a href="{{url('estados/tareas')}}"><i class="fa fa-circle-o"></i>Estados</a>
+                  </li>
+              </ul>
+          </li>
          <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
@@ -115,9 +140,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i>Importar Tickets</a></li>
-            <li><a href="{{url('indicadores/indicadorcargos')}}"><i class="fa fa-circle-o"></i> config 1 Cargos</a></li>
-            <li><a href="{{url('indicadores/indicador')}}"><i class="fa fa-circle-o"></i> Config 2</a></li>
+              <li><a href="{{url('configuraciones/ldap/index')}}"><i class="fa fa-circle-o"></i>AD/Conectar LDAP</a></li> {{--  @click.prevent="importarLdap"  --}}
           </ul>
         </li>
         

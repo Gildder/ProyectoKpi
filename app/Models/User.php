@@ -6,13 +6,15 @@ namespace ProyectoKpi\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use ProyectoKpi\Cms\Repositories\EmpleadoRepository;
+use ProyectoKpi\Cms\Repositories\Entity;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use Adldap\Laravel\Traits\AdldapUserModelTrait;
+use ProyectoKpi\Models\Procesos\OpcionAprobacion;
 
 class User extends Authenticatable
 {
     use AdldapUserModelTrait;
-
+    use Entity;
 
     /**
     * Los atributos que son asignables en masa.
@@ -130,6 +132,12 @@ class User extends Authenticatable
     public static function getGraficoIndicador($emp_id, $ind_id)
     {
         return IndicadorRepository::getGraficoIndicador($emp_id, $ind_id);
+    }
+
+
+    public function opcionAprobacion()
+    {
+        return $this->hasOne(OpcionAprobacion::getClass());
     }
 
 }

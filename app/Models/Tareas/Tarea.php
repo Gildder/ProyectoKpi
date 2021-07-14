@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use function print_r;
 use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Clases\Tiempo;
+use ProyectoKpi\Cms\Repositories\Entity;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
+use ProyectoKpi\Models\Api\TareaEstadoTiempo;
+use ProyectoKpi\Models\Api\TareaHistoricoProceso;
 use function strtotime;
 
 
@@ -16,6 +19,7 @@ class Tarea extends Model
 {
 
     use SoftDeletes;
+    use Entity;
     use TareaRepository;
 
     protected $table = "tareas";
@@ -75,106 +79,13 @@ class Tarea extends Model
         return $this->belongsToMany('ProyectoKpi/Models/Localizaciones/Localizacion', 'tarea_localizacion', 'tarea_id', 'localizacion_id', 'id');
     }
 
-
-    /* ;Metodos de repositorio */
-    // lista de ubidadciones Ocupadas para una tarea
-    public static function ubicacionTarea($tarea_id)
+    public function estadoTiempo()
     {
-        return
-            DB::table('localizaciones')
-            ->join('tarea_localizacion','tarea_localizacion.localizacion_id','=', 'localizaciones.id')
-            ->where('tarea_localizacion.tarea_id',$tarea_id)
-            ->select('localizaciones.id','localizaciones.nombre')->get();
-
-        /*
-        if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion')))
-        {
-            $localizacion = DB::table('localizaciones')->where('localizaciones.id', \Usuario::get('localizacion')->id)->first();
-        // $localizaciones = DB::table('localizaciones')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->select('localizaciones.id','localizaciones.nombre')->get();
-
-        $ubicacionesOcupadas = DB::table('localizaciones')->join('tarea_localizacion','tarea_localizacion.localizacion_id','=', 'localizaciones.id')
-            ->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)
-            ->where('tarea_localizacion.tarea_id',$tarea_id)
-            ->select('localizaciones.id','localizaciones.nombre')->get();
-
-
-        return $ubicacionesOcupadas;
-        }else{
-            return [];
-        }
-*/
+        return $this->hasMany(TareaEstadoTiempo::getClass());
     }
 
-
-    // lista de ubidadciones disponbiles para una tarea
-    public static function ubicacionesDisponibles($tarea_id)
+    public function tareahistoricos()
     {
-        if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion')))
-        {
-            $localizacion = DB::table('localizaciones')->where('localizaciones.id','=', \Usuario::get('localizacion')->id)->first();
-
-        $ubicacionesDisponible  = DB::select('call pa_tareas_ubicaionesDisponibles('.$localizacion->grupoloc_id.','.$tarea_id.');');
-
-        return $ubicacionesDisponible;
-        }else{
-            return [];
-        }
-    }
-
-     // lista de ubidadciones disponbiles para una tarea
-    public static function ubicacionesTodos($tarea_id)
-    {
-        if(!is_null(\Usuario::get('localizacion')) && !empty(\Usuario::get('localizacion'))) {
-            $localizacion = DB::table('localizaciones')->where('localizaciones.id', '=', \Usuario::get('localizacion')->id)->first();
-            $localizaciones = DB::table('localizaciones')->select('localizaciones.id', 'localizaciones.nombre')->where('localizaciones.grupoloc_id', $localizacion->grupoloc_id)->get();
-
-            return $localizaciones;
-        }else{
-            return [];
-        }
-    }
-
-    /*
-     * Metodo para cambiar del formato Y-m-d  a d/m/Y
-     *
-     * @param string $fecha
-     * @return fecha en formato d/m/Y
-     */
-    public function cambiarFormatoEuropeo($fecha)
-    {
-        if(isset($fecha)){
-            $partes=explode('-',$fecha);//se parte la fecha
-            $fecha=$partes[2].'/'.$partes[1].'/'.$partes[0];
-            return $fecha;
-        }else{
-            return '00/00/0000';
-        }
-    }
-
-    /*
-     * Metodo para cambiar del formato Y-m-d  a d-m-Y
-     *
-     * @param string $fecha
-     * @return fecha en formato d-m-Y
-     */
-    public function cambiarFormatoDB($fecha)
-    {
-        if(isset($fecha)){
-            $partes=explode('/',$fecha);//se parte la fecha
-            $fecha=$partes[2].'-'.$partes[1].'-'.$partes[0];
-            return $fecha;
-        }else{
-            return '0000-00-00';
-        }
-    }
-
-
-    public function validarDuracionCeros()
-    {
-        if((string) $this->tiempoEstimado == '0:0'){
-            return false;
-        }else{
-            return true;
-        }
+        return $this->hasMany(TareaHistoricoProceso::getClass());
     }
 }

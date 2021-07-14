@@ -29,9 +29,6 @@ $(document).ready(function() {
         require('./components/nuevo_widget/selector_modal.vue')
     );
 
-    Vue.component('input-date',
-        require('./components/date/inputDate.vue')
-    );
 
     Vue.component('panel-widget',
         require('./components/widget/PanelWidget.vue')
@@ -150,6 +147,22 @@ $(document).ready(function() {
             id_usuario_buscar: 12,
             /******************* Busqueda de Usuarios ***************************/
             btnFiltroTareaSupervisor: true,
+
+
+            /***Edita tareas agenda **/
+            tipolistatarea: sessionStorage.getItem('tipoListado'),
+
+
+            /**************** Aprobaciones **************/
+            nombreAprobador: '',
+            apellidoAprobador: '',
+            usuariosPosibleAprobador: [],
+            usuarioAprobador: '',
+            usuarioAprobador_id: '',
+            opcionAprobador_id: '',
+            evaluadorAprobador_id: '',
+            btnGuardarEnable: false,
+            nuevoAprobacion: false,
         },
 
         ready: function () {
@@ -165,6 +178,17 @@ $(document).ready(function() {
         },
         /***************************************** COMPUTED ***********************************************************/
         computed: {
+            validarCheckFechasEstimadas: function () {
+                if (this.utilizarfechasestimadas){
+                    if($('input[name=hora]') === ''){
+                        $('input[name=hora]').val(0);
+                    }
+
+                    if($('input[name=minuto]') === ''){
+                        $('input[name=minuto]').val(0);
+                    }
+                }
+            },
             listaVacia: function() {
                 if(this.listaTareaComunes.length == 0 ){
                     return true;
@@ -215,7 +239,6 @@ $(document).ready(function() {
                     Notificion.success('El Widget se elimino correctamente!');
                 }, function (response) {
                     Notificion.warning('El Widget No elimino, por favor verificar con su administrador!');
-                    alert(JSON.stringify(response));
                 });
             },
             'buscar-tarea-supervidor': function (tareas) {
@@ -227,14 +250,123 @@ $(document).ready(function() {
         },
         /************************************************* METHODS *****************************************************/
         methods: {
+            /************************************** Aprobacion ******************************************/
+            buscarUsuariosAprobador: function ($event) {
+                utils.mostrarCargando(true);
 
+                $event.preventDefault();
+
+                $.ajax({
+                    url: '/procesos/aprobaciones/buscarUsuario',
+                    method: 'POST',
+                    data: { nombre: String(this.nombreAprobador), apellido: String(this.apellidoAprobador) },
+                    dataType: 'json',
+                    success: function (data) {
+                        this.usuariosPosibleAprobador = data.usuarios;
+
+                        utils.mostrarCargando(false);
+                    }.bind(this), error: function (data)
+                    {
+                        console.log('Upps,  se encontraron problemas');
+
+                        utils.mostrarCargando(false);
+                    }.bind(this)
+                })
+            },
+
+            guardarUsuarioAprobador: function ($event) {
+                $event.preventDefault();
+
+                if(this.validarNuevoAprobador()) {
+                    utils.mostrarCargando(true);
+
+                    let objeto = {evaluador_id: this.evaluadorAprobador_id, opcion_id: this.opcionAprobador_id, user_id: this.usuarioAprobador_id};
+                    $.ajax({
+                        url: '/procesos/aprobaciones/guardarAprobador',
+                        method: 'POST',
+                        data: objeto,
+                        dataType: 'json',
+                        success: function (data) {
+
+                            if(data.success) {
+                                this.limpiarFormularioAprobacion();
+
+                                utils.mostrarCargando(false);
+
+                                Notificion.success('Se guardo el nuevo aprobador correctamente');
+                            }else{
+                                Notificion.warning('Se encontraron problemas al guardar');
+                            }
+                        }.bind(this), error: function (data) {
+                            Notificion.warning('Upps, No se guardo por favor consulte con el administrador');
+                            utils.mostrarCargando(false);
+                        }.bind(this)
+                    })
+                }
+            },
+            quitarUsuarioAprobador: function ($event) {
+                $event.preventDefault();
+
+                this.usuarioAprobador = '';
+                this.usuarioAprobador_id = '';
+            },
+            cargarUsuarioAprovador: function($event, usuario){
+                $event.preventDefault();
+
+                this.usuarioAprobador = usuario.nombres + ' '+ usuario.apellidos;
+                this.usuarioAprobador_id = usuario.id;
+            },
+            validarNuevoAprobador: function () {
+                if(this.usuarioAprobador_id === '' ){
+                  Notificion.error('Agrege un usuario');
+                  return false;
+                }
+
+                if(this.opcionAprobador_id === '' ){
+                    Notificion.error('Por favor, selecione una aprobacion');
+                    return false;
+                }
+
+                if(this.evaluadorAprobador_id === '' ){
+                    Notificion.error('Por favor, selecione un evaluador');
+                    return false;
+                }
+
+                return true;
+
+            },
+            mostrarNuevaAprobacion: function ($event) {
+                $event.preventDefault();
+
+               this.nuevoAprobacion = true;
+            },
+            ocultarNuevaAprobacion: function ($event) {
+                $event.preventDefault();
+
+                this.limpiarFormularioAprobacion();
+
+            },
+
+            limpiarUsuarioBuscados: function ($event) {
+                $event.preventDefault();
+
+                this.usuariosPosibleAprobador = [];
+
+            },
+            limpiarFormularioAprobacion: function () {
+                this.nuevoAprobacion = false;
+
+                this.usuarioAprobador_id = '';
+                this.opcionAprobador_id = '';
+                this.usuarioAprobador = '';
+                this.usuariosPosibleAprobador = [];
+            },
             /******************************* Obtener la semana ****************************************/
             obtenerSemanaActual: function obtenerSemanaActual() {
                 let tipo = sessionStorage.getItem('agendas');
 
-                console.log(tipo);
                 $.ajax({
-                    url: '/tareas/tareaProgramadas/getSemanaAnio',
+                    url: '/tareas/tareaProgramadas/getSemanaAnioFecha',
                     methos: 'GET',
                     data: { agenda: tipo },
                     dataType: 'json',
@@ -379,17 +511,17 @@ $(document).ready(function() {
                 this.tareaNueva.minuto= 0;
                 this.tareaNueva.agenda= sessionStorage.getItem('agendas');
             },
+
             guardarTareaNueva: function ($event) {
                 $event.preventDefault();
+
                 utils.mostrarCargando(true);
 
                 let token = $('input[name=_token]').val();
-                let path = window.location.href;
-                path = path.split("/");
 
                 // actualizar el tipo de agenda
-                let ag = sessionStorage.getItem('agendas');
-                if(ag !== undefined){
+                let agenda = sessionStorage.getItem('agendas');
+                if(agenda !== undefined){
                     this.tareaNueva.agenda = sessionStorage.getItem('agendas');
                 }
 
@@ -401,11 +533,10 @@ $(document).ready(function() {
                     dataType: 'json',
                     success: function (data) {
                         if(data.success === true){
-                            if(path[path.length - 1] === 'index' && (path[path.length - 2] === 'empleado')){
+                            if(sessionStorage.getItem('calendario') == 1){
                                 $('#calendarTareaUsuario').fullCalendar( 'refetchEventSources', { url: 'cargarTareas'} );
                             }else{
-                                console.log('si actualizo pagina ')
-                               this.$broadcast('actuliza-tareas', data.tareas);
+                               this.$broadcast('actuliza-tareas');
                             }
 
                             Notificion.success('Se guardo correctamente', 10000);
@@ -419,13 +550,13 @@ $(document).ready(function() {
                             Notificion.error(data.message, 10000);
                         }
                         utils.mostrarCargando(false);
-                    }.bind(this), error: function (data){
+                    }.bind(this),
+                    error: function (data){
                         utils.mostrarCargando(false);
                         $('#modal-nueva-tarea').modal('show');
 
                         var errors = data.responseJSON;
                         $.each(errors, function (key, value) {
-                            console.log(data.value);
                             Notificion.error(value, 10000);
 
                         });
@@ -507,16 +638,24 @@ $(document).ready(function() {
                     },
 
                     eventMouseover: function (data, event, view) {
-                        var start = data.start.format('DD/MM/YYYY');
-                        var back = data.backgroundColor;
-                        var hora = data.hora;
-                        var end = data.end.format('DD/MM/YYYY');
+                        try {
+                            var start = data.start.format('DD/MM/YYYY');
+                            var back = data.backgroundColor;
+                            var hora = data.hora;
+                            var end = data.end.format('DD/MM/YYYY');
 
-                        tooltip =
-                            "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:"+data.backgroundColor +"; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>"+data.nro +"</span></label></center>" +
-                            "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" +
-                            "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" +
-                            "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
+                            tooltip =
+                                "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:" + data.backgroundColor + "; height:180px;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>" + data.nro + "</span></label></center>" +
+                                "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" +
+                                "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" +
+                                "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
+                        }catch (Exception){
+                            tooltip =
+                                "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:" + data.backgroundColor + "; height:180px;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>" + data.nro + "</span></label></center>" +
+                                "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>Fecha Invalida<br>" +
+                                "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>Fecha Invalida<br>" +
+                                "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "<br><b class='label label-danger'>ERROR: Llame al Administrado, Por favor</b></div>";
+                        }
 
                         $('body').append(tooltip);
                         $(this).mouseover(function (e) {
@@ -537,10 +676,17 @@ $(document).ready(function() {
                     },
 
                     eventClick: function(data, jsEvent, view) {
-                        var start = data.start.format('DD/MM/YYYY');
-                        var back = data.backgroundColor;
-                        var hora = data.hora;
-                        var end =  data.end.format('DD/MM/YYYY');
+                        try {
+                            var start = data.start.format('DD/MM/YYYY');
+                            var back = data.backgroundColor;
+                            var hora = data.hora;
+                            var end = data.end.format('DD/MM/YYYY');
+                        }catch(Exception){
+                            var start = 'Fecha Invalida';
+                            var back = data.backgroundColor;
+                            var hora = data.hora;
+                            var end = 'Fecha Invalida';
+                        }
 
                         $('#modal-tarea-Calendario').modal("show");
                         $('#modalTareaTitle').html('Detalle de Tarea Nro.: ' + data.numero);
@@ -559,7 +705,6 @@ $(document).ready(function() {
                         $('#verDetalleTarea').attr('action','');
                         $('#verDetalleTarea').attr('action',pathname);
 
-                        console.log(data.can_change );
                         /// verificamos si puede eliminar
                         if(data.can_delete === 0){
                             $('#borrarCalendar').css('display', 'none');
@@ -575,11 +720,65 @@ $(document).ready(function() {
                             $('#editarCalendar').css('display', 'inline-block');
                         }
 
+
+                        let hrefFinalizar = '/tareas/tareaProgramadas/resolver/'+ data.id;
+                        let hrefEditar = '/tareas/tareaProgramadas/'+data.id+'/edit';
                         let href = '/tareas/tareaProgramadas/' + data.id;
                         $('a[name=ver]').attr('href', href );
+                        $('#modalidTaraeEliminar').val(data.id);
+
+                        if(data.can_change === 0){
+                            $('#finalizarCalendar').css('display', 'none');
+                            $('#editarCalendar').css('display', 'none');
+                        } else {
+                            $('#finalizarCalendar').css('display', 'inline-block');
+                            $('#editarCalendar').css('display', 'inline-block');
+
+                            $('#finalizarCalendar').attr('href', hrefFinalizar );
+                            $('#editarCalendar').attr('href', hrefEditar );
+                        }
 
                     }
 
+                });
+
+
+
+            },
+            mostrarEliminarTareaCalendario: function ($event) {
+                $event.preventDefault();
+
+                $('#modal-delete-tarea-calendario').modal('show');
+                $('#idTaraeEliminar').val($('#idTarea').html());
+                $('#idTareaDato').html($('#idTarea').html());
+
+            },
+            cancelarElimnarTarea: function () {
+                $('#modal-delete-tarea-calendario').modal('hide');
+                $('#idTaraeEliminar').val('');
+
+            },
+            eliminarTarea: function ($event) {
+                $event.preventDefault();
+                let tarea_id = $('#idTaraeEliminar').val();
+
+                $.ajax({
+                    url: '/tareas/tareaProgramadas/eliminarTareaAjax',
+                    method: 'GET',
+                    data: { id: $('#idTaraeEliminar').val() },
+                    dataType: 'json',
+                    success: function (data) {
+                        if(data.success) {
+                            $('#modal-delete-tarea-calendario').modal('hide');
+                            $('#modal-tarea-Calendario').modal('hide');
+                            $('#calendarTareaUsuario').fullCalendar('refetchEventSources', {url: 'cargarTareas'});
+                            Notificion.success(data.message);
+                        }
+                    }.bind(this),
+                    error: function (data) {
+                        $('#modal-delete-tarea-calendario').modal('hide');
+                        Notificion.warning('No se elimino la tarea, Por favor consulte al administrador')
+                    }.bind(this)
                 });
 
 
@@ -613,8 +812,6 @@ $(document).ready(function() {
                     data: { titulo: this.tituloNuevoTareaComun, color: color },
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data.tareas);
-
                         Notificion.success('Se guardo correctamente', 10000);
 
                         this.listaTareaComunes = data.tareas;

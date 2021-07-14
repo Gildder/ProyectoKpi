@@ -139,7 +139,7 @@ trait IndicadorRepository
             ->join('indicador_cargos','indicador_cargos.cargo_id','=', 'cargos.id')
             ->join('indicadores','indicadores.id','=','indicador_cargos.indicador_id')
             ->where('indicadores.id',$id)
-            ->where('indicador_cargos.evaluadorCargo_id',$evaluador_id)
+            ->where('indicador_cargos.evaluador_id',$evaluador_id)
             ->get();
 
         return $cargosindicadores;

@@ -80,17 +80,13 @@ class EvaluadorController extends Controller
 	public function show($id)
 	{
 		$evaluador = Evaluador::findOrFail($id);
-		$user = \Auth::user();
-		
-		$empleadosDisponibles = DB::select('call pa_evaluadores_empleadosDisponibles('.$id.');');
-        $empleadosAgregados = DB::select('call pa_evaluadores_empleadosEvaluadores('.$id.');');
+
+		$empleadosDisponibles =  Evaluador::usuariosNoEvalaudores($id);
+        $empleadosAgregados = Evaluador::usuariosEvalaudores($id);
 
         $indicadoresDisponibles = DB::select('call pa_evaluadores_indicadoresDisponibles('.$id.');');
 
-
 		$indicadores = IndicadorRepository::getIndicadoresDeEvaluador($id);
-
-//		dd($indicadores[0]::getCargos(1, 1));
 
         $cargosDisponibles = DB::select('call pa_evaluadores_cargosDisponibles('.$id.');');
         $cargoAgregados = DB::select('call pa_evaluadores_cargosAgregados('.$id.');');
@@ -134,10 +130,10 @@ class EvaluadorController extends Controller
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id])
-            ->update( array('is_evaluador' => 1, 'evaluador_id'=> $evaluador_id));
+            ->update( array('is_evaluador' => 1));
 
 
-        return redirect()->back()->with('message', 'Se agrego el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
+        return redirect()->back()->with('message', 'Se agrego el evaluador '.$empleado->id.'. '.$empleado->name.' correctamente.');
     }
 
     public function quitarempleado($user_id, $evaluador_id)
@@ -148,9 +144,9 @@ class EvaluadorController extends Controller
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id])
-            ->update( array('is_evaluador' => null, 'evaluador_id'=> null));
+            ->update( array('is_evaluador' => null));
 
-        return redirect()->back()->with('message', 'Se quito el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
+        return redirect()->back()->with('message', 'Se quito el evaluador '.$empleado->id.'. '.$empleado->name.' correctamente.');
     }
 
     /* CARGOS */
@@ -172,7 +168,7 @@ class EvaluadorController extends Controller
     {
         $cargo = Cargo::findOrFail($cargo_id);
 
-        $isCargoConIndicador = DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('evaluadorCargo_id', $evaluador_id)->count();
+        $isCargoConIndicador = DB::table('indicador_cargos')->where('cargo_id', $cargo_id)->where('evaluador_id', $evaluador_id)->count();
 
         // verificamos si cargo tiene indicador asignado
         if($isCargoConIndicador <= 0){
@@ -209,20 +205,18 @@ class EvaluadorController extends Controller
     public function quitarindicador($indicador_id, $evaluador_id)
     {
     	$existeCargaConIndicador = DB::select('call pa_evaluadores_existeCargoIndicador('.$indicador_id.','.$evaluador_id.');');
-//dd($indicador_id, $evaluador_id, $existeCargaConIndicador);
 
     	$indicador = Indicador::findOrFail($indicador_id);
 
-    	// dd($existeCargaConIndicador[0]->cantidad);
 
-    	if($existeCargaConIndicador[0]->cantidad > 0)
-    	{
-    		// \Session::flash('No se puede quitar, el indicador '.$indicador->nombre.' tiene cargos agregados.');
-        	 return redirect()->back()->withErrors( 'No se puede quitar, el indicador "'.$indicador->nombre.'" tiene cargos agregados.');
-    	}else{
-        	DB::table('evaluador_indicadores')
-                ->where('indicador_id', $indicador_id)
-                ->where('evaluador_id', $evaluador_id)
+        if($existeCargaConIndicador[0]->cantidad > 0)
+        {
+            // \Session::flash('No se puede quitar, el indicador '.$indicador->nombre.' tiene cargos agregados.');
+            return redirect()->back()->withErrors( 'No se puede quitar, el indicador "'.$indicador->nombre.'" tiene cargos agregados.');
+        }else{
+            DB::table('evaluador_indicadores')
+                ->where('indicador_id', '=', $indicador_id)
+                ->where('evaluador_id', '=',$evaluador_id)
                 ->delete();
         	
         	return redirect()->back()->with('message', 'Se quito el indicador "'.$indicador->nombre.'" correctamente.');
@@ -238,7 +232,7 @@ class EvaluadorController extends Controller
         $evaluador = Evaluador::findOrFail($evaluador_id);
         $indicador = Indicador::findOrFail($indicador_id);
 
-        $cargosEvaluadores = DB::select('call pa_evaluadores_cargosEvaluados('.$indicador_id.', '.$evaluador_id.', '.$evaluador_id.');');
+        $cargosEvaluadores = DB::select('call pa_evaluadores_cargosEvaluados('.$indicador_id.', '.$evaluador_id.');');
         $indicadorCargos = DB::select('call pa_evaluadores_indicadorCargos('.$indicador_id.','.$evaluador_id.');');
         $cargos = DB::select('call pa_evaluadores_cargosAgregados('.$evaluador->id.');');
 
@@ -273,7 +267,7 @@ class EvaluadorController extends Controller
 
         /* insertamos el indicador al cargo asignado */
         $ids = DB::table('indicador_cargos')->insertGetId(
-            array('indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion)
+            array('indicador_id' => $indicador_id, 'evaluador_id' => $evaluador_id, 'cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion)
         );
 
         //Actualizacion de Users en campos is_evaluador
@@ -310,7 +304,7 @@ class EvaluadorController extends Controller
 
         // dd($cargo_id, $cargo_idOld);
         
-        DB::table('indicador_cargos')->where(['indicador_id' => $indicador_id, 'evaluadorIndicador_id' => $evaluador_id, 'evaluadorCargo_id' => $evaluador_id, 'cargo_id' => $cargo_idOld])
+        DB::table('indicador_cargos')->where(['indicador_id' => $indicador_id, 'evaluador_id' => $evaluador_id,  'cargo_id' => $cargo_idOld])
                                      ->update( array('cargo_id' => $cargo_id, 'frecuencia_id' => $frecuencia_id, 'objetivo'=>$objetivo, 'aclaraciones'=> $aclaraciones, 'condicion'=>$condicion));
 
         //Actualizacion de Users en campos is_evaluador
@@ -320,13 +314,12 @@ class EvaluadorController extends Controller
         DB::table('users')->where(['cargo_id' => $cargo_id])
             ->update( array('evaluado_por'=> $evaluador_id));
 
-
         return redirect()->back()->with('message', 'Se modifico el cargo "'.$cargo->nombre.'" correctamente.' );
     }
 
     public function quitarcargoasignado($indicador_id, $evaluador_id, $cargo_id)
     {
-        DB::table('indicador_cargos')->where('indicador_id', $indicador_id)->where('evaluadorIndicador_id', $evaluador_id)->where('evaluadorCargo_id', $evaluador_id)->where('cargo_id', $cargo_id)->delete();
+        DB::table('indicador_cargos')->where('indicador_id', $indicador_id)->where('evaluador_id', $evaluador_id)->where('cargo_id', $cargo_id)->delete();
 
         $cargo = Cargo::findOrFail($cargo_id);
 

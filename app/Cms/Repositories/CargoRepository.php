@@ -5,7 +5,7 @@ namespace ProyectoKpi\Cms\Repositories;
 use ProyectoKpi\Models\Empleados\Cargo;
 use ProyectoKpi\Models\Indicadores\Indicador;
 
-class CargoRepository
+trait CargoRepository
 {
     public function getIndicadores(Cargo $cargo)
     {
@@ -13,4 +13,13 @@ class CargoRepository
 
         return $result;
     }
+
+
+    public static function getsupervisores($id)
+    {
+        $empleadossupervisores = \DB::select('call pa_supervisores_empleadosSupervisadoresCargo('.$id.')');
+
+        return $empleadossupervisores;
+    }
+
 }

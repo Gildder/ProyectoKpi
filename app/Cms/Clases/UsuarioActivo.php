@@ -10,7 +10,7 @@ namespace ProyectoKpi\Cms\Clases;
 
 use Mockery\Exception;
 use ProyectoKpi\Cms\Interfaces\IClases;
-use ProyectoKpi\Cms\Repositories\EvaluadoresRepository;
+use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Cms\Repositories\IndicadorRepository;
 use ProyectoKpi\Cms\Repositories\TareaRepository;
 
@@ -42,7 +42,6 @@ class UsuarioActivo implements IClases
     {
         $this->preferencias = $preferencias;
         $this->inicializar();
-
     }
 
     /** Metodos */
@@ -127,7 +126,7 @@ class UsuarioActivo implements IClases
 
             if (!$this->isAdmin()) {
                 if (isset($user->is_evaluador)) {
-                    $result = EvaluadoresRepository::cnVerificarsEvaluador($user->id);
+                    $result = EvaluadorRepository::cnVerificarsEvaluador($user->id);
                     \Cache::forget('evadores');
                     \Cache::forever('evadores', $result);
 

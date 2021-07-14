@@ -283,6 +283,7 @@ function mostrarErrorForm(objeto, mensaje){
     hijo.show();
 }
 
+
 function ocultarErrorForm(objeto){
     let padre =objeto.parent('.form-group');
     let hijo = padre.children('span');

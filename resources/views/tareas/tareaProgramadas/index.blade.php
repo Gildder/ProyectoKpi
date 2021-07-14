@@ -15,6 +15,8 @@ $(document).ready(function () {
     sessionStorage.setItem('tipoListado', {{ $agenda }});
     sessionStorage.setItem('inicioSemanaFija', '{!! $semanas->fechaInicio !!}');
     sessionStorage.setItem('finSemanaFija', '{!! $semanas->fechaFin !!}');
+    sessionStorage.setItem('calendario', 0);
+
 });
 </script>
 
@@ -62,7 +64,9 @@ $(document).ready(function () {
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <div class="col-sm-12">Tareas Programadas para la Semana {{ $semanas->semana }} del mes de <b>{{ $semanas->mes }}</b>, del <b class="fechaTareas">{{ $semanas->fechaInicio }}</b> al <b class="fechaTareas">{{ $semanas->fechaFin }}</b>
           </div>
-              <tabla-tarea url="/tareas/tareaProgramadas/tareaSemanaJson"></tabla-tarea>
+            @verbatim
+              <tabla-tarea :url="/tareas/tareaProgramadas/tareaSemanaJson"></tabla-tarea>
+                @endverbatim
       </div>
     </div>
   </div>

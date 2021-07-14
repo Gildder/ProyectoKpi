@@ -52,7 +52,7 @@
 
             {{-- Fechas de Inicio y Fin --}}
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row"
-                 style="display:{{ (\Usuario::get('verFechaEstimadas')== true || $agenda === '1')?'block':'none'}}">
+                 style="display:{{ (\Usuario::get('verFechaEstimadas')== true)?'block':'none'}}">
                 {{-- Fecha Inicio de Tarea --}}
                 <div class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
                     <div class="form-group
@@ -231,11 +231,14 @@
             }
         });
 
+
         $('input[name="hora"]').blur(function(){
             if(validarCampoVacio($(this).val())){
                 ocultarErrorForm($(this));
             }else{
-                mostrarErrorForm($(this), 'La hora es requerida');
+
+//            mostrarErrorForm($(this), 'La hora no puede esta vacio');
+                $(this).val('0');
             }
         });
 
@@ -243,9 +246,12 @@
             if(validarCampoVacio($(this).val())){
                 ocultarErrorForm($(this));
             }else{
-                mostrarErrorForm($(this), 'El minuto es requerida');
+
+//            mostrarErrorForm($(this), 'El minuto es requerida');
+                $(this).val('0');
             }
         });
+
 
         $('input[name="fechaInicio"]')
             .change(function(){

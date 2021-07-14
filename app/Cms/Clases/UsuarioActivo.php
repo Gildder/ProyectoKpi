@@ -42,7 +42,6 @@ class UsuarioActivo implements IClases
     {
         $this->preferencias = $preferencias;
         $this->inicializar();
-
     }
 
     /** Metodos */

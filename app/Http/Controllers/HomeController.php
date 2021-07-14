@@ -46,6 +46,7 @@ class HomeController extends Controller
             if (\Usuario::get('isAdmin')) {
                 return redirect()->route('administrador.index');
             } else {
+//                dd(\Auth::user()->is_evaluador);
                 // tiene indicadores asignado
                 if (\Usuario::get('isIndicadores')) {
                     $rutaPrincipal = 'tareas.tareaProgramadas.index';

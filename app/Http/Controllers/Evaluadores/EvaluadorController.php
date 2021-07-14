@@ -130,10 +130,10 @@ class EvaluadorController extends Controller
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id])
-            ->update( array('is_evaluador' => 1, 'evaluador_id'=> $evaluador_id));
+            ->update( array('is_evaluador' => 1));
 
 
-        return redirect()->back()->with('message', 'Se agrego el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
+        return redirect()->back()->with('message', 'Se agrego el evaluador '.$empleado->id.'. '.$empleado->name.' correctamente.');
     }
 
     public function quitarempleado($user_id, $evaluador_id)
@@ -144,9 +144,9 @@ class EvaluadorController extends Controller
 
         //Actualizacion de Users en campos is_evaluador
         DB::table('users')->where(['id' => $user_id])
-            ->update( array('is_evaluador' => null, 'evaluador_id'=> null));
+            ->update( array('is_evaluador' => null));
 
-        return redirect()->back()->with('message', 'Se quito el evaluador "'.$empleado->id.' - '.$empleado->name.' correctamente.');
+        return redirect()->back()->with('message', 'Se quito el evaluador '.$empleado->id.'. '.$empleado->name.' correctamente.');
     }
 
     /* CARGOS */

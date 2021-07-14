@@ -19,6 +19,10 @@ return [
         /*Estado tarea */
         'lbsNombre'  => 'Nombre *:',
 
+        /* Inincio Sesion */
+        'lbsUsuario' => 'Usuario:',
+        'lbsContrasenia' => 'Contraseña:',
+
     ],
 
     'buttons' => [
@@ -37,21 +41,24 @@ return [
         'btnInfo' => '',
         'btnBuscar' => 'Buscar',
         'btnLimpiar' => 'Limpiar',
+
+        /* Inicio Sesion */
+        'btnEntrar' => 'Entrar',
     ],
 
     'stylbtns' => [
         'btnGuardar' => 'btn btn-success',
         'btnCancelar' => 'btn btn-danger',
-        'btnNuevo' => 'btn btn-primary btn-sm',
-        'btnEliminar' => 'btn btn-danger btn-sm',
-        'btnEditar' => 'btn btn-warning btn-sm',
-        'btnRestaurar' => 'btn btn-success btn-sm',
-        'btnReabrir' => 'btn btn-danger btn-sm',
-        'btnFinalizar' => 'btn btn-success btn-sm',
-        'btnFinalizarArchivo' => 'btn btn-github btn-sm',
+        'btnNuevo' => 'btn btn-primary',
+        'btnEliminar' => 'btn btn-danger',
+        'btnEditar' => 'btn btn-warning',
+        'btnRestaurar' => 'btn btn-success',
+        'btnReabrir' => 'btn btn-danger',
+        'btnFinalizar' => 'btn btn-success',
+        'btnFinalizarArchivo' => 'btn btn-github',
         'btnInfo' => 'btn btn-primary btn-xs',
-        'btnBuscar' => 'btn btn-success btn-sm',
-        'btnLimpiar' => 'btn btn-primary btn-sm',
+        'btnBuscar' => 'btn btn-success',
+        'btnLimpiar' => 'btn btn-primary',
     ],
 
     'patterns' => [
@@ -89,6 +96,29 @@ return [
         /* Estado tareas */
         'phsNombre' => 'Ingrese el Nombre',
 
+        /* Inicio Session*/
+        'phsUsuario'=> 'Usuario',
+        'phsContrasenia' => 'Contraseña',
+
+    ],
+
+    'titlesPage' => [
+        /* Tarea Resolver*/
+        'tareaFinalizar' => 'Finalizar Tarea',
+        'createTarea' => 'Nueva Tarea',
+        'ttlEstadoTarea' => 'Estados de Tareas', //index
+        'ttlEstadoTareaRecycle' => 'Reciclados', //index
+        'ttlTareasArchivadas' => 'Archivos', //index
+
+        'ttlConexionLdap' => 'Conexion LDAP',
+        'ttlNuevaLdap' => 'Nueva Conexion',
+        'ttlAprobaciones' => 'Aprobaciones',
+        'ttlOpicioens' => 'Opciones',
+
+        /* Aprobaciones */
+        'ttlAprobacionOpciones' => 'Opciones de Aprobacion',
+        /* Inicio de Session */
+        'ttlInicioSesion' => 'Inicio de Session',
     ],
 
     'panels' => [
@@ -104,26 +134,20 @@ return [
         'pnsNuevo' => 'Nuevo',
         'pnsReciclados' => 'Reciclados',
         'pnsDetalle' => 'Detalle',
-    ],
 
 
-    'titlesForm' => [
 
-    ],
+        'pnsConexionLdap' => 'Conexion LDAP',
+        'pnsNuevoLdap' => 'Nueva Conexion LDAP',
+        
 
-    'titlesPage' => [
-        /* Tarea Resolver*/
-        'tareaFinalizar' => 'Finalizar Tarea',
-        'createTarea' => 'Nueva Tarea',
-        'ttlEstadoTarea' => 'Estados de Tareas', //index
-        'ttlEstadoTareaRecycle' => 'Reciclados', //index
-        'ttlTareasArchivadas' => 'Archivos', //index
+        'pnsAprobaciones' => 'Procesos Aprobacion',
+        'pnsOpciones' => 'Opciones de Aprobacion',
 
-    ],
+        'pnsAprobacionOpciones' => 'Opciones de Aprobacion',
 
-    'titleBtns' => [
-        'ttlBtnEditar' => 'Editar',
-        'ttlBtnEliminar' => 'Eliminar',
+        /*Inicio de Ssssion */
+        'pnsInicioSesion' => 'Inicio de Sesiòn',
     ],
 
 

@@ -108,6 +108,17 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 		['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy', 'show']]);
 });
 
+
+/* LDAP */
+Route::group(['middleware' => ['auth', 'administrador']], function () {
+    Route::get('configuraciones/ldap/index',
+        array('as' => 'configuraciones.ldap.index', 'uses' => 'Configuracion\LdapController@index'));
+
+    Route::get('configuraciones/ldap/create',
+        array('as' => 'configuraciones.ldap.create', 'uses' => 'Configuracion\LdapController@create'));
+});
+
+
 // **********************  MODULO EVALUADORES  *****************************************
 
 /* ESCALAS  */
@@ -192,6 +203,47 @@ Route::group(['middleware'=>['auth', 'administrador']], function ()
 	Route::resource('evaluadores/evaluador', 'Evaluadores\EvaluadorController',
 		['only' => ['index', 'create', 'edit', 'store', 'update', 'destroy', 'show']]);
 	
+});
+
+/* Aprobaciones*/
+Route::group(['middleware' => ['auth', 'administrador']], function() 
+{
+	Route::get('procesos/aprobaciones', array(
+		'as' =>'procesos.aprobaciones.index',
+		'uses' => 'Procesos\AprobacionesController@index' 
+	));
+
+	Route::get('procesos/opciones', array(
+		'as' =>'procesos.opciones.index',
+		'uses' => 'Procesos\OpcionesController@index' 
+	));
+
+	Route::get('procesos/aprobaciones/agregarOpcion', array(
+        'as' => 'procesos.aprobaciones.agregarOpcion',
+        'uses'=> 'Procesos\AprobacionesController@agregarOpcion'
+    ));
+
+	Route::get('procesos/aprobaciones/{id}', array(
+	    'as'=> 'procesos.aprobaciones.show',
+        'uses'=> 'Procesos\AprobacionesController@show'
+    ));
+
+
+	Route::post('procesos/aprobaciones/buscarUsuario', array(
+	    'as' => 'procesos.aprobaciones.buscarUsuario',
+        'uses' => 'Procesos\AprobacionesController@buscarUsuario'
+    ));
+
+    Route::post('procesos/aprobaciones/guardarAprobador', array(
+        'as' => 'procesos.aprobaciones.guardarAprobador',
+        'uses' => 'Procesos\AprobacionesController@guardarAprobador'
+    ));
+
+    Route::get('procesos/aprobaciones/opcionesAprobacion', array(
+        'as' => 'procesos.aprobaciones.opcionesAprobacion',
+        'uses' => 'Procesos\AprobacionesController@opcionesAprobacion'
+    ));
+
 });
 
 /* EVALUADORES */
@@ -474,12 +526,6 @@ route::group(['middleware'=>['auth', 'supervisores', 'estandard']], function()
 
 });
 
-
-
-
-
-
-
 // **********************  MODULO TAREAS  *****************************************
 
 /*  TAREAS */
@@ -491,6 +537,9 @@ route::group(['middleware'=>['auth', 'estandard']], function()
 	// tareas cancelar programadas
 	Route::get('tareas/tareaProgramadas/cancelarSolucion/{tarea}',
 		array('as' => 'tareas.tareaProgramadas.cancelarSolucion', 'uses' => 'Tareas\TareaProgramadaController@cancelarSolucion') );
+
+    Route::get('tareas/tareaProgramadas/eliminarTareaAjax',
+        array('as' => 'tareas.tareaProgramadas.eliminarTareaAjax', 'uses' => 'Tareas\TareaProgramadaController@eliminarTareaAjax') );
 
 	Route::get('tareas/tareaProgramadas/tareaSemanaJson',
 		array('as' => 'tareas.tareaProgramadas.tareaSemanaJson', 'uses' => 'Tareas\TareaProgramadaController@tareaSemanaJson') );

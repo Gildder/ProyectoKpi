@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use ProyectoKpi\Http\Requests;
 use ProyectoKpi\Http\Controllers\Controller;
-use ProyectoKpi\Http\Requests\Empleados\EstadoTareaFormRequest;
+use ProyectoKpi\Http\Requests\Estados\EstadoTareaFormRequest;
 use ProyectoKpi\Models\Tareas\Estados;
 
 class EstadoTareaController extends Controller

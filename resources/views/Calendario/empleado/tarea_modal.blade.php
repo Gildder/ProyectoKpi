@@ -50,23 +50,24 @@
 
           <div class="modal-footer modal-delete-footer">
 
-              <a  data-dismiss="modal"
+              <a
                   class="btn btn-success btn-xs"
                   id="finalizarCalendar" title="Finalizar" >Finalizar  <span class="fa fa-thumbs-up "></span>
               </a>
               
-              <a  data-dismiss="modal"
+              <a
                   class="btn btn-warning btn-xs"
                   id="editarCalendar" title="Editar" >Editar  <span class="fa fa-edit "></span> </a>
                   
-              <a  data-dismiss="modal"
-                  class="btn btn-danger btn-xs"
+              <a data-toggle="modal"
+                  data-target="modal-delete-tarea-calendario" @click="mostrarEliminarTareaCalendario($event)"
+                   class="btn btn-danger btn-xs"
                   id="borrarCalendar" title="Borrar" >Borrar   <span class="fa fa-trash "></span> </a>
           </div>
           </form>
       </div>
     </div>
-
+@include('Calendario/empleado/delete_tarea')
   </div>
 </div>
 

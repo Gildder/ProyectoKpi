@@ -12344,8 +12344,6 @@ $(document).ready(function () {
 
     Vue.component('selector-modal', require('./components/nuevo_widget/selector_modal.vue'));
 
-    Vue.component('input-date', require('./components/date/inputDate.vue'));
-
     Vue.component('panel-widget', require('./components/widget/PanelWidget.vue'));
 
     Vue.component('chart-widget', require('./components/widget/grafica.vue'));
@@ -12446,7 +12444,18 @@ $(document).ready(function () {
             btnFiltroTareaSupervisor: true,
 
             /***Edita tareas agenda **/
-            tipolistatarea: sessionStorage.getItem('tipoListado')
+            tipolistatarea: sessionStorage.getItem('tipoListado'),
+
+            /**************** Aprobaciones **************/
+            nombreAprobador: '',
+            apellidoAprobador: '',
+            usuariosPosibleAprobador: [],
+            usuarioAprobador: '',
+            usuarioAprobador_id: '',
+            opcionAprobador_id: '',
+            evaluadorAprobador_id: '',
+            btnGuardarEnable: false,
+            nuevoAprobacion: false
         },
 
         ready: function ready() {
@@ -12471,8 +12480,6 @@ $(document).ready(function () {
                     if ($('input[name=minuto]') === '') {
                         $('input[name=minuto]').val(0);
                     }
-
-                    console.log('gol');
                 }
             },
             listaVacia: function listaVacia() {
@@ -12519,7 +12526,6 @@ $(document).ready(function () {
                     Notificion.success('El Widget se elimino correctamente!');
                 }, function (response) {
                     Notificion.warning('El Widget No elimino, por favor verificar con su administrador!');
-                    alert(JSON.stringify(response));
                 });
             },
             'buscar-tarea-supervidor': function buscarTareaSupervidor(tareas) {
@@ -12531,7 +12537,113 @@ $(document).ready(function () {
         },
         /************************************************* METHODS *****************************************************/
         methods: {
+            /************************************** Aprobacion ******************************************/
+            buscarUsuariosAprobador: function buscarUsuariosAprobador($event) {
+                utils.mostrarCargando(true);
 
+                $event.preventDefault();
+
+                $.ajax({
+                    url: '/procesos/aprobaciones/buscarUsuario',
+                    method: 'POST',
+                    data: { nombre: String(this.nombreAprobador), apellido: String(this.apellidoAprobador) },
+                    dataType: 'json',
+                    success: function (data) {
+                        this.usuariosPosibleAprobador = data.usuarios;
+
+                        utils.mostrarCargando(false);
+                    }.bind(this), error: function (data) {
+                        console.log('Upps,  se encontraron problemas');
+
+                        utils.mostrarCargando(false);
+                    }.bind(this)
+                });
+            },
+
+            guardarUsuarioAprobador: function guardarUsuarioAprobador($event) {
+                $event.preventDefault();
+
+                if (this.validarNuevoAprobador()) {
+                    utils.mostrarCargando(true);
+
+                    var objeto = { evaluador_id: this.evaluadorAprobador_id, opcion_id: this.opcionAprobador_id, user_id: this.usuarioAprobador_id };
+                    $.ajax({
+                        url: '/procesos/aprobaciones/guardarAprobador',
+                        method: 'POST',
+                        data: objeto,
+                        dataType: 'json',
+                        success: function (data) {
+
+                            if (data.success) {
+                                this.limpiarFormularioAprobacion();
+
+                                utils.mostrarCargando(false);
+
+                                Notificion.success('Se guardo el nuevo aprobador correctamente');
+                            } else {
+                                Notificion.warning('Se encontraron problemas al guardar');
+                            }
+                        }.bind(this), error: function (data) {
+                            Notificion.warning('Upps, No se guardo por favor consulte con el administrador');
+                            utils.mostrarCargando(false);
+                        }.bind(this)
+                    });
+                }
+            },
+            quitarUsuarioAprobador: function quitarUsuarioAprobador($event) {
+                $event.preventDefault();
+
+                this.usuarioAprobador = '';
+                this.usuarioAprobador_id = '';
+            },
+            cargarUsuarioAprovador: function cargarUsuarioAprovador($event, usuario) {
+                $event.preventDefault();
+
+                this.usuarioAprobador = usuario.nombres + ' ' + usuario.apellidos;
+                this.usuarioAprobador_id = usuario.id;
+            },
+            validarNuevoAprobador: function validarNuevoAprobador() {
+                if (this.usuarioAprobador_id === '') {
+                    Notificion.error('Agrege un usuario');
+                    return false;
+                }
+
+                if (this.opcionAprobador_id === '') {
+                    Notificion.error('Por favor, selecione una aprobacion');
+                    return false;
+                }
+
+                if (this.evaluadorAprobador_id === '') {
+                    Notificion.error('Por favor, selecione un evaluador');
+                    return false;
+                }
+
+                return true;
+            },
+            mostrarNuevaAprobacion: function mostrarNuevaAprobacion($event) {
+                $event.preventDefault();
+
+                this.nuevoAprobacion = true;
+            },
+            ocultarNuevaAprobacion: function ocultarNuevaAprobacion($event) {
+                $event.preventDefault();
+
+                this.limpiarFormularioAprobacion();
+            },
+
+            limpiarUsuarioBuscados: function limpiarUsuarioBuscados($event) {
+                $event.preventDefault();
+
+                this.usuariosPosibleAprobador = [];
+            },
+            limpiarFormularioAprobacion: function limpiarFormularioAprobacion() {
+                this.nuevoAprobacion = false;
+
+                this.usuarioAprobador_id = '';
+                this.opcionAprobador_id = '';
+                this.usuarioAprobador = '';
+                this.usuariosPosibleAprobador = [];
+            },
             /******************************* Obtener la semana ****************************************/
             obtenerSemanaActual: function obtenerSemanaActual() {
                 var tipo = sessionStorage.getItem('agendas');
@@ -12684,8 +12796,6 @@ $(document).ready(function () {
                 utils.mostrarCargando(true);
 
                 var token = $('input[name=_token]').val();
-                var path = window.location.href;
-                path = path.split("/");
 
                 // actualizar el tipo de agenda
                 var agenda = sessionStorage.getItem('agendas');
@@ -12701,10 +12811,10 @@ $(document).ready(function () {
                     dataType: 'json',
                     success: function (data) {
                         if (data.success === true) {
-                            if (path[path.length - 1] === 'index' && path[path.length - 2] === 'empleado') {
+                            if (sessionStorage.getItem('calendario') == 1) {
                                 $('#calendarTareaUsuario').fullCalendar('refetchEventSources', { url: 'cargarTareas' });
                             } else {
-                                this.$broadcast('actuliza-tareas', data.tareas);
+                                this.$broadcast('actuliza-tareas');
                             }
 
                             Notificion.success('Se guardo correctamente', 10000);
@@ -12800,12 +12910,16 @@ $(document).ready(function () {
                     },
 
                     eventMouseover: function eventMouseover(data, event, view) {
-                        var start = data.start.format('DD/MM/YYYY');
-                        var back = data.backgroundColor;
-                        var hora = data.hora;
-                        var end = data.end.format('DD/MM/YYYY');
+                        try {
+                            var start = data.start.format('DD/MM/YYYY');
+                            var back = data.backgroundColor;
+                            var hora = data.hora;
+                            var end = data.end.format('DD/MM/YYYY');
 
-                        tooltip = "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:" + data.backgroundColor + "; height:17%;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>" + data.nro + "</span></label></center>" + "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
+                            tooltip = "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:" + data.backgroundColor + "; height:180px;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>" + data.nro + "</span></label></center>" + "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>" + start + "<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>" + end + "<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "</div>";
+                        } catch (Exception) {
+                            tooltip = "<div id='tooltip' class=\'tooltipevent\' style=\'width:300px; box-shadow: 2px 2px 2px gray; border: 2px solid gray; border-color:" + data.backgroundColor + "; height:180px;background: white;position:absolute; z-index:10001;border-radius:15px; padding: 10px;\'><center style=\'border-bottom: 1px solid aliceblue; display: inline-block; text-shadow: 1px 1px 1px gray; font-weight: bold;margin-bottom: 10px;\'>" + data.descrip + "<label class='badge' style='display: inline-block; float: left; margin-right: 5px;'><span>" + data.nro + "</span></label></center>" + "<br><b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Inicio:</b>Fecha Invalida<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Fecha Fin:</b>Fecha Invalida<br>" + "<b style='text-shadow: 1px 1px 1px gray; display: inline-block; width: 100px;'>Duracion:</b>" + hora + "<br><b class='label label-danger'>ERROR: Llame al Administrado, Por favor</b></div>";
+                        }
 
                         $('body').append(tooltip);
                         $(this).mouseover(function (e) {
@@ -12826,10 +12940,17 @@ $(document).ready(function () {
                     },
 
                     eventClick: function eventClick(data, jsEvent, view) {
-                        var start = data.start.format('DD/MM/YYYY');
-                        var back = data.backgroundColor;
-                        var hora = data.hora;
-                        var end = data.end.format('DD/MM/YYYY');
+                        try {
+                            var start = data.start.format('DD/MM/YYYY');
+                            var back = data.backgroundColor;
+                            var hora = data.hora;
+                            var end = data.end.format('DD/MM/YYYY');
+                        } catch (Exception) {
+                            var start = 'Fecha Invalida';
+                            var back = data.backgroundColor;
+                            var hora = data.hora;
+                            var end = 'Fecha Invalida';
+                        }
 
                         $('#modal-tarea-Calendario').modal("show");
                         $('#modalTareaTitle').html('Detalle de Tarea Nro.: ' + data.numero);
@@ -12863,10 +12984,58 @@ $(document).ready(function () {
                             $('#editarCalendar').css('display', 'inline-block');
                         }
 
+                        var hrefFinalizar = '/tareas/tareaProgramadas/resolver/' + data.id;
+                        var hrefEditar = '/tareas/tareaProgramadas/' + data.id + '/edit';
                         var href = '/tareas/tareaProgramadas/' + data.id;
                         $('a[name=ver]').attr('href', href);
+                        $('#modalidTaraeEliminar').val(data.id);
+
+                        if (data.can_change === 0) {
+                            $('#finalizarCalendar').css('display', 'none');
+                            $('#editarCalendar').css('display', 'none');
+                        } else {
+                            $('#finalizarCalendar').css('display', 'inline-block');
+                            $('#editarCalendar').css('display', 'inline-block');
+
+                            $('#finalizarCalendar').attr('href', hrefFinalizar);
+                            $('#editarCalendar').attr('href', hrefEditar);
+                        }
                     }
 
+                });
+            },
+            mostrarEliminarTareaCalendario: function mostrarEliminarTareaCalendario($event) {
+                $event.preventDefault();
+
+                $('#modal-delete-tarea-calendario').modal('show');
+                $('#idTaraeEliminar').val($('#idTarea').html());
+                $('#idTareaDato').html($('#idTarea').html());
+            },
+            cancelarElimnarTarea: function cancelarElimnarTarea() {
+                $('#modal-delete-tarea-calendario').modal('hide');
+                $('#idTaraeEliminar').val('');
+            },
+            eliminarTarea: function eliminarTarea($event) {
+                $event.preventDefault();
+                var tarea_id = $('#idTaraeEliminar').val();
+
+                $.ajax({
+                    url: '/tareas/tareaProgramadas/eliminarTareaAjax',
+                    method: 'GET',
+                    data: { id: $('#idTaraeEliminar').val() },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            $('#modal-delete-tarea-calendario').modal('hide');
+                            $('#modal-tarea-Calendario').modal('hide');
+                            $('#calendarTareaUsuario').fullCalendar('refetchEventSources', { url: 'cargarTareas' });
+                            Notificion.success(data.message);
+                        }
+                    }.bind(this),
+                    error: function (data) {
+                        $('#modal-delete-tarea-calendario').modal('hide');
+                        Notificion.warning('No se elimino la tarea, Por favor consulte al administrador');
+                    }.bind(this)
                 });
             },
             borrarTareaNueva: function borrarTareaNueva($event, tarea_id) {
@@ -12991,166 +13160,7 @@ $(document).ready(function () {
     /* fin de vm de Vuejs */
 });
 
-},{"./components/date/inputDate.vue":8,"./components/indicadores/TablaIndicador.vue":9,"./components/loading/loading.vue":10,"./components/nuevo_widget/Fila_Widget.vue":11,"./components/nuevo_widget/ModalWidget.vue":12,"./components/nuevo_widget/selector_modal.vue":13,"./components/supervisores/tareas/filtro.vue":14,"./components/supervisores/tareas/tabla.vue":15,"./components/tareas/estados.vue":16,"./components/tareas/tabla/tabla.vue":17,"./components/widget/PanelWidget.vue":18,"./components/widget/grafica.vue":19,"./helper/utils.js":20,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-
-var Vue = require('vue');
-
-var RangeDates = ["12/8/2017, 13/8/2017"];
-var RangeDatesIsDisable = true;
-
-exports.default = {
-    props: {
-        tipo: { type: String, required: true },
-        nombre: { type: String, required: true },
-        fechainicio: { type: String, required: true },
-        fechafin: { type: String, required: true },
-        placeholder: { type: String, required: true },
-        readonly: { type: String, default: false },
-        valor: { type: String, required: true },
-        agendar: { type: String, required: true }
-    },
-    computed: {
-        cambioFecha: function cambioFecha() {
-            if (this.valor !== '') {
-                this.cambioFechaTarea();
-                this.cargarDate();
-            }
-        }
-    },
-    ready: function ready() {
-        this.obtenerFechaFin();
-
-        this.cargarDate();
-
-        this.DisableDays(new Date());
-    },
-    methods: {
-
-        DisableDays: function DisableDays(date) {
-            var isd = RangeDatesIsDisable;
-            var rd = RangeDates;
-
-            var d = date.getDate();
-            var m = date.getMonth();
-            var y = date.getFullYear();
-
-            for (var i = 0; i < rd.length; i++) {
-                var ds = rd[i].split(',');
-
-                var di, df;
-                var m1, d1, y1, m2, d2, y2;
-
-                if (ds.length == 1) {
-                    di = ds[0].split('/');
-
-                    m1 = parseInt(di[0]);
-                    d1 = parseInt(di[1]);
-                    y1 = parseInt(di[2]);
-                    if (y1 == y && m1 == m + 1 && d1 == d) return [!isd];
-                } else if (ds.length > 1) {
-                    di = ds[0].split('/');
-                    df = ds[1].split('/');
-                    m1 = parseInt(di[0]);
-                    d1 = parseInt(di[1]);
-                    y1 = parseInt(di[2]);
-                    m2 = parseInt(df[0]);
-                    d2 = parseInt(df[1]);
-                    y2 = parseInt(df[2]);
-
-                    if (y1 >= y || y <= y2) {
-                        if (m + 1 >= m1 && m + 1 <= m2) {
-                            if (m1 == m2) {
-                                if (d >= d1 && d <= d2) return [!isd];
-                            } else if (m1 == m + 1) {
-                                if (d >= d1) return [!isd];
-                            } else if (m2 == m + 1) {
-                                if (d <= d2) return [!isd];
-                            } else return [!isd];
-                        }
-                    }
-                }
-            }
-            return [isd];
-        },
-        isSemanaTieneFinMes: function isSemanaTieneFinMes() {
-            var arrayFechaInicio = this.fechainicio.split('/');
-            var arrayFechaFin = this.fechafin.split('/');
-
-            var mesInicio = parseInt(arrayFechaInicio[1]);
-            var mesFin = parseInt(arrayFechaFin[1]);
-            if (mesInicio !== mesFin) {
-                return 2;
-            } else {
-                return 1;
-            }
-        },
-        obtenerFechaFin: function obtenerFechaFin() {
-            if (parseInt(this.agendar) === 0) {
-                return this.fechafin;
-            } else {
-                var fecha = new Date();
-                var ano = fecha.getFullYear();
-
-                this.fechafin = '31/12/' + ano;
-            }
-        },
-        cambioFechaTarea: function cambioFechaTarea() {
-            if (parseInt(this.agendar) === 1 && this.agendar !== undefined) {
-
-                $.ajax({
-                    url: 'fechaInicioFinSemamal',
-                    method: 'POST',
-                    data: { fecha: this.valor },
-                    dataType: 'json',
-                    success: function (data) {
-                        this.fechafin = data.semanas.fechaFin;
-                        this.fechainicio = data.semanas.fechaInicio;
-                    }.bind(this), error: function (data) {
-                        //                            console.log('Error: No se obtuvo las cantidad de semanas');
-
-                    }.bind(this)
-                });
-            }
-        },
-        cargarDate: function cargarDate() {
-
-            $("#inputdate-" + this.nombre).datepicker({
-                format: 'dd/mm/yyyy',
-                changeMonth: true,
-                showWeek: false,
-                numberOfMonths: this.isSemanaTieneFinMes(),
-                firstDay: 1,
-                showButtonPanel: true,
-                minDate: this.fechainicio,
-                maxDate: this.fechafin,
-                selectOtherMonths: true,
-                showAnim: 'fadeIn',
-                beforeShowDay: false
-            });
-        }
-
-    }
-
-};
-if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"input-group row\" style=\"margin: 10px 5px 15px 0px;\">\n    <div class=\"input-group-addon row\">\n        <i class=\"fa fa-calendar\"></i>\n    </div>\n    <input type=\"{{ tipo }}\" id=\"inputdate-{{ nombre }}\" value=\"{{ valor }}\" style=\"z-index: 3000\" readonly=\"{{ readonly}}\" agendar=\"{{ agendar }}\" v-model=\"valor\" v-bind:key=\"cambioFecha\" placeholder=\"{{ placeholder }}\" pattern=\"(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d\" class=\"form-control\" name=\"{{ nombre }}\" required=\"\">\n</div>\n"
-if (module.hot) {(function () {  module.hot.accept()
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), true)
-  if (!hotAPI.compatible) return
-  if (!module.hot.data) {
-    hotAPI.createRecord("_v-26d64d38", module.exports)
-  } else {
-    hotAPI.update("_v-26d64d38", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
-  }
-})()}
-},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
+},{"./components/indicadores/TablaIndicador.vue":8,"./components/loading/loading.vue":9,"./components/nuevo_widget/Fila_Widget.vue":10,"./components/nuevo_widget/ModalWidget.vue":11,"./components/nuevo_widget/selector_modal.vue":12,"./components/supervisores/tareas/filtro.vue":13,"./components/supervisores/tareas/tabla.vue":14,"./components/tareas/estados.vue":15,"./components/tareas/tabla/tabla.vue":16,"./components/widget/PanelWidget.vue":17,"./components/widget/grafica.vue":18,"./helper/utils.js":19,"vue":5,"vue-resource":4}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13185,7 +13195,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-62bc5fbe", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],10:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],9:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.modal-load-content{\n    border-radius: 10px 10px 10px 10px;\n}\n\n.modal-load-header{\n    background: #4f81bd;\n    color: white;\n}\n\n.modal-load-body{\n    padding: 10px;\n}\n\n#loading{\n    z-index: 99999;\n}\n.marginLeft{\n    /*margin-right:30px;*/\n}\n#warning{\n    font-size:16px;\n}\n#Gen{\n    width:100px;\n    /*height:100px;*/\n    /*float:left;*/\n    margin-left:35%;\n    -webkit-transform:scale(0.6)\n}\n.block{\n    -moz-border-radius:8px 8px 0px 0px;\n    -webkit-border-radius:8px 8px 0px 0px;\n    background-color:#efefef;\n    height:36px;\n    width:15px;\n    float:left;\n    -webkit-transform:scale(0.4);\n    -webkit-animation-name: fade;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#rotate_01{\n    -webkit-transform:rotate(-90deg);\n    -moz-transform:rotate(-90deg);\n    margin-left:1px;\n    margin-top:30px;\n    -webkit-animation-delay: .3s;\n}\n#rotate_02{\n    -webkit-transform:rotate(-45deg);\n    -moz-transform:rotate(-45deg);\n    margin-left:-5px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.4s;\n}\n#rotate_03{\n    -webkit-transform:rotate(0deg);\n    -moz-transform:rotate(0deg);\n    margin-left:12px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.5s;\n}\n#rotate_04{\n    -webkit-transform:rotate(45deg);\n    -moz-transform:rotate(45deg);\n    margin-left:14px;\n    margin-top:3px;\n    -webkit-animation-delay: 0.6s;\n}\n#rotate_05{\n    -webkit-transform:rotate(90deg);\n    -moz-transform:rotate(90deg);\n    margin-left:-4px;\n    margin-top:30px;\n    -webkit-animation-delay: 0.7s;\n}\n#rotate_06{\n    -webkit-transform:rotate(135deg);\n    -moz-transform:rotate(135deg);\n    margin-left:68px;\n    margin-top:-8px;\n    -webkit-animation-delay: 0.8s;\n}\n#rotate_07{\n    -webkit-transform:rotate(180deg);\n    -moz-transform:rotate(180deg);\n    margin-left:-43px;\n    margin-top:2px;\n    -webkit-animation-delay: 0.9s;\n}\n#rotate_08{\n    -webkit-transform:rotate(-135deg);\n    -moz-transform:rotate(-135deg);\n    margin-left:-72px;\n    margin-top:-8px;\n    -webkit-animation-delay: 1s;\n}\n\n@-webkit-keyframes fade{\n    0%{background-color:#333;}\n    100%{background-color:#efefef;}\n}\n/***************************** facebook **********************************/\n#facebook{\n    margin-top:30px;\n    float:left;\n}\n.facebook_block{\n    background-color:#9FC0FF;\n    border:2px solid #3B5998;\n    float:left;\n    height:30px;\n    margin-left:5px;\n    width:8px;\n    -webkit-animation-name: bounce;\n    -webkit-animation-duration: 1s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.1;\n    -webkit-transform:scale(0.7);\n}\n#block_1{\n    -webkit-animation-delay: .3s;\n}\n#block_2{\n    -webkit-animation-delay: .4s;\n}\n#block_3{\n    -webkit-animation-delay: .5s;\n}\n@-webkit-keyframes bounce{\n    0%{-webkit-transform: scale(1.2);opacity:1;}\n    100%{-webkit-transform: scale(0.7);opacity:0.1;}\n}\n/***************************** facebook like circle **********************************/\n#circle{\n    margin-top:40px;\n    float:left;\n}\n.circle{\n    background-color:#CCC;\n    float:left;\n    height:15px;\n    margin-left:8px;\n    width:15px;\n    -webkit-animation-name: bounce_circle;\n    -webkit-border-radius:10px;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n    opacity:0.3;\n}\n#circle_1{\n    -webkit-animation-delay: .3s;\n}\n#circle_2{\n    -webkit-animation-delay: .7s;\n}\n#circle_3{\n    -webkit-animation-delay: .9s;\n}\n@-webkit-keyframes bounce_circle{\n    0%{opacity:0.3;}\n    50%{opacity:1;background-color:#111}\n    100%{opacity:0.3;}\n}\n/***************************** circular **********************************/\n#circular{\n    margin-top:15px;\n    width:64px;\n    float:left;\n}\n.circular{\n    background-color:#5FB7FF;\n    float:left;\n    width:15px;\n    height:15px;\n    -webkit-border-radius:10px;\n    -moz-border-radius:10px;\n    -webkit-animation-name: bounce_circular;\n    -webkit-animation-duration: 0.7s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#circular_1{\n    margin-top:25px;\n    -webkit-animation-delay: .3s;\n}\n#circular_2{\n    margin-left:-8px;\n    margin-top:9px;\n    -webkit-animation-delay: .4s;\n}\n#circular_3{\n    margin-top:1px;\n    -webkit-animation-delay: .5s;\n}\n#circular_4{\n    margin-left:0;\n    margin-top:9px;\n    -webkit-animation-delay: .6s;\n}\n#circular_5{\n    margin-left:-8px;\n    margin-top:25px;\n    -webkit-animation-delay: .7s;\n}\n#circular_6{\n    margin-left:-22px;\n    margin-top:40px;\n    -webkit-animation-delay: .8s;\n}\n#circular_7{\n    margin-left:-37px;\n    margin-top:48px;\n    -webkit-animation-delay: .9s;\n}\n#circular_8{\n    margin-left:-53px;\n    margin-top:41px;\n    -webkit-animation-delay: 1s;\n}\n@-webkit-keyframes bounce_circular{\n    0%{-webkit-transform:scale(1);}\n    100%{-webkit-transform:scale(.3);}\n}\n\n/*************************** Bar line ******************************/\n#outer-bar{\n    height:20px;\n    margin-top:38px;\n    width:70px;\n    border:1px solid #222;\n    -moz-border-radius:4px;\n    -webkit-border-radius:4px;\n    overflow:hidden;\n    background-color:#dfdfdf;\n    float:left;\n\n}\n\n.bar-line{\n    background-color:#888;\n    float:left;\n    width:10px;\n    height:55px;\n    margin-right:13px;\n    margin-top:-15px;\n    -moz-transform:rotate(45deg);\n    -webkit-transform:rotate(45deg);\n}\n.bar-animation{\n    margin-left:92px;\n    width:92px;\n    -webkit-animation-name: bar-animation;\n    -webkit-animation-duration: 1.5s;\n    -webkit-animation-iteration-count: infinite;\n    -webkit-animation-direction: linear;\n}\n#front-bar{\n}\n#modalLoading {\n    top: 20%;\n}\n\n@-webkit-keyframes bar-animation{\n    0%{margin-left:85px;margin-top:10px;}\n    100%{margin-left:-70px;margin-top:-20px;}\n}\n\n")
 ;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"modal fade\" aria-hidden=\"true\" tabindex=\"-1\" data-backdrop=\"static\" data-keyboard=\"false\" role=\"dialog\" id=\"loading\">\n\n    <div class=\"modal-dialog modal-sm\" id=\"modalLoading\">\n    <div class=\"modal-content modal-load-content\">\n        <div class=\"modal-heading modal-load-header\">\n            <h4 class=\"modal-title\" style=\"padding: 10px;\">Espere por favor..</h4>\n        </div>\n        <div class=\"modal-body modal-load-body\">\n\n            <p>Estamos procesando su solicitud...</p>\n\n<div id=\"Gen\" class=\"marginLeft\">\n    <div class=\"block\" id=\"rotate_01\"></div>\n    <div class=\"block\" id=\"rotate_02\"></div>\n    <div class=\"block\" id=\"rotate_03\"></div>\n    <div class=\"block\" id=\"rotate_04\"></div>\n    <div class=\"block\" id=\"rotate_05\"></div>\n    <div class=\"block\" id=\"rotate_06\"></div>\n    <div class=\"block\" id=\"rotate_07\"></div>\n    <div class=\"block\" id=\"rotate_08\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"facebook\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"block_1\" class=\"facebook_block\"></div>\n    <div id=\"block_2\" class=\"facebook_block\"></div>\n    <div id=\"block_3\" class=\"facebook_block\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"circle\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circle_1\" class=\"circle\"></div>\n    <div id=\"circle_2\" class=\"circle\"></div>\n    <div id=\"circle_3\" class=\"circle\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n<div id=\"outer-bar\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"front-bar\" class=\"bar-animation\">\n        <div id=\"bar_1\" class=\"bar-line\"></div>\n        <div id=\"bar_2\" class=\"bar-line\"></div>\n        <div id=\"bar_3\" class=\"bar-line\"></div>\n        <div class=\"clearfix\"></div>\n    </div>\n</div>\n<div id=\"circular\" class=\"marginLeft\" :style=\"{ 'display':'none'}\" v-if=\"false\">\n    <div id=\"circular_1\" class=\"circular\"></div>\n    <div id=\"circular_2\" class=\"circular\"></div>\n    <div id=\"circular_3\" class=\"circular\"></div>\n    <div id=\"circular_4\" class=\"circular\"></div>\n    <div id=\"circular_5\" class=\"circular\"></div>\n    <div id=\"circular_6\" class=\"circular\"></div>\n    <div id=\"circular_7\" class=\"circular\"></div>\n    <div id=\"circular_8\" class=\"circular\"></div>\n    <div class=\"clearfix\"></div>\n</div>\n</div>\n        </div>\n    </div>\n</div>\n"
@@ -13203,7 +13213,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-c4e450dc", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],11:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13237,7 +13247,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-ebda8356", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],12:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13453,7 +13463,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-65ca3f9b", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],13:[function(require,module,exports){
+},{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13477,7 +13487,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-492f5ed3", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13634,7 +13644,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-08244674", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],15:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],14:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.estado {\n    font-size: 10px; padding: 1.5px 5px; border-radius: 15px; box-shadow: 1px 1px gray;\n}\n.labelUser {\n    font-size: 12px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n    cursor: pointer;\n}\n")
 'use strict';
@@ -13694,7 +13704,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-54afc908", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],16:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13752,7 +13762,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a0dfd706", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],17:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],16:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.estado {\n    font-size: 10px;\n    padding: 1.5px 5px;\n    border-radius: 15px;\n    box-shadow: 1px 1px gray;\n}\n")
 'use strict';
@@ -13767,10 +13777,7 @@ var table;
 
 exports.default = {
     props: {
-        url: {
-            type: String,
-            default: ''
-        }
+        url: ''
     },
     data: function data() {
         return {
@@ -13778,10 +13785,8 @@ exports.default = {
         };
     },
     events: {
-        'actuliza-tareas': function actulizaTareas(tareas) {
-            this.tareas = tareas;
-
-            cargarTabla();
+        'actuliza-tareas': function actulizaTareas() {
+            cargarTabla(this.url);
         }
     },
     computed: {
@@ -13794,7 +13799,6 @@ exports.default = {
         }
     },
     ready: function ready() {
-        console.log(this.url);
         cargarTabla(this.url);
     },
     methods: {
@@ -13851,7 +13855,6 @@ function cargarTabla(urlString) {
         }, { data: 'descripcion' }, { data: 'fechaInicio' }, { data: 'fechaFin' }, { data: 'tiempo' }, {
             sortable: false,
             render: function render(data, type, full, meta) {
-                console.log(full);
                 var estado = full.estado;
                 var colorEstado = full.colorEstado;
                 var textoEstado = full.textoColor;
@@ -13907,7 +13910,7 @@ function mostraModaLading() {
     }
 }
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"#\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n\n    <a href=\"#\" id=\"btnLimpiar\" @click=\"limpiarFiltro($event)\" :style=\"{'display':  cmpFiltroHide?'none':'inline-block'}\" class=\"btn btn-info btn-sm\">\n        Limpiar  <i class=\"fa fa-paint-brush\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion (hrs:min)</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizado</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizado</th>\n    </tr>\n    </tfoot>\n\n\n    <!--<tbody>-->\n\n    <!--<tr v-for=\"tarea in tareas\">-->\n        <!--<td style=\"display: none\" id=\"idtarea\">{{ tarea.id }}</td>-->\n        <!--<td>-->\n            <!--<a href=\"/tareas/tareaProgramadas/{{ tarea.id }}\" id=\"lnkShow\" class=\"btn btn-warning btn-sm\" title=\"click  Ver\">\n                <!--<span id=\"nro\" >{{ tarea.numero }}</span>-->\n            <!--</a>-->\n        <!--</td>-->\n        <!--<td>{{ tarea.descripcion }}</td>-->\n        <!--<td> {{ tarea.fechaInicio }} </td>-->\n        <!--<td>{{ tarea.fechaFin }}</td>-->\n        <!--<td>{{ tarea.tiempo }}</td>-->\n        <!--<td>-->\n            <!--<label-->\n                <!--:style=\"{ 'background': tarea.colorEstado, 'color':tarea.textoColor }\"-->\n                <!--class=\"estado\">-->\n            <!--{{ tarea.estado }}-->\n            <!--</label>-->\n        <!--</td>-->\n        <!--<td>{{ tarea.observaciones }}</td>-->\n        <!--<td>{{ tarea.updated_at }}</td>-->\n    <!--</tr>-->\n\n\n    <!--</tbody>-->\n\n</table>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-12\" style=\"margin: 10px;\">\n    <a href=\"#\" :class=\"{btn:true, 'btn-success': cmpFiltroHide, 'btn-danger': cmpFiltroHide == false , 'btn-sm': true}\" @click=\"mostrarFiltro($event)\">\n        {{ textoFiltro }}  <i class=\"fa fa-filter\"></i>\n    </a>\n\n    <a href=\"#\" id=\"btnLimpiar\" @click=\"limpiarFiltro($event)\" :style=\"{'display':  cmpFiltroHide?'none':'inline-block'}\" class=\"btn btn-info btn-sm\">\n        Limpiar  <i class=\"fa fa-paint-brush\"></i>\n    </a>\n</div>\n<div class=\"table table-responsive\">\n<table id=\"tablaTareasNormal\" class=\"table table-responsive table-striped table-bordered table-condensed table-hover display\" cellspacing=\"0\" width=\"100%\">\n    <thead>\n    <tr>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion (hrs:min)</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizado</th>\n    </tr>\n    </thead>\n\n    <tfoot :style=\"{'display':  cmpFiltroHide?'none':'table-header-group'}\">\n    <tr>\n        <th>Nro</th>\n        <th>Descripcion</th>\n        <th>Fecha Inicio </th>\n        <th>Fecha Fin</th>\n        <th>Duracion</th>\n        <th>Estado</th>\n        <th>Observacion</th>\n        <th>Actualizado</th>\n    </tr>\n    </tfoot>\n</table>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -13922,7 +13925,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-a3098f30", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
+},{"../../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vueify/lib/insert-css":6}],17:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("\n.colProm {background-color: #ddffdd; font-weight: bold;}\n.colTarea {background-color: lightskyblue; font-weight: bold;}\n.colTicket {background-color: bisque; font-weight: bold;}\n")
 'use strict';
@@ -14412,7 +14415,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7342ddac", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../../helper/utils.js":20,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],19:[function(require,module,exports){
+},{"../../helper/utils.js":19,"vue":5,"vue-hot-reload-api":3,"vue-resource":4,"vueify/lib/insert-css":6}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14500,7 +14503,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-f5b708ce", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":5,"vue-hot-reload-api":3}],20:[function(require,module,exports){
+},{"vue":5,"vue-hot-reload-api":3}],19:[function(require,module,exports){
 'use strict';
 
 /**

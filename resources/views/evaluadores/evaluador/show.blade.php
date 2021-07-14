@@ -56,7 +56,8 @@
 						<div class="panel-body">
 							@include('evaluadores/evaluador/empleados/tabla_empleados')
 						</div>
-					</div>
+                        <p>[e]=> Empleado ya es Evaluador de una Gerencia.</p>
+                    </div>
 				</div>
 
 				{{-- Capa de empleados Agregados --}}

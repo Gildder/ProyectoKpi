@@ -9,6 +9,8 @@
 namespace ProyectoKpi\Cms\Clases;
 
 
+use ProyectoKpi\Models\Configuracion\ConexionLdap;
+
 class Conexion_LDAP
 {
     private $PORT = 389;
@@ -48,7 +50,7 @@ class Conexion_LDAP
         $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
         if ($ldapbind){
             $filter="(|(SAMAccountName=".trim($user)."))";
-            $fields = array("SAMAccountName", "cn","mail","ou", "userPassword");
+            $fields = array("SAMAccountName", "cn","mail","ou", "givenName", "sn", "department", "userPassword","title");
             $sr = @ldap_search($ldapconn, $dn, $filter, $fields);
             $info = @ldap_get_entries($ldapconn, $sr);
 //            $array = $info[0]["cn"][0];
@@ -72,7 +74,7 @@ class Conexion_LDAP
         $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
         if ($ldapbind){
             $filter="(|(SAMAccountName=*))";
-            $fields = array("SAMAccountName", "cn","mail","ou", "userPassword");
+            $fields = array("SAMAccountName", "cn","mail","ou", "givenName", "sn", "department", "userPassword","title");
             $sr = @ldap_search($ldapconn, $dn, $filter, $fields);
 //            $sr = @ldap_read($ldapconn, $dn, null,$fields);
             $info = @ldap_get_entries($ldapconn, $sr);

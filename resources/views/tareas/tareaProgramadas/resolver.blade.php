@@ -256,11 +256,14 @@ $(document).ready(function(){
        }
    });
 
+
    $('input[name="hora"]').blur(function(){
        if(validarCampoVacio($(this).val())){
            ocultarErrorForm($(this));
        }else{
-           mostrarErrorForm($(this), 'La hora es requerida');
+
+//            mostrarErrorForm($(this), 'La hora no puede esta vacio');
+           $(this).val('0');
        }
    });
 
@@ -268,11 +271,11 @@ $(document).ready(function(){
        if(validarCampoVacio($(this).val())){
            ocultarErrorForm($(this));
        }else{
-           mostrarErrorForm($(this), 'El minuto es requerida');
+
+//            mostrarErrorForm($(this), 'El minuto es requerida');
+           $(this).val('0');
        }
    });
-
-
 
 </script>
 

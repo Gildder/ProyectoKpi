@@ -4,9 +4,12 @@ namespace ProyectoKpi\Models\Evaluadores;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use ProyectoKpi\Cms\Repositories\AprobacionRepository;
+use ProyectoKpi\Cms\Repositories\Entity;
 use ProyectoKpi\Cms\Repositories\EvaluadorRepository;
 use ProyectoKpi\Models\Empleados\Cargo;
 use Illuminate\Support\Facades\DB;
+use ProyectoKpi\Models\Procesos\OpcionAprobacion;
 
 
 class Evaluador extends Model
@@ -14,6 +17,8 @@ class Evaluador extends Model
 
     use SoftDeletes;
     use EvaluadorRepository;
+    use AprobacionRepository;
+    use Entity;
 
     protected $table = "evaluadores";
 
@@ -64,6 +69,17 @@ class Evaluador extends Model
     public function indicadores()
     {
         return $this->belongsToMany('ProyectoKpi\Models\Indicadores\Indicador', 'evaluador_indicadores', 'indicador_id', 'evaluador_id', 'id');
+    }
+
+
+    public function opcionAprobaciones()
+    {
+        return $this->belongsToMany(OpcionAprobacion::getClass(),
+            'opcion_aprobacion_evaluadores',
+            'opcion_id',
+            'evaluador_id',
+            'id'
+        );
     }
 
 }

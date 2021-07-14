@@ -10,9 +10,10 @@
             <h4 class="modal-title">@lang('labels.titlesPage.createTarea')</h4>
         </div>
 
+        <form id="formNuevaTarea" method="post" class="form-group" @submit="guardarTareaNueva($event)">
+
         <div class="modal-body">
 
-        <form id="formNuevaTarea" method="post" class="form-group" @submit="guardarTareaNueva($event)">
             <div class="col-sm-12">
                 <p>Tareas Programadas de <b class="fechaTareas" id="limFechaInicio"></b> al
                     <b class="fechaTareas" id="limFechaFin"></b></p>
@@ -114,7 +115,7 @@
         </div>
 
         {{-- Footer de Modal --}}
-        <div class="modal-footer" style="padding: 0px;">
+        <div class="modal-footer" >
             <button type="reset"  @click="cancelarNuevaTarea($event)"
                     class="@lang('labels.stylbtns.btnCancelar')">
                 <span class="@lang('labels.icons.icoCancel')"></span>
@@ -242,15 +243,18 @@
         if(validarCampoVacio($(this).val())){
             ocultarErrorForm($(this));
         }else{
-            mostrarErrorForm($(this), 'La hora es requerida');
+//            mostrarErrorForm($(this), 'La hora es requerida');
+            $(this).val(0);
         }
+
     });
 
     $('input[name="minuto"]').blur(function(){
         if(validarCampoVacio($(this).val())){
             ocultarErrorForm($(this));
         }else{
-            mostrarErrorForm($(this), 'El minuto es requerida');
+//            mostrarErrorForm($(this), 'El minuto es requerida');
+            $(this).val(0);
         }
     });
 

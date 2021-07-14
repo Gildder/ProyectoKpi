@@ -30,7 +30,7 @@ class EmpleadoTareaCalendarioController extends Controller
             'estados' => $estados,
             'diaHoy'=> Carbon::now()->toDateString(),
             'semanas' => $semanas->getSemana(),
-            'agenda' => 0
+            'agenda' => 0,
         ]);
     }
 

@@ -60,7 +60,7 @@
                 </a>
             @endif
         @else
-            @if($tarea->estado_id != 3)
+            @if($tarea->estado_id == -1)
                 <a  href="{{route('tareas.tareaProgramadas.resolver', $tarea->id)}}"
                     class="@lang('labels.stylbtns.btnFinalizarArchivo')" @click="mostrarModalLoading()"
                     style="margin-right: 10px;"

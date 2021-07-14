@@ -8,10 +8,11 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">@lang('labels.titlesPage.createTarea')</h4>
             </div>
-            
+
+            <form id="formNuevaTarea" method="post" class="form-group" @submit="guardarTareaNueva($event)">
+
             <div class="modal-body">
                 
-                <form id="formNuevaTarea" method="post" class="form-group" @submit="guardarTareaNueva($event)">
                     {{-- Contenido del Modal --}}
                     <p> @lang('labels.comments.obligatorioAttr') </p>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -106,6 +107,7 @@
                             </div>
                         </div>
                     </div>
+            </div>
 
             {{-- Footer de Modal --}}
             <div class="modal-footer">
@@ -123,7 +125,6 @@
                 </button>
             </div>
             </form>
-            </div>
 
         </div>
     
@@ -171,7 +172,9 @@
         if(validarCampoVacio($(this).val())){
             ocultarErrorForm($(this));
         }else{
-            mostrarErrorForm($(this), 'La hora es requerida');
+
+//            mostrarErrorForm($(this), 'La hora no puede esta vacio');
+            $(this).val('0');
         }
     });
 
@@ -179,7 +182,9 @@
         if(validarCampoVacio($(this).val())){
             ocultarErrorForm($(this));
         }else{
-            mostrarErrorForm($(this), 'El minuto es requerida');
+
+//            mostrarErrorForm($(this), 'El minuto es requerida');
+            $(this).val('0');
         }
     });
 

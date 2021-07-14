@@ -5,6 +5,7 @@ namespace ProyectoKpi\Http\Controllers\Tareas;
 use function array_push;
 use function date_add;
 use Illuminate\Support\Facades\Input;
+use Mockery\Exception;
 use ProyectoKpi\Cms\Clases\Caches;
 use ProyectoKpi\Cms\Semanas\SemanaTarea;
 use ProyectoKpi\Http\Controllers\Controller;
@@ -223,10 +224,21 @@ class TareaProgramadaController extends Controller
 
     public function destroy($id)
     {
-        $tarea = Tarea::findOrFail($id);
         Tarea::destroy($id);
 
         return redirect('tareas/tareaProgramadas')->with('message', 'La tarea se eliminò correctamente.');
+    }
+
+    public function eliminarTareaAjax(Request $request)
+    {
+        try {
+            Tarea::destroy($request->id);
+
+            return response()->json(['success' => true, 'message' => 'La tarea se elimino correctamente']);
+        }catch(Exception $ex ){
+            return response()->json(['success' => false, 'message' => 'No se elimino tarea, consulte al administrador']);
+
+        }
     }
 
     public function cancelarSolucion($id)

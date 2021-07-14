@@ -1,6 +1,6 @@
 <?php
 
-namespace ProyectoKpi\Http\Requests\Empleados;
+namespace ProyectoKpi\Http\Requests\Estados;
 
 use ProyectoKpi\Http\Requests\Request;
 

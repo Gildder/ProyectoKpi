@@ -12,6 +12,8 @@
         sessionStorage.setItem('tipoListado', {{ $agenda }});
         sessionStorage.setItem('inicioSemanaFija', '{!! $semanas->fechaInicio !!}');
         sessionStorage.setItem('finSemanaFija', '{!! $semanas->fechaFin !!}');
+
+        sessionStorage.setItem('calendario', 0);
     });
 </script>
 

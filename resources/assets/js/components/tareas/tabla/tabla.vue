@@ -42,35 +42,6 @@
             <th>Actualizado</th>
         </tr>
         </tfoot>
-
-
-        <!--<tbody>-->
-
-        <!--<tr v-for="tarea in tareas">-->
-            <!--<td style="display: none" id="idtarea">{{ tarea.id }}</td>-->
-            <!--<td>-->
-                <!--<a href="/tareas/tareaProgramadas/{{ tarea.id }}" id="lnkShow" class="btn btn-warning btn-sm" title="click  Ver">
-                    <!--<span id="nro" >{{ tarea.numero }}</span>-->
-                <!--</a>-->
-            <!--</td>-->
-            <!--<td>{{ tarea.descripcion }}</td>-->
-            <!--<td> {{ tarea.fechaInicio }} </td>-->
-            <!--<td>{{ tarea.fechaFin }}</td>-->
-            <!--<td>{{ tarea.tiempo }}</td>-->
-            <!--<td>-->
-                <!--<label-->
-                    <!--:style="{ 'background': tarea.colorEstado, 'color':tarea.textoColor }"-->
-                    <!--class="estado">-->
-                <!--{{ tarea.estado }}-->
-                <!--</label>-->
-            <!--</td>-->
-            <!--<td>{{ tarea.observaciones }}</td>-->
-            <!--<td>{{ tarea.updated_at }}</td>-->
-        <!--</tr>-->
-
-
-        <!--</tbody>-->
-
     </table>
     </div>
 </template>
@@ -89,10 +60,7 @@
 
     export default {
         props: {
-            url: {
-                type:String,
-                default: ''
-            }
+            url: ''
         },
         data: function(){
             return {
@@ -101,10 +69,8 @@
         },
         events:
         {
-            'actuliza-tareas': function (tareas) {
-                this.tareas = tareas;
-
-                cargarTabla();
+            'actuliza-tareas': function () {
+                cargarTabla(this.url);
 
             },
         },
@@ -118,7 +84,6 @@
             }
         },
         ready: function () {
-            console.log(this.url);
             cargarTabla(this.url);
         },
         methods: {
@@ -189,7 +154,6 @@
                  {
                      sortable: false,
                      render: function ( data, type, full, meta ) {
-                         console.log(full   );
                          var estado = full.estado;
                          var colorEstado = full.colorEstado;
                          var textoEstado = full.textoColor;
